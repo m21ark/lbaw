@@ -80,6 +80,11 @@ DROP INDEX IF EXISTS index_comment;
 DROP INDEX IF EXISTS index_message;
 DROP INDEX IF EXISTS index_notification;
 
+DROP INDEX IF EXISTS comment_search_fts;
+DROP INDEX IF EXISTS post_search_fts;
+DROP INDEX IF EXISTS group_search_fts;
+DROP INDEX IF EXISTS user_search_fts;
+
 ----------------Tables--------------
 
 CREATE TABLE "user" (
@@ -666,6 +671,7 @@ CREATE TRIGGER private_user_messaging_privacy
     EXECUTE PROCEDURE private_user_messaging_privacy();
 
 
+-- FTS
 
 ALTER TABLE "user"
 ADD COLUMN tsvectors TSVECTOR; 
@@ -782,8 +788,10 @@ CREATE TRIGGER comment_search_update
 CREATE INDEX comment_search_fts ON "comment" USING GIN (tsvectors);
 
 
+-- Performance Indexes
+
 CREATE INDEX index_post_user ON post USING hash (id_poster);
 CREATE INDEX index_post_date ON post USING btree (post_date);
 CREATE INDEX index_comment ON comment USING hash (id_post);
-CREATE INDEX index_message ON message USING hash (id_receiver);
+CREATE INDEX index_message ON message USING btree (id_sender, id_receiver);
 CREATE INDEX index_notification ON notification USING hash (id_user);
