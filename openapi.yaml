@@ -1,0 +1,1172 @@
+openapi: 3.0.0
+
+info:
+ version: '1.0'
+ title: 'LBAW Nexus Web API'
+ description: 'Web Resources Specification (A7) for Nexus'
+
+servers:
+- url: http://lbaw.fe.up.pt
+  description: Production server
+
+
+paths:
+  /: #Falar ao stor
+    get:
+      operationId: R101
+      summary: 'R101 View home page'
+      description: 'Show the home page Access: PUB'
+      tags:
+        - "MXX - TODO"
+      responses:
+        '200':
+          description: 'Ok. Show home page UIXX' 
+
+  /api/topic/hot:
+    get:
+      operationId: R202
+      summary: 'R202 Get the hot topics'
+      description:  'Get the topics which are the most popular at the moment Access: PUB'
+      tags:
+        - "MXX - TODO"
+
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    topic:
+                      type: string
+                example:
+                  - id: 1
+                    topic: Star Wars
+                  - id: 2
+                    topic: Lord of the Rings
+
+
+  /api/user/recommendations: # Falar com stor
+    get:
+      operationId: R203
+      summary: 'R203 Get friend recomendations'
+      description: 'Get the users that are friends of your friends that you might know. Access: USR'
+      tags:
+        - "MXX - TODO"      
+
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    photo:
+                      type: string
+                example:
+                  - id: 1
+                    username: Darth Vader
+                    photo: user/1.png
+                  - id: 666
+                    username: Sauron
+                    photo: user/666.png 
+
+
+  /api/post/feed:
+    get:
+      operationId: R201
+      summary: 'R201 Get Posts'
+      description: 'Gets the posts according to the parameters and returns the results as json Access: USR'
+      tags:
+        - "MXX - TODO"
+      parameters:
+        - in: query
+          name: id_user
+          description: 'Id of user making the request'
+          schema:
+            type: integer
+          required: true
+        
+        - in: query
+          name: type_feed
+          description: 'Filter parameter. Can be "for_you", "friends", "groups", "viral" '
+          schema:
+            type: string
+          required: true
+    
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    post_date:
+                      type: string 
+
+                    user:
+                      type: object
+                      properties:
+                        id: 
+                          type: integer
+                        username:
+                          type: string
+                        photo:
+                          type: string
+
+                    group:
+                      type: object
+                      properties:
+                        id: 
+                          type: integer
+                        name:
+                          type: string
+                        photo:
+                          type: string
+
+                    images:
+                        type: array
+                        items:
+                          type: string
+                
+                example:
+                  - id: 123
+                    text: "The dark side of the force is stronger!!!"
+                    post_date: 2022-05-04 22:22:22
+                    user:
+                      id: 1
+                      username: Darth Vader
+                      photo: user/1.png
+                    group:
+                      id: 1
+                      name: Dark Side Of The Force
+                      photo: group/1.png
+                    
+                    images:
+                      - post/666.png
+                      - post/667.png
+
+                  - id: 200
+                    text: "Believe in the Force, and you will see the light!"
+                    post_date: 2022-05-04 23:10:10
+                    user:
+                      id: 2
+                      username: Luke Skywalker
+                      photo: user/2.png
+                    group:
+                      id: 2
+                      name: The Force is with us
+                      photo: group/2.png
+                    
+                    images:
+                      - post/700.png
+                      - post/701.png
+
+
+  /api/group/join_requests:
+    get:
+      operationId: R207
+      summary: 'R207 Get group join requests'
+      description: 'Gets the group join requests of the user. Access: USR'
+      tags:
+        - "MXX - TODO"
+
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    photo:
+                      type: string
+
+
+  /api/group/recomendations: 
+    get:
+      operationId: R208
+      summary: 'R208 Get group recomendations'
+      description: 'Get the groups about your likes. Access: USR'
+      tags:
+        - 'M02: Group'      
+      
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    photo:
+                      type: string
+
+
+  /api/user/friend_requests:
+    get:
+      operationId: R209
+      summary: 'R209 Get friend requests'
+      description: 'Get the friend requests of the user. Access: USR'
+      tags:
+        - "MXX - TODO"
+
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    username: 
+                      type: string
+                    photo:
+                      type: string
+
+
+  /api/notifications:
+    get:
+      operationId: R210
+      summary: 'R210 Get the notifications'
+      description: 'Get notifications of the user according to the type. Access:USR'
+
+      parameters:
+        - in: query
+          name: type_notification
+          description: 'Type of notification Like Comment FriendRequest UserMention'
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':  
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    seen:
+                      type: boolean
+                    date:
+                      type: string
+
+
+
+  /messages:
+    get:
+      operationId: R102
+      summary: 'R102 View message page'
+      description: 'Show the messages page UI04. Access: USR'
+      tags:
+        - "MXX - TODO"
+      responses:
+        '200':
+          description: 'Ok. Show message page'
+  
+
+  /api/message/recent:
+    get:
+      operationId: R206
+      summary: 'R206 Get recent messages'
+      description: 'Get the most recent messages, with unique users Access: USR'
+
+      tags:
+        - "MXX - TODO"
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    username:
+                      type: string
+                    photo:
+                      type: string
+                    text:   
+                      type: string
+                    date:
+                      type: string
+
+
+  /api/message/{id}:
+    get:
+      operationId: 'R204'
+      summary: 'R204 Get the messages'
+      description: 'Get the messages. Access: USR'
+      tags:
+        - "MXX - TODO"
+      parameters:
+        - in: query
+          name: id
+          description: 'Id of friend of user'
+          schema: 
+            type: integer
+          required: true
+      
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    text:
+                      type: string
+                    date:
+                      type: string 
+                    seen:
+                      type: boolean
+                    id_sender:
+                      type: integer
+                    id_receiver:
+                      type: integer
+                
+                example:
+                  - id: 500
+                    text: Luke, I am your father.
+                    date: 2022-05-04 20:00:00
+                    seen: true
+                    id_sender: 1
+                    id_receiver: 2
+                  - id: 501
+                    text: Noooooooooooooooooooo
+                    date: 2022-05-04 20:05:01
+                    seen: true
+                    id_sender: 2
+                    id_receiver: 1
+    
+    post:
+      operationId: 'R205'
+      summary: 'R205 Send a message'
+      description: 'Send a message to a user. Access: USR'
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_sender:
+                  type: integer
+                id_receiver:
+                  type: integer
+                text:
+                  type: string
+      
+      responses:
+        '200':   # não sei bem que código colocar aqui
+          description: 'Success. Message sent'
+        '403':   # Em erro redirect ?n será necesessário 
+          description: 'Failed to send message'
+                    
+
+
+  /login:
+    get:
+      operationId: R101
+      summary: "R101: Login Form"
+      description: "Provide login form. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "200": 
+          description: "Ok. Show log-in UI05"
+    post:
+      operationId: R102
+      summary: "R102: Login Action"
+      description: "Processes the login form submission. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email: # <!--- form field name
+                  type: string
+                password: # <!--- form field name
+                  type: string
+              required:
+                - email
+                - password
+
+      responses:
+        "302":
+          description: "Redirect after processing the login credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful authentication. Redirect to user profile."
+                  value: "/home" # confirmar se ir para /home ou /?
+                302Error:
+                  description: "Failed authentication. Redirect to login form."
+                  value: "/login"
+
+  /logout:
+    post:
+      operationId: R103
+      summary: "R103: Logout Action"
+      description: "Logout the current authenticated user. Access: USR, ADM"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "302":
+          description: "Redirect after processing logout."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful logout. Redirect to login form."
+                  value: "/login"
+                  #perguntar ao stor se erro no logout faz sentido e pra onde mandar
+
+  /register:
+    get:
+      operationId: R104
+      summary: "R104: Register Form"
+      description: "Provide new user registration form. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "200":
+          description: "Ok. Show sign-up UI"
+
+    post:
+      operationId: R104
+      summary: "R104: Register Action"
+      description: "Processes the Register form submission. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email: # <!--- form field name
+                  type: string
+                password: # <!--- form field name
+                  type: string
+                username: # <!--- form field name
+                  type: string
+                birthdate: # <!--- form field name
+                  type: string
+                bio: # <!--- form field name
+                  type: string
+              required:
+                - email
+                - password
+                - username
+                - birthdate
+
+      responses:
+        "302":
+          description: "Redirect after processing the register credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful register. Redirect to user profile."
+                  value: "/users/{id}"
+                302Error:
+                  description: "Failed to register. Redirect to register form."
+                  value: "/register"
+
+  /about:
+    get:
+      operationId: R106
+      summary: "R106: About"
+      description: "Show Nexus About page. Access: PUB"
+      tags:
+        - "M03: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show about page UI"
+        "404":
+          description: "Page not available" # temos de adicionar erro pra td?
+
+      # ========================================================
+    
+  /search:
+    get:
+      operationId: R106
+      summary: "R106: Search"
+      description: "Show Search hits page. Access: PUB"
+      tags:
+        - "M02: Search"
+
+      parameters:
+        - in: query
+          name: query
+          description: 'Queried String'
+          schema: 
+            type: string
+          required: true
+
+      responses:
+        "302":
+          description: "Ok. Show search page"       
+
+
+  /api/search:
+    get:
+      operationId: R202
+      summary: "R202: Search API"
+      description: "Searches for works and returns the results as JSON. Access: PUB."
+
+      tags:
+        - "M02: Search"
+
+      parameters:
+        - in: query
+          name: query
+          description: String to use for full-text search
+          schema:
+            type: string
+          required: false
+
+          # boolean filters
+        - in: query
+          name: username
+          description: Include matches on usernames
+          schema:
+            type: boolean
+          required: false
+
+        - in: query
+          name: user_bio
+          description: Include matches on users' bios
+          schema:
+            type: boolean
+          required: false
+
+        - in: query
+          name: group_name
+          description: Include matches on group names
+          schema:
+            type: boolean
+          required: false
+
+        - in: query
+          name: group_description
+          description: Include matches on group descriptions
+          schema:
+            type: boolean
+          required: false
+
+        - in: query
+          name: post_text
+          description: Include matches on post text
+          schema:
+            type: boolean
+          required: false
+
+        - in: query
+          name: comment_text
+          description: Include matches on comment text
+          schema:
+            type: boolean
+          required: false
+
+      # TODO, ver se faz sentido retornar so IDs aqui ou o conteudo ja pronto para exibir
+      
+      ## Falta exemplo de json
+      responses:
+        "200":
+          description: Json Search Results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer  # WHAT TO DO?
+                    type:
+                      type: string # WHAT TO DO?
+                            
+# HOW TO DO
+# { user: [user1, user2],  post: [post1, post2], group: [group1, group2], comment: [comment1, comment2]}
+
+  /admin:
+    get:
+      operationId: R197
+      summary: "R197: Admin Panel"
+      description: "Show administration control panel. Access: ADM"
+      tags:
+        - "M03: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show admin UI"
+        "404": ## VER 
+          description: "Page not available"
+                          
+  /api/user/report:
+    get:
+      operationId: 'R204'
+      summary: 'R204 Get the messages'
+      description: 'Get the messages. Access: USR'
+      tags:
+        - "MXX - TODO"
+
+      ## FALTA EXEMPLO JSON
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id: 
+                      type: integer
+                    id_reporter:
+                      type: integer
+                    report_date:
+                      type: string
+                    description:
+                      type: string 
+          
+  /api/statistics:
+    get:
+      operationId: 'R204'
+      summary: 'R204 Get site statistics'
+      description: 'Get site statistics. Access: PUB'
+      tags:
+        - "MXX - TODO"
+
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    name: 
+                      type: string
+                    value:
+                      type: string
+        
+
+  /post/{id}:
+    get:
+      operationId: RXXX-TODO
+      summary: 'RXXX: View Post'
+      description: 'Shows post, with comments, likes etc. Access: PUB'
+      tags:
+        - "MXX - TODO"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok, show Post Page UI02'
+        '403':
+          description: 'Forbidden access to resource, the post might be private or it does not exists'
+   
+  /api/post/{id}:       
+    put: 
+      operationId: RXXX-TODO
+      summary: 'RXXX: Edit a Post'
+      description: 'Edit a post. Access: OWN'
+      tags:
+        - "MXX - TODO"
+      parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+             type: object
+             properties:
+               text:
+                 type: string
+               picture:  ## array
+                 type: array
+                 items:
+                  type: string
+                  format: binary
+             required:
+                 - text
+      responses:
+        '200':
+          description: 'The post was edit successfully'
+        '403':
+          description: 'Forbidden access to resource, the post is not yours'
+    delete:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Delete Post'
+      description: 'Deletes a post. Access: OWN'
+      tags:
+        - "MXX - TODO"
+      parameters: 
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+      responses:
+        '200':
+          description: 'The post was deleted successfully'
+        '403':
+          description: 'Forbidden access to resource, the post is not yours'
+          
+  ## NOTA: meter este como api ? array de pics como? e é assim que fazemos ?
+  /api/post:
+    post:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Create a Post'
+      description: 'Creates a post. Access: USR'
+      tags:
+        - "MXX - TODO"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+             type: object
+             properties:
+               text:
+                 type: string
+               group:
+                 type: integer
+               picture: 
+                 type: array
+                 items:
+                     type: string
+                     format: binary
+             required:
+                 - text
+      responses:
+        '201':
+          description: 'The post was created successfully'
+        '400':
+          description: 'There is something wrong with the request body'
+
+  /api/comment/{id}:
+    get:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Get Comment'
+      description: 'Returns a JSON object with the comment. Access: PUB'
+      tags:
+        - "MXX - TODO"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+           application/json:
+             schema:
+               type: array
+               items:
+                 type: object
+                 properties:
+                   id:
+                     type: integer
+                   post_date:
+                     type: string
+                   text:
+                     type: string
+                   id_post:
+                     type: integer
+                   id_commenter:
+                     type: integer
+                   id_parent:
+                     type: integer
+               example:
+                 - id: 1
+                   post_date: '2022-07-26 18:17:00'
+                   text: 'Julies, definitely, on weekdays.'
+                   id_post: 2
+                   id_commenter: 2
+                   id_parent: null # check if null can be used else -1
+        '403':
+          description: 'Forbidden access to resource, you do not have permission to access the comment'
+
+    put:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Edit a Comment'
+      description: 'Edits a Comment. Access: OWN'
+      tags:
+        - "MXX - TODO"
+      parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+             type: object
+             properties:
+               text:
+                 type: string
+             required:
+                 - text
+      responses:
+        '201':
+          description: 'The comment was edited successfully'
+        '403':
+          description: 'You are not allowed to edit this comment'
+    delete:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Delete Comment'
+      description: 'Deletes a comment. Access: OWN'
+      tags:
+        - "MXX - TODO"
+      parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+      responses:
+        '200':
+          description: 'The comment was deleted successfully'
+        '403':
+          description: 'Forbidden access to resource, the comment is not yours'
+
+  /api/comment:
+    post:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Create a Comment'
+      description: 'Creates a Comment. Access: USR'
+      tags:
+        - "MXX - TODO"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+             type: object
+             properties:
+               text:
+                 type: string
+               post_id:
+                 type: integer
+               id_parent:
+                 type: integer
+             required:
+                 - text
+                 - post_id
+      responses:
+        '201':
+          description: 'The comment was created successfully'
+        '400':
+          description: 'There is something wrong with the request body'
+
+
+
+  /api/profile/{id}:
+    get:
+      operationId: R101
+      summary: 'R101: profile page '
+      description: 'Show the profile page . Access: USR'
+      tags:
+        - 'M01: Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show profile page'
+        '404':
+            description: 'Profile not found' 
+
+    put: 
+        operationId: R102
+        summary: 'R102: Edit a Profile'
+        description: 'Edit a Profile'
+        tags:
+          - "M01: Profile"
+        parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  password:
+                      type: string 
+                  visibility:
+                      type: boolean  
+                  bio:
+                      type: string
+                  picture:
+                    type: string
+                    format: binary
+        responses:
+          '200':
+            description: 'The profile was edit successfully'
+          '403':
+            description: 'Forbidden access to resource, the profile is not yours'
+                      
+    delete:
+      operationId: 'R103: Delete a Profile'
+      summary: 'R103: Delete a Profile'
+      description: 'Deletes a profile. Access: USR'
+      tags:
+        - "M01 - Profile"
+      parameters: 
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: 'The profile was deleted successfully'
+        '403':
+          description: 'Forbidden access to resource, the profile is not yours'
+
+  /api/group:
+    post:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Create a Group'
+      description: 'Creates a Group. Access: USR'
+      tags:
+        - "MXX - TODO"
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string 
+                    visibility:  
+                      type: integer
+                    image:
+                      type: string
+                      format: binary
+                        
+      responses:
+        '201':
+          description: 'The group was created successfully'
+        '400':
+          description: 'There is something wrong with the request body'
+
+
+  /api/group/{id}: 
+
+    get:
+      operationId: R107
+      summary: 'R107 Get Group Posts'
+      description: 'Gets the  Group posts according to the parameters and returns the results as json'
+      tags:
+        - "M02: Group"
+      parameters:
+        - in: query
+          name: id_user
+          description: 'Id of user making the request'
+          schema:
+            type: integer
+          required: true
+    
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    post_date:
+                      type: string 
+                    id_poster:  
+                      type: integer
+                    id_group:
+                      type: integer
+                    paths:
+                        type: array
+                        items:
+                            type: string
+                            
+    put:
+      operationId: R104
+      summary: 'R104: Edit a Group'
+      description: 'Edit a Group'
+      tags:
+      - "M02: Group"
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+             type: object
+             properties:
+               name:
+                 type: string
+               description:
+                 type: string
+               visibility:
+                  type: boolean
+               picture:
+                 type: string
+                 format: binary
+      responses:
+        '200':
+          description: 'The group was edit successfully'
+        '403':
+          description: 'Forbidden access to resource, the Group is not yours'
+          
+    delete:
+       operationId: RXXX-TODO
+       summary: 'RXXX: Delete Group'
+       description: 'Deletes a group. Access: USR'
+       tags:
+        - "M02: Group"
+       parameters: 
+       - in: path
+         name: name_group
+         schema:
+           type: string
+         required: true
+       responses:
+        '200':
+          description: 'The group was deleted successfully'
+        '403':
+          description: 'Forbidden access to resource, the group is not yours'
+
+  /group/{id}:
+    get:
+       operationId: R105
+       summary: 'R105: Group Profile'
+       description: 'Group Profile. Access: PUB'
+       tags:
+        - "M02: Group"
+       parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+       responses:
+        '200':
+          description: 'Success'
+        '403': # n é isto
+          description: 'Group Profile doesnt exist'
+   
+
