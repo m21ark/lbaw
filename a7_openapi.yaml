@@ -10,6 +10,17 @@ servers:
   description: Production server
 
 
+tags:
+  - name: 'M01: Authentication and Individual Profile'
+  - name: 'M02: Feed'
+  - name: 'M03: Groups'
+  - name: 'M04: Requests'
+  - name: 'M05: Messages'
+  - name: 'M06: Notifications'
+  - name: 'M07: Search'
+  - name: 'M08: User Administration and Static pages'
+
+
 paths:
   /: #Falar ao stor
     get:
@@ -17,7 +28,7 @@ paths:
       summary: 'R101 View home page'
       description: 'Show the home page Access: PUB'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       responses:
         '200':
           description: 'Ok. Show home page UIXX' 
@@ -28,7 +39,7 @@ paths:
       summary: 'R202 Get the hot topics'
       description:  'Get the topics which are the most popular at the moment Access: PUB'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
 
       responses:
         '200':
@@ -57,7 +68,7 @@ paths:
       summary: 'R203 Get friend recomendations'
       description: 'Get the users that are friends of your friends that you might know. Access: USR'
       tags:
-        - "MXX - TODO"      
+        - "M02: Feed"      
 
       responses:
         '200':
@@ -90,7 +101,7 @@ paths:
       summary: 'R201 Get Posts'
       description: 'Gets the posts according to the parameters and returns the results as json Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       parameters:
         - in: query
           name: id_user
@@ -188,7 +199,7 @@ paths:
       summary: 'R207 Get group join requests'
       description: 'Gets the group join requests of the user. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M04: Requests"
 
       responses:
         '200':
@@ -214,7 +225,7 @@ paths:
       summary: 'R208 Get group recomendations'
       description: 'Get the groups about your likes. Access: USR'
       tags:
-        - 'M02: Group'      
+        - 'M02: Feed'      
       
       responses:
         '200':
@@ -240,7 +251,7 @@ paths:
       summary: 'R209 Get friend requests'
       description: 'Get the friend requests of the user. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M04: Requests"
 
       responses:
         '200':
@@ -265,6 +276,8 @@ paths:
       operationId: R210
       summary: 'R210 Get the notifications'
       description: 'Get notifications of the user according to the type. Access:USR'
+      tags:
+        - "M06: Notifications"
 
       parameters:
         - in: query
@@ -299,7 +312,7 @@ paths:
       summary: 'R102 View message page'
       description: 'Show the messages page UI04. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M05: Messages"
       responses:
         '200':
           description: 'Ok. Show message page'
@@ -312,7 +325,7 @@ paths:
       description: 'Get the most recent messages, with unique users Access: USR'
 
       tags:
-        - "MXX - TODO"
+        - "M05: Messages"
       responses:
         '200':
           description: 'Success'
@@ -341,7 +354,7 @@ paths:
       summary: 'R204 Get the messages'
       description: 'Get the messages. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M05: Messages"
       parameters:
         - in: query
           name: id
@@ -391,6 +404,8 @@ paths:
       operationId: 'R205'
       summary: 'R205 Send a message'
       description: 'Send a message to a user. Access: USR'
+      tags:
+        - "M05: Messages"
 
       requestBody:
         required: true
@@ -543,7 +558,7 @@ paths:
       summary: "R106: About"
       description: "Show Nexus About page. Access: PUB"
       tags:
-        - "M03: User Administration and Static pages"
+        - "M08: User Administration and Static pages"
 
       responses:
         "302":
@@ -559,7 +574,7 @@ paths:
       summary: "R106: Search"
       description: "Show Search hits page. Access: PUB"
       tags:
-        - "M02: Search"
+        - "M07: Search"
 
       parameters:
         - in: query
@@ -581,7 +596,7 @@ paths:
       description: "Searches for works and returns the results as JSON. Access: PUB."
 
       tags:
-        - "M02: Search"
+        - "M07: Search"
 
       parameters:
         - in: query
@@ -661,7 +676,7 @@ paths:
       summary: "R197: Admin Panel"
       description: "Show administration control panel. Access: ADM"
       tags:
-        - "M03: User Administration and Static pages"
+        - "M08: User Administration and Static pages"
 
       responses:
         "302":
@@ -675,7 +690,7 @@ paths:
       summary: 'R204 Get the messages'
       description: 'Get the messages. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M08: User Administration and Static pages"
 
       ## FALTA EXEMPLO JSON
       responses:
@@ -703,7 +718,7 @@ paths:
       summary: 'R204 Get site statistics'
       description: 'Get site statistics. Access: PUB'
       tags:
-        - "MXX - TODO"
+        - "M08: User Administration and Static pages"
 
       responses:
         '200':
@@ -727,7 +742,8 @@ paths:
       summary: 'RXXX: View Post'
       description: 'Shows post, with comments, likes etc. Access: PUB'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
+
       parameters:
         - in: path
           name: id
@@ -746,7 +762,7 @@ paths:
       summary: 'RXXX: Edit a Post'
       description: 'Edit a post. Access: OWN'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       parameters:
        - in: path
          name: id
@@ -774,6 +790,7 @@ paths:
           description: 'The post was edit successfully'
         '403':
           description: 'Forbidden access to resource, the post is not yours'
+    
     delete:
       operationId: RXXX-TODO
       summary: 'RXXX: Delete Post'
@@ -799,7 +816,7 @@ paths:
       summary: 'RXXX: Create a Post'
       description: 'Creates a post. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       requestBody:
         required: true
         content:
@@ -830,7 +847,7 @@ paths:
       summary: 'RXXX: Get Comment'
       description: 'Returns a JSON object with the comment. Access: PUB'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       parameters:
         - in: path
           name: id
@@ -874,7 +891,7 @@ paths:
       summary: 'RXXX: Edit a Comment'
       description: 'Edits a Comment. Access: OWN'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       parameters:
        - in: path
          name: id
@@ -897,12 +914,13 @@ paths:
           description: 'The comment was edited successfully'
         '403':
           description: 'You are not allowed to edit this comment'
+    
     delete:
       operationId: RXXX-TODO
       summary: 'RXXX: Delete Comment'
       description: 'Deletes a comment. Access: OWN'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       parameters:
        - in: path
          name: id
@@ -921,7 +939,7 @@ paths:
       summary: 'RXXX: Create a Comment'
       description: 'Creates a Comment. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M02: Feed"
       requestBody:
         required: true
         content:
@@ -952,7 +970,7 @@ paths:
       summary: 'R101: profile page '
       description: 'Show the profile page . Access: USR'
       tags:
-        - 'M01: Profile'
+        - 'M01: Authentication and Individual Profile'
 
       parameters:
         - in: path
@@ -972,7 +990,7 @@ paths:
         summary: 'R102: Edit a Profile'
         description: 'Edit a Profile'
         tags:
-          - "M01: Profile"
+          - "M01: Authentication and Individual Profile"
         parameters:
         - in: path
           name: id
@@ -1010,7 +1028,7 @@ paths:
       summary: 'R103: Delete a Profile'
       description: 'Deletes a profile. Access: USR'
       tags:
-        - "M01 - Profile"
+        - "M01 - Authentication and Individual Profile"
       parameters: 
       - in: path
         name: id
@@ -1029,7 +1047,7 @@ paths:
       summary: 'RXXX: Create a Group'
       description: 'Creates a Group. Access: USR'
       tags:
-        - "MXX - TODO"
+        - "M03: Groups"
       requestBody:
         required: true
         content:
@@ -1063,7 +1081,7 @@ paths:
       summary: 'R107 Get Group Posts'
       description: 'Gets the  Group posts according to the parameters and returns the results as json'
       tags:
-        - "M02: Group"
+        - "M03: Groups"
       parameters:
         - in: query
           name: id_user
@@ -1102,7 +1120,7 @@ paths:
       summary: 'R104: Edit a Group'
       description: 'Edit a Group'
       tags:
-      - "M02: Group"
+      - "M03: Groups"
       parameters:
       - in: path
         name: id
@@ -1133,18 +1151,18 @@ paths:
           description: 'Forbidden access to resource, the Group is not yours'
           
     delete:
-       operationId: RXXX-TODO
-       summary: 'RXXX: Delete Group'
-       description: 'Deletes a group. Access: USR'
-       tags:
-        - "M02: Group"
-       parameters: 
-       - in: path
-         name: name_group
-         schema:
-           type: string
-         required: true
-       responses:
+      operationId: RXXX-TODO
+      summary: 'RXXX: Delete Group'
+      description: 'Deletes a group. Access: USR'
+      tags:
+      - "M03: Groups"
+      parameters: 
+      - in: path
+        name: name_group
+        schema:
+          type: string
+        required: true
+      responses:
         '200':
           description: 'The group was deleted successfully'
         '403':
@@ -1156,7 +1174,7 @@ paths:
        summary: 'R105: Group Profile'
        description: 'Group Profile. Access: PUB'
        tags:
-        - "M02: Group"
+        - "M03: Groups"
        parameters:
        - in: path
          name: id
