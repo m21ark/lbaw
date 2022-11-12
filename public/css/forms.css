@@ -1,0 +1,219 @@
+.form_button {
+    box-shadow: 0.5px 0.5px 10px #333;
+    font-size: 0.7em;
+    margin-top: 3em;
+    padding: 1em 4em;
+    background-color: var(--accent);
+    border-radius: 7px;
+    color: white;
+    font-weight: bold;
+    border-width: 0;
+    display: block;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 0.2s ease-out;
+    text-decoration: none;
+}
+
+.form_button:hover {
+    filter: brightness(120%);
+    cursor: pointer;
+}
+
+.form_alternative>a {
+    width: 4em;
+    text-align: center;
+}
+
+section#login, section#register{
+    height: 100%;
+}
+
+section#login, section#register, section#review {
+    padding: 1em;
+    background-image: url("../form_bg.jpg");
+}
+
+div.sign_form {
+    max-width: 30em;
+    margin: 2.5em auto;
+}
+
+section#login div.sign_form {
+    width: 90%;
+    max-width: 20em;
+}
+
+.null_input {
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    height: 0;
+}
+
+textarea {
+    resize: none;
+    border-radius: 7px;
+    box-shadow: 1px 1px 10px grey;
+    padding: 1em;
+    margin: 1em auto;
+    width: 90%;
+    height: 10em;
+    font-size: 1.1em;
+    font-family: 'Times New Roman', Times, serif;
+    border: 1px solid var(--title_color);
+}
+
+section#review div.sign_form {
+    max-width: 30em;
+    padding-bottom: 2em;
+}
+
+
+section#review #review_options a {
+    box-shadow: 1.5px 1.5px 5px black;
+    font-size: 0.7em;
+    padding: 1em 2em;
+    background-color: var(--title_color);
+    border-radius: 7px;
+    color: white;
+    font-weight: bold;
+    border-width: 0;
+    border-width: 0;
+}
+
+#review .link_button {
+    padding: 1em 2em;
+}
+
+
+div.sign_form h2 {
+    margin-bottom: 1em;
+}
+
+div.sign_form label {
+    color: var(--text_color);
+}
+
+div.sign_form input {
+    margin: 0.3em auto 1.2em auto;
+    display: block;
+    padding: 0.5em;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 10px grey;
+    border-radius: 7px;
+    border-width: 0;
+}
+
+div.sign_form p {
+    margin: 1.4em auto 0.5em auto;
+    text-align: center;
+}
+
+
+section#register>* {
+    width: 60%;
+}
+
+
+#user_photo {
+    border-radius: 100%;
+}
+
+
+/*  Start rating system   */
+
+#star_rating {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: row-reverse;
+    position: relative;
+    padding-left: 0.8em;
+}
+
+#star_rating>label {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    margin-top: auto;
+    background-image: url("../docs/star_unfill.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 76%;
+    transition: .3s;
+}
+
+#star_rating>input:checked~label,
+#star_rating>input:checked~label~label {
+    background-image: url("../docs/star_filled.svg");
+}
+
+.feedback #star_rating input[type="radio"] {
+    visibility: hidden;
+}
+
+.feedback {
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, .05);
+    margin: 1em 3em 4em;
+}
+
+
+.custom_input {
+    margin: 0.6em auto 1em auto;
+    display: block;
+    width: 90%;
+    padding: 0.8em 0.5em;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 10px grey;
+    border-radius: 7px;
+    border-width: 0;
+    background-color: white;
+}
+
+.edit_form {
+    display: flex;
+    width: 80%;
+    gap: 0.7em;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit_form img {
+    margin-bottom: 2em;
+}
+
+
+
+.edit_form>label {
+    color: var(--title_color);
+    font-family: var(--);
+}
+
+.edit_form #del_dish {
+    margin-top: 2em;
+    background-color: #CC0000;
+}
+
+
+
+.edit_profile div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#user_info #edit_profile_options a.link_button {
+    background-color: #CC0000;
+    padding: 1em;
+}
