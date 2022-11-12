@@ -120,9 +120,8 @@
         </header>
 
         <!-- Main Content -->
-        <section id="content">
-            @yield('content')
-        </section>
+        @yield('content')
+
         
     </main>
 
