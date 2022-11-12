@@ -31,6 +31,12 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
+
+Route::get('about', 'AboutController@show')->name('about');
+Route::get('contacts', 'ContactsController@show')->name('contacts');
+
 // Main
 Route::get('home', 'HomeController@show')->name('home');
 Route::get('post/{id}', 'PostController@show')->name('post');
+Route::get('profile/{username}', 'ProfileController@show')->name('profile');
+Route::get('group/{username}', 'GroupController@show')->name('group');

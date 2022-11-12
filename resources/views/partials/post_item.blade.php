@@ -1,9 +1,9 @@
 <article class="post">
     <div class="post_head">
-        <a href={{ url('/profile') }}><img src="../user.png" alt="" width="50"></a>
-        <a href={{ url('/profile') }}>Username</a>
+        <a href={{ url('/profile/username') }}><img src="../user.png" alt="" width="50"></a>
+        <a href={{ url('/profile/username') }}>Username</a>
         <a href={{ url('/messages') }}><span class="shareicon">&lt;</span></a>
-        <a href="{{ url('/post/3') }}">&vellip;</a> <!-- TODO: add Profile ID Here-->
+        <a href={{ url('/post/3') }}>&vellip;</a> <!-- TODO: add Profile ID Here-->
     </div>
 
     <div class="post_body">

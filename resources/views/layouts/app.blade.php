@@ -25,50 +25,49 @@
 
 <body>
 
+    <!-- Header -->
+    <header>
+        <a href={{ url('/home') }}> <img src="../logo.png" alt="nexus_logo" width="150"></a>
+
+        <input type="text" name="search" id="search_bar" placeholder="Search contents">
+        <span><a id="header_search" href={{ url('/search') }}>&#128270;</a></span>
+
+
+        @if (Auth::check())
+            <a id="header_avatar" href={{ url('/profile/username') }}><img src="../user.png" alt="logo"></a>
+            <a href={{ url('/logout') }}> Logout </a>
+        @else
+            <div id="header_signup">
+                <a class="link_button" href={{ url('/login') }}>Login</a>
+            </div>
+        @endif
+
+    </header>
+
+    <!-- Left Sidebar -->
     <nav id="navbar">
         <input type="checkbox" id="hamburger">
         <label class="hamburger" for="hamburger"></label>
 
-        <h2> Home</h2>
-
         <ul>
-            <li><a href="{{ url('/home') }}">Home</a></li>
-            <li><a href="{{ url('/messages') }}">Messages</a></li>
-            <li><a href="{{ url('/groups') }}">My Groups</a></li>
+            <li><a href={{ url('/home') }}>Home</a></li>
+            <li><a href={{ url('/messages') }}>Messages</a></li>
+            <li><a href={{ url('/group/groupname') }}>My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>
+        @if (Auth::check())
+            <div>
+                <a href={{ url('/profile/username') }}><img src="../user.png" alt="" width="65">
+                    <p>Own Profile</p>
+                </a>
 
-        <div>
-            <img src="../user.png" alt="" width="50">
-            <a href="{{ url('/profile') }}">Profile</a>
-        </div>
+            </div>
 
-        <button id="post_button">Post</button>
-
+            <button id="post_button">Post</button>
+        @endif
     </nav>
 
-
     @yield('rightbar')
-
-    <!-- Header -->
-    <header>
-        <a href="{{ url('/home') }}"> <img src="../logo.png" alt="nexus_logo" width="150"></a>
-
-        <input type="text" name="search" id="search_bar" placeholder="Search contents">
-        <span><a id="header_search" href="{{ url('/search') }}">&#128270;</a></span>
-
-
-        @if (Auth::check())
-            <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-        @else
-            <div id="header_signup">
-                <a class="link_button" href="{{ url('/login') }}">Login</a>
-            </div>
-        @endif
-
-        <a id="header_avatar" href="{{ url('/profile') }}"><img src="../user.png" alt="logo"></a>
-        <span class="user_id"></span>
-    </header>
 
     <main>
 
@@ -77,7 +76,7 @@
             <?php $segments = ''; ?>
             @foreach (Request::segments() as $segment)
                 <?php $segments .= '/' . $segment; ?>
-                <li><a href="{{ $segments }}">{{ $segment }}</a></li>
+                <li><a href={{ $segments }}>{{ $segment }}</a></li>
             @endforeach
         </div>
 
@@ -89,7 +88,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>Nexus Website | LBAW | G2261 | 22/23</p>
+        <p>Nexus Website | LBAW | G2261 | 22/23 | <a href={{ url('/about') }}>About</a></p>
     </footer>
 </body>
 
