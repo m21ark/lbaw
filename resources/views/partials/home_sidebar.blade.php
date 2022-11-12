@@ -4,10 +4,10 @@
     <div class="hot_topics">
         <h3>Hot Topics</h3>
         <ul>
-            <li><a href="search.html">Topic</a> </li>
-            <li><a href="search.html">Topic</a> </li>
-            <li><a href="search.html">Topic</a> </li>
-            <li><a href="search.html">Topic</a> </li>
+            <li><a href={{ url('/search') }}>Topic</a> </li>
+            <li><a href={{ url('/search') }}>Topic</a> </li>
+            <li><a href={{ url('/search') }}>Topic</a> </li>
+            <li><a href={{ url('/search') }}>Topic</a> </li>
         </ul>
     </div>
 
@@ -25,7 +25,7 @@
             <li>
                 <div>
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Pessoa 2</a>
+                    <a href={{ url('/profile') }}>Pessoa 2</a>
                 </div>
                 <a href="#" class="link_button">Follow</a>
             </li>
@@ -33,7 +33,7 @@
             <li>
                 <div>
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Pessoa 3</a>
+                    <a href={{ url('/profile') }}>Pessoa 3</a>
                 </div>
                 <a href="#" class="link_button">Follow</a>
             </li>
@@ -41,7 +41,7 @@
             <li>
                 <div>
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Pessoa 4</a>
+                    <a href={{ url('/profile') }}>Pessoa 4</a>
                 </div>
                 <a href="#" class="link_button ">Follow</a>
             </li>

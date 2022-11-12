@@ -37,12 +37,13 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function getUser(){
+    public function getUser()
+    {
         return $request->user();
     }
 
-    public function home() {
+    public function home()
+    {
         return redirect('login');
     }
-
 }

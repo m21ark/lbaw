@@ -50,33 +50,41 @@
 
     @yield('rightbar')
 
-        <!-- Header -->
-        <header>
-            <a href="{{ url('/home') }}"> <img src="../logo.png" alt="nexus_logo" width="150"></a>
+    <!-- Header -->
+    <header>
+        <a href="{{ url('/home') }}"> <img src="../logo.png" alt="nexus_logo" width="150"></a>
 
-            <input type="text" name="search" id="search_bar" placeholder="Search contents">
-            <span><a id="header_search" href="{{ url('/search') }}">&#128270;</a></span>
+        <input type="text" name="search" id="search_bar" placeholder="Search contents">
+        <span><a id="header_search" href="{{ url('/search') }}">&#128270;</a></span>
 
 
-            @if (Auth::check())
-                <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-            @else
-                <div id="header_signup">
-                    <a class="link_button" href="{{ url('/login') }}">Login</a>
-                </div>
-            @endif
+        @if (Auth::check())
+            <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+        @else
+            <div id="header_signup">
+                <a class="link_button" href="{{ url('/login') }}">Login</a>
+            </div>
+        @endif
 
-            <a id="header_avatar" href="{{ url('/profile') }}"><img src="../user.png" alt="logo"></a>
-            <span class="user_id"></span>
-        </header>
+        <a id="header_avatar" href="{{ url('/profile') }}"><img src="../user.png" alt="logo"></a>
+        <span class="user_id"></span>
+    </header>
 
     <main>
 
+        <div id="bread_crumbs">
+            <li><a href={{ url('/home') }}>Home</a></li>
+            <?php $segments = ''; ?>
+            @foreach (Request::segments() as $segment)
+                <?php $segments .= '/' . $segment; ?>
+                <li><a href="{{ $segments }}">{{ $segment }}</a></li>
+            @endforeach
+        </div>
 
         <!-- Main Content -->
         @yield('content')
 
-        
+
     </main>
 
     <!-- Footer -->

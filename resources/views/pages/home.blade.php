@@ -8,8 +8,8 @@
     @section('rightbar')
         @include('partials.home_sidebar')
     @endsection
-@else 
+@else
     @section('rightbar')
         @include('partials.guest_sidebar')
     @endsection
-@endif 
+@endif

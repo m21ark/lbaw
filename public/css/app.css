@@ -119,9 +119,31 @@ header a#header_search {
     font-size: 2.4em;
 }
 
-#feed_head {
+#bread_crumbs {
     padding: 0.6em;
     margin: 0.6em;
+    display: flex;
+    gap: 0.5em;
+    list-style-type: none;
+}
+
+#bread_crumbs a {
+    text-decoration: none;
+    color: var(--accent);
+}
+
+#bread_crumbs li {
+    font-size: 1.1em;
+    font-family: var(--text_font);
+    color: var(--text_color);
+}
+
+#bread_crumbs li:before {
+    content: "> ";
+}
+
+#bread_crumbs li:first-child {
+    color: white;
 }
 
 #feed_filter {

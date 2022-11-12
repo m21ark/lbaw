@@ -54,7 +54,7 @@
     font-family: var(--text_font);
 }
 
-.message_body p:first-of-type{
+.message_body p:first-of-type {
     background-color: rgb(0, 0, 0, 13%);
     padding: 0.3em 0.5em;
     border-radius: 1em;

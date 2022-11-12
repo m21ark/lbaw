@@ -1,8 +1,3 @@
-<div id="feed_head">
-    <p id="bread_crumbs">Home > Feed > Post </p>
-</div>
-
-
 <div id="timeline">
 
     <article class="post">
@@ -41,4 +36,3 @@
     </article>
 
 </div>
-

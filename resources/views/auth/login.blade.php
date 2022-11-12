@@ -8,32 +8,33 @@
 
                 <h2>Login</h2>
                 <label>
-                    Email <input type="text" value="{{ old('email') }}" placeholder="Email" name="email" required autofocus>
+                    Email <input type="text" value="{{ old('email') }}" placeholder="Email" name="email" required
+                        autofocus>
                 </label>
                 @if ($errors->has('email'))
                     <span class="error">
-                      {{ $errors->first('email') }}
+                        {{ $errors->first('email') }}
                     </span>
                 @endif
 
                 <label>
-                    Password <input type="password" placeholder="Password" name="password" required >
+                    Password <input type="password" placeholder="Password" name="password" required>
                 </label>
                 @if ($errors->has('password'))
                     <span class="error">
-                     {{ $errors->first('password') }}
+                        {{ $errors->first('password') }}
                     </span>
                 @endif
 
-                
+
                 <!--
-                <label>
-                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                </label>
-                -->
+                    <label>
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                    </label>
+                    -->
 
                 <button class="form_button" type="submit">
-                 Login
+                    Login
                 </button>
 
             </form>

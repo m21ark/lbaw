@@ -26,14 +26,14 @@
     text-align: center;
 }
 
-section#login, section#register{
+section#login, section#register {
     height: 100%;
 }
 
 section#login, section#register, section#review {
     padding: 1em;
     background-image: url("../form_bg.jpg");
-    max-height:52em;
+    height: 50em;
 }
 
 div.sign_form {
