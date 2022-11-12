@@ -8,13 +8,34 @@
 
                 <h2>Login</h2>
                 <label>
-                    Email <input type="text" required placeholder="Email" name="email">
+                    Email <input type="text" value="{{ old('email') }}" placeholder="Email" name="email" required autofocus>
                 </label>
-                <label>
-                    Password <input type="password" required placeholder="Password" name="password">
-                </label>
+                @if ($errors->has('email'))
+                    <span class="error">
+                      {{ $errors->first('email') }}
+                    </span>
+                @endif
 
-                <button class="form_button" formaction="../actions/action_login.html" formmethod="post">Login</button>
+                <label>
+                    Password <input type="password" placeholder="Password" name="password" required >
+                </label>
+                @if ($errors->has('password'))
+                    <span class="error">
+                     {{ $errors->first('password') }}
+                    </span>
+                @endif
+
+                
+                <!--
+                <label>
+                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                </label>
+                -->
+
+                <button class="form_button" type="submit">
+                 Login
+                </button>
+
             </form>
             <div class="form_alternative">
                 <p><span class="bold">Don't have an account?</span></p>

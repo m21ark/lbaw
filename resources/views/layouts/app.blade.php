@@ -103,7 +103,6 @@
     </nav>
 
     <main>
-
         <!-- Header -->
         <header>
             <a href="{{ url('/cards') }}"> <img src="logo.png" alt="nexus_logo" width="150"></a>
@@ -124,7 +123,7 @@
         <section id="content">
             @yield('content')
         </section>
-
+        
     </main>
 
     <!-- Footer -->
