@@ -45,3 +45,8 @@
     </section>
 @endsection
 
+
+
+@section('rightbar')
+    @include('partials.guest_sidebar')
+@endsection

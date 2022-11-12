@@ -32,15 +32,15 @@
         <h2> Home</h2>
 
         <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="messages.html">Messages</a></li>
-            <li><a href="group.html">My Groups</a></li>
+            <li><a href="{{ url('/home') }}">Home</a></li>
+            <li><a href="{{ url('/messages') }}">Messages</a></li>
+            <li><a href="{{ url('/groups') }}">My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>
 
         <div>
             <img src="../user.png" alt="" width="50">
-            <a href="profile.html">Profile</a>
+            <a href="{{ url('/profile') }}">Profile</a>
         </div>
 
         <button id="post_button">Post</button>
@@ -48,76 +48,30 @@
     </nav>
 
 
-    <nav id="rightbar">
-        <h2>Recommendations</h2>
+    @yield('rightbar')
 
-        <div class="hot_topics">
-            <h3>Hot Topics</h3>
-            <ul>
-                <li><a href="search.html">Topic</a> </li>
-                <li><a href="search.html">Topic</a> </li>
-                <li><a href="search.html">Topic</a> </li>
-                <li><a href="search.html">Topic</a> </li>
-            </ul>
-        </div>
-
-        <div class="might_know">
-            <h3>Might Know</h3>
-            <ul>
-                <li>
-                    <div>
-                        <img src="../user.png" alt="user_avatar" width="50">
-                        <a href="profile.html">Pessoa 1</a>
-                    </div>
-                    <a href="#" class="follow_btn">Follow</a>
-                </li>
-
-                <li>
-                    <div>
-                        <img src="../user.png" alt="user_avatar" width="50">
-                        <a href="profile.html">Pessoa 2</a>
-                    </div>
-                    <a href="#" class="follow_btn">Follow</a>
-                </li>
-
-                <li>
-                    <div>
-                        <img src="../user.png" alt="user_avatar" width="50">
-                        <a href="profile.html">Pessoa 3</a>
-                    </div>
-                    <a href="#" class="follow_btn">Follow</a>
-                </li>
-
-                <li>
-                    <div>
-                        <img src="../user.png" alt="user_avatar" width="50">
-                        <a href="profile.html">Pessoa 4</a>
-                    </div>
-                    <a href="#" class="follow_btn">Follow</a>
-                </li>
-
-            </ul>
-        </div>
-
-
-    </nav>
-
-    <main>
         <!-- Header -->
         <header>
-            <a href="{{ url('/cards') }}"> <img src="logo.png" alt="nexus_logo" width="150"></a>
+            <a href="{{ url('/home') }}"> <img src="../logo.png" alt="nexus_logo" width="150"></a>
 
             <input type="text" name="search" id="search_bar" placeholder="Search contents">
-            <span><a id="header_search" href="search.html">&#128270;</a></span>
+            <span><a id="header_search" href="{{ url('/search') }}">&#128270;</a></span>
 
 
             @if (Auth::check())
                 <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+            @else
+                <div id="header_signup">
+                    <a class="link_button" href="{{ url('/login') }}">Login</a>
+                </div>
             @endif
 
-            <a id="header_avatar" href="profile.html"><img src="../user.png" alt="logo"></a>
+            <a id="header_avatar" href="{{ url('/profile') }}"><img src="../user.png" alt="logo"></a>
             <span class="user_id"></span>
         </header>
+
+    <main>
+
 
         <!-- Main Content -->
         @yield('content')

@@ -33,6 +33,7 @@ section#login, section#register{
 section#login, section#register, section#review {
     padding: 1em;
     background-image: url("../form_bg.jpg");
+    max-height:52em;
 }
 
 div.sign_form {
