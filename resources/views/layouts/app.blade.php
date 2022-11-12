@@ -30,7 +30,7 @@
         <a href={{ url('/home') }}> <img src="../logo.png" alt="nexus_logo" width="150"></a>
 
         <input type="text" name="search" id="search_bar" placeholder="Search contents">
-        <span><a id="header_search" href={{ url('/search') }}>&#128270;</a></span>
+        <span><a id="header_search" href={{ url('/search/query') }}>&#128270;</a></span>
 
 
         @if (Auth::check())
@@ -51,7 +51,7 @@
 
         <ul>
             <li><a href={{ url('/home') }}>Home</a></li>
-            <li><a href={{ url('/messages') }}>Messages</a></li>
+            <li><a href={{ url('/messages/sender_username') }}>Messages</a></li>
             <li><a href={{ url('/group/groupname') }}>My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>

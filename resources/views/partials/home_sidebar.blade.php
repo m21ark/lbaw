@@ -4,10 +4,10 @@
     <div class="hot_topics">
         <h3>Hot Topics</h3>
         <ul>
-            <li><a href={{ url('/search') }}>Topic</a> </li>
-            <li><a href={{ url('/search') }}>Topic</a> </li>
-            <li><a href={{ url('/search') }}>Topic</a> </li>
-            <li><a href={{ url('/search') }}>Topic</a> </li>
+            <li><a href={{ url('/search/query') }}>Topic</a> </li>
+            <li><a href={{ url('/search/query') }}>Topic</a> </li>
+            <li><a href={{ url('/search/query') }}>Topic</a> </li>
+            <li><a href={{ url('/search/query') }}>Topic</a> </li>
         </ul>
     </div>
 
