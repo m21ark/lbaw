@@ -13,6 +13,6 @@
 <div id="timeline">
     <!-- TODO: Add posts here -->
     @for ($i = 0; $i < 10; $i++)
-        @include('partials.post_item');
+        @include('partials.post_item')
     @endfor
 </div>
