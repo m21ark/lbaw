@@ -37,9 +37,8 @@ body {
     margin: 0 auto;
     box-shadow: 2px 2px 20px grey;
     background-color: white;
+
 }
-
-
 
 
 
@@ -63,11 +62,25 @@ header {
     grid-area: header;
     display: grid;
     background-color: var(--light_color);
-    grid-template-columns: 0.5fr 1fr 5fr 1fr auto auto;
-    grid-template-areas: "logo""name""search""cart""avatar";
-    padding: 0.1em;
+    grid-template-columns: 3fr 5fr 2.5fr 1fr 1fr;
+    grid-template-areas: "logo search . avatar logbtn";
+    padding: 0.6em 0.2em 0.3em 0.8em;
     align-items: center;
     background-color: var(--bg_block);
+    min-height: 5em;
+
+}
+
+header #header_signup {
+    grid-area: logbtn;
+    margin-right: 1em;
+}
+
+header a {
+    color: var(--bg_white);
+    text-decoration: none;
+    font-weight: bolder;
+    font-size: 1.5em;
 }
 
 header #search_bar {
@@ -94,7 +107,7 @@ header a.link_button {
 }
 
 header #header_avatar {
-    grid-column: "avatar";
+    grid-area: "avatar";
 }
 
 header #header_avatar>img {
@@ -105,23 +118,36 @@ header #header_avatar>img {
     margin-right: 1em;
 }
 
-
-header a#header_cart {
-    font-weight: bolder;
-    font-size: 2.4em;
-    margin: 0em;
-    margin-right: 0.8em;
-    padding: 0;
-}
-
 header a#header_search {
     font-weight: bolder;
     font-size: 2.4em;
 }
 
-#feed_head {
+#bread_crumbs {
     padding: 0.6em;
     margin: 0.6em;
+    display: flex;
+    gap: 0.5em;
+    list-style-type: none;
+}
+
+#bread_crumbs a {
+    text-decoration: none;
+    color: var(--accent);
+}
+
+#bread_crumbs li {
+    font-size: 1.1em;
+    font-family: var(--text_font);
+    color: var(--text_color);
+}
+
+#bread_crumbs li:before {
+    content: "> ";
+}
+
+#bread_crumbs li:first-child {
+    color: white;
 }
 
 #feed_filter {
@@ -171,6 +197,7 @@ main {
     font-size: 1.1em;
     padding: 0.3em 2em;
     border-radius: 0.8em;
+    border-width: 0;
 }
 
 
@@ -179,41 +206,60 @@ main {
 #rightbar {
     grid-area: rightbar;
     background-color: var(--bg_light);
-    padding: 1rem;
+    padding: 1em;
 }
 
 #rightbar h2 {
     margin-bottom: 0.8em;
     font-family: var(--header_font);
     background-color: var(--bg_block);
-    padding: 0.2em;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    text-align: center;
 }
 
 
-#rightbar>*:not(h2) {
+
+#rightbar>div {
     margin-top: 2em;
-    padding: 0.6em;
-    background-color: var(--bg_block);
+    background-color: var(--bg_white);
+    border-radius: 0.5em;
+    padding-bottom: 0.2em;
+}
+
+#rightbar>div>* {
+    padding: 0.5em;
 }
 
 
 #rightbar .might_know li {
-    background-color: var(--bg_white);
+    background-color: white;
     padding: 1em;
-    margin: 0.8em auto;
+    margin: 0.8em 0.2em;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 5px lightgray;
 }
+
+#rightbar a {
+    text-decoration: none;
+}
+
 
 
 #rightbar .hot_topics a {
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: bolder;
+    font-size: 1.1em;
 }
 
 #rightbar .hot_topics li {
-    background-color: var(--accent);
-    padding: 1em;
-    margin: 0.8em auto;
+    background-color: var(--bg_block);
+    padding: 0.7em;
+    margin: 0.8em 0.4em;
+    font-size: larger;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 5px grey;
 }
 
 
@@ -221,16 +267,19 @@ main {
 #rightbar h3 {
     color: white;
     font-size: 1.3em;
-    padding: 0.3em;
+    padding: 0.5em;
     background-color: var(--bg_header);
+    border-radius: 0.5em;
+    text-align: center;
 }
 
 #rightbar ul>* {
     display: flex;
-    margin: 1em auto;
     justify-content: center;
     align-items: center;
+    gap: 1.2em;
 }
+
 
 
 
@@ -243,6 +292,10 @@ footer {
     padding: 0.8em;
     text-align: center;
     background-color: var(--bg_white);
+}
+
+footer a {
+    color: var(--text_color);
 }
 
 footer>p {
@@ -280,10 +333,12 @@ footer>p {
 
 
 .post {
-    padding: 1em;
     background-color: var(--bg_light);
     margin: 1em auto;
-    width: 90%;
+    width: 95%;
+    border-radius: 0.5em;
+    padding-bottom: 1.3em;
+    box-shadow: 2px 2px 10px grey;
 }
 
 .post a, .post a::after {
@@ -292,6 +347,7 @@ footer>p {
 }
 
 .post_head {
+    border-radius: 0.5em;
     display: flex;
     background-color: var(--bg_header);
     justify-content: space-around;
@@ -299,9 +355,10 @@ footer>p {
     padding: 0.4em 3em;
 }
 
-.post_body {
-    padding: 1em;
-    margin: 1em;
+.post .post_body {
+    padding: 1.5em;
+    margin: 1.2em 1em;
+
 }
 
 .post_body>p {
