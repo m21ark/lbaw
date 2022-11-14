@@ -31,4 +31,37 @@ class PostController extends Controller
     return view('pages.post', ['post' => $post]);
   }
 
+
+  public function create(Request $request) 
+  {
+
+    // TODO ::: TESTAR
+    $post = new Post();
+
+    $this->authorize('create', $post);
+
+    $post->text = $request->input('text');
+    $post->id_poster = Auth::user()->id; 
+    
+    if (isset($request->input('group'))) {
+      $post->id_group = $request->input('group');
+    }
+    // TODO : ADD IMAGES
+
+    $post->save();
+
+    return $post;
+  }
+
+  public function delete($id) 
+  {
+    // TODO ::: TESTAR
+    $post = Post::find($id);
+
+    $this->delete('delete', $post);
+
+    $post->delete();
+    return $post;
+  }
+
 }

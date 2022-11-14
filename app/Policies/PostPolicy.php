@@ -42,7 +42,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        //
+        return Auth::check();
     }
 
     /**
@@ -66,7 +66,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        //
+        return $post->owner->id == $user->id;
     }
 
     /**
