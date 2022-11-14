@@ -18,7 +18,7 @@
             <p>{{$post->likes_count}}</p>
             <a href="#"><span class="likeicon">&#128077;</span></a>
 
-            <p>7</p>
+            <p>{{$post->comments_count}}</p>
             <a href="#"><span class="commenticon">&#128172;</span></a>
 
             <p>{{$post->post_date}}</p>

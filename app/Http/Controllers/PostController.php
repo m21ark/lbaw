@@ -22,7 +22,7 @@ class PostController extends Controller
   public function show($id)
   {
     // TODO: use id to get post from database
-    $post   = Post::withCount('likes')->find($id);
+    $post   = Post::withCount('likes', 'comments')->find($id);
     // policy, nr_comments_post
     if (!$post->owner->visibility)
     {
