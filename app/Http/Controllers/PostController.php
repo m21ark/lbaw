@@ -41,9 +41,9 @@ class PostController extends Controller
     $this->authorize('create', $post);
 
     $post->text = $request->input('text');
-    $post->id_poster = Auth::user()->id; 
+    $post->id_poster = Auth::user()->id;
     
-    if (isset($request->input('group'))) {
+    if ($request->input('group') != Null) {
       $post->id_group = $request->input('group');
     }
     // TODO : ADD IMAGES

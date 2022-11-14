@@ -37,3 +37,20 @@ div.post_footer_comment {
     background-color: white;
     border-radius: 1em;
 }
+
+.make_post {
+    margin: 1em;
+    padding: 1.5em;
+    background-color: white;
+    border-radius: 1em;
+    height: 30em;
+    width: 30em;
+    background-color: bisque;
+    position: absolute;
+    top:0;  
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+}
