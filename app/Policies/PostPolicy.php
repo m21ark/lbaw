@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Http\Controllers\PostController;
 
 class PostPolicy
 {
@@ -30,7 +31,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        
+        return  PostController::areFriends($user, $post->owner);
     }
 
     /**
