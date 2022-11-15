@@ -15,25 +15,23 @@
         <h3>Members</h3>
         <ul>
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Person 1</a>
-            </li>
+            @foreach ($group->owners as $owner)
+                <li>
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Person 1</a>
-            </li>
+                    <img src="../user.png" alt="user_avatar" width="50">
+                    <a href="profile.html">Owner ID:{{ $owner->id_user }}</a>
+                </li>
+            @endforeach
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Person 1</a>
-            </li>
+            @foreach ($group->members as $member)
+                <li>
+                    <!-- TODO DONT INCLUDE PREVIOUSLY MENTIONED OWNERS LOL  -->
+                    <img src="../user.png" alt="user_avatar" width="50">
+                    <a href="profile.html">Member ID:{{ $member->id_user }}</a>
+                </li>
+            @endforeach
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Person 1</a>
-            </li>
+
 
         </ul>
     </div>
@@ -45,25 +43,25 @@
 
             <li>
                 <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Person 1</a>
-                <a href="#" class="link_button">Join</a>
-            </li>
-
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
                 <a href="profile.html">Group 1</a>
                 <a href="#" class="link_button">Join</a>
             </li>
 
             <li>
                 <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Group 1</a>
+                <a href="profile.html">Group 2</a>
                 <a href="#" class="link_button">Join</a>
             </li>
 
             <li>
                 <img src="../user.png" alt="user_avatar" width="50">
-                <a href="profile.html">Group 1</a>
+                <a href="profile.html">Group 3</a>
+                <a href="#" class="link_button">Join</a>
+            </li>
+
+            <li>
+                <img src="../user.png" alt="user_avatar" width="50">
+                <a href="profile.html">Group 4</a>
                 <a href="#" class="link_button">Join</a>
             </li>
 

@@ -7,7 +7,7 @@
     </div>
 
     <div class="post_body">
-        <p>OLALA{{}}</p>
+        <p>{{}}</p>
         <img src="../post.jpg" alt="" width="400">
     </div>
 

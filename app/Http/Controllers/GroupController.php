@@ -18,6 +18,12 @@ class GroupController extends Controller
 
         $group = Group::where('name', $name)->first();
 
+        /* DESNECESSARIO
+        $groupMembers = $group->members()->get();
+        $groupOwners = $group->owners()->get();
+        $groupPosts = $group->posts()->get();
+        */
+
         if ($group == null) {
             //No group with that name so we return to the home page
             return redirect()->route('home');
@@ -26,7 +32,7 @@ class GroupController extends Controller
         if (!$group->visibility) {
             $this->authorize('view', $group);
         }
-        return view('pages.group', ['group' => $group]);
+        return view('pages.group', ['group' => $group,]);
     }
 
     public static function userInGroup(User $user1, Group $group)
