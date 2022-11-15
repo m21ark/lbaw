@@ -52,7 +52,7 @@
         <ul>
             <li><a href={{ url('/home') }}>Home</a></li>
             <li><a href={{ url('/messages/sender_username') }}>Messages</a></li>
-            <li><a href={{ url('/group/groupname') }}>My Groups</a></li>
+            <li><a href={{ url('/group/per') }}>My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>
         @if (Auth::check())

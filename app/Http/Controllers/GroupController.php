@@ -18,6 +18,11 @@ class GroupController extends Controller
 
         $group = Group::where('name', $name)->first();
 
+        if ($group == null) {
+            //No group with that name so we return to the home page
+            return redirect()->route('home');
+        }
+
         if (!$group->visibility) {
             $this->authorize('view', $group);
         }
@@ -118,7 +123,7 @@ class GroupController extends Controller
     {
         $request = GroupJoinRequest::find($idMember);
         $request->acceptance_status = 'Rejected';
-        
+
         $request->save();
 
         return $request;
