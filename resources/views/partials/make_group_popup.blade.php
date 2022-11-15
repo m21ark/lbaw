@@ -3,8 +3,14 @@
         <form>
             <label>
                 <div class="form-group">
-                    <label for="text">Tell us your thought</label>
-                    <textarea class="form-control" id="text" rows="3"></textarea>
+
+                    <label for="group_name">Group Name</label>
+                    <input  type="text" id="group_name">
+
+                    <label for="group_description">Group Description</label>
+                    <textarea class="form-control" id="group_description" rows="3"></textarea>
+
+                    <!-- FALTA A FOTO DO GRUPO -->
                 </div>
             </label>
             <button class="form_button" type="submit">

@@ -53,3 +53,13 @@ div.post_footer_comment {
     right: 0;
     margin: auto;
 }
+
+.pop_up input[type="text"] {
+    display: block;
+    padding: 1em;
+    width: 80%;
+    border-radius: 0.5em;
+    border-width: 0;
+    margin: 0.4em;
+    box-shadow: 1px 1px 10px gray;
+}

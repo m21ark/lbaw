@@ -104,10 +104,9 @@ function GroupAddedHandler() {
 
 
 function sendCreateGroupRequest(event) {
-  // let name = document.querySelector('textarea[id=text]').value;
 
-  let name = 'MARKITO'
-  let description = 'Grupo com descrição fixolas'
+  let name = document.querySelector('textarea[id=group_name]').value;
+  let description = document.querySelector('textarea[id=group_description]').value;
   let visibility = true
 
   if (name == null || description == null || visibility == null)

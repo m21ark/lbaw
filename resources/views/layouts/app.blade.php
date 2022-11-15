@@ -63,7 +63,7 @@
 
             </div>
 
-            <button id="post_button" class='make_post_popup'>Post</button>
+            <button id="post_button" class='make_post_popup form_button'>Post</button>
         @endif
     </nav>
 
