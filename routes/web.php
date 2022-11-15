@@ -41,16 +41,16 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 
 // Group Make/Delete Post
 Route::post('api/group', 'GroupController@createPost');
-Route::post('api/group/{id}', 'GroupController@deletePost');
+Route::delete('api/group/{id}', 'GroupController@deletePost');
 
 // Create group
 Route::post('api/group/', 'GroupController@create');
-Route::post('api/group/{id}', 'GroupController@delete');
+Route::delete('api/group/{id}', 'GroupController@delete');
 
 // Group Add/Remove Owner
-Route::post('api/group/{id}', 'GroupController@addGroupOwner');
-Route::post('api/group/{id}', 'GroupController@removeGroupOwner');
+Route::post('api/group/{id}', 'GroupController@addGroupOwner'); // talvez n seja post
+Route::delete('api/group/{id}', 'GroupController@removeGroupOwner');
 
 // User Make/Delete Post
 Route::post('api/post', 'PostController@create');
-Route::post('api/post/{id}', 'PostController@delete');
+Route::delete('api/post/{id}', 'PostController@delete');

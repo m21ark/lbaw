@@ -19,7 +19,7 @@ class GroupController extends Controller
         return view('pages.group');
     }
 
-    public static function areFriends(User $user1, User $user2)
+    public static function areFriends(User $user1, User $user2) // que é isto
     {
         return DB::table('friend_request')
             ->where('id_user_sender', $user1->id)
@@ -61,7 +61,7 @@ class GroupController extends Controller
 
         $group = Group::find($id);
 
-        $this->delete('delete', $group);
+        $this->authorize('delete', $group);
         $group->delete();
 
         return $group;
@@ -88,7 +88,7 @@ class GroupController extends Controller
     public function removeGroupOwner($id)
     {
         $owner = Owner::find($id);
-        $this->delete('delete', $owner);
+        $this->authorize('delete', $owner);
         $owner->delete();
 
         return $owner;
