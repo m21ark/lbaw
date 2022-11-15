@@ -2,13 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Post;
+use App\Models\Group;
 use App\Models\User;
+use App\Http\Controllers\GroupController;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use App\Http\Controllers\PostController;
-use Illuminate\Support\Facades\Auth;
 
-class PostPolicy
+class GroupPolicy
 {
     use HandlesAuthorization;
 
@@ -27,12 +26,12 @@ class PostPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Post $post)
+    public function view(User $user, Group $group)
     {
-        return PostController::areFriends($user, $post->owner);
+        return GroupController::userInGroup($user, $group);
     }
 
     /**
@@ -43,17 +42,17 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return Auth::check();
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Post $post)
+    public function update(User $user, Group $group)
     {
         //
     }
@@ -62,22 +61,22 @@ class PostPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Post $post)
+    public function delete(User $user, Group $group)
     {
-        return $post->owner->id == $user->id;
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Post $post)
+    public function restore(User $user, Group $group)
     {
         //
     }
@@ -86,10 +85,10 @@ class PostPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Post $post)
+    public function forceDelete(User $user, Group $group)
     {
         //
     }

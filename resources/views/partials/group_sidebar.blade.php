@@ -7,7 +7,7 @@
             <li>
                 <div>
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Group 1</a>
+                    <a href="profile.html">{{$group}}</a>
                 </div>
             </li>
 

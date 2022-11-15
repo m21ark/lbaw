@@ -15,17 +15,17 @@ class PostController extends Controller
   {
     return DB::table('friend_request')
       ->where('id_user_sender', $user1->id)
-      ->where('id_user_sender', $user2->id)->where('accept_st', 'Accepted') ||
+      ->where('id_user_receiver', $user2->id)->where('acceptance_status', 'Accepted')->exists() ||
       DB::table('friend_request')
       ->where('id_user_sender', $user2->id)
-      ->where('id_user_sender', $user1->id)->where('accept_st', 'Accepted');
+      ->where('id_user_receiver', $user1->id)->where('acceptance_status', 'Accepted')->exists();
   }
 
   public function show($id)
   {
     // TODO: use id to get post from database
     $post   = Post::withCount('likes', 'comments')->find($id);
-    
+
     // policy, nr_comments_post
     if (!$post->owner->visibility) {
       $this->authorize('view', $post);

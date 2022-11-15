@@ -5,16 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\GroupJoinRequest;
 use App\Models\Owner;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
-    public function show($id)
+    public function show($name)
     {
         // TODO: use id to get group from database
-        return view('pages.group');
+
+        $group = Group::where('name', $name)->first();
+
+        if (!$group->visibility) {
+            $this->authorize('view', $group);
+        }
+        return view('pages.group', ['group' => $group]);
+    }
+
+    public static function userInGroup(User $user1, Group $group)
+    {
+        return DB::table('group_join_request')
+            ->where('id_user', $user1->id)
+            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists();
     }
 
 
@@ -24,7 +38,7 @@ class GroupController extends Controller
         // Insert group
         $group = new Group();
 
-        $this->authorize('create', $group);
+        $this->authorize('create', $group); // TODO : FAZER
 
         $group->text = $request->input('name');
         $group->text = $request->input('description');
@@ -49,7 +63,7 @@ class GroupController extends Controller
 
         $group = Group::find($id);
 
-        $this->authorize('delete', $group);
+        $this->authorize('delete', $group); // TODO
         $group->delete();
 
         return $group;
@@ -62,7 +76,7 @@ class GroupController extends Controller
 
         $owner = new Owner();
 
-        $this->authorize('create', $owner);
+        $this->authorize('create', $owner); // TODO
 
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;
@@ -76,7 +90,7 @@ class GroupController extends Controller
     public function removeGroupOwner($id)
     {
         $owner = Owner::find($id);
-        $this->authorize('delete', $owner);
+        $this->authorize('delete', $owner); // TODO
         $owner->delete();
 
         return $owner;
@@ -103,9 +117,8 @@ class GroupController extends Controller
     public function removeGroupMember($idMember)
     {
         $request = GroupJoinRequest::find($idMember);
-
-        // É possivel que dê erro aqui por n ser ENUM
         $request->acceptance_status = 'Rejected';
+        
         $request->save();
 
         return $request;
