@@ -13,20 +13,22 @@ use App\Models\User;
 
 class GroupController extends Controller
 {
-    public function show($id)
+    public function show($name)
     {
         // TODO: use id to get group from database
-        return view('pages.group');
+
+        $group = Group::where('name', $name)->first();
+
+        $this->authorize('view', $group);
+        
+        return view('pages.group', ['group' => $group]);
     }
 
-    public static function areFriends(User $user1, User $user2) // que é isto
+    public static function userInGroup(User $user1, Group $group) 
     {
-        return DB::table('friend_request')
-            ->where('id_user_sender', $user1->id)
-            ->where('id_user_sender', $user2->id)->where('accept_st', 'Accepted') ||
-            DB::table('friend_request')
-            ->where('id_user_sender', $user2->id)
-            ->where('id_user_sender', $user1->id)->where('accept_st', 'Accepted');
+        return DB::table('group_join_request')
+            ->where('id_user', $user1->id)
+            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists();
     }
 
 
@@ -36,7 +38,7 @@ class GroupController extends Controller
         // Insert group
         $group = new Group();
 
-        $this->authorize('create', $group);
+        $this->authorize('create', $group); // TODO : FAZER
 
         $group->text = $request->input('name');
         $group->text = $request->input('description');
@@ -61,7 +63,7 @@ class GroupController extends Controller
 
         $group = Group::find($id);
 
-        $this->authorize('delete', $group);
+        $this->authorize('delete', $group); // TODO
         $group->delete();
 
         return $group;
@@ -74,7 +76,7 @@ class GroupController extends Controller
 
         $owner = new Owner();
 
-        $this->authorize('create', $owner);
+        $this->authorize('create', $owner); // TODO
 
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;
@@ -88,7 +90,7 @@ class GroupController extends Controller
     public function removeGroupOwner($id)
     {
         $owner = Owner::find($id);
-        $this->authorize('delete', $owner);
+        $this->authorize('delete', $owner); // TODO
         $owner->delete();
 
         return $owner;
