@@ -25,6 +25,7 @@ class PostController extends Controller
   {
     // TODO: use id to get post from database
     $post   = Post::withCount('likes', 'comments')->find($id);
+    
     // policy, nr_comments_post
     if (!$post->owner->visibility) {
       $this->authorize('view', $post);

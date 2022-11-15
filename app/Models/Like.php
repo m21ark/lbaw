@@ -15,5 +15,4 @@ class Like extends Model
     public function post() {
         return $this->belongsTo('App\Models\Post', 'id_post');
     }
-
 }
