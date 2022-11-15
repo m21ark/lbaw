@@ -60,7 +60,7 @@ class PostController extends Controller
     // TODO ::: TESTAR
     $post = Post::find($id);
 
-    $this->delete('delete', $post);
+    $this->authorize('delete', $post);
 
     $post->delete();
     return $post;

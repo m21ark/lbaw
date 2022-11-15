@@ -25,7 +25,7 @@ Route::get('/', 'Auth\LoginController@home');
 //Route::delete('api/item/{id}', 'ItemController@delete');
 
 Route::post('api/post', 'PostController@create');
-Route::post('api/post/{id}', 'PostController@delete');
+Route::delete('api/post/{id}', 'PostController@delete');
 
 
 // Authentication
