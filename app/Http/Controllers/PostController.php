@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -33,7 +35,19 @@ class PostController extends Controller
 
   public function feed(Request $request) {
 
-    if ($request->route('type_feed') === "viral") {
+    if ($request->route('type_feed') === "for_you") {
+      
+      $posts = Post::
+        with('owner')
+        ->withCount('likes', 'comments')
+        ->limit(5)
+        ->get();
+        
+      $this->authorize('feed', $posts);
+      echo Auth::user()->id;
+
+        
+    } else {
       $posts = Post::
         with('owner')
         //where('likes', '>', 1)
