@@ -19,8 +19,9 @@ class GroupController extends Controller
 
         $group = Group::where('name', $name)->first();
 
-        $this->authorize('view', $group);
-        
+        if (!$group->visibility) {
+            $this->authorize('view', $group);
+        }
         return view('pages.group', ['group' => $group]);
     }
 
