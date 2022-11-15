@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\GroupJoinRequest;
 use App\Models\Owner;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-use App\Models\Post;
-use App\Models\User;
 
 class GroupController extends Controller
 {
@@ -17,16 +15,6 @@ class GroupController extends Controller
     {
         // TODO: use id to get group from database
         return view('pages.group');
-    }
-
-    public static function areFriends(User $user1, User $user2) // que é isto
-    {
-        return DB::table('friend_request')
-            ->where('id_user_sender', $user1->id)
-            ->where('id_user_sender', $user2->id)->where('accept_st', 'Accepted') ||
-            DB::table('friend_request')
-            ->where('id_user_sender', $user2->id)
-            ->where('id_user_sender', $user1->id)->where('accept_st', 'Accepted');
     }
 
 
@@ -41,9 +29,7 @@ class GroupController extends Controller
         $group->text = $request->input('name');
         $group->text = $request->input('description');
         $group->text = $request->input('visibility');
-
         // TODO : ADD PROFILE IMAGE
-        $group->save();
 
         // Insert Group Owner
         $ownerId = $group->id_poster = Auth::user()->id;
@@ -51,6 +37,8 @@ class GroupController extends Controller
         if ($this->addGroupOwner($ownerId, $group->id_group) == null) {
             return null; // Error adding owner
         }
+
+        $group->save();
 
         return $group;
     }
@@ -94,4 +82,32 @@ class GroupController extends Controller
         return $owner;
     }
 
+
+    public function addGroupMember($idUser, $idGroup)
+    {
+
+        $request = new GroupJoinRequest();
+
+        $this->authorize('create', $request);
+
+        $request->id_user = $idUser;
+        $request->id_group = $idGroup;
+        $request->acceptance_status = 'Pending';
+
+        $request->save();
+
+        return $request;
+    }
+
+
+    public function removeGroupMember($idMember)
+    {
+        $request = GroupJoinRequest::find($idMember);
+
+        // É possivel que dê erro aqui por n ser ENUM
+        $request->acceptance_status = 'Rejected';
+        $request->save();
+
+        return $request;
+    }
 }

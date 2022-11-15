@@ -47,6 +47,14 @@ Route::delete('api/group/{id}', 'GroupController@delete');
 Route::post('api/group/{id}', 'GroupController@addGroupOwner'); // talvez n seja post
 Route::delete('api/group/{id}', 'GroupController@removeGroupOwner');
 
+// Group Add/Remove Member
+Route::post('api/group/', 'GroupController@addGroupMember');
+Route::delete('api/group/{id}', 'GroupController@removeGroupMember');
+
 // User Make/Delete Post
 Route::post('api/post', 'PostController@create');
 Route::delete('api/post/{id}', 'PostController@delete');
+
+// VER AS ROUTES USADAS
+// addGroupMember($idUser, $idGroup)
+// removeGroupMember($idMember)
