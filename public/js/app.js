@@ -75,7 +75,7 @@ function PostAddedHandler() {
 
   // create alert notification
   console.log("post added");
- 
+  logItem(0);
   // talvez dar redirect para a pagina do post
   
 
