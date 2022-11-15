@@ -10,23 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 // Home
 Route::get('/', 'Auth\LoginController@home');
-
-// Cards
-//Route::get('cards', 'CardController@list');
-//Route::get('cards/{id}', 'CardController@show');
-
-// API
-//Route::put('api/cards', 'CardController@create');
-//Route::delete('api/cards/{card_id}', 'CardController@delete');
-//Route::put('api/cards/{card_id}/', 'ItemController@create');
-//Route::post('api/item/{id}', 'ItemController@update');
-//Route::delete('api/item/{id}', 'ItemController@delete');
-
-Route::post('api/post', 'PostController@create');
-Route::post('api/post/{id}', 'PostController@delete');
-
 
 // Authentication
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -36,7 +22,7 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 
-
+// Main PAGES
 Route::get('about', 'AboutController@show')->name('about');
 Route::get('contacts', 'ContactsController@show')->name('contacts');
 Route::get('admin', 'AdminController@show')->name('admin');
@@ -49,3 +35,18 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{username}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
+
+
+// ======================================= APIS ========================================
+
+// Group Make/Delete Post
+Route::post('api/group', 'GroupController@createPost');
+Route::post('api/group/{id}', 'GroupController@deletePost');
+
+// Group Add/Remove Owner
+Route::post('api/group/{id}', 'GroupController@addGroupOwner');
+Route::post('api/group/{id}', 'GroupController@removeGroupOwner');
+
+// User Make/Delete Post
+Route::post('api/post', 'PostController@create');
+Route::post('api/post/{id}', 'PostController@delete');

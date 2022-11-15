@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class PostController extends Controller
 {
 
-  public static function areFriends(User $user1, User $user2) {
+  public static function areFriends(User $user1, User $user2)
+  {
     return DB::table('friend_request')
       ->where('id_user_sender', $user1->id)
       ->where('id_user_sender', $user2->id)->where('accept_st', 'Accepted') ||
@@ -25,15 +26,14 @@ class PostController extends Controller
     // TODO: use id to get post from database
     $post   = Post::withCount('likes', 'comments')->find($id);
     // policy, nr_comments_post
-    if (!$post->owner->visibility)
-    {
+    if (!$post->owner->visibility) {
       $this->authorize('view', $post);
     }
     return view('pages.post', ['post' => $post]);
   }
 
 
-  public function create(Request $request) 
+  public function create(Request $request)
   {
 
     // TODO ::: TESTAR
@@ -43,7 +43,7 @@ class PostController extends Controller
 
     $post->text = $request->input('text');
     $post->id_poster = Auth::user()->id;
-    
+
     if ($request->input('group') != Null) {
       $post->id_group = $request->input('group');
     }
@@ -54,7 +54,7 @@ class PostController extends Controller
     return $post;
   }
 
-  public function delete($id) 
+  public function delete($id)
   {
     // TODO ::: TESTAR
     $post = Post::find($id);
@@ -64,5 +64,4 @@ class PostController extends Controller
     $post->delete();
     return $post;
   }
-
 }
