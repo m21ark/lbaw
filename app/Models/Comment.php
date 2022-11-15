@@ -15,4 +15,8 @@ class Comment extends Model
     public function post() {
         return $this->belongsTo('App\Models\Post', 'id_post');
     }
+
+    public function likes() {
+        return $this->hasMany('App\Models\CommentLike', 'id_comment');
+    }
 }
