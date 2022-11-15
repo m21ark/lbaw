@@ -39,10 +39,6 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 
 // ======================================= APIS ========================================
 
-// Group Make/Delete Post
-Route::post('api/group', 'GroupController@createPost');
-Route::delete('api/group/{id}', 'GroupController@deletePost');
-
 // Create group
 Route::post('api/group/', 'GroupController@create');
 Route::delete('api/group/{id}', 'GroupController@delete');

@@ -94,41 +94,4 @@ class GroupController extends Controller
         return $owner;
     }
 
-
-
-
-    // Não sei se isto é preciso ter codigo repetido pra criar posts...
-
-    public function createPost(Request $request)
-    {
-
-        $post = new Post();
-
-        $this->authorize('create', $post);
-
-        $post->text = $request->input('text');
-        $post->id_poster = Auth::user()->id;
-
-        if ($request->input('group') == null) {
-            return null;
-        }
-
-        $post->id_group = $request->input('group');
-        // TODO : ADD IMAGES
-
-        $post->save();
-
-        return $post;
-    }
-
-    public function deletePost($id)
-    {
-        // TODO ::: TESTAR
-        $post = Post::find($id);
-
-        $this->delete('delete', $post);
-
-        $post->delete();
-        return $post;
-    }
 }
