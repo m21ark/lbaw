@@ -95,7 +95,7 @@ paths:
                     photo: user/666.png 
 
 
-  /api/post/feed:
+  /api/post/feed/{type_feed}:
     get:
       operationId: R201
       summary: 'R201 Get Posts'
@@ -103,13 +103,6 @@ paths:
       tags:
         - "M02: Feed"
       parameters:
-        - in: query
-          name: id_user
-          description: 'Id of user making the request'
-          schema:
-            type: integer
-          required: true
-        
         - in: query
           name: type_feed
           description: 'Filter parameter. Can be "for_you", "friends", "groups", "viral" '

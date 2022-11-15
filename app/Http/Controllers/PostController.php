@@ -31,13 +31,36 @@ class PostController extends Controller
     return view('pages.post', ['post' => $post]);
   }
 
+  public function feed(Request $request) {
+
+    if ($request->route('type_feed') === "viral") {
+      $posts = Post::
+        with('owner')
+        //where('likes', '>', 1)
+        ->withCount('likes', 'comments')
+        //->having('likes_count', '>', 1)
+        ->orderBy('likes_count', 'desc') // TODO: take the date into consideration
+        ->limit(5)
+        ->get();
+        
+    }
+    /*
+    $posts_view = '';
+    foreach($posts as $post) {
+      $posts_view += view('partials.post', ['post' => $post]);
+    }
+    */
+    //return json_encode([1, 2, 3]);
+    return json_encode($posts);
+  }
 
   public function create(Request $request) 
   {
 
     // TODO ::: TESTAR
+    
     $post = new Post();
-
+    /*
     $this->authorize('create', $post);
 
     $post->text = $request->input('text');
@@ -51,6 +74,7 @@ class PostController extends Controller
     $post->save();
 
     return $post;
+    */
   }
 
   public function delete($id) 
@@ -63,5 +87,7 @@ class PostController extends Controller
     $post->delete();
     return $post;
   }
+
+
 
 }

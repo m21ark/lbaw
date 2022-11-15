@@ -178,3 +178,78 @@ function createItem(item) {
 }
 
 addEventListeners();
+
+
+// Home =============================================================================
+/*
+function addEventListenersHome() {
+  let feed_inputs = document.querySelectorAll('feed_filter')
+  feed_inputs.forEach( function (feed_input) {
+    feed_input.addEventListener('click')
+
+  })
+}
+*/
+
+function updateFeed(feed) {
+  console.log('Update Feed called')
+  sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
+    console.log ("Received!");
+    console.log(this.responseText);
+    let received = JSON.parse(this.responseText);
+    console.log(received);
+    
+    let timeline = document.querySelector('#timeline');
+    received.forEach( function (post) {
+      timeline.appendChild(createPost(post))
+    })
+
+  
+  })
+}
+
+function createTimeline(posts) {
+  
+  posts.forEach( function (post) {
+    new_timeline.innerHTML += createPost(post).innerHTML
+  })
+
+  return new_timeline;
+}
+
+function createPost(post) {
+  let new_post = document.createElement('article');
+  new_post.classList.add('post');
+  new_post.innerHTML = `
+  <div class="post_head">
+    <a href='/profile/${post.owner.username}'><img src="../user.png" alt="" width="50"></a>
+    <a href='/profile/${post.owner.username}'>${post.owner.username}</a>
+    <a href='/messages'><span class="shareicon">&lt;</span></a>
+    <a href='/post/${post.id}'>&vellip;</a>
+  </div>
+
+  <div class="post_body">
+      <p>${post.text}</p>
+      <img src="../post.jpg" alt="" width="400">
+  </div>
+
+  <div class="post_footer">
+
+    <p>${post.likes_count}</p>
+    <a href="#"><span class="likeicon">&#128077;</span></a>
+
+    <p>${post.comments_count}</p>
+    <a href="#"><span class="commenticon">&#128172;</span></a>
+
+    <p>${post.post_date}</p>
+
+  </div>
+  `
+  return new_post;
+}
+
+
+
+
+
+

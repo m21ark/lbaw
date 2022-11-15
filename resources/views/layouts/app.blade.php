@@ -19,7 +19,6 @@
     <link href="<?php echo e(asset('css/profile.css')); ?>" rel="stylesheet">
 
     <!-- Javascript -->
-    <script type="text/javascript"></script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
 </head>
 
