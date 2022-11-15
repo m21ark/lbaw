@@ -75,4 +75,9 @@
     </div>
 
 
+    @if (Auth::check())
+        <button id="create_group_button" class='link_button create_group_button'>Create Group</button>
+    @endif
+
+
 </nav>

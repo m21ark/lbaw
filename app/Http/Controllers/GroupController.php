@@ -30,7 +30,7 @@ class GroupController extends Controller
     }
 
 
-    public function createGroup(Request $request)
+    public function create(Request $request)
     {
 
         // Insert group
@@ -56,7 +56,7 @@ class GroupController extends Controller
     }
 
 
-    public function deleteGroup($id)
+    public function delete($id)
     {
 
         $group = Group::find($id);

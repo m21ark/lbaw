@@ -38,7 +38,7 @@ div.post_footer_comment {
     border-radius: 1em;
 }
 
-.make_post {
+.pop_up {
     margin: 1em;
     padding: 1.5em;
     background-color: white;
@@ -47,10 +47,9 @@ div.post_footer_comment {
     width: 30em;
     background-color: bisque;
     position: absolute;
-    top:0;  
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    
     margin: auto;
 }

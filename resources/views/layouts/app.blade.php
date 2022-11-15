@@ -83,8 +83,9 @@
         <!-- Main Content -->
         @yield('content')
 
-        <!-- Hidden Overlapping Post Page -->
+        <!-- Hidden Overlapping Pop-ups -->
         @include('partials.make_post_popup')
+        @include('partials.make_group_popup')
 
 
     </main>

@@ -28,6 +28,11 @@ function addEventListeners() {
     post_edit.addEventListener('click', logItem);
   });
 
+  let group_add = document.querySelectorAll('.create_group_button');
+  [].forEach.call(group_add, function (group_add) {
+    group_add.addEventListener('click', makeGroupPopup);
+  });
+
 
   let create_button = document.querySelector('.make_post .form_button');
   create_button.addEventListener('click', sendCreatePostRequest);
@@ -38,7 +43,12 @@ function logItem(e) {
   const item = document.querySelector('.make_post');
   console.log(item);
   item.toggleAttribute('hidden');
+}
 
+function makeGroupPopup(e) {
+  const item = document.querySelector('.make_group');
+  console.log(item);
+  item.toggleAttribute('hidden');
 }
 
 function encodeForAjax(data) {
@@ -77,10 +87,36 @@ function PostAddedHandler() {
   console.log("post added");
   logItem(0);
   // talvez dar redirect para a pagina do post
-
-
 }
 
+
+
+
+function GroupAddedHandler() {
+  console.log(this.status)
+  if (this.status != 201) window.location = '/'; // ver dps
+
+  // create alert notification
+  console.log("group added");
+  logItem(0);
+  // talvez dar redirect para a pagina do group
+}
+
+
+function sendCreateGroupRequest(event) {
+  // let name = document.querySelector('textarea[id=text]').value;
+
+  let name = 'MARKITO'
+  let description = 'Grupo com descrição fixolas'
+  let visibility = true
+
+  if (name == null || description == null || visibility == null)
+    return;
+
+  sendAjaxRequest('post', '/api/group/', { name: name, description: description, visibility: visibility }, GroupAddedHandler);
+
+  event.preventDefault();
+}
 
 
 

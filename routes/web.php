@@ -43,6 +43,10 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 Route::post('api/group', 'GroupController@createPost');
 Route::post('api/group/{id}', 'GroupController@deletePost');
 
+// Create group
+Route::post('api/group/', 'GroupController@create');
+Route::post('api/group/{id}', 'GroupController@delete');
+
 // Group Add/Remove Owner
 Route::post('api/group/{id}', 'GroupController@addGroupOwner');
 Route::post('api/group/{id}', 'GroupController@removeGroupOwner');

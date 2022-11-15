@@ -1,5 +1,5 @@
 @if (Auth::check())
-    <div class="post_body make_post pop_up" hidden="">
+    <div class="post_body make_group pop_up" hidden="">
         <form>
             <label>
                 <div class="form-group">
@@ -8,7 +8,7 @@
                 </div>
             </label>
             <button class="form_button" type="submit">
-                Post
+                Make Group
             </button>
         </form>
     </div>
