@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Auth;
 
 class PostPolicy
 {

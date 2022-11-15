@@ -30,11 +30,7 @@ function addEventListeners() {
 
 
   let create_button = document.querySelector('.make_post .form_button');
-  console.log(create_button);
-  [].forEach.call(create_button, function(c) {
-    c.preventDefault();
-    c.addEventListener('click', sendCreatePostRequest);
-  });
+  create_button.addEventListener('click', sendCreatePostRequest);
 
 }
 
@@ -42,6 +38,7 @@ function logItem(e) {
   const item = document.querySelector('.make_post');
   console.log(item);
   item.toggleAttribute('hidden');
+  
 }
 
 function encodeForAjax(data) {
@@ -53,7 +50,7 @@ function encodeForAjax(data) {
 
 function sendAjaxRequest(method, url, data, handler) {
   let request = new XMLHttpRequest();
-
+  console.log("kdk")
   request.open(method, url, true);
   request.withCredentials = true;
   request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -63,13 +60,27 @@ function sendAjaxRequest(method, url, data, handler) {
 }
 
 function sendCreatePostRequest(event) {
-  let name = this.querySelector('input[id=text]').value;
+  let name = document.querySelector('textarea[id=text]').value;
+  console.log(name);
 
-  if (name != '')
-    sendAjaxRequest('post', '/api/post/', {text: name}, cardAddedHandler);
+  if (name != null)
+    sendAjaxRequest('post', '/api/post/', {text: name}, PostAddedHandler);
 
   event.preventDefault();
 }
+
+function PostAddedHandler() {
+  console.log(this.status)
+  if (this.status != 201) window.location = '/'; // ver dps
+
+  // create alert notification
+  console.log("post added");
+ 
+  // talvez dar redirect para a pagina do post
+  
+
+}
+
 
 
 
