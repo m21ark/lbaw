@@ -19,7 +19,7 @@
                 <li>
 
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href={{ url('/profile/{username}', ['username'=>$owner->user->username]) }}>&star; {{ $owner->user->username }}</a>
+                    <a href={{ url('/profile', ['username'=>$owner->user->username]) }}>&star; {{ $owner->user->username }}</a>
                 </li>
             @endforeach
 
@@ -28,7 +28,7 @@
                 <li>
                     <!-- TODO DONT INCLUDE PREVIOUSLY MENTIONED OWNERS LOL  -->
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href={{ url('/profile/{username}', ['username'=>$member->user->username]) }}>{{ $member->user->username }}</a>
+                    <a href={{ url('/profile', ['username'=>$member->user->username]) }}>{{ $member->user->username }}</a>
                 </li>
                 @endif
             @endforeach
