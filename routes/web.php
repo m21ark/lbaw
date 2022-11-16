@@ -37,6 +37,10 @@ Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 
 
+Route::get('api/post/feed/{type_feed}', 'PostController@feed');
+Route::post('api/post', 'PostController@create');
+Route::post('api/post/{id}', 'PostController@delete');
+
 // ======================================= APIS ========================================
 
 // Create group

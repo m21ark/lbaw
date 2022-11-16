@@ -257,3 +257,70 @@ function createItem(item) {
 }
 
 addEventListeners();
+
+
+// Home =============================================================================
+
+function updateFeed(feed) {
+  if (!document.querySelector('#timeline')) {
+    return;
+  }
+
+  sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
+    let received = JSON.parse(this.responseText);
+    
+    let timeline = document.querySelector('#timeline');
+    timeline.innerHTML = '';
+    received.forEach( function (post) {
+      timeline.appendChild(createPost(post))
+    })
+
+  })
+}
+
+function createPost(post) {
+  let new_post = document.createElement('article');
+  new_post.classList.add('post');
+  new_post.innerHTML = `
+    <div class="post_head">
+      <a href='/profile/${post.owner.username}'><img src="../user.png" alt="" width="50"></a>
+      <a href='/profile/${post.owner.username}'>${post.owner.username}</a>
+      <a href='/messages'><span class="shareicon">&lt;</span></a>
+      <a href='/post/${post.id}'>&vellip;</a>
+    </div>
+
+    <div class="post_body">
+        <p>${post.text}</p>
+        <img src="../post.jpg" alt="" width="400">
+    </div>
+
+    <div class="post_footer">
+
+      <p>${post.likes_count}</p>
+      <a href="#"><span class="likeicon">&#128077;</span></a>
+
+      <p>${post.comments_count}</p>
+      <a href="#"><span class="commenticon">&#128172;</span></a>
+
+      <p>${post.post_date}</p>
+
+    </div>
+  `
+  return new_post;
+}
+
+function updateFeedOnLoad() {
+  let feed_filters = document.querySelector('#feed_radio_viral')
+  
+
+  if (feed_filters) {
+    feed_filters.checked = true
+  }
+
+  updateFeed('viral')
+}
+
+updateFeedOnLoad()
+
+
+// =============================================================================

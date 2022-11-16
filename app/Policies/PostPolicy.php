@@ -47,6 +47,17 @@ class PostPolicy
     }
 
     /**
+     * Determine whether the user can have access to personalized timeline.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function feed(User $user)
+    {
+        return Auth::check();
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
