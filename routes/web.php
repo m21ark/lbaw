@@ -44,7 +44,7 @@ Route::post('api/post/{id}', 'PostController@delete');
 // ======================================= APIS ========================================
 
 // Create group
-Route::post('api/group/', 'GroupController@create');
+Route::post('api/group', 'GroupController@create');
 Route::delete('api/group/{id}', 'GroupController@delete');
 
 // Group Add/Remove Owner

@@ -45,25 +45,24 @@ class GroupController extends Controller
 
     public function create(Request $request)
     {
-
         // Insert group
         $group = new Group();
+        
+        //$this->authorize('create', Auth::user()); 
 
-        $this->authorize('create', $group); // TODO : FAZER
-
-        $group->text = $request->input('name');
-        $group->text = $request->input('description');
-        $group->text = $request->input('visibility');
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+        $group->visibility = $request->input('visibility');
         // TODO : ADD PROFILE IMAGE
 
         // Insert Group Owner
-        $ownerId = $group->id_poster = Auth::user()->id;
-
-        if ($this->addGroupOwner($ownerId, $group->id_group) == null) {
-            return null; // Error adding owner
-        }
+        $ownerId = Auth::user()->id;
 
         $group->save();
+        
+        $owner = $this->addGroupOwner($ownerId, $group->id);
+
+        $group->owners()->save($owner);
 
         return $group;
     }
@@ -87,12 +86,10 @@ class GroupController extends Controller
 
         $owner = new Owner();
 
-        $this->authorize('create', $owner); // TODO
+        //$this->authorize('create', $owner); // TODO
 
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;
-
-        $owner->save();
 
         return $owner;
     }
