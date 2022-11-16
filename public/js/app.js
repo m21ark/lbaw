@@ -37,6 +37,8 @@ function addEventListeners() {
   let create_button = document.querySelector('.make_post .form_button');
   create_button.addEventListener('click', sendCreatePostRequest);
 
+  let create_group_button = document.querySelector('.make_group .form_button');
+  create_group_button.addEventListener('click', sendCreateGroupRequest);
 }
 
 function logItem(e) {
@@ -98,21 +100,22 @@ function GroupAddedHandler() {
 
   // create alert notification
   console.log("group added");
-  logItem(0);
-  // talvez dar redirect para a pagina do group
+
+  const item = document.querySelector('.make_group');
+  item.toggleAttribute('hidden');
 }
 
 
 function sendCreateGroupRequest(event) {
 
-  let name = document.querySelector('textarea[id=group_name]').value;
+  let name = document.querySelector('input[id=group_name]').value;
   let description = document.querySelector('textarea[id=group_description]').value;
   let visibility = true
 
   if (name == null || description == null || visibility == null)
     return;
 
-  sendAjaxRequest('post', '/api/group/', { name: name, description: description, visibility: visibility }, GroupAddedHandler);
+  sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, GroupAddedHandler);
 
   event.preventDefault();
 }
