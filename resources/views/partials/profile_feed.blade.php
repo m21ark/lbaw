@@ -16,7 +16,4 @@
 
 <div id="timeline">
     <!-- TODO: Add posts here -->
-    @for ($i = 0; $i < 4; $i++)
-        @include('partials.post_item')
-    @endfor
 </div>
