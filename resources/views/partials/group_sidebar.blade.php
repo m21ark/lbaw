@@ -19,16 +19,18 @@
                 <li>
 
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Owner ID:{{ $owner->id_user }}</a>
+                    <a href={{ url('/profile/{username}', ['username'=>$owner->user->username]) }}>&star; {{ $owner->user->username }}</a>
                 </li>
             @endforeach
 
             @foreach ($group->members as $member)
+                @if (in_array($member->id, $group->owners->toArray()))
                 <li>
                     <!-- TODO DONT INCLUDE PREVIOUSLY MENTIONED OWNERS LOL  -->
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href="profile.html">Member ID:{{ $member->id_user }}</a>
+                    <a href={{ url('/profile/{username}', ['username'=>$member->user->username]) }}>{{ $member->user->username }}</a>
                 </li>
+                @endif
             @endforeach
 
 

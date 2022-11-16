@@ -33,5 +33,10 @@ class User extends Authenticatable
     public function posts() {
         return $this->hasMany('App\Models\Post');
     }
+
+    public function groupJoinRequests()
+    {
+        return $this->hasMany('App\Models\GroupJoinRequest');
+    }
     
 }

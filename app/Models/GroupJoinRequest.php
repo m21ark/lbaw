@@ -18,4 +18,9 @@ class GroupJoinRequest extends Model
         return $this->belongsTo('App\Models\Post', 'id_post');
     }
     */
+
+    public function user() 
+    {
+        return $this->belongsTo('App\Models\User', 'id_user');
+    }
 }
