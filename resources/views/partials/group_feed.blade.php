@@ -5,7 +5,4 @@
         @include('partials.post_item', ['post' => $post]);
     @endforeach
 
-    <!-- PLACEHOLDER -->
-    @include('partials.post_item')
-
 </div>

@@ -3,22 +3,22 @@ function addEventListeners() {
   // [].forEach.call(itemCheckers, function(checker) {
   //   checker.addEventListener('change', sendItemUpdateRequest);
   // });
-  // 
+  //
   // let itemCreators = document.querySelectorAll('article.card form.new_item');
   // [].forEach.call(itemCreators, function(creator) {
   //   creator.addEventListener('submit', sendCreateItemRequest);
   // });
-  // 
+  //
   // let itemDeleters = document.querySelectorAll('article.card li a.delete');
   // [].forEach.call(itemDeleters, function(deleter) {
   //   deleter.addEventListener('click', sendDeleteItemRequest);
   // });
-  // 
+  //
   // let cardDeleters = document.querySelectorAll('article.card header a.delete');
   // [].forEach.call(cardDeleters, function(deleter) {
   //   deleter.addEventListener('click', sendDeleteCardRequest);
   // });
-  // 
+  //
   // let cardCreator = document.querySelector('article.card form.new_card');
   // if (cardCreator != null)
   //   cardCreator.addEventListener('submit', sendCreateCardRequest);
@@ -256,7 +256,7 @@ function createItem(item) {
   return new_item;
 }
 
-addEventListeners();
+
 
 
 // Home =============================================================================
@@ -268,7 +268,7 @@ function updateFeed(feed) {
 
   sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
     let received = JSON.parse(this.responseText);
-    
+
     let timeline = document.querySelector('#timeline');
     timeline.innerHTML = '';
     received.forEach( function (post) {
@@ -311,7 +311,7 @@ function createPost(post) {
 
 function updateFeedOnLoad() {
   let feed_filters = document.querySelector('#feed_radio_viral')
-  
+
 
   if (feed_filters) {
     feed_filters.checked = true
@@ -324,3 +324,6 @@ updateFeedOnLoad()
 
 
 // =============================================================================
+
+
+addEventListeners();
