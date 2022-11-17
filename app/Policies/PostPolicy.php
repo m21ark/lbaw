@@ -33,7 +33,7 @@ class PostPolicy
     public function view(User $user, Post $post)
     {   
 
-        if (isset($post->group) && !$post->group->visibility) {
+        if (isset($post->group)) {
             return GroupController::userInGroup($user, $post->group);
         }
 

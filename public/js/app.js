@@ -1,22 +1,20 @@
 function addEventListeners() {
-  ;
 
-  let post_edit = document.querySelectorAll('.make_post_popup');
-  [].forEach.call(post_edit, function (post_edit) {
-    post_edit.addEventListener('click', logItem('.make_post'));
-  });
+  // Toggle para botões que escondem paginas
+  let listener_list = [
+    ['.make_post_popup', logItem('.make_post')],
+    ['.create_group_button', logItem('.make_group')],
+    ['.group_post_button', logItem('.make_group_post')]
+  ];
 
-  let group_add = document.querySelectorAll('.create_group_button');
-  [].forEach.call(group_add, function (group_add) {
-    group_add.addEventListener('click', logItem('.make_group'));
-  });
-
-  let post_group_add = document.querySelectorAll('.group_post_button');
-  [].forEach.call(post_group_add, function (group_add) {
-    group_add.addEventListener('click', logItem('.make_group_post'));
-  });
-
-
+  listener_list.forEach(function (l) {
+    let element = document.querySelectorAll(l[0]);
+    [].forEach.call(element, function (element) {
+      element.addEventListener('click', l[1]);
+    });
+  }
+  );
+  
   let create_button = document.querySelector('.make_post .form_button');
   create_button.addEventListener('click', sendCreatePostRequest(''));
 
@@ -30,7 +28,7 @@ function addEventListeners() {
 }
 
 function logItem(class_name) {
-  return function(e) {
+  return function (e) {
     const item = document.querySelector(class_name);
     console.log(item);
     item.toggleAttribute('hidden');
@@ -70,7 +68,7 @@ function sendCreatePostRequest(group_name_) {
       console.log(name);
       console.log("ldldld")
       if (name != null)
-        sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_}, addedHandler('.make_group_post'));
+        sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_ }, addedHandler('.make_group_post'));
     }
 
     event.preventDefault();
@@ -80,10 +78,10 @@ function sendCreatePostRequest(group_name_) {
 function addedHandler(class_name) {
   return function () {
     console.log(this.status)
-    if (this.status != 201) window.location = '/'; // ver dps
+    if (this.status < 200 && this.status >= 300) window.location = '/';
 
     // create alert notification - use switch 
-    
+
     logItem(class_name)(0);
     // talvez dar redirect para a pagina do post
   }
@@ -120,12 +118,12 @@ function updateFeed(feed) {
     return;
   }
 
-  sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
+  sendAjaxRequest('get', 'api/post/feed/' + feed, {}, function () {
     let received = JSON.parse(this.responseText);
 
     let timeline = document.querySelector('#timeline');
     timeline.innerHTML = '';
-    received.forEach( function (post) {
+    received.forEach(function (post) {
       timeline.appendChild(createPost(post))
     })
 
