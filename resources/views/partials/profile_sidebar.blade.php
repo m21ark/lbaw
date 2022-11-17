@@ -14,10 +14,11 @@
         <h3>Interests</h3>
 
         <ul id="user_interests">
-            <!--  TODO: Get these from database  -->
-            <li><a href="search.html">Travel</a> </li>
-            <li><a href="search.html">Photos</a> </li>
-            <li><a href="search.html">Dogs</a> </li>
+
+            @foreach ($user->interests as $interest)
+                <a href={{ url('/search/' . $interest->topic->topic) }}><li>{{ $interest->topic->topic }}</li></a>
+            @endforeach
+
         </ul>
 
     </div>

@@ -39,4 +39,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\GroupJoinRequest', 'id_user');
     }
+
+
+    public function interests()
+    {
+        return $this->hasMany('App\Models\TopicsInterestUser', 'id_user');
+    }
 }
