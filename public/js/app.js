@@ -189,7 +189,7 @@ function updateFeed(feed) {
 
   sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
     let received = JSON.parse(this.responseText);
-    
+    console.log(received)
     let timeline = document.querySelector('#timeline');
     timeline.innerHTML = '';
     received.forEach( function (post) {
@@ -204,8 +204,8 @@ function createPost(post) {
   new_post.classList.add('post');
   new_post.innerHTML = `
     <div class="post_head">
-      <a href='/profile/${post.owner.username}'><img src="../user.png" alt="" width="50"></a>
-      <a href='/profile/${post.owner.username}'>${post.owner.username}</a>
+      <a href='/profile/${post.owner}'><img src="../user.png" alt="" width="50"></a>
+      <a href='/profile/${post.owner}'>${post.owner}</a>
       <a href='/messages'><span class="shareicon">&lt;</span></a>
       <a href='/post/${post.id}'>&vellip;</a>
     </div>
@@ -233,7 +233,6 @@ function createPost(post) {
 function updateFeedOnLoad() {
   let feed_filters = document.querySelector('#feed_radio_viral')
   
-
   if (feed_filters) {
     feed_filters.checked = true
   }
