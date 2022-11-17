@@ -39,7 +39,8 @@ class GroupController extends Controller
     {
         return DB::table('group_join_request')
             ->where('id_user', $user1->id)
-            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists();
+            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists() 
+            || $group->owners()->where('id_user', $user1->id)->exists();
     }
 
 
