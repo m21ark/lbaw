@@ -24,9 +24,13 @@ class Group extends Model
         return $this->hasMany('App\Models\GroupJoinRequest', 'id_group')->where('acceptance_status', 'Accepted');
     }
 
-    public function posts(){
+    public function posts()
+    {
         return $this->hasMany('App\Models\Post', 'id_group');
     }
 
-    
+    public function groupJoinRequests()
+    {
+        return $this->hasMany('App\Models\GroupJoinRequest', 'id_group');
+    }
 }

@@ -23,8 +23,11 @@ function addEventListeners() {
   if (group_name !== null)
     create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
 
-  let create_group_button = document.querySelector('.make_group .form_button');
-  create_group_button.addEventListener('click', sendCreateGroupRequest);
+  let remove_groupMember_button = document.querySelector('.leave_group_button');
+  if (remove_groupMember_button)
+      remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
+
+
 }
 
 function logItem(class_name) {
@@ -36,21 +39,21 @@ function logItem(class_name) {
 }
 
 function encodeForAjax(data) {
-  if (data == null) return null;
-  return Object.keys(data).map(function (k) {
-    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-  }).join('&');
+    if (data == null) return null;
+    return Object.keys(data).map(function (k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+    }).join('&');
 }
 
 function sendAjaxRequest(method, url, data, handler) {
-  let request = new XMLHttpRequest();
-  console.log("kdk")
-  request.open(method, url, true);
-  request.withCredentials = true;
-  request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  request.addEventListener('load', handler);
-  request.send(encodeForAjax(data));
+    let request = new XMLHttpRequest();
+
+    request.open(method, url, true);
+    request.withCredentials = true;
+    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.addEventListener('load', handler);
+    request.send(encodeForAjax(data));
 }
 
 function sendCreatePostRequest(group_name_) {
@@ -91,49 +94,62 @@ function addedHandler(class_name) {
 
 function sendCreateGroupRequest(event) {
 
-  let name = document.querySelector('input[id=group_name]').value;
-  let description = document.querySelector('textarea[id=group_description]').value;
-  let visibility = true
+    let name = document.querySelector('input[id=group_name]').value;
+    let description = document.querySelector('textarea[id=group_description]').value;
+    let visibility = true
 
   if (name == null || description == null || visibility == null) // TODO a error message here
     return;
 
   sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
 
-  event.preventDefault();
 }
 
 
+
+function sendDeleteGroupMemberRequest() {
+
+    let id = document.querySelector('.leave_group_button').getAttribute('data-idGroup');
+
+    let res = confirm("Are you sure you want to leave this group?");
+
+    if (!res)
+        return;
+
+    sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
+}
+
 addEventListeners();
-
-
 
 // Home =============================================================================
 
 function updateFeed(feed) {
-  let pathname = window.location.pathname
-  if (pathname !== '/home') return;
 
-  if (!document.querySelector('#timeline')) {
-    return;
-  }
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
-  sendAjaxRequest('get', 'api/post/feed/' + feed, {}, function () {
-    let received = JSON.parse(this.responseText);
 
-    let timeline = document.querySelector('#timeline');
-    timeline.innerHTML = '';
-    received.forEach(function (post) {
-      timeline.appendChild(createPost(post))
+
+    if (!document.querySelector('#timeline')) {
+        return;
+    }
+
+    sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+        let received = JSON.parse(this.responseText);
+
+        let timeline = document.querySelector('#timeline');
+        timeline.innerHTML = '';
+        received.forEach(function (post) {
+            timeline.appendChild(createPost(post))
+        })
+
     })
-
-  })
 }
 
 function createPost(post) {
-  let new_post = document.createElement('article');
-  new_post.classList.add('post');
-  new_post.innerHTML = `
+    let new_post = document.createElement('article');
+    new_post.classList.add('post');
+    new_post.innerHTML = `
     <div class="post_head">
       <a href='/profile/${post.owner.username}'><img src="../user.png" alt="" width="50"></a>
       <a href='/profile/${post.owner.username}'>${post.owner.username}</a>
@@ -158,18 +174,18 @@ function createPost(post) {
 
     </div>
   `
-  return new_post;
+    return new_post;
 }
 
 function updateFeedOnLoad() {
-  let feed_filters = document.querySelector('#feed_radio_viral')
+    let feed_filters = document.querySelector('#feed_radio_viral')
 
 
-  if (feed_filters) {
-    feed_filters.checked = true
-  }
+    if (feed_filters) {
+        feed_filters.checked = true
+    }
 
-  updateFeed('viral')
+    updateFeed('viral')
 }
 
 updateFeedOnLoad();

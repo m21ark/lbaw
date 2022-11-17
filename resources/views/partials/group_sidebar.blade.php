@@ -20,17 +20,17 @@
                 <li>
 
                     <img src="../user.png" alt="user_avatar" width="50">
-                    <a href={{ url('/profile', ['username'=>$owner->user->username]) }}>&star; {{ $owner->user->username }}</a>
+                    <a href={{ url('/profile', ['username' => $owner->user->username]) }}>&star;
+                        {{ $owner->user->username }}</a>
                 </li>
             @endforeach
 
             @foreach ($group->members as $member)
-                @if (in_array($member->id, $group->owners->toArray()))
-                <li>
-                    <!-- TODO DONT INCLUDE PREVIOUSLY MENTIONED OWNERS LOL  -->
-                    <img src="../user.png" alt="user_avatar" width="50">
-                    <a href={{ url('/profile', ['username'=>$member->user->username]) }}>{{ $member->user->username }}</a>
-                </li>
+                @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
+                    <li>
+                        <img src="../user.png" alt="user_avatar" width="50">
+                        <a href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
+                    </li>
                 @endif
             @endforeach
 
@@ -72,7 +72,9 @@
     </div>
 
     @if (Auth::check())
-        <button id="create_group_button" class='form_button create_group_button'>Create Group</button>
+        <!-- Temporary placement -->
+        <button class='form_button create_group_button'>Create Group</button>
+        <button class='form_button leave_group_button' data-idGroup="{{ $group->id }}">Leave Group</button>
     @endif
 
     @auth

@@ -47,8 +47,8 @@ class GroupController extends Controller
     {
         // Insert group
         $group = new Group();
-        
-        //$this->authorize('create', Auth::user()); 
+
+        //$this->authorize('create', Auth::user());
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
@@ -59,7 +59,7 @@ class GroupController extends Controller
         $ownerId = Auth::user()->id;
 
         $group->save();
-        
+
         $owner = $this->addGroupOwner($ownerId, $group->id);
 
         $group->owners()->save($owner);
@@ -122,13 +122,28 @@ class GroupController extends Controller
     }
 
 
-    public function removeGroupMember($idMember)
+    public function removeGroupMember($idGroup)
     {
-        $request = GroupJoinRequest::find($idMember);
+
+        $id_user = Auth::user()->id;
+
+
+        DB::table('group_join_request')
+            ->where('id_group', $idGroup)->where('id_user', $id_user)
+            ->update(['acceptance_status' => 'Rejected']);
+
+        /*
+
+        $id_user = Auth::user()->id;
+        $request = GroupJoinRequest::where('id_group', $idGroup)->where('id_user', $id_user)->get();
+
         $request->acceptance_status = 'Rejected';
 
-        $request->save();
+        $group = Group::find($idGroup);
+
+        $group->groupJoinRequests->save($request);
 
         return $request;
+        */
     }
 }
