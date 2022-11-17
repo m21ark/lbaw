@@ -22,6 +22,10 @@ class Post extends Model
         return $this->hasMany('App\Models\Comment', 'id_post');
     }
 
+    public function group() {
+        return $this->belongsTo('App\Models\Group', 'id_group');
+    }
+
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;

@@ -31,7 +31,12 @@ class PostPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, Post $post)
-    {
+    {   
+
+        if (isset($post->group) && !$post->group->visibility) {
+            return GroupController::userInGroup($user, $post->group);
+        }
+
         return PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
     }
 
