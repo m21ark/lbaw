@@ -80,7 +80,7 @@ function PostAddedHandler() {
 
 function GroupAddedHandler() {
     console.log(this.status)
-    if (this.status != 201) window.location = '/'; // ver dps
+    if (this.status !image.png= 201) window.location = '/'; // ver dps
 
     // create alert notification
     console.log("group added");
