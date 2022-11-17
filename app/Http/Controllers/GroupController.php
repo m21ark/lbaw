@@ -124,6 +124,16 @@ class GroupController extends Controller
 
     public function removeGroupMember($idGroup)
     {
+
+        $id_user = Auth::user()->id;
+
+
+        DB::table('group_join_request')
+            ->where('id_group', $idGroup)->where('id_user', $id_user)
+            ->update(['acceptance_status' => 'Rejected']);
+
+        /*
+
         $id_user = Auth::user()->id;
         $request = GroupJoinRequest::where('id_group', $idGroup)->where('id_user', $id_user)->get();
 
@@ -131,8 +141,9 @@ class GroupController extends Controller
 
         $group = Group::find($idGroup);
 
-        $group->groupJoinRequests()->save($request);
+        $group->groupJoinRequests->save($request);
 
         return $request;
+        */
     }
 }
