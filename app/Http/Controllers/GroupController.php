@@ -39,7 +39,7 @@ class GroupController extends Controller
     {
         return DB::table('group_join_request')
             ->where('id_user', $user1->id)
-            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists() 
+            ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists()
             || $group->owners()->where('id_user', $user1->id)->exists();
     }
 
@@ -80,6 +80,27 @@ class GroupController extends Controller
         return $group;
     }
 
+    public function edit(Request $request)
+    {
+
+        $id_group = $request->input('id_group');
+        $group = Group::find($id_group);
+
+        // TODO : MAKE POLICY
+        //$this->authorize('edit', $group);
+
+
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+        $group->visibility = $request->input('visibility');
+
+        // todo: add profile image
+
+        $group->save();
+
+        return $group;
+    }
+
 
 
     public function addGroupOwner($idUser, $idGroup)
@@ -113,7 +134,7 @@ class GroupController extends Controller
 
         $this->authorize('create', $request);
 
-        $request->id_user = $idUser;
+        $request->id_user = $idUser; // TODO
         $request->id_group = $idGroup;
         $request->acceptance_status = 'Pending';
 
@@ -132,19 +153,5 @@ class GroupController extends Controller
         DB::table('group_join_request')
             ->where('id_group', $idGroup)->where('id_user', $id_user)
             ->update(['acceptance_status' => 'Rejected']);
-
-        /*
-
-        $id_user = Auth::user()->id;
-        $request = GroupJoinRequest::where('id_group', $idGroup)->where('id_user', $id_user)->get();
-
-        $request->acceptance_status = 'Rejected';
-
-        $group = Group::find($idGroup);
-
-        $group->groupJoinRequests->save($request);
-
-        return $request;
-        */
     }
 }

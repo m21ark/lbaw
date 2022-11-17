@@ -3,7 +3,7 @@
     <h2>Group Info</h2>
 
     <button id="group_post_button" class='form_button group_post_button'>Post on group</button>
-    
+
     <h3 id="username">{{ $group->name }}</h3>
     <!-- TODO add profile image  -->
     <img src="../user.png" alt="" width="150">
@@ -29,7 +29,8 @@
                 @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                     <li>
                         <img src="../user.png" alt="user_avatar" width="50">
-                        <a href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
+                        <a
+                            href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
                     </li>
                 @endif
             @endforeach
@@ -74,6 +75,11 @@
     @if (Auth::check())
         <!-- Temporary placement -->
         <button class='form_button create_group_button'>Create Group</button>
+
+        <!-- Should oly be visible to group owners -->
+        <button class='form_button edit_group_button' data-idGroup="{{ $group->id }}">Edit Group</button>
+
+        <!-- SHould only be visible to group members/owners -->
         <button class='form_button leave_group_button' data-idGroup="{{ $group->id }}">Leave Group</button>
     @endif
 

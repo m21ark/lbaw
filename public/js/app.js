@@ -92,11 +92,11 @@ function addedHandler(class_name) {
 
 
 
-function sendCreateGroupRequest(event) {
+function sendCreateGroupRequest() {
 
     let name = document.querySelector('input[id=group_name]').value;
     let description = document.querySelector('textarea[id=group_description]').value;
-    let visibility = true
+    let visibility = true // TODO: add this to popup
 
     if (name == null || description == null || visibility == null) // TODO a error message here
         return;
@@ -105,6 +105,20 @@ function sendCreateGroupRequest(event) {
 
 }
 
+
+function sendEditGroupRequest() {
+
+    let name = document.querySelector('input[id=group_name]').value;
+    let description = document.querySelector('textarea[id=group_description]').value;
+    let visibility = true// TODO: add this to popup
+
+    if (name == null || description == null || visibility == null) // TODO a error message here
+        return;
+
+    // TODO MAKE THIS WORK
+    sendAjaxRequest('put', '/api/group_edit/5', { name: 'alterado', description: 'description_altera', visibility: true, id_group: 5 }, () => { });
+
+}
 
 
 function sendDeleteGroupMemberRequest() {
@@ -125,23 +139,23 @@ addEventListeners();
 
 function updateFeed(feed) {
 
-  let pathname = window.location.pathname
-  if (pathname !== '/home') return;
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
-  if (!document.querySelector('#timeline')) {
-    return;
-  }
+    if (!document.querySelector('#timeline')) {
+        return;
+    }
 
-  sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
-    let received = JSON.parse(this.responseText);
+    sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+        let received = JSON.parse(this.responseText);
 
-    let timeline = document.querySelector('#timeline');
-    timeline.innerHTML = '';
-    received.forEach(function (post) {
-        timeline.appendChild(createPost(post))
+        let timeline = document.querySelector('#timeline');
+        timeline.innerHTML = '';
+        received.forEach(function (post) {
+            timeline.appendChild(createPost(post))
+        })
+
     })
-
-  })
 }
 
 function createPost(post) {
@@ -176,13 +190,13 @@ function createPost(post) {
 }
 
 function updateFeedOnLoad() {
-  let feed_filters = document.querySelector('#feed_radio_viral')
-  
-  if (feed_filters) {
-    feed_filters.checked = true
-  }
+    let feed_filters = document.querySelector('#feed_radio_viral')
 
-  updateFeed('viral')
+    if (feed_filters) {
+        feed_filters.checked = true
+    }
+
+    updateFeed('viral')
 }
 
 updateFeedOnLoad();
