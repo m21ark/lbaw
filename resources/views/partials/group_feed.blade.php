@@ -1,6 +1,8 @@
 <div id="timeline">
-    <!-- TODO: Add posts here -->
-    @for ($i = 0; $i < 5; $i++)
-        @include('partials.post_item');
-    @endfor
+
+    <!-- TODO make posts for groups and make POST_ITEM receive the post correctly  -->
+    @foreach ($group->posts as $post)
+        @include('partials.post_item', ['post' => $post]);
+    @endforeach
+
 </div>

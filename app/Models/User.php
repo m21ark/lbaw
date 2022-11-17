@@ -29,4 +29,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Post', 'id_poster');
+    }
+
+    public function groupJoinRequests()
+    {
+        return $this->hasMany('App\Models\GroupJoinRequest', 'id_user');
+    }
+
+
+    public function interests()
+    {
+        return $this->hasMany('App\Models\TopicsInterestUser', 'id_user');
+    }
 }

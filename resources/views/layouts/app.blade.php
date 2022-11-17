@@ -19,7 +19,6 @@
     <link href="<?php echo e(asset('css/profile.css')); ?>" rel="stylesheet">
 
     <!-- Javascript -->
-    <script type="text/javascript"></script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
 </head>
 
@@ -34,7 +33,11 @@
 
 
         @if (Auth::check())
-            <a id="header_avatar" href={{ url('/profile/username') }}><img src="../user.png" alt="logo"></a>
+            <div id="header_avatar">
+                <a href={{ url('/profile/' . Auth::user()->username) }}>{{ Auth::user()->username }}</a>
+                <a href={{ url('/profile/' . Auth::user()->username) }}><img src="../user.png" alt="logo"></a>
+            </div>
+
             <a href={{ url('/logout') }}> Logout </a>
         @else
             <div id="header_signup">
@@ -52,19 +55,13 @@
         <ul>
             <li><a href={{ url('/home') }}>Home</a></li>
             <li><a href={{ url('/messages/sender_username') }}>Messages</a></li>
-            <li><a href={{ url('/group/groupname') }}>My Groups</a></li>
+            <li><a href={{ url('/group/per') }}>My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>
-        @if (Auth::check())
-            <div>
-                <a href={{ url('/profile/username') }}><img src="../user.png" alt="" width="65">
-                    <p>Own Profile</p>
-                </a>
+        @auth
+            <button id="post_button" class='make_post_popup form_button'>Post</button>
+        @endauth
 
-            </div>
-
-            <button id="post_button">Post</button>
-        @endif
     </nav>
 
     @yield('rightbar')
@@ -82,6 +79,12 @@
 
         <!-- Main Content -->
         @yield('content')
+
+        <!-- Hidden Overlapping Pop-ups -->
+        <!-- TODO: Put this somewherelse -->
+        @include('partials.make_post_popup', ['popup_class' => 'make_post'])
+        @include('partials.make_post_popup', ['popup_class' => 'make_group_post'])
+        @include('partials.make_group_popup')
 
 
     </main>

@@ -8,6 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $table = 'post';
+
+    public function owner()
+    {
+        return $this->belongsTo('App\Models\User', 'id_poster');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Like', 'id_post');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'id_post');
+    }
+
+    public function group()
+    {
+        return $this->belongsTo('App\Models\Group', 'id_group');
+    }
+
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
