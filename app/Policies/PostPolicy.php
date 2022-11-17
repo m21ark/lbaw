@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Http\Controllers\GroupController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -32,8 +33,12 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        // TODO dps por de volta o q esta a comentado
-        return true;//return PostController::areFriends($user, $post->owner);
+
+        if (isset($post->group)) {
+            return GroupController::userInGroup($user, $post->group);
+        }
+
+        return PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
     }
 
     /**

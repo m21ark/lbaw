@@ -820,7 +820,7 @@ paths:
                text:
                  type: string
                group:
-                 type: integer
+                 type: group_name
                picture: 
                  type: array
                  items:

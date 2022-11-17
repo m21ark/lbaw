@@ -1,40 +1,41 @@
 function addEventListeners() {
 
-    let post_edit = document.querySelectorAll('.make_post_popup');
-    [].forEach.call(post_edit, function (post_edit) {
-        post_edit.addEventListener('click', logItem);
-    });
+    // Toggle para botões que escondem paginas
+    let listener_list = [
+        ['.make_post_popup', logItem('.make_post')],
+        ['.create_group_button', logItem('.make_group')],
+        ['.group_post_button', logItem('.make_group_post')]
+    ];
 
-    let group_add = document.querySelectorAll('.create_group_button');
-    [].forEach.call(group_add, function (group_add) {
-        group_add.addEventListener('click', makeGroupPopup);
-    });
-
+    listener_list.forEach(function (l) {
+        let element = document.querySelectorAll(l[0]);
+        [].forEach.call(element, function (element) {
+            element.addEventListener('click', l[1]);
+        });
+    }
+    );
 
     let create_button = document.querySelector('.make_post .form_button');
-    if (create_button)
-        create_button.addEventListener('click', sendCreatePostRequest);
+    create_button.addEventListener('click', sendCreatePostRequest(''));
 
-    let create_group_button = document.querySelector('.make_group .form_button');
-    if (create_group_button)
-        create_group_button.addEventListener('click', sendCreateGroupRequest);
+    let create_group_post_button = document.querySelector('.make_group_post .form_button');
+    let group_name = document.querySelector('#username');
+    if (group_name !== null)
+        create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
 
     let remove_groupMember_button = document.querySelector('.leave_group_button');
     if (remove_groupMember_button)
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
+
 }
 
-function logItem(e) {
-    const item = document.querySelector('.make_post');
-    console.log(item);
-    item.toggleAttribute('hidden');
-}
-
-function makeGroupPopup(e) {
-    const item = document.querySelector('.make_group');
-    console.log(item);
-    item.toggleAttribute('hidden');
+function logItem(class_name) {
+    return function (e) {
+        const item = document.querySelector(class_name);
+        console.log(item);
+        item.toggleAttribute('hidden');
+    }
 }
 
 function encodeForAjax(data) {
@@ -55,51 +56,52 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-function sendCreatePostRequest(event) {
-    let name = document.querySelector('textarea[id=text]').value;
-    console.log(name);
+function sendCreatePostRequest(group_name_) {
+    return function (event) {
+        if (group_name_ == '') {
+            let name = document.querySelector('.make_post textarea[name=text_to_save]').value;
+            console.log(name);
+            if (name != null) {
+                sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
+                console.log('lçdlddl');
+            }
+        }
+        else {
+            let name = document.querySelector('.make_group_post textarea[name=text_to_save]').value;
+            console.log(name);
+            console.log("ldldld")
+            if (name != null)
+                sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_ }, addedHandler('.make_group_post'));
+        }
 
-    if (name != null)
-        sendAjaxRequest('post', '/api/post/', { text: name }, PostAddedHandler);
-
-    event.preventDefault();
+        event.preventDefault();
+    }
 }
 
-function PostAddedHandler() {
-    console.log(this.status)
-    if (this.status != 201) window.location = '/'; // ver dps
+function addedHandler(class_name) {
+    return function () {
+        console.log(this.status)
+        if (this.status < 200 && this.status >= 300) window.location = '/';
 
-    // create alert notification
-    console.log("post added");
-    logItem(0);
-    // talvez dar redirect para a pagina do post
+        // create alert notification - use switch
+
+        logItem(class_name)(0);
+        // talvez dar redirect para a pagina do post
+    }
 }
 
 
 
-
-function GroupAddedHandler() {
-    console.log(this.status)
-    if (this.status !image.png= 201) window.location = '/'; // ver dps
-
-    // create alert notification
-    console.log("group added");
-
-    const item = document.querySelector('.make_group');
-    item.toggleAttribute('hidden');
-}
-
-
-function sendCreateGroupRequest() {
+function sendCreateGroupRequest(event) {
 
     let name = document.querySelector('input[id=group_name]').value;
     let description = document.querySelector('textarea[id=group_description]').value;
     let visibility = true
 
-    if (name == null || description == null || visibility == null)
+    if (name == null || description == null || visibility == null) // TODO a error message here
         return;
 
-    sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, GroupAddedHandler);
+    sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
 
 }
 
@@ -117,7 +119,7 @@ function sendDeleteGroupMemberRequest() {
     sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
 }
 
-
+addEventListeners();
 
 // Home =============================================================================
 
@@ -186,10 +188,4 @@ function updateFeedOnLoad() {
     updateFeed('viral')
 }
 
-updateFeedOnLoad()
-
-
-// =============================================================================
-
-
-addEventListeners();
+updateFeedOnLoad();

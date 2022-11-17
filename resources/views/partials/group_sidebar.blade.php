@@ -2,7 +2,8 @@
 
     <h2>Group Info</h2>
 
-
+    <button id="group_post_button" class='form_button group_post_button'>Post on group</button>
+    
     <h3 id="username">{{ $group->name }}</h3>
     <!-- TODO add profile image  -->
     <img src="../user.png" alt="" width="150">
@@ -25,12 +26,12 @@
             @endforeach
 
             @foreach ($group->members as $member)
-                <li>
-                    <!-- in_array($member->id, $group->owners->toArray())  -->
-                    <img src="../user.png" alt="user_avatar" width="50">
-                    <a
-                        href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
-                </li>
+                @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
+                    <li>
+                        <img src="../user.png" alt="user_avatar" width="50">
+                        <a href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
+                    </li>
+                @endif
             @endforeach
 
 
@@ -76,5 +77,10 @@
         <button class='form_button leave_group_button' data-idGroup="{{ $group->id }}">Leave Group</button>
     @endif
 
+    @auth
+        @if (Auth::user()->id == $group->owner_id)
+            <button id="edit_group_button" class='form_button edit_group_button'>Edit Group</button>
+        @endif
+    @endauth
 
 </nav>
