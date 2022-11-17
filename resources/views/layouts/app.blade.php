@@ -33,7 +33,11 @@
 
 
         @if (Auth::check())
-            <a id="header_avatar" href={{ url('/profile/username') }}><img src="../user.png" alt="logo"></a>
+            <div id="header_avatar">
+                <a href={{ url('/profile/' . Auth::user()->username) }}>{{ Auth::user()->username }}</a>
+                <a href={{ url('/profile/' . Auth::user()->username) }}><img src="../user.png" alt="logo"></a>
+            </div>
+
             <a href={{ url('/logout') }}> Logout </a>
         @else
             <div id="header_signup">
@@ -54,16 +58,10 @@
             <li><a href={{ url('/group/per') }}>My Groups</a></li>
             <li><a href="#">Notifications</a></li>
         </ul>
-        @if (Auth::check())
-            <div>
-                <a href={{ url('/profile/username') }}><img src="../user.png" alt="" width="65">
-                    <p>Own Profile</p>
-                </a>
-
-            </div>
-
+        @auth
             <button id="post_button" class='make_post_popup form_button'>Post</button>
-        @endif
+        @endauth
+
     </nav>
 
     @yield('rightbar')

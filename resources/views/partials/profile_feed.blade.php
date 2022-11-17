@@ -15,5 +15,8 @@
 
 
 <div id="timeline">
-    <!-- TODO: Add posts here -->
+    @foreach ($user->posts as $post)
+        @include('partials.post_item', ['post' => $post])
+    @endforeach
+
 </div>
