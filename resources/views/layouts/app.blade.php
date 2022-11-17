@@ -83,7 +83,9 @@
         @yield('content')
 
         <!-- Hidden Overlapping Pop-ups -->
-        @include('partials.make_post_popup')
+        <!-- TODO: Put this somewherelse -->
+        @include('partials.make_post_popup', ['popup_class' => 'make_post'])
+        @include('partials.make_post_popup', ['popup_class' => 'make_group_post'])
         @include('partials.make_group_popup')
 
 

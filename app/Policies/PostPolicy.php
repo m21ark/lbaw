@@ -32,7 +32,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return PostController::areFriends($user, $post->owner);
+        return PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
     }
 
     /**

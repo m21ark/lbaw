@@ -2,7 +2,8 @@
 
     <h2>Group Info</h2>
 
-
+    <button id="group_post_button" class='form_button group_post_button'>Post on group</button>
+    
     <h3 id="username">{{ $group->name }}</h3>
     <!-- TODO add profile image  -->
     <img src="../user.png" alt="" width="150">
@@ -74,5 +75,10 @@
         <button id="create_group_button" class='form_button create_group_button'>Create Group</button>
     @endif
 
+    @auth
+        @if (Auth::user()->id == $group->owner_id)
+            <button id="edit_group_button" class='form_button edit_group_button'>Edit Group</button>
+        @endif
+    @endauth
 
 </nav>

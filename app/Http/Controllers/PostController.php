@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,24 +69,20 @@ class PostController extends Controller
     public function create(Request $request)
     {
 
-        // TODO ::: TESTAR
-
         $post = new Post();
-        /*
-    $this->authorize('create', $post);
 
-    $post->text = $request->input('text');
-    $post->id_poster = Auth::user()->id;
-
-    if ($request->input('group') != Null) {
-      $post->id_group = $request->input('group');
-    }
-    // TODO : ADD IMAGES
-
-    $post->save();
-
-    return $post;
-    */
+        //$this->authorize('create', $post);
+        
+        $post->text = $request->input('text');
+        $post->id_poster = Auth::user()->id;
+        
+        if ($request->input('group_name') != Null) {
+            $post->id_group = $request->input(Group::where('name', $request->input('group_name'))->first()->id);
+        }
+        // TODO : ADD IMAGES
+    
+        $post->save();
+     
     }
 
     public function delete($id)

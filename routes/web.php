@@ -38,7 +38,7 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 
 
 Route::get('api/post/feed/{type_feed}', 'PostController@feed');
-Route::post('api/post', 'PostController@create');
+Route::post('api/post/', 'PostController@create');
 Route::post('api/post/{id}', 'PostController@delete');
 
 // ======================================= APIS ========================================

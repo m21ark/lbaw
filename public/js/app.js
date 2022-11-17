@@ -1,56 +1,39 @@
 function addEventListeners() {
-  // let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
-  // [].forEach.call(itemCheckers, function(checker) {
-  //   checker.addEventListener('change', sendItemUpdateRequest);
-  // });
-  //
-  // let itemCreators = document.querySelectorAll('article.card form.new_item');
-  // [].forEach.call(itemCreators, function(creator) {
-  //   creator.addEventListener('submit', sendCreateItemRequest);
-  // });
-  //
-  // let itemDeleters = document.querySelectorAll('article.card li a.delete');
-  // [].forEach.call(itemDeleters, function(deleter) {
-  //   deleter.addEventListener('click', sendDeleteItemRequest);
-  // });
-  //
-  // let cardDeleters = document.querySelectorAll('article.card header a.delete');
-  // [].forEach.call(cardDeleters, function(deleter) {
-  //   deleter.addEventListener('click', sendDeleteCardRequest);
-  // });
-  //
-  // let cardCreator = document.querySelector('article.card form.new_card');
-  // if (cardCreator != null)
-  //   cardCreator.addEventListener('submit', sendCreateCardRequest);
+  ;
 
   let post_edit = document.querySelectorAll('.make_post_popup');
   [].forEach.call(post_edit, function (post_edit) {
-    post_edit.addEventListener('click', logItem);
+    post_edit.addEventListener('click', logItem('.make_post'));
   });
 
   let group_add = document.querySelectorAll('.create_group_button');
   [].forEach.call(group_add, function (group_add) {
-    group_add.addEventListener('click', makeGroupPopup);
+    group_add.addEventListener('click', logItem('.make_group'));
+  });
+
+  let post_group_add = document.querySelectorAll('.group_post_button');
+  [].forEach.call(post_group_add, function (group_add) {
+    group_add.addEventListener('click', logItem('.make_group_post'));
   });
 
 
   let create_button = document.querySelector('.make_post .form_button');
-  create_button.addEventListener('click', sendCreatePostRequest);
+  create_button.addEventListener('click', sendCreatePostRequest(''));
+
+  let create_group_post_button = document.querySelector('.make_group_post .form_button');
+  let group_name = document.querySelector('#username');
+  create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name));
 
   let create_group_button = document.querySelector('.make_group .form_button');
   create_group_button.addEventListener('click', sendCreateGroupRequest);
 }
 
-function logItem(e) {
-  const item = document.querySelector('.make_post');
-  console.log(item);
-  item.toggleAttribute('hidden');
-}
-
-function makeGroupPopup(e) {
-  const item = document.querySelector('.make_group');
-  console.log(item);
-  item.toggleAttribute('hidden');
+function logItem(class_name) {
+  return function(e) {
+    const item = document.querySelector(class_name);
+    console.log(item);
+    item.toggleAttribute('hidden');
+  }
 }
 
 function encodeForAjax(data) {
@@ -71,39 +54,39 @@ function sendAjaxRequest(method, url, data, handler) {
   request.send(encodeForAjax(data));
 }
 
-function sendCreatePostRequest(event) {
-  let name = document.querySelector('textarea[id=text]').value;
-  console.log(name);
+function sendCreatePostRequest(group_name_) {
+  return function (event) {
+    let name = document.querySelector('textarea[id=text]').value;
+    console.log(name);
+    console.log('lçdlddl');
 
-  if (name != null)
-    sendAjaxRequest('post', '/api/post/', { text: name }, PostAddedHandler);
+    if (group_name == '') {
+      if (name != null) {
+        sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
+        console.log('lçdlddl');
+      }
+    }
+    else {
+      if (name != null)
+        sendAjaxRequest('post', '/api/post/' + group_name_.value, { text: name, group_name: group_name_}, addedHandler('.make_group_post'));
+    }
 
-  event.preventDefault();
+    event.preventDefault();
+  }
 }
 
-function PostAddedHandler() {
-  console.log(this.status)
-  if (this.status != 201) window.location = '/'; // ver dps
+function addedHandler(class_name) {
+  return function () {
+    console.log(this.status)
+    if (this.status != 201) window.location = '/'; // ver dps
 
-  // create alert notification
-  console.log("post added");
-  logItem(0);
-  // talvez dar redirect para a pagina do post
+    // create alert notification - use switch 
+    
+    logItem(class_name)(0);
+    // talvez dar redirect para a pagina do post
+  }
 }
 
-
-
-
-function GroupAddedHandler() {
-  console.log(this.status)
-  if (this.status != 201) window.location = '/'; // ver dps
-
-  // create alert notification
-  console.log("group added");
-
-  const item = document.querySelector('.make_group');
-  item.toggleAttribute('hidden');
-}
 
 
 function sendCreateGroupRequest(event) {
@@ -112,13 +95,20 @@ function sendCreateGroupRequest(event) {
   let description = document.querySelector('textarea[id=group_description]').value;
   let visibility = true
 
-  if (name == null || description == null || visibility == null)
+  if (name == null || description == null || visibility == null) // TODO a error message here
     return;
 
-  sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, GroupAddedHandler);
+  sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
 
   event.preventDefault();
 }
+
+
+
+
+
+
+
 
 
 

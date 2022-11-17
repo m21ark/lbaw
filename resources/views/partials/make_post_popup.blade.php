@@ -1,5 +1,5 @@
 @if (Auth::check())
-    <div class="post_body make_post pop_up" hidden="">
+    <div class="post_body pop_up {{$popup_class}}" hidden="">
         <form>
             <label>
                 <div class="form-group">
