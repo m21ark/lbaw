@@ -32,7 +32,8 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return PostController::areFriends($user, $post->owner);
+        // TODO dps por de volta o q esta a comentado
+        return true;//return PostController::areFriends($user, $post->owner);
     }
 
     /**

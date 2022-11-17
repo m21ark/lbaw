@@ -68,24 +68,21 @@ class PostController extends Controller
     public function create(Request $request)
     {
 
-        // TODO ::: TESTAR
-
         $post = new Post();
-        /*
-    $this->authorize('create', $post);
 
-    $post->text = $request->input('text');
-    $post->id_poster = Auth::user()->id;
+        $this->authorize('create', $post);
 
-    if ($request->input('group') != Null) {
-      $post->id_group = $request->input('group');
-    }
-    // TODO : ADD IMAGES
+        $post->text = $request->input('text');
+        $post->id_poster = Auth::user()->id;
 
-    $post->save();
+        if ($request->input('group') != Null) {
+            $post->id_group = $request->input('group');
+        }
+        // TODO : ADD IMAGES
 
-    return $post;
-    */
+        $post->save();
+
+        return $post;
     }
 
     public function delete($id)

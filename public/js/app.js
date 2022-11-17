@@ -122,6 +122,12 @@ function sendDeleteGroupMemberRequest() {
 // Home =============================================================================
 
 function updateFeed(feed) {
+
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
+
+
+
     if (!document.querySelector('#timeline')) {
         return;
     }
