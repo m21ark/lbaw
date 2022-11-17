@@ -22,7 +22,8 @@ function addEventListeners() {
 
   let create_group_post_button = document.querySelector('.make_group_post .form_button');
   let group_name = document.querySelector('#username');
-  create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name));
+  if (group_name !== null)
+    create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
 
   let create_group_button = document.querySelector('.make_group .form_button');
   create_group_button.addEventListener('click', sendCreateGroupRequest);
@@ -56,19 +57,20 @@ function sendAjaxRequest(method, url, data, handler) {
 
 function sendCreatePostRequest(group_name_) {
   return function (event) {
-    let name = document.querySelector('textarea[id=text]').value;
-    console.log(name);
-    console.log('lçdlddl');
-
-    if (group_name == '') {
+    if (group_name_ == '') {
+      let name = document.querySelector('.make_post textarea[name=text_to_save]').value;
+      console.log(name);
       if (name != null) {
         sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
         console.log('lçdlddl');
       }
     }
     else {
+      let name = document.querySelector('.make_group_post textarea[name=text_to_save]').value;
+      console.log(name);
+      console.log("ldldld")
       if (name != null)
-        sendAjaxRequest('post', '/api/post/' + group_name_.value, { text: name, group_name: group_name_}, addedHandler('.make_group_post'));
+        sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_}, addedHandler('.make_group_post'));
     }
 
     event.preventDefault();
@@ -104,9 +106,16 @@ function sendCreateGroupRequest(event) {
 }
 
 
+addEventListeners();
+
+
+
 // Home =============================================================================
 
 function updateFeed(feed) {
+  let pathname = window.location.pathname
+  if (pathname !== '/home') return;
+
   if (!document.querySelector('#timeline')) {
     return;
   }
@@ -165,7 +174,4 @@ function updateFeedOnLoad() {
   updateFeed('viral')
 }
 
-updateFeedOnLoad()
-
-
-addEventListeners();
+updateFeedOnLoad();

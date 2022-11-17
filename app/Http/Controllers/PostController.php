@@ -71,7 +71,7 @@ class PostController extends Controller
 
         $post = new Post();
 
-        //$this->authorize('create', $post);
+        $this->authorize('create', $post);
         
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
