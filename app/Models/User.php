@@ -30,13 +30,13 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function posts() {
-        return $this->hasMany('App\Models\Post');
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Post', 'id_poster');
     }
 
     public function groupJoinRequests()
     {
-        return $this->hasMany('App\Models\GroupJoinRequest');
+        return $this->hasMany('App\Models\GroupJoinRequest', 'id_user');
     }
-    
 }

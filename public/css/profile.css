@@ -8,6 +8,9 @@
 
 #user_interests {
     display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
 }
 
 #user_interests li {
@@ -30,4 +33,18 @@
     font-size: 1.5em;
     padding: 0.3em 2em;
     border-radius: 0.8em;
+}
+
+#rightbar .profile_img {
+    width: 60%;
+    margin: auto;
+    display: block;
+}
+
+
+.edit_profile_btn {
+    font-size: 1.3em;
+    padding: 0.5em 1em;
+    text-align: center;
+    width: 50%;
 }

@@ -1,31 +1,30 @@
 <nav id="rightbar">
     <h2>Profile Info</h2>
 
-    <img src="../user.png" alt="" width="150">
-    <h3 id="username">Rachel03</h3>
+    <img class="profile_img" src="../user.png" alt="" width="150">
+    <h3 id="username">{{ $user->username }}</h3>
 
     <div class="about_me">
         <h3>About me</h3>
 
         <p id="user_bio">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro earum dolor voluptas molestias omnis
-            deserunt quibusdam quasi excepturi facilis perspiciatis numquam eligendi, quisquam dolore, eaque hic.
-            Odit porro sapiente eum.
+            {{ $user->bio }}
         </p>
 
         <h3>Interests</h3>
 
         <ul id="user_interests">
+            <!--  TODO: Get these from database  -->
             <li><a href="search.html">Travel</a> </li>
             <li><a href="search.html">Photos</a> </li>
             <li><a href="search.html">Dogs</a> </li>
-
         </ul>
 
     </div>
 
     <div class="user_stats">
         <h3>Statistics</h3>
+        <!-- TODO: Fetch from DB -->
         <ul>
             <li>
                 <img src="../user.png" alt="user_avatar" width="50">
@@ -51,7 +50,9 @@
         </ul>
     </div>
 
-    <button id="post_button">Edit</button>
+    @if (Auth::user()->id == $user->id)
+        <a href="#" class="edit_profile_btn form_button">Edit</a>
+    @endif
 
 
 </nav>
