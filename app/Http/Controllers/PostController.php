@@ -77,7 +77,7 @@ class PostController extends Controller
         $post->id_poster = Auth::user()->id;
         
         if ($request->input('group_name') != Null) {
-            $post->id_group = $request->input(Group::where('name', $request->input('group_name'))->first()->id);
+            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }
         // TODO : ADD IMAGES
     
