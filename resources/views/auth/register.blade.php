@@ -47,7 +47,7 @@
                             required>
                     </label>
 
-                    <button class="form_button" type="submit">
+                    <button class="form_button" type="submit" >
                         Register
                     </button>
                 </div>

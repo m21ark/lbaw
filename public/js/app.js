@@ -1,208 +1,153 @@
 function addEventListeners() {
-  let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
-  [].forEach.call(itemCheckers, function(checker) {
-    checker.addEventListener('change', sendItemUpdateRequest);
-  });
 
-  let itemCreators = document.querySelectorAll('article.card form.new_item');
-  [].forEach.call(itemCreators, function(creator) {
-    creator.addEventListener('submit', sendCreateItemRequest);
-  });
+    // Toggle para botões que escondem paginas
+    let listener_list = [
+        ['.make_post_popup', logItem('.make_post')],
+        ['.create_group_button', logItem('.make_group')],
+        ['.group_post_button', logItem('.make_group_post')]
+    ];
 
-  let itemDeleters = document.querySelectorAll('article.card li a.delete');
-  [].forEach.call(itemDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteItemRequest);
-  });
+    listener_list.forEach(function (l) {
+        let element = document.querySelectorAll(l[0]);
+        [].forEach.call(element, function (element) {
+            element.addEventListener('click', l[1]);
+        });
+    }
+    );
 
-  let cardDeleters = document.querySelectorAll('article.card header a.delete');
-  [].forEach.call(cardDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteCardRequest);
-  });
+    let create_button = document.querySelector('.make_post .form_button');
+    create_button.addEventListener('click', sendCreatePostRequest(''));
 
-  let cardCreator = document.querySelector('article.card form.new_card');
-  if (cardCreator != null)
-    cardCreator.addEventListener('submit', sendCreateCardRequest);
+    let create_group_post_button = document.querySelector('.make_group_post .form_button');
+    let group_name = document.querySelector('#username');
+    if (group_name !== null)
+        create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
+
+    let remove_groupMember_button = document.querySelector('.leave_group_button');
+    if (remove_groupMember_button)
+        remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
+
+
+}
+
+function logItem(class_name) {
+    return function (e) {
+        const item = document.querySelector(class_name);
+        console.log(item);
+        item.toggleAttribute('hidden');
+    }
 }
 
 function encodeForAjax(data) {
-  if (data == null) return null;
-  return Object.keys(data).map(function(k){
-    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-  }).join('&');
+    if (data == null) return null;
+    return Object.keys(data).map(function (k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+    }).join('&');
 }
 
 function sendAjaxRequest(method, url, data, handler) {
-  let request = new XMLHttpRequest();
+    let request = new XMLHttpRequest();
 
-  request.open(method, url, true);
-  request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  request.addEventListener('load', handler);
-  request.send(encodeForAjax(data));
+    request.open(method, url, true);
+    request.withCredentials = true;
+    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.addEventListener('load', handler);
+    request.send(encodeForAjax(data));
 }
 
-function sendItemUpdateRequest() {
-  let item = this.closest('li.item');
-  let id = item.getAttribute('data-id');
-  let checked = item.querySelector('input[type=checkbox]').checked;
+function sendCreatePostRequest(group_name_) {
+    return function (event) {
+        if (group_name_ == '') {
+            let name = document.querySelector('.make_post textarea[name=text_to_save]').value;
+            console.log(name);
+            if (name != null) {
+                sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
+                console.log('lçdlddl');
+            }
+        }
+        else {
+            let name = document.querySelector('.make_group_post textarea[name=text_to_save]').value;
+            console.log(name);
+            console.log("ldldld")
+            if (name != null)
+                sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_ }, addedHandler('.make_group_post'));
+        }
 
-  sendAjaxRequest('post', '/api/item/' + id, {done: checked}, itemUpdatedHandler);
+        event.preventDefault();
+    }
 }
 
-function sendDeleteItemRequest() {
-  let id = this.closest('li.item').getAttribute('data-id');
+function addedHandler(class_name) {
+    return function () {
+        console.log(this.status)
+        if (this.status < 200 && this.status >= 300) window.location = '/';
 
-  sendAjaxRequest('delete', '/api/item/' + id, null, itemDeletedHandler);
+        // create alert notification - use switch
+
+        logItem(class_name)(0);
+        // talvez dar redirect para a pagina do post
+    }
 }
 
-function sendCreateItemRequest(event) {
-  let id = this.closest('article').getAttribute('data-id');
-  let description = this.querySelector('input[name=description]').value;
 
-  if (description != '')
-    sendAjaxRequest('put', '/api/cards/' + id, {description: description}, itemAddedHandler);
 
-  event.preventDefault();
+function sendCreateGroupRequest(event) {
+
+    let name = document.querySelector('input[id=group_name]').value;
+    let description = document.querySelector('textarea[id=group_description]').value;
+    let visibility = true
+
+    if (name == null || description == null || visibility == null) // TODO a error message here
+        return;
+
+    sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+
 }
 
-function sendDeleteCardRequest(event) {
-  let id = this.closest('article').getAttribute('data-id');
 
-  sendAjaxRequest('delete', '/api/cards/' + id, null, cardDeletedHandler);
-}
 
-function sendCreateCardRequest(event) {
-  let name = this.querySelector('input[name=name]').value;
+function sendDeleteGroupMemberRequest() {
 
-  if (name != '')
-    sendAjaxRequest('put', '/api/cards/', {name: name}, cardAddedHandler);
+    let id = document.querySelector('.leave_group_button').getAttribute('data-idGroup');
 
-  event.preventDefault();
-}
+    let res = confirm("Are you sure you want to leave this group?");
 
-function itemUpdatedHandler() {
-  let item = JSON.parse(this.responseText);
-  let element = document.querySelector('li.item[data-id="' + item.id + '"]');
-  let input = element.querySelector('input[type=checkbox]');
-  element.checked = item.done == "true";
-}
+    if (!res)
+        return;
 
-function itemAddedHandler() {
-  if (this.status != 200) window.location = '/';
-  let item = JSON.parse(this.responseText);
-
-  // Create the new item
-  let new_item = createItem(item);
-
-  // Insert the new item
-  let card = document.querySelector('article.card[data-id="' + item.card_id + '"]');
-  let form = card.querySelector('form.new_item');
-  form.previousElementSibling.append(new_item);
-
-  // Reset the new item form
-  form.querySelector('[type=text]').value="";
-}
-
-function itemDeletedHandler() {
-  if (this.status != 200) window.location = '/';
-  let item = JSON.parse(this.responseText);
-  let element = document.querySelector('li.item[data-id="' + item.id + '"]');
-  element.remove();
-}
-
-function cardDeletedHandler() {
-  if (this.status != 200) window.location = '/';
-  let card = JSON.parse(this.responseText);
-  let article = document.querySelector('article.card[data-id="'+ card.id + '"]');
-  article.remove();
-}
-
-function cardAddedHandler() {
-  if (this.status != 200) window.location = '/';
-  let card = JSON.parse(this.responseText);
-
-  // Create the new card
-  let new_card = createCard(card);
-
-  // Reset the new card input
-  let form = document.querySelector('article.card form.new_card');
-  form.querySelector('[type=text]').value="";
-
-  // Insert the new card
-  let article = form.parentElement;
-  let section = article.parentElement;
-  section.insertBefore(new_card, article);
-
-  // Focus on adding an item to the new card
-  new_card.querySelector('[type=text]').focus();
-}
-
-function createCard(card) {
-  let new_card = document.createElement('article');
-  new_card.classList.add('card');
-  new_card.setAttribute('data-id', card.id);
-  new_card.innerHTML = `
-
-  <header>
-    <h2><a href="cards/${card.id}">${card.name}</a></h2>
-    <a href="#" class="delete">&#10761;</a>
-  </header>
-  <ul></ul>
-  <form class="new_item">
-    <input name="description" type="text">
-  </form>`;
-
-  let creator = new_card.querySelector('form.new_item');
-  creator.addEventListener('submit', sendCreateItemRequest);
-
-  let deleter = new_card.querySelector('header a.delete');
-  deleter.addEventListener('click', sendDeleteCardRequest);
-
-  return new_card;
-}
-
-function createItem(item) {
-  let new_item = document.createElement('li');
-  new_item.classList.add('item');
-  new_item.setAttribute('data-id', item.id);
-  new_item.innerHTML = `
-  <label>
-    <input type="checkbox"> <span>${item.description}</span><a href="#" class="delete">&#10761;</a>
-  </label>
-  `;
-
-  new_item.querySelector('input').addEventListener('change', sendItemUpdateRequest);
-  new_item.querySelector('a.delete').addEventListener('click', sendDeleteItemRequest);
-
-  return new_item;
+    sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
 }
 
 addEventListeners();
 
-
 // Home =============================================================================
 
 function updateFeed(feed) {
+
+  let pathname = window.location.pathname
+  if (pathname !== '/home') return;
+
   if (!document.querySelector('#timeline')) {
     return;
   }
 
-  sendAjaxRequest('get', 'api/post/feed/'+feed, {}, function () {
+  sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
     let received = JSON.parse(this.responseText);
-    console.log(received)
+
     let timeline = document.querySelector('#timeline');
     timeline.innerHTML = '';
-    received.forEach( function (post) {
-      timeline.appendChild(createPost(post))
+    received.forEach(function (post) {
+        timeline.appendChild(createPost(post))
     })
 
   })
 }
 
 function createPost(post) {
-  let new_post = document.createElement('article');
-  new_post.classList.add('post');
-  new_post.innerHTML = `
+    let new_post = document.createElement('article');
+    new_post.classList.add('post');
+    new_post.innerHTML = `
     <div class="post_head">
       <a href='/profile/${post.owner}'><img src="../user.png" alt="" width="50"></a>
       <a href='/profile/${post.owner}'>${post.owner}</a>
@@ -227,7 +172,7 @@ function createPost(post) {
 
     </div>
   `
-  return new_post;
+    return new_post;
 }
 
 function updateFeedOnLoad() {
@@ -240,7 +185,4 @@ function updateFeedOnLoad() {
   updateFeed('viral')
 }
 
-updateFeedOnLoad()
-
-
-// =============================================================================
+updateFeedOnLoad();

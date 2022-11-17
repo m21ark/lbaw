@@ -63,7 +63,7 @@ header {
     display: grid;
     background-color: var(--light_color);
     grid-template-columns: 3fr 5fr 2.5fr 1fr 1fr;
-    grid-template-areas: "logo search . avatar logbtn";
+    grid-template-areas: "logo search name avatar logbtn";
     padding: 0.6em 0.2em 0.3em 0.8em;
     align-items: center;
     background-color: var(--bg_block);
@@ -75,6 +75,8 @@ header #header_signup {
     grid-area: logbtn;
     margin-right: 1em;
 }
+
+
 
 header a {
     color: var(--bg_white);
@@ -108,9 +110,13 @@ header a.link_button {
 
 header #header_avatar {
     grid-area: "avatar";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
 }
 
-header #header_avatar>img {
+header #header_avatar img {
     width: 60px;
     height: 60px;
     padding-top: 0.2em;

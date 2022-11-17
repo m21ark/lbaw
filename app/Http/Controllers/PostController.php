@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,88 +13,82 @@ use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
 
-  public static function areFriends(User $user1, User $user2) {
-    return DB::table('friend_request')
-      ->where('id_user_sender', $user1->id)
-      ->where('id_user_sender', $user2->id)->where('accept_st', 'Accepted') ||
-      DB::table('friend_request')
-      ->where('id_user_sender', $user2->id)
-      ->where('id_user_sender', $user1->id)->where('accept_st', 'Accepted');
-  }
-
-  public function show($id)
-  {
-    // TODO: use id to get post from database
-    $post   = Post::withCount('likes', 'comments')->find($id);
-    // policy, nr_comments_post
-    if (!$post->owner->visibility)
+    public static function areFriends(User $user1, User $user2)
     {
-      $this->authorize('view', $post);
-    }
-    return view('pages.post', ['post' => $post]);
-  }
-
-  public function feed(Request $request) {
-
-    $posts = [];
-
-    if ($request->route('type_feed') === "for_you") {
-      
-      //$this->authorize('feed', $posts);
-      $posts = $this->feed_for_you()->limit(20)->get();
-
-    } else if ($request->route('type_feed') === "friends") {
-      //$this->authorize('feed', $posts);
-      $posts = $this->feed_friends()->limit(20)->get();
-
-    } else if ($request->route('type_feed') === "groups") {
-      //$this->authorize('feed', $posts);
-      $posts = $this->feed_groups()->limit(20)->get();
-
-    } else if ($request->route('type_feed') === "viral") {
-      
-      $posts = $this->feed_viral()->limit(20)->get();
-
+        return DB::table('friend_request')
+            ->where('id_user_sender', $user1->id)
+            ->where('id_user_receiver', $user2->id)->where('acceptance_status', 'Accepted')->exists() ||
+            DB::table('friend_request')
+            ->where('id_user_sender', $user2->id)
+            ->where('id_user_receiver', $user1->id)->where('acceptance_status', 'Accepted')->exists();
     }
 
-    return json_encode($posts);
-  }
+    public function show($id)
+    {
+        // TODO: use id to get post from database
+        $post   = Post::withCount('likes', 'comments')->find($id);
+        // policy, nr_comments_post
+        if (!$post->owner->visibility) {
+          $this->authorize('view', $post);
+      }
+      return view('pages.post', ['post' => $post]);
+    }
 
-  public function create(Request $request) 
-  {
+    public function feed(Request $request)
+    {
+      $posts = [];
 
-    // TODO ::: TESTAR
+      if ($request->route('type_feed') === "for_you") {
+        
+        //$this->authorize('feed', $posts);
+        $posts = $this->feed_for_you()->limit(20)->get();
+  
+      } else if ($request->route('type_feed') === "friends") {
+        //$this->authorize('feed', $posts);
+        $posts = $this->feed_friends()->limit(20)->get();
+  
+      } else if ($request->route('type_feed') === "groups") {
+        //$this->authorize('feed', $posts);
+        $posts = $this->feed_groups()->limit(20)->get();
+  
+      } else if ($request->route('type_feed') === "viral") {
+        
+        $posts = $this->feed_viral()->limit(20)->get();
+  
+      }
+  
+      return json_encode($posts);
+    }
+
+
+    public function create(Request $request)
+    {
+
+        $post = new Post();
+
+        $this->authorize('create', $post);
+        
+        $post->text = $request->input('text');
+        $post->id_poster = Auth::user()->id;
+        
+        if ($request->input('group_name') != Null) {
+            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
+        }
+        // TODO : ADD IMAGES
     
-    $post = new Post();
-    /*
-    $this->authorize('create', $post);
-
-    $post->text = $request->input('text');
-    $post->id_poster = Auth::user()->id; 
-    
-    if (isset($request->input('group'))) {
-      $post->id_group = $request->input('group');
+        $post->save();
+     
     }
-    // TODO : ADD IMAGES
 
-    $post->save();
-
-    return $post;
-    */
-  }
-
-  public function delete($id) 
-  {
-    // TODO ::: TESTAR
-    $post = Post::find($id);
-
-    $this->delete('delete', $post);
-
-    $post->delete();
-    return $post;
-  }
-
-
+    public function delete($id)
+    {
+        // TODO ::: TESTAR
+        $post = Post::find($id);
+        $this->authorize('delete', $post);
+        $post->delete();
+        return $post;
+    }
+    
   private function feed_friends() {
   
     $posts = Post::
