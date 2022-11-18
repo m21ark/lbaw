@@ -3,7 +3,7 @@
     <hr>
 
     <h3 class="mt-4 mb-3">Hot Topics</h3>
-    <div class="list-group align-items-center  mb-5">
+    <div class="list-group align-items-center mb-5 expand_tag_a">
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 1</a>
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 2</a>
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 3</a>
@@ -12,24 +12,24 @@
 
     <h3 class="mb-3">Might Know</h3>
 
-    <div class="list-group align-items-center d-flex mb-5">
+    <div class="list-group align-items-center d-flex mb-5 ">
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Username</a>
-            <a href="#" class="btn btn-primary">Follow</a>
+            <img class="me-4" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-4" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class="btn btn-outline-primary">Follow</a>
         </div>
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Username</a>
-            <a href="#" class="btn btn-primary">Follow</a>
+            <img class="me-4" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-4" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class=" btn btn-outline-primary">Follow</a>
         </div>
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Username</a>
-            <a href="#" class="btn btn-primary">Follow</a>
+            <img class="me-4" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-4" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class=" btn btn-outline-primary">Follow</a>
         </div>
 
 

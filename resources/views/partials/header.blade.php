@@ -17,8 +17,8 @@
 
             @if (Auth::check())
                 <div class="d-flex align-items-center">
-                    <a class="text-white text-decoration-none" href={{ url('/profile/' . Auth::user()->username) }}>
-                        <strong>{{ Auth::user()->username }}</strong>
+                    <a class="text-white text-decoration-none me-3" href={{ url('/profile/' . Auth::user()->username) }}>
+                        <strong class="me-2">{{ Auth::user()->username }}</strong>
                         <img src="../user.png" alt="logo" width="40" height="40">
                     </a>
 

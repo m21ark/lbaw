@@ -5,7 +5,7 @@
         <h3 class="p-2">About me</h3>
 
 
-        <div class=" m-auto ">
+        <div class="m-auto">
             <img class="profile_img " src="../user.png" alt="" width="150">
             <h3 id="username" class="">{{ $user->username }}</h3>
         </div>
@@ -18,7 +18,7 @@
         <div class="card-footer">
             <h3>Interests</h3>
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-evenly">
 
 
                 @foreach ($user->interests as $interest)
@@ -34,6 +34,7 @@
     </div>
 
 
+    <!-- TODO: Do statistics from database -->
     <h3 class="mt-5 mb-3">Statistics</h3>
     <div class="list-group align-items-center mb-5">
 

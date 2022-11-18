@@ -28,6 +28,12 @@ function addEventListeners() {
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
 
+    let post_dropDown = document.querySelector('.dropdownPostButton');
+    if (post_dropDown)
+        post_dropDown.addEventListener('click', () => { document.querySelector('.dropdown_menu').toggleAttribute('hidden') });
+
+
+
 }
 
 function logItem(class_name) {

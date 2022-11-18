@@ -35,14 +35,70 @@ main {
     grid-area: rightbar;
     padding: 2em 1.5em;
     min-width: 20em;
+
 }
 
 #footer {
     grid-area: footer;
 }
 
+/*  ====================== AJUSTES =====================*/
+
+.profile_img {
+    display: block;
+    margin: auto;
+}
 
 
 .header_searchbar {
     width: 40%
+}
+
+.expand_tag_a a {
+    width: 60%;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.group_member_list .list-group-item {
+    width: 90%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 20em;
+}
+
+.post_item img {
+    max-width: 50%;
+    margin: 0.5em auto;
+    border-radius: 0.5em;
+}
+
+.post_item {
+    margin: 0 auto;
+}
+
+.post_item small {
+    margin: auto;
+}
+
+
+.post_item .dropdown {
+    margin: auto;
+}
+
+.post_item .dropdown_menu {
+    position: absolute;
+}
+
+.post_item .dropdown_menu * {
+    padding: 0.5em;
+    background-color: white;
+    border: 1px solid lightgray;
+}
+
+.post_item .dropdown_menu *:hover {
+    background-color: #006EF5;
+    color: white;
 }

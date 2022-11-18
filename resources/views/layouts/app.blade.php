@@ -13,8 +13,8 @@
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
 
 
-    <!-- Bootstrap -->
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Javascript -->

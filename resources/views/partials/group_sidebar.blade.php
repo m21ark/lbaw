@@ -32,11 +32,11 @@
 
 
     <h3 class="mb-4">Members</h3>
-    <div class="list-group align-items-center d-flex mb-4">
+    <div class="list-group align-items-center d-flex mb-4 group_member_list">
 
         @foreach ($group->owners as $owner)
-            <div class="list-group-item">
-                <img src="../user.png" alt="user_avatar" width="50">
+            <div class="list-group-item max_width_rightbar">
+                <img  src="../user.png" alt="user_avatar" width="50">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 
@@ -52,10 +52,12 @@
 
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
-                <div class="list-group-item">
+                <div class="list-group-item max_width_rightbar">
                     <img src="../user.png" alt="user_avatar" width="50">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
                 </div>
             @endif
         @endforeach
@@ -69,24 +71,24 @@
 
 
     <h3 class="mb-4">Groups for you</h3>
-    <div class="list-group align-items-center d-flex mb-4">
+    <div class="list-group align-items-center d-flex mb-4 ">
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-secondary">Join</a>
+            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-secondary">Join</a>
+            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img src="../user.png" alt="user_avatar" width="50">
-            <a href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-secondary">Join</a>
+            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
     </div>
