@@ -210,7 +210,6 @@ function updateSearchOnInputAndClick() {
     const searchBar = document.querySelector('#search_bar')
 
     if (searchBar) {
-        console.log(searchBar)
         searchBar.addEventListener('input', function () {
             updateSearch()
         }) 
@@ -221,8 +220,11 @@ function updateSearchOnInputAndClick() {
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
-        console.log(filters)
-        //filters.
+        filters.forEach(function (filter) {
+            filter.addEventListener('click', function () {
+                updateSearch()
+            })
+        })
     }
 
 
@@ -230,28 +232,43 @@ function updateSearchOnInputAndClick() {
 
 
 function updateSearch() {
-    // get the query string and the type here
+    let type_search = '', query_string = '';
 
-    let checked_name;
-    console.log('hello')
-
+    // Get the type_search from the radio input
     const filters = document.querySelectorAll('#search_filter input') 
+
+    if (!filters) return;
+
     filters.forEach(filter => {
-        if (filter.checked) {checked_name = filter.value} 
+        if (filter.checked) {type_search = filter.value} 
     })
 
-    console.log(checked_name)
+    // Get the query string from the search bar
+    const searchBar = document.querySelector('#search_bar')
 
-    let parameters = {}
-    sendAjaxRequest('get', '/api/search/' + query_string, {}, function () {
-        let received = JSON.parse(this.responseText);
+    if (!searchBar) return;
+
+    query_string = searchBar.value
+
+    console.log(type_search)
+    console.log(query_string)
+
+    sendAjaxRequest('get', '/api/search/'+query_string+'/type/'+type_search, {}, function () {
         
         let timeline = document.querySelector('#timeline');
+        console.log(this.responseText)
+        let received = JSON.parse(this.responseText);
+        
+        console.log('Received')
+        console.log(received)
+        
+        /*
+        
         timeline.innerHTML = '';
         received.forEach(function (searchItem) {
             timeline.appendChild(createSearchCard(searchItem))
         })
-    
+        */
       })
 
 }
