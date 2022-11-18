@@ -5,12 +5,16 @@
     <div class="card border-secondary mb-4">
 
         <div class="card-header">
-            <h3 class="p-2">{{ $group->name }}</h3>
+            <h3 class="p-2 ">{{ $group->name }}
+                <!-- Should oly be visible to group owners -->
+                <a class='btn btn-primary edit_group_button' data-idGroup="{{ $group->id }}">Edit</a>
+            </h3>
         </div>
 
         <div class="mt-3 m-auto ">
             <img class="profile_img " src="../user.png" alt="" width="150">
         </div>
+
 
         <div class="card-body">
             <h3>Bio</h3>
@@ -36,7 +40,7 @@
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
-                <img  src="../user.png" alt="user_avatar" width="50">
+                <img src="../user.png" alt="user_avatar" width="50">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 
@@ -74,20 +78,20 @@
     <div class="list-group align-items-center d-flex mb-4 ">
 
         <div class="list-group-item">
-            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
-            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
-            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-5" src="../user.png" alt="user_avatar" width="50">
-            <a class="me-5" href={{ url('/profile/username') }}>Group</a>
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
@@ -100,19 +104,9 @@
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3 create_group_button'>Create Group</button>
 
-        <!-- Should oly be visible to group owners -->
-        <button class='btn btn-primary w-100 mb-3 mt-3 edit_group_button' data-idGroup="{{ $group->id }}">Edit
-            Group</button>
-
         <!-- SHould only be visible to group members/owners -->
         <button class='btn btn-primary w-100 mb-3 mt-3 leave_group_button' data-idGroup="{{ $group->id }}">Leave
             Group</button>
     @endif
-
-    @auth
-        @if (Auth::user()->id == $group->owner_id)
-            <button id="edit_group_button" class='btn btn-primary w-100 mb-3 mt-3 edit_group_button'>Edit Group</button>
-        @endif
-    @endauth
 
 </nav>

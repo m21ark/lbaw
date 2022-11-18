@@ -1,7 +1,7 @@
 <div class="container mt-5 mb-5 post_item">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
-            <div class="card">
+            <div class="card post_card">
 
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
@@ -12,7 +12,7 @@
 
                     <small class="me-5">{{ $post->post_date }}</small>
                     <div class="dropdown">
-                        <button class="btn dropdownPostButton" type="button">:</button>
+                        <button class="btn dropdownPostButton" type="button">&vellip;</button>
                         <div class="dropdown_menu " hidden>
                             <a class="dropdown-item" href="{{ url('/profile/' . $post->owner->username) }}">Go to
                                 Profile</a>
@@ -27,19 +27,29 @@
                         </div>
                     </div>
 
-
                 </div>
 
+                <!-- TODO: Ver imagens da database -->
                 <img src="https://i.imgur.com/xhzhaGA.jpg" class="img-fluid">
 
                 <div class="p-2">
                     <p class="text-justify">{{ $post->text }}</p>
 
-                    <div class="card-footer d-flex justify-content-between align-items-center">
-                        <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i
-                                class="fa fa-smile-o ml-2"></i> </div>
-                        <div class="d-flex flex-row muted-color"> <span>2 comments</span> <span
-                                class="ml-2">Share</span> </div>
+
+                    <div class="card-footer d-flex justify-content-evenly">
+
+                        <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
+                        <div class="d-flex">
+                            <p class="me-3">{{ sizeof($post->likes) }}</p>
+                            <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
+
+                        </div>
+                        <div class="d-flex">
+                            <p class="me-3">{{ sizeof($post->comments) }}</p>
+                            <a href="#" class="text-decoration-none"><span
+                                    class="commenticon">&#128172;</span></a>
+                        </div>
+
                     </div>
 
 

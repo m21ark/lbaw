@@ -1,17 +1,32 @@
-<div id="feed_filter">
-    <h3>Filter Results:</h3>
-    <label for="feed_radio_user">User</label>
-    <input type="radio" name="feed_filter" id="feed_radio_user" checked>
+<div id="feed_filter" class="form-check d-flex p-3 flex justify-content-between text-bg-light">
 
-    <label for="feed_radio_group">Group</label>
-    <input type="radio" name="feed_filter" id="feed_radio_group">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" onclick="updateFeed('for_you')" name="feed_filter"
+            id="feed_radio_foryou">User
+        <label class="form-check-label"></label>
+    </div>
 
-    <label for="feed_radio_post">Post</label>
-    <input type="radio" name="feed_filter" id="feed_radio_post">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" onclick="updateFeed('viral')" name="feed_filter"
+            id="feed_radio_viral">Group
+        <label class="form-check-label"></label>
+    </div>
 
-    <label for="feed_radio_comment">Comment</label>
-    <input type="radio" name="feed_filter" id="feed_radio_comment">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" onclick="updateFeed('friends')" name="feed_filter"
+            id="feed_radio_friends">Post
+        <label class="form-check-label"></label>
+    </div>
+
+    <div class="form-check">
+        <input type="radio" class="form-check-input" onclick="updateFeed('groups')" name="feed_filter"
+            id="feed_radio_groups">Comment
+        <label class="form-check-label"></label>
+    </div>
+
 </div>
+
+
 
 
 <div id="timeline">

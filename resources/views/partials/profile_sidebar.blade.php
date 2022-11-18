@@ -2,8 +2,13 @@
     <h2 class="mb-4">Profile Info</h2>
 
     <div class="card border-secondary mb-4">
-        <h3 class="p-2">About me</h3>
-
+        <h3 class="p-2 me-5">About me
+            @auth
+                @if (Auth::user()->id == $user->id)
+                    <a href="#" class="btn btn-secondary w-20">Edit</a>
+                @endif
+            @endauth
+        </h3>
 
         <div class="m-auto">
             <img class="profile_img " src="../user.png" alt="" width="150">
@@ -60,11 +65,7 @@
 
     </div>
 
-    @auth
-        @if (Auth::user()->id == $user->id)
-            <a href="#" class="btn btn-primary w-100">Edit</a>
-        @endif
-    @endauth
+
 
 
 </nav>
