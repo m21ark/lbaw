@@ -1,5 +1,10 @@
 /* Site layout */
+
+
+
 body {
+    width: 90%;
+    box-shadow: 2px 2px 5px lightgray;
     display: grid;
     grid-template-columns: 1fr 3fr 1.5fr;
     grid-template-rows: auto auto auto;
@@ -19,6 +24,7 @@ header {
 
 main {
     grid-area: content;
+    margin: 1.5em;
 }
 
 #leftbar {
@@ -27,6 +33,7 @@ main {
 
 #rightbar {
     grid-area: rightbar;
+    padding: 2em 1.5em;
 }
 
 #footer {

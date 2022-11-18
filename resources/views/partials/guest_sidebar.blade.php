@@ -1,4 +1,4 @@
-<nav id="rightbar">
+<nav id="rightbar" class="text-bg-light">
     <h2>Login for personalized content!</h2>
 
     <p>Nao sei o que acham melhor. Por aqui na mesma hot topics e cenas aleatorias para tentar convencer a criar conta
