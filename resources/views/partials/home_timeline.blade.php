@@ -1,7 +1,7 @@
 @if (Auth::check()) 
 <div id="feed_filter">
     
-    <label for="feed_radio_foryou">For you</label>
+    <label for="feed_radio_for_you">For you</label>
     <input type="radio" onclick="updateFeed('for_you')" name="feed_filter" id="feed_radio_foryou">
     
     <label for="feed_radio_viral">Viral</label>

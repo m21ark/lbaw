@@ -156,7 +156,7 @@ header a#header_search {
     color: white;
 }
 
-#feed_filter {
+#feed_filter, #search_filter {
     background-color: var(--bg_white);
     padding: 1.5em 1em;
     margin: 0em;

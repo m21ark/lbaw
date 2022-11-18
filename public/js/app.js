@@ -119,7 +119,7 @@ function sendDeleteGroupMemberRequest() {
     sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
 }
 
-addEventListeners();
+//addEventListeners();
 
 // Home =============================================================================
 
@@ -191,8 +191,7 @@ updateFeedOnLoad();
 
 // Search =============================================================================
 
-
-function updateSearchOnInput() {
+function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
     if (!/\/search\/[#@\w]/.test(pathname)) return;
@@ -201,22 +200,52 @@ function updateSearchOnInput() {
       return;
     }
     
+    let search_filters = document.querySelector('#search_radio_user')
+
+    if (search_filters) {
+        search_filters.checked = true
+    }
+
+    // Add event listeners when input changes
     const searchBar = document.querySelector('#search_bar')
 
     if (searchBar) {
         console.log(searchBar)
         searchBar.addEventListener('input', function () {
-            updateSearch(query_string, type_search)
+            updateSearch()
         }) 
     }
+
+
+    // Add event listeners when a radio has a click
+    const filters = document.querySelectorAll('#search_filter input')
+
+    if (filters) {
+        console.log(filters)
+        //filters.
+    }
+
+
 }
 
 
+function updateSearch() {
+    // get the query string and the type here
 
-function updateSearch(query_string, type_search) {
+    let checked_name;
+    console.log('hello')
+
+    const filters = document.querySelectorAll('#search_filter input') 
+    filters.forEach(filter => {
+        if (filter.checked) {checked_name = filter.value} 
+    })
+
+    console.log(checked_name)
+
+    let parameters = {}
     sendAjaxRequest('get', '/api/search/' + query_string, {}, function () {
         let received = JSON.parse(this.responseText);
-    
+        
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
         received.forEach(function (searchItem) {
@@ -232,7 +261,10 @@ function createSearchCard() {
     return 'hello'
 }
 
-updateSearchOnInput();
+
+updateSearchOnInputAndClick();
+updateSearch();
+
 
 
 

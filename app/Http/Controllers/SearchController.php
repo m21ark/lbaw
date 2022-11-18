@@ -11,4 +11,8 @@ class SearchController extends Controller
         // TODO: get query from database
         return view('pages.search');
     }
+
+
+
+    
 }
