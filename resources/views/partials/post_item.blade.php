@@ -1,6 +1,6 @@
 <div class="container mt-5 mb-5">
-    <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-md-6">
+    <div class="row d-flex align-items-center justify-content-center ">
+        <div class="col-md-6  ">
             <div class="card">
                 <div class="d-flex justify-content-between p-2 px-3">
                     <div class="d-flex flex-row align-items-center"> <img src="https://i.imgur.com/UXdKE3o.jpg"
@@ -21,32 +21,9 @@
                         <div class="d-flex flex-row muted-color"> <span>2 comments</span> <span
                                 class="ml-2">Share</span> </div>
                     </div>
-                    <hr>
-                    <div class="comments">
-                        <div class="d-flex flex-row mb-2"> <img src="https://i.imgur.com/9AZ2QX1.jpg" width="40"
-                                class="rounded-image">
-                            <div class="d-flex flex-column ml-2"> <span class="name">Daniel Frozer</span> <small
-                                    class="comment-text">I like this alot! thanks alot</small>
-                                <div class="d-flex flex-row align-items-center status"> <small>Like</small>
-                                    <small>Reply</small> <small>Translate</small> <small>18 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-row mb-2"> <img src="https://i.imgur.com/1YrCKa1.jpg" width="40"
-                                class="rounded-image">
-                            <div class="d-flex flex-column ml-2"> <span class="name">Elizabeth goodmen</span> <small
-                                    class="comment-text">Thanks for sharing!</small>
-                                <div class="d-flex flex-row align-items-center status"> <small>Like</small>
-                                    <small>Reply</small> <small>Translate</small> <small>8 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment-input"> <input type="text" class="form-control">
-                            <div class="fonts"> <i class="fa fa-camera"></i> </div>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
-</div>

@@ -1,28 +1,35 @@
 @if (Auth::check())
-    <div id="feed_filter">
+    <div id="feed_filter" class="form-check d-flex p-3 flex justify-content-between text-bg-light">
 
-        <label for="feed_radio_foryou">For you</label>
-        <input type="radio" onclick="updateFeed('for_you')" name="feed_filter" id="feed_radio_foryou">
 
-        <label for="feed_radio_viral">Viral</label>
-        <input type="radio" onclick="updateFeed('viral')" name="feed_filter" id="feed_radio_viral">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" onclick="updateFeed('for_you')" name="feed_filter"
+                id="feed_radio_foryou">For you
+            <label class="form-check-label"></label>
+        </div>
 
-        <label for="feed_radio_friends">Friends</label>
-        <input type="radio" onclick="updateFeed('friends')" name="feed_filter" id="feed_radio_friends">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" onclick="updateFeed('viral')" name="feed_filter"
+                id="feed_radio_viral">Viral
+            <label class="form-check-label"></label>
+        </div>
 
-        <label for="feed_radio_groups">Groups</label>
-        <input type="radio" onclick="updateFeed('groups')" name="feed_filter" id="feed_radio_groups">
+        <div class="form-check">
+            <input type="radio" class="form-check-input" onclick="updateFeed('friends')" name="feed_filter"
+                id="feed_radio_friends">Friends
+            <label class="form-check-label"></label>
+        </div>
+
+        <div class="form-check">
+            <input type="radio" class="form-check-input" onclick="updateFeed('groups')" name="feed_filter"
+                id="feed_radio_groups">Groups
+            <label class="form-check-label"></label>
+        </div>
 
     </div>
 @endif
 
-<ul class="nav nav-pills">
-    <li role="presentation" class="active"><a href="#">Home</a></li>
-    <li role="presentation"><a href="#">Profile</a></li>
-    <li role="presentation"><a href="#">Messages</a></li>
-</ul>
 
-<div id="timeline">
+<div id="timeline" class="mt-3">
     <!-- Add posts here -->
-
 </div>

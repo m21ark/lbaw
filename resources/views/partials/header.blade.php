@@ -1,28 +1,34 @@
 <header class="p-3 text-bg-primary">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center  justify-content-between ">
+
+    <div class="d-flex flex-wrap align-items-center  justify-content-between w-100">
 
 
+        <div class="text-start">
             <a href="{{ url('/home') }}"><img src="/logo.png" alt="nexus_logo" width="100"></a>
 
-            <!--
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-        -->
+        </div>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-light text-bg-light" placeholder="Search"
-                    aria-label="Search">
-            </form>
+        <form class="header_searchbar">
+            <input type="search" class="form-control text-bg-light" placeholder="Search"
+                aria-label="Search">
+        </form>
 
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-light">Sign-up</button>
-            </div>
+        <div class="text-end">
+
+            @if (Auth::check())
+                <div class="d-flex align-items-center">
+                    <a class="text-white text-decoration-none" href={{ url('/profile/' . Auth::user()->username) }}>
+                        <strong>{{ Auth::user()->username }}</strong>
+                        <img src="../user.png" alt="logo" width="40" height="40">
+                    </a>
+
+                    <a href={{ url('/logout') }} type="button" class="btn btn-light">Logout</a>
+                </div>
+            @else
+                <a href={{ url('/login') }} type="button" class="btn btn-outline-light me-3">Login</a>
+                <a href={{ url('/register') }} type="button" class="btn btn-light">Sign-up</a>
+            @endif
         </div>
     </div>
+
 </header>

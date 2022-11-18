@@ -1,7 +1,8 @@
 <nav id="rightbar" class="text-bg-light">
-    <h2 class="mb-5">Recommendations</h2>
+    <h2>Recommendations</h2>
+    <hr>
 
-    <h3 class="mb-3">Hot Topics</h3>
+    <h3 class="mt-4 mb-3">Hot Topics</h3>
     <div class="list-group align-items-center  mb-5">
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 1</a>
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 2</a>
@@ -9,7 +10,7 @@
         <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 4</a>
     </div>
 
-    <h3 class="mb-3">Hot Topics</h3>
+    <h3 class="mb-3">Might Know</h3>
 
     <div class="list-group align-items-center d-flex mb-5">
 

@@ -5,7 +5,6 @@
     @foreach ($post->comments as $comment)
         <div class="card border-secondary mb-4">
 
-
             <div class="card-header d-flex justify-content-between align-items-center">
                 <img src="../user.png" alt="" width="50">
                 <p>Username</p>
@@ -24,7 +23,6 @@
                 <p class="like_count">{{ $comment->likes->count() }} Likes</p>
                 <a href="#">&#x2764;</a>
             </div>
-
 
         </div>
     @endforeach
