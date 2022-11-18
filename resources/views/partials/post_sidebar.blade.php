@@ -1,4 +1,4 @@
-<nav id="rightbar">
+<nav id="rightbar" class="text-center">
     <h3>Comment Section</h3>
 
     <div class="might_know">

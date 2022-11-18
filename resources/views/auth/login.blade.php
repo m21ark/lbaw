@@ -1,49 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-    <section id="login">
-        <div class="container sign_form">
-            <form method="POST" action="{{ route('login') }}">
-                {{ csrf_field() }}
 
-                <h2>Login</h2>
+    <body class="text-center">
+        <form class="form-signin">
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt=""
+                width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required=""
+                autofocus="">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+            <div class="checkbox mb-3">
                 <label>
-                    Email <input type="text" value="{{ old('email') }}" placeholder="Email" name="email" required
-                        autofocus>
+                    <input type="checkbox" value="remember-me"> Remember me
                 </label>
-                @if ($errors->has('email'))
-                    <span class="error">
-                        {{ $errors->first('email') }}
-                    </span>
-                @endif
-
-                <label>
-                    Password <input type="password" placeholder="Password" name="password" required>
-                </label>
-                @if ($errors->has('password'))
-                    <span class="error">
-                        {{ $errors->first('password') }}
-                    </span>
-                @endif
-
-
-                <!--
-                    <label>
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                    </label>
-                    -->
-
-                <button class="form_button" type="submit">
-                    Login
-                </button>
-
-            </form>
-            <div class="form_alternative">
-                <p><span class="bold">Don't have an account?</span></p>
-                <a class="form_button" href="{{ route('register') }}">Register</a>
             </div>
-        </div>
-    </section>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+        </form>
+
+
+    </body>
 @endsection
 
 
