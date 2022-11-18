@@ -4,7 +4,7 @@
     <div class="mw-10 d-flex align-items-center justify-content-around">
 
         <body class="text-center">
-            <form>
+            <form method="POST" action="{{ route('login') }}">
 
                 <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
                 <label for="inputEmail" class="sr-only">Email address</label>

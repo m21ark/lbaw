@@ -3,7 +3,7 @@
         <div class="d-flex flex-wrap align-items-center  justify-content-between ">
 
 
-            <a href="{{ url('/home') }}"><img src="logo.png" alt="nexus_logo" width="100"></a>
+            <a href="{{ url('/home') }}"><img src="/logo.png" alt="nexus_logo" width="100"></a>
 
             <!--
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">

@@ -1,4 +1,4 @@
-<nav id="rightbar">
+<nav id="rightbar" class="text-bg-light">
     <h2>Reports</h2>
 
     <div class="might_know">

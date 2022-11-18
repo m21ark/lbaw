@@ -7,46 +7,23 @@
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
+
+        <li class="nav-item border-secondary">
+            <a href="#" class="nav-link  mb-2">Home</a>
+        </li>
+
         <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#home"></use>
-                </svg>
-                Home
-            </a>
+            <a href="#" class="nav-link  mb-2">Home</a>
         </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#speedometer2"></use>
-                </svg>
-                Dashboard
-            </a>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link  mb-2">Home</a>
         </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#table"></use>
-                </svg>
-                Orders
-            </a>
+
+        <li class="nav-item">
+            <a href="#" class="nav-link  mb-2">Home</a>
         </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#grid"></use>
-                </svg>
-                Products
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#people-circle"></use>
-                </svg>
-                Customers
-            </a>
-        </li>
+
     </ul>
     <hr>
     <div class="dropdown">
