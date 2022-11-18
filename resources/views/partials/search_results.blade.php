@@ -8,9 +8,6 @@
 
     <label for="feed_radio_post">Post</label>
     <input type="radio" name="feed_filter" id="feed_radio_post">
-
-    <label for="feed_radio_comment">Comment</label>
-    <input type="radio" name="feed_filter" id="feed_radio_comment">
 </div>
 
 
