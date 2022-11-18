@@ -582,7 +582,7 @@ paths:
           description: "Ok. Show search page"       
 
 
-  /api/search/{query}:
+  /api/search/{query_string}:
     get:
       operationId: R202
       summary: "R202: Search API"

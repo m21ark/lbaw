@@ -192,7 +192,47 @@ updateFeedOnLoad();
 // Search =============================================================================
 
 
+function updateSearchOnInput() {
 
+    let pathname = window.location.pathname
+    if (!/\/search\/[#@\w]/.test(pathname)) return;
+    
+    if (!document.querySelector('#timeline')) {
+      return;
+    }
+    
+    const searchBar = document.querySelector('#search_bar')
+
+    if (searchBar) {
+        console.log(searchBar)
+        searchBar.addEventListener('input', function () {
+            updateSearch(query_string, type_search)
+        }) 
+    }
+}
+
+
+
+function updateSearch(query_string, type_search) {
+    sendAjaxRequest('get', '/api/search/' + query_string, {}, function () {
+        let received = JSON.parse(this.responseText);
+    
+        let timeline = document.querySelector('#timeline');
+        timeline.innerHTML = '';
+        received.forEach(function (searchItem) {
+            timeline.appendChild(createSearchCard(searchItem))
+        })
+    
+      })
+
+}
+
+
+function createSearchCard() {
+    return 'hello'
+}
+
+updateSearchOnInput();
 
 
 

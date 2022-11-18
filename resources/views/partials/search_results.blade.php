@@ -10,7 +10,6 @@
     <input type="radio" name="feed_filter" id="feed_radio_post">
 </div>
 
-
 <div id="timeline">
     <!-- TODO: Add results here -->
 </div>
