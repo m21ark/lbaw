@@ -4,8 +4,9 @@ function addEventListeners() {
     let listener_list = [
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
-        ['.group_post_button', logItem('.make_group_post')]
+        ['#popup_btn_group_create', logItem('#popup_show_group_create')]
     ];
+
 
     listener_list.forEach(function (l) {
         let element = document.querySelectorAll(l[0]);
@@ -19,16 +20,27 @@ function addEventListeners() {
     create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
-    if (create_group_post_button !== null)
+    if (create_group_post_button)
         create_group_post_button.addEventListener('click', sendCreatePostRequest(false));
 
-    let remove_groupMember_button = document.querySelector('.leave_group_button');
+    let remove_groupMember_button = document.querySelector('#leave_group_button');
     if (remove_groupMember_button)
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
+    let create_group_button = document.querySelector('#create_group_button');
+    if (create_group_button)
+        create_group_button.addEventListener('click', sendCreateGroupRequest);
+
+    let close_popups = document.querySelectorAll('.close_popup_btn');
+    if (close_popups)
+        if (close_popups.length > 0) {
+            close_popups.forEach(e => {
+                e.addEventListener('click', closePopups);
+            });
+        }
 
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
-    console.log(post_dropDowns);
+    // console.log(post_dropDowns);
     // No caso dos post da home q recebem load com javascript nao da :(
     // Ricardo help. I hate JS
     if (post_dropDowns.length > 0)
@@ -44,7 +56,6 @@ function togglePostDropDown() {
 function logItem(btn_id) {
     return function (e) {
         const item = document.querySelector(btn_id);
-        console.log(item);
         item.toggleAttribute('hidden');
     }
 }
@@ -92,28 +103,38 @@ function sendCreatePostRequest(isProfile) {
 
 function addedHandler(class_name) {
     return function () {
-        console.log(this.status)
         if (this.status < 200 && this.status >= 300) window.location = '/';
-
         // create alert notification - use switch
-
         logItem(class_name)(0);
         // talvez dar redirect para a pagina do post
     }
+}
+
+function closePopups() {
+    let popups = document.querySelectorAll('.pop_up')
+    if (popups)
+        popups.forEach(e => {
+            e.setAttribute('hidden', true);
+        });
 }
 
 
 
 function sendCreateGroupRequest() {
 
-    let name = document.querySelector('input[id=group_name]').value;
-    let description = document.querySelector('textarea[id=group_description]').value;
-    let visibility = true // TODO: add this to popup
+    let name = document.querySelector('#popup_show_group_create #group_name').value;
+    let description = document.querySelector('#popup_show_group_create #group_description').value;
+    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value;
 
-    if (name == null || description == null || visibility == null) // TODO a error message here
+    if (name == '' || description == '' || visibility == null) {
+        alert('Invalid input');
         return;
+    }
 
-    sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+    let res = confirm('Are you sure you want to create this group?');
+    if (res) {
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+    }
 
 }
 
@@ -135,7 +156,7 @@ function sendEditGroupRequest() {
 
 function sendDeleteGroupMemberRequest() {
 
-    let id = document.querySelector('.leave_group_button').getAttribute('data-idGroup');
+    let id = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
 
     let res = confirm("Are you sure you want to leave this group?");
 
@@ -143,6 +164,8 @@ function sendDeleteGroupMemberRequest() {
         return;
 
     sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
+
+    location.reload();
 }
 
 addEventListeners();

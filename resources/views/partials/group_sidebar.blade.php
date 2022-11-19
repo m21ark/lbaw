@@ -103,10 +103,10 @@
     @auth
 
         <!-- Temporary placement -->
-        <button class='btn btn-primary w-100 mb-3 mt-3 create_group_button'>Create Group</button>
+        <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
 
         <!-- SHould only be visible to group members/owners -->
-        <button class='btn btn-primary w-100 mb-3 mt-3 leave_group_button' data-idGroup="{{ $group->id }}">Leave
+        <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
             Group</button>
 
     @endauth

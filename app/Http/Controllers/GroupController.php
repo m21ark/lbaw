@@ -65,6 +65,7 @@ class GroupController extends Controller
 
         $group->owners()->save($owner);
 
+
         return $group;
     }
 

@@ -12,12 +12,12 @@
                     <h3 class="h3 mb-3 font-weight-normal">Make a group post</h3>
                 @endif
 
-                <a href="#" class=" btn btn-danger"><strong>X</strong></a>
+                <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
             </div>
 
 
             <label for="inputText" class="sr-only">Text</label>
-            <textarea rows="8" id="inputText" value="{{ old('email') }}" class="form-control mb-3" placeholder="Content"
+            <textarea rows="8" id="inputText" class="form-control mb-3" placeholder="Content"
                 name="text" required autofocus style="resize: none;"
                 @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
