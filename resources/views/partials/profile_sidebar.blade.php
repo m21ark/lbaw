@@ -1,59 +1,71 @@
-<nav id="rightbar">
-    <h2>Profile Info</h2>
+<nav id="rightbar" class="text-bg-light">
+    <h2 class="mb-4">Profile Info</h2>
 
-    <img class="profile_img" src="../user.png" alt="" width="150">
-    <h3 id="username">{{ $user->username }}</h3>
+    <div class="card border-secondary mb-4">
+        <h3 class="p-2 me-5">About me
+            @auth
+                @if (Auth::user()->id == $user->id)
+                    <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
+                @endif
+            @endauth
+        </h3>
 
-    <div class="about_me">
-        <h3>About me</h3>
+        <div class="m-auto">
+            <img class="profile_img " src="../user.png" alt="" width="150">
+            <h3 id="username" class="">{{ $user->username }}</h3>
+        </div>
 
-        <p id="user_bio">
-            {{ $user->bio }}
-        </p>
+        <div class="card-body">
+            <h3>Bio</h3>
+            <p class="card-text">{{ $user->bio }}</p>
+        </div>
 
-        <h3>Interests</h3>
+        <div class="card-footer">
+            <h3>Interests</h3>
 
-        <ul id="user_interests">
+            <div class="d-flex justify-content-evenly">
 
-            @foreach ($user->interests as $interest)
-                <a href={{ url('/search/' . $interest->topic->topic) }}><li>{{ $interest->topic->topic }}</li></a>
-            @endforeach
 
-        </ul>
+                @foreach ($user->interests as $interest)
+                    <a class="btn btn-primary" href={{ url('/search/' . $interest->topic->topic) }}>
+                        {{ $interest->topic->topic }}
+                    </a>
+                @endforeach
+            </div>
+
+        </div>
+
 
     </div>
 
-    <div class="user_stats">
-        <h3>Statistics</h3>
-        <!-- TODO: Fetch from DB -->
-        <ul>
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="#" class="link_button">34 Friends</a>
-            </li>
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="#" class="link_button">6 Groups</a>
-            </li>
+    <!-- TODO: Do statistics from database -->
+    <h3 class="mt-5 mb-3">Statistics</h3>
+    <div class="list-group align-items-center mb-5">
 
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="#" class="link_button">21 Likes</a>
-            </li>
-            <li>
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href="#" class="link_button">4 Comments</a>
-            </li>
+        <div class="d-flex list-group-item w-100">
+            <img src="../user.png" alt="user_avatar" width="50">
+            <a href="#" class=" p-3">34 Friends</a>
+        </div>
 
+        <div class="d-flex list-group-item w-100">
+            <img src="../user.png" alt="user_avatar" width="50">
+            <a href="#" class=" p-3">6 Groups</a>
+        </div>
 
+        <div class="d-flex list-group-item w-100">
+            <img src="../user.png" alt="user_avatar" width="50">
+            <a href="#" class=" p-3">21 Likes</a>
+        </div>
 
-        </ul>
+        <div class="d-flex list-group-item w-100">
+            <img src="../user.png" alt="user_avatar" width="50">
+            <a href="#" class=" p-3">4 Comments</a>
+        </div>
+
     </div>
 
-    @if (Auth::user()->id == $user->id)
-        <a href="#" class="edit_profile_btn form_button">Edit</a>
-    @endif
+
 
 
 </nav>

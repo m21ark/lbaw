@@ -2,10 +2,13 @@ function addEventListeners() {
 
     // Toggle para botões que escondem paginas
     let listener_list = [
-        ['.make_post_popup', logItem('.make_post')],
-        ['.create_group_button', logItem('.make_group')],
-        ['.group_post_button', logItem('.make_group_post')]
+        ['#popup_btn_post', logItem('#popup_show_post')],
+        ['#popup_btn_group_post', logItem('#popup_show_group_post')],
+        ['#popup_btn_group_create', logItem('#popup_show_group_create')],
+        ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
+        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')]
     ];
+
 
     listener_list.forEach(function (l) {
         let element = document.querySelectorAll(l[0]);
@@ -15,25 +18,68 @@ function addEventListeners() {
     }
     );
 
-    let create_button = document.querySelector('.make_post .form_button');
-    create_button.addEventListener('click', sendCreatePostRequest(''));
+    let create_button = document.querySelector('#profile_post_button_action');
+    create_button.addEventListener('click', sendCreatePostRequest(true));
 
-    let create_group_post_button = document.querySelector('.make_group_post .form_button');
-    let group_name = document.querySelector('#username');
-    if (group_name !== null)
-        create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
+    let create_group_post_button = document.querySelector('#group_post_button_action');
+    if (create_group_post_button)
+        create_group_post_button.addEventListener('click', sendCreatePostRequest(false));
 
-    let remove_groupMember_button = document.querySelector('.leave_group_button');
+    let remove_groupMember_button = document.querySelector('#leave_group_button');
     if (remove_groupMember_button)
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
+    // ====================== Group ======================
+
+    let create_group_button = document.querySelector('#create_group_button');
+    if (create_group_button)
+        create_group_button.addEventListener('click', sendCreateGroupRequest);
+
+    let edit_group_button = document.querySelector('#edit_group_button');
+    if (edit_group_button)
+        edit_group_button.addEventListener('click', sendEditGroupRequest);
+
+    let delete_group_button = document.querySelector('#delete_group_button');
+    if (delete_group_button)
+        delete_group_button.addEventListener('click', sendDeleteGroupRequest);
+
+    // ====================== Profile ======================
+
+    let edit_profile_button = document.querySelector('#edit_profile_button');
+    if (edit_profile_button)
+        edit_profile_button.addEventListener('click', sendEditProfileRequest);
+
+    let delete_profile_button = document.querySelector('#delete_profile_button');
+    if (delete_profile_button)
+        delete_profile_button.addEventListener('click', sendDeleteProfileRequest);
+
+
+
+    let close_popups = document.querySelectorAll('.close_popup_btn');
+    if (close_popups)
+        if (close_popups.length > 0) {
+            close_popups.forEach(e => {
+                e.addEventListener('click', closePopups);
+            });
+        }
+
+    let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
+    // console.log(post_dropDowns);
+    // No caso dos post da home q recebem load com javascript nao da :(
+    // Ricardo help. I hate JS
+    if (post_dropDowns.length > 0)
+        for (var i = 0; i < post_dropDowns.length; i++)
+            post_dropDowns[i].addEventListener('click', togglePostDropDown);
 
 }
 
-function logItem(class_name) {
+function togglePostDropDown() {
+    document.querySelector('.dropdown_menu').toggleAttribute('hidden')
+}
+
+function logItem(btn_id) {
     return function (e) {
-        const item = document.querySelector(class_name);
-        console.log(item);
+        const item = document.querySelector(btn_id);
         item.toggleAttribute('hidden');
     }
 }
@@ -56,60 +102,77 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-function sendCreatePostRequest(group_name_) {
-    return function (event) {
-        if (group_name_ == '') {
-            let name = document.querySelector('.make_post textarea[name=text_to_save]').value;
-            console.log(name);
-            if (name != null) {
-                sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
-                console.log('lçdlddl');
-            }
-        }
-        else {
-            let name = document.querySelector('.make_group_post textarea[name=text_to_save]').value;
-            console.log(name);
-            console.log("ldldld")
-            if (name != null)
-                sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_ }, addedHandler('.make_group_post'));
-        }
-
-        event.preventDefault();
-    }
-}
-
 function addedHandler(class_name) {
     return function () {
-        console.log(this.status)
         if (this.status < 200 && this.status >= 300) window.location = '/';
-
         // create alert notification - use switch
-
         logItem(class_name)(0);
         // talvez dar redirect para a pagina do post
     }
 }
 
+function closePopups() {
+    let popups = document.querySelectorAll('.pop_up')
+    if (popups)
+        popups.forEach(e => {
+            e.setAttribute('hidden', true);
+        });
+}
 
 
-function sendCreateGroupRequest(event) {
+// ============================================ GROUPS ============================================
 
-    let name = document.querySelector('input[id=group_name]').value;
-    let description = document.querySelector('textarea[id=group_description]').value;
-    let visibility = true
+function sendCreateGroupRequest() {
 
-    if (name == null || description == null || visibility == null) // TODO a error message here
+    let name = document.querySelector('#popup_show_group_create #group_name').value
+    let description = document.querySelector('#popup_show_group_create #group_description').value
+    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
+
+    if (name == '' || description == '' || visibility == null) {
+        alert('Invalid input');
         return;
+    }
 
-    sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+    let res = confirm('Are you sure you want to create this group?');
+    if (res) {
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+        // TODO: Fazer redirect para grupo criado
+    }
 
+}
+
+function sendEditGroupRequest() {
+
+    let name = document.querySelector('#popup_show_group_edit #group_name').value
+    let description = document.querySelector('#popup_show_group_edit #group_description').value
+    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
+    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
+    let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
+
+    if (name == '' || description == '' || visibility == null) {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to edit this group?');
+    if (res)
+        sendAjaxRequest('put', '/api/group/' + oldName, { name: name, description: description, visibility: visibility, id_group: id_group }, () => { });
+
+}
+
+function sendDeleteGroupRequest() {
+    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
+    let res = confirm('Are you sure you want to delete this group?');
+    if (res) {
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+    }
 }
 
 
 
 function sendDeleteGroupMemberRequest() {
 
-    let id = document.querySelector('.leave_group_button').getAttribute('data-idGroup');
+    let id = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
 
     let res = confirm("Are you sure you want to leave this group?");
 
@@ -117,130 +180,274 @@ function sendDeleteGroupMemberRequest() {
         return;
 
     sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
+
+    location.reload();
 }
 
-//addEventListeners();
 
-// Home =============================================================================
+// ============================================ Profile ============================================
+
+
+function sendEditProfileRequest() {
+
+    let username = document.querySelector('#popup_show_profile_edit #user_name').value
+    let email = document.querySelector('#popup_show_profile_edit #user_email').value
+    let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
+    let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
+    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
+
+    let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+    let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+
+    // console.log(username, email, bdate, bio, visibility, oldName, idUser);
+
+    if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to edit your profile?');
+    if (res) {
+        sendAjaxRequest('put', '/api/profile/' + oldName, { username: username, email: email, bdate: bdate, bio: bio, visibility: visibility, oldName: oldName, idUser: idUser }, () => { });
+        //todo: fazer redirect para o perfil editado
+    }
+
+}
+
+
+function sendDeleteProfileRequest() {
+    let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+
+    let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
+    if (res === username) {
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { });
+    } else {
+        alert('Invalid input! Account not deleted!');
+    }
+}
+
+
+// ============================================ Post ============================================
+
+
+function sendCreatePostRequest(isProfile) {
+    return function (event) {
+        if (isProfile) {
+            let textarea = document.querySelector('#popup_show_post textarea');
+            let res = confirm('Are you sure you want to profile post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+        else {
+            let textarea = document.querySelector('#popup_show_group_post textarea');
+            let res = confirm('Are you sure you want to group post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+
+        event.preventDefault();
+        location.reload();
+    }
+}
+
+
+function sendEditPostRequest() {
+
+    // TODO : fazer o edit do post baseado no criar do post e no edit do group pq é a msm logica
+    return function (event) {
+        if (isProfile) {
+            let textarea = document.querySelector('#popup_show_post textarea');
+            let res = confirm('Are you sure you want to profile post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+        else {
+            let textarea = document.querySelector('#popup_show_group_post textarea');
+            let res = confirm('Are you sure you want to group post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+
+        event.preventDefault();
+    }
+}
+
+
+function sendDeletePostRequest() {
+    let id = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+
+    let res = confirm('Are you sure you want to delete this post?');
+    if (res === id)
+        sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
+}
+
+
+
+addEventListeners();
+
+
+// =================================== Home ==========================================
 
 function updateFeed(feed) {
 
-  let pathname = window.location.pathname
-  if (pathname !== '/home') return;
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
-  if (!document.querySelector('#timeline')) {
-    return;
-  }
+    if (!document.querySelector('#timeline')) {
+        return;
+    }
 
-  sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
-    let received = JSON.parse(this.responseText);
+    sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+        let received = JSON.parse(this.responseText);
 
-    let timeline = document.querySelector('#timeline');
-    timeline.innerHTML = '';
-    received.forEach(function (post) {
-        timeline.appendChild(createPost(post))
+        let timeline = document.querySelector('#timeline');
+        timeline.innerHTML = '';
+        received.forEach(function (post) {
+            timeline.appendChild(createPost(post))
+        })
+
     })
-
-  })
 }
 
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
     new_post.innerHTML = `
-    <div class="post_head">
-      <a href='/profile/${post.owner}'><img src="../user.png" alt="" width="50"></a>
-      <a href='/profile/${post.owner}'>${post.owner}</a>
-      <a href='/messages'><span class="shareicon">&lt;</span></a>
-      <a href='/post/${post.id}'>&vellip;</a>
+
+    <div class="container mt-5 mb-5 post_item">
+    <div class="row d-flex align-items-center justify-content-center ">
+        <div>
+            <div class="card post_card">
+
+                <div class="card-header d-flex justify-content-between p-2 px-3">
+
+                    <a href="/profile/${post.owner}" class="text-decoration-none d-flex flex-row align-items-center">
+                        <img src="/../user.png" width="60" class="rounded-circle me-3">
+                        <strong class="font-weight-bold">${post.owner}</strong>
+                    </a>
+
+                    <small class="me-5">${post.post_date}</small>
+                    <div class="dropdown">
+                        <button class="btn dropdownPostButton" onclick="togglePostDropDown()" type="button">&vellip;</button>
+                        <div class="dropdown_menu " hidden>
+                            <a class="dropdown-item" href="/profile/${post.owner}">Go to
+                                Profile</a>
+                            @if (Auth::user()->id == $post->owner->id)
+                                <a class="dropdown-item" href="#">Edit Post</a>
+                                <a class="dropdown-item" href="#">Delete Post</a>
+                            @else
+                                <a class="dropdown-item" href="#">Send Message</a>
+                            @endif
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TODO: Ver imagens da database -->
+                <img src="/../post.jpg" class="img-fluid">
+
+                <div class="p-2">
+                    <p class="text-justify">${post.text}</p>
+
+
+                    <div class="card-footer d-flex justify-content-evenly">
+
+                        <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
+                        <div class="d-flex">
+                            <p class="me-3">${post.likes_count}</p>
+                            <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
+
+                        </div>
+                        <div class="d-flex">
+                            <p class="me-3">${post.comments_count}</p>
+                            <a href="#" class="text-decoration-none"><span
+                                    class="commenticon">&#128172;</span></a>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="post_body">
-        <p>${post.text}</p>
-        <img src="../post.jpg" alt="" width="400">
-    </div>
-
-    <div class="post_footer">
-
-      <p>${post.likes_count}</p>
-      <a href="#"><span class="likeicon">&#128077;</span></a>
-
-      <p>${post.comments_count}</p>
-      <a href="#"><span class="commenticon">&#128172;</span></a>
-
-      <p>${post.post_date}</p>
-
-    </div>
   `
     return new_post;
 }
 
 function updateFeedOnLoad() {
-  let feed_filters = document.querySelector('#feed_radio_viral')
-  
-  if (feed_filters) {
-    feed_filters.checked = true
-  }
-
-  updateFeed('viral')
+    let feed_filters = document.querySelector('#feed_radio_viral')
+    if (feed_filters)
+        feed_filters.checked = true
+    updateFeed('viral')
 }
-
 updateFeedOnLoad();
 
 
 
-// Search =============================================================================
+//  ======================================= Search ======================================
 
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
     if (!/\/search\/[#@\w]/.test(pathname)) return;
-    
-    if (!document.querySelector('#timeline')) {
-      return;
-    }
-    
-    let search_filters = document.querySelector('#search_radio_user')
 
-    if (search_filters) {
-        search_filters.checked = true
+    if (!document.querySelector('#timeline')) {
+        return;
     }
+
+    let search_filters = document.querySelector('input#search_radio_user')
+
+    if (search_filters)
+        search_filters.checked = true
+
 
     // Add event listeners when input changes
     const searchBar = document.querySelector('#search_bar')
 
-    if (searchBar) {
-        searchBar.addEventListener('input', function () {
-            updateSearch()
-        }) 
-    }
-
+    if (searchBar)
+        searchBar.addEventListener('input', () => { updateSearch() })
 
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', function () {
-                updateSearch()
-            })
+            filter.addEventListener('click', () => { updateSearch() })
         })
     }
-
 
 }
 
 
 function updateSearch() {
+
+
     let type_search = '', query_string = '';
 
     // Get the type_search from the radio input
-    const filters = document.querySelectorAll('#search_filter input') 
+    const filters = document.querySelectorAll('#search_filter input')
 
     if (!filters) return;
 
+
+
     filters.forEach(filter => {
-        if (filter.checked) {type_search = filter.value} 
+        if (filter.checked) { type_search = filter.value }
     })
 
     // Get the query string from the search bar
@@ -252,23 +459,30 @@ function updateSearch() {
 
     if (query_string === '') return;
 
-    console.log(type_search)
-    console.log(query_string)
 
-    sendAjaxRequest('get', '/api/search/'+query_string+'/type/'+type_search, {}, function () {
-        
+    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
+
         let timeline = document.querySelector('#timeline');
-        let received = JSON.parse(this.responseText);
-        
-        console.log('Received')
-        console.log(received)
-        
+
+        if (!timeline) return;
+        let received;
+        try {
+            received = JSON.parse(this.responseText);
+        } catch (error) {
+            // ignore for now
+        }
+
+        if (received == null) return;
+
         timeline.innerHTML = '';
-        received.forEach(function (searchItem) {
+        received.forEach(function (searchHit) {
+
             if (type_search === 'posts') {
-                timeline.appendChild(createPost(searchItem));
+                timeline.appendChild(createPost(searchHit));
+            } else if (type_search === 'groups') {
+                timeline.appendChild(createGroupCard(searchHit))
             } else {
-                timeline.appendChild(createSearchCard(type_search, searchItem))
+                timeline.appendChild(createUserCard(searchHit))
             }
 
         })
@@ -278,22 +492,51 @@ function updateSearch() {
 }
 
 
-function createSearchCard(type_search, searchItem) {
-    let photo = '', name = ''; 
-    let card = document.createElement('article');
-    card.innerHTML = 'Still searching for a card design<br>'
 
-    if (type_search === 'groups') {
-        
-        
-        
-    } else if (type_search === 'users') {
-        
-        
-    }
+function createUserCard(user) {
+    let new_card = document.createElement('article');
 
-    return card;
+    let bio_short = user.bio;
+    if (bio_short.length > 50)
+        bio_short = user.bio.substring(0, 100) + '...'
+
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="width: 15em;height:29em">
+        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <div class="card-body">
+            <h5 class="card-title">${user.username}</h5>
+            <p class="card-text">${bio_short}</p>
+            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Group</a>
+        </div>
+    </div>
+    `
+    return new_card;
 }
+
+
+
+function createGroupCard(group) {
+    let new_card = document.createElement('article');
+
+    let bio_short = group.description;
+    if (bio_short.length > 50)
+        bio_short = user.bio.substring(0, 100) + '...'
+
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="width: 15em;height:25em">
+        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <div class="card-body">
+            <h5 class="card-title">${group.name}</h5>
+            <p class="card-text">${bio_short}</p>
+            <a href="/profile/${group.name}" class="btn btn-primary w-100">Visit Profile</a>
+        </div>
+    </div>
+    `
+    return new_card;
+}
+
+
+
 
 
 

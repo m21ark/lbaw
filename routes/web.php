@@ -26,6 +26,7 @@ Route::post('register', 'Auth\RegisterController@register');
 Route::get('about', 'AboutController@show')->name('about');
 Route::get('contacts', 'ContactsController@show')->name('contacts');
 Route::get('admin', 'AdminController@show')->name('admin');
+Route::get('features', 'FeaturesController@show')->name('features');
 Route::get('home', 'HomeController@show')->name('home');
 
 // TODO: Nestes é preciso passar dps os argumentos corretos
@@ -45,17 +46,20 @@ Route::post('api/post/{id}', 'PostController@delete');
 
 Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@search');
 
-// Create group
+// Create/Update/Delete group
 Route::post('api/group', 'GroupController@create');
-Route::delete('api/group/{id}', 'GroupController@delete');
+Route::put('api/group/{name}', 'GroupController@edit');
+Route::delete('api/group/{name}', 'GroupController@delete');
+
+// Edit/Delete profile
+Route::put('api/profile/{username}', 'ProfileController@edit');
+Route::delete('api/profile/{username}', 'ProfileController@delete');
+
+
 
 // Group Add/Remove Owner
 Route::post('api/group_owner/{id}', 'GroupController@addGroupOwner'); // talvez n seja post
 Route::delete('api/group_owner/{id}', 'GroupController@removeGroupOwner');
-
-// VER AS ROUTES USADAS
-// addGroupMember($idUser, $idGroup)
-// removeGroupMember($idMember)
 
 // Group Add/Remove Member
 Route::post('api/group_member/', 'GroupController@addGroupMember');

@@ -16,4 +16,10 @@ class Owner extends Model
     {
         return $this->belongsTo('App\Models\User', 'id_user');
     }
+
+
+    public function group()
+    {
+        return $this->belongsTo('App\Models\Group', 'id_group');
+    }
 }

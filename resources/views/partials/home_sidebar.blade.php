@@ -1,48 +1,38 @@
-<nav id="rightbar">
+<nav id="rightbar" class="text-bg-light">
     <h2>Recommendations</h2>
+    <hr>
 
-    <div class="hot_topics">
-        <h3>Hot Topics</h3>
-        <ul>
-            <li><a href={{ url('/search/query') }}>Topic</a> </li>
-            <li><a href={{ url('/search/query') }}>Topic</a> </li>
-            <li><a href={{ url('/search/query') }}>Topic</a> </li>
-            <li><a href={{ url('/search/query') }}>Topic</a> </li>
-        </ul>
+    <h3 class="mt-4 mb-3">Hot Topics</h3>
+    <div class="list-group align-items-center mb-5 expand_tag_a">
+        <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 1</a>
+        <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 2</a>
+        <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 3</a>
+        <a href="{{ url('/search/query') }}" class="list-group-item p-3">Topic 4</a>
     </div>
 
-    <div class="might_know">
-        <h3>Might Know</h3>
-        <ul>
-            <li>
+    <h3 class="mb-3">Might Know</h3>
 
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href={{ url('/profile/username') }}>Pessoa 1</a>
-                <a href="#" class="link_button">Follow</a>
-            </li>
+    <div class="list-group align-items-center d-flex mb-5 ">
 
-            <li>
+        <div class="list-group-item">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class="btn btn-outline-primary">Follow</a>
+        </div>
 
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href={{ url('/profile/username') }}>Pessoa 1</a>
-                <a href="#" class="link_button">Follow</a>
-            </li>
+        <div class="list-group-item">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class=" btn btn-outline-primary">Follow</a>
+        </div>
 
-            <li>
+        <div class="list-group-item">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <a class="me-3" href={{ url('/profile/username') }}>Username</a>
+            <a href="#" class=" btn btn-outline-primary">Follow</a>
+        </div>
 
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href={{ url('/profile/username') }}>Pessoa 1</a>
-                <a href="#" class="link_button">Follow</a>
-            </li>
 
-            <li>
-
-                <img src="../user.png" alt="user_avatar" width="50">
-                <a href={{ url('/profile/username') }}>Pessoa 1</a>
-                <a href="#" class="link_button">Follow</a>
-            </li>
-        </ul>
     </div>
-
 
 </nav>
