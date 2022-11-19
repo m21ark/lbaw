@@ -100,13 +100,15 @@
 
     <h3>Actions</h3>
 
-    @if (Auth::check())
+    @auth
+
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3 create_group_button'>Create Group</button>
 
         <!-- SHould only be visible to group members/owners -->
         <button class='btn btn-primary w-100 mb-3 mt-3 leave_group_button' data-idGroup="{{ $group->id }}">Leave
             Group</button>
-    @endif
+
+    @endauth
 
 </nav>

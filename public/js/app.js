@@ -28,12 +28,18 @@ function addEventListeners() {
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
 
-    let post_dropDown = document.querySelector('.dropdownPostButton');
-    if (post_dropDown)
-        post_dropDown.addEventListener('click', () => { document.querySelector('.dropdown_menu').toggleAttribute('hidden') });
+    let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
+    console.log(post_dropDowns);
+    // No caso dos post da home q recebem load com javascript nao da :(
+    // Ricardo help. I hate JS
+    if (post_dropDowns.length > 0)
+        for (var i = 0; i < post_dropDowns.length; i++)
+            post_dropDowns[i].addEventListener('click', togglePostDropDown);
 
+}
 
-
+function togglePostDropDown() {
+    document.querySelector('.dropdown_menu').toggleAttribute('hidden')
 }
 
 function logItem(class_name) {
@@ -183,7 +189,7 @@ function createPost(post) {
 
                     <small class="me-5">${post.post_date}</small>
                     <div class="dropdown">
-                        <button class="btn dropdownPostButton" type="button">&vellip;</button>
+                        <button class="btn dropdownPostButton" onclick="togglePostDropDown()" type="button">&vellip;</button>
                         <div class="dropdown_menu " hidden>
                             <a class="dropdown-item" href="/profile/${post.owner}">Go to
                                 Profile</a>

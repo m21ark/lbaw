@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <h2 class="mt-4 mb-4">About Us</h2>
     <div class="list-group">
         @for ($i = 0; $i < 3; $i++)
             <div class="list-group-item ">

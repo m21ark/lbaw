@@ -17,8 +17,8 @@
 
     </div>
 
-    <h3>Past Reports</h3>
-    <div class="list-group align-items-center d-flex mb-5 ">
+    <h3>Your Last Reports</h3>
+    <div class="list-group align-items-center d-flex mb-5 mt-4">
 
         <div class="list-group-item">
             <img class="me-3" src="../user.png" alt="user_avatar" width="50">

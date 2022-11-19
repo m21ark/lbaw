@@ -5,7 +5,8 @@
 
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                    <a href="#" class="text-decoration-none d-flex flex-row align-items-center">
+                    <a href={{ url('/profile/' . $post->owner->username) }}
+                        class="text-decoration-none d-flex flex-row align-items-center">
                         <img src="/../user.png" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
                     </a>
@@ -16,12 +17,15 @@
                         <div class="dropdown_menu " hidden>
                             <a class="dropdown-item" href="{{ url('/profile/' . $post->owner->username) }}">Go to
                                 Profile</a>
-                            @if (Auth::user()->id == $post->owner->id)
-                                <a class="dropdown-item" href="#">Edit Post</a>
-                                <a class="dropdown-item" href="#">Delete Post</a>
-                            @else
-                                <a class="dropdown-item" href="#">Send Message</a>
-                            @endif
+
+                            @auth
+                                @if (Auth::user()->id == $post->owner->id)
+                                    <a class="dropdown-item" href="#">Edit Post</a>
+                                    <a class="dropdown-item" href="#">Delete Post</a>
+                                @else
+                                    <a class="dropdown-item" href="#">Send Message</a>
+                                @endif
+                            @endauth
 
 
                         </div>
@@ -31,7 +35,7 @@
 
                 <!-- TODO: Ver imagens da database -->
                 <img src="/../post.jpg" class="img-fluid">
-                
+
                 <div class="p-2">
                     <p class="text-justify">{{ $post->text }}</p>
 

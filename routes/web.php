@@ -26,6 +26,7 @@ Route::post('register', 'Auth\RegisterController@register');
 Route::get('about', 'AboutController@show')->name('about');
 Route::get('contacts', 'ContactsController@show')->name('contacts');
 Route::get('admin', 'AdminController@show')->name('admin');
+Route::get('features', 'FeaturesController@show')->name('features');
 Route::get('home', 'HomeController@show')->name('home');
 
 // TODO: Nestes é preciso passar dps os argumentos corretos
