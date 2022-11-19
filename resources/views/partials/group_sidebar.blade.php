@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="p-2 ">{{ $group->name }}
                 <!-- Should oly be visible to group owners -->
-                <a class='btn btn-secondary edit_group_button' data-idGroup="{{ $group->id }}">Edit</a>
+                <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
             </h3>
         </div>
 

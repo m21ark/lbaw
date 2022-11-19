@@ -70,13 +70,12 @@ class GroupController extends Controller
     }
 
 
-    public function delete($id)
+    public function delete($name)
     {
 
-        $group = Group::find($id);
-
-        $this->authorize('delete', $group); // TODO
-        $group->delete();
+        $group = Group::where('name', $name)->first();
+        //$this->authorize('delete', $group); // TODO
+        // $group->delete(); NAO DA POR CAUSA DOS TRIGGERS :(
 
         return $group;
     }

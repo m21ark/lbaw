@@ -44,13 +44,12 @@ Route::post('api/post/{id}', 'PostController@delete');
 
 // ======================================= APIS ========================================
 
-// Create/Delete group
+// Create/Update/Delete group
 Route::post('api/group', 'GroupController@create');
-Route::delete('api/group/{id}', 'GroupController@delete');
+Route::put('api/group/{name}', 'GroupController@edit');
+Route::delete('api/group/{name}', 'GroupController@delete');
 
 
-// Edit group
-Route::put('api/group_edit/{id}', 'GroupController@edit');
 
 
 // Group Add/Remove Owner

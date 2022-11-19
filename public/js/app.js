@@ -4,7 +4,8 @@ function addEventListeners() {
     let listener_list = [
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
-        ['#popup_btn_group_create', logItem('#popup_show_group_create')]
+        ['#popup_btn_group_create', logItem('#popup_show_group_create')],
+        ['#popup_btn_group_edit', logItem('#popup_show_group_edit')]
     ];
 
 
@@ -30,6 +31,16 @@ function addEventListeners() {
     let create_group_button = document.querySelector('#create_group_button');
     if (create_group_button)
         create_group_button.addEventListener('click', sendCreateGroupRequest);
+
+
+    let edit_group_button = document.querySelector('#edit_group_button');
+    if (edit_group_button)
+        edit_group_button.addEventListener('click', sendEditGroupRequest);
+
+
+    let delete_group_button = document.querySelector('#delete_group_button');
+    if (delete_group_button)
+        delete_group_button.addEventListener('click', sendDeleteGroupRequest);
 
     let close_popups = document.querySelectorAll('.close_popup_btn');
     if (close_popups)
@@ -119,12 +130,13 @@ function closePopups() {
 }
 
 
+// ============================================ GROUPS ============================================
 
 function sendCreateGroupRequest() {
 
-    let name = document.querySelector('#popup_show_group_create #group_name').value;
-    let description = document.querySelector('#popup_show_group_create #group_description').value;
-    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value;
+    let name = document.querySelector('#popup_show_group_create #group_name').value
+    let description = document.querySelector('#popup_show_group_create #group_description').value
+    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -134,24 +146,43 @@ function sendCreateGroupRequest() {
     let res = confirm('Are you sure you want to create this group?');
     if (res) {
         sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+        // TODO: Fazer redirect para grupo criado
     }
 
 }
 
-
 function sendEditGroupRequest() {
 
-    let name = document.querySelector('input[id=group_name]').value;
-    let description = document.querySelector('textarea[id=group_description]').value;
-    let visibility = true// TODO: add this to popup
+    let name = document.querySelector('#popup_show_group_edit #group_name').value
+    let description = document.querySelector('#popup_show_group_edit #group_description').value
+    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
+    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
+    let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
 
-    if (name == null || description == null || visibility == null) // TODO a error message here
+    console.log(name, description, visibility, oldName, id_group);
+
+    if (name == '' || description == '' || visibility == null) {
+        alert('Invalid input');
         return;
+    }
 
-    // TODO MAKE THIS WORK
-    sendAjaxRequest('put', '/api/group_edit/5', { name: 'alterado', description: 'description_altera', visibility: true, id_group: 5 }, () => { });
+    let res = confirm('Are you sure you want to edit this group?');
+    if (res)
+        sendAjaxRequest('put', '/api/group/' + oldName, { name: name, description: description, visibility: visibility, id_group: id_group }, () => { });
 
 }
+
+function sendDeleteGroupRequest() {
+    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
+    console.log('/api/group/' + oldName);
+    let res = confirm('Are you sure you want to delete this group?');
+    if (res) {
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+    }
+}
+
+
+// ============================================ END GROUPS ============================================
 
 
 function sendDeleteGroupMemberRequest() {

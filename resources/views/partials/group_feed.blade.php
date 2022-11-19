@@ -9,3 +9,4 @@
 
 @include('partials.make_post_popup', ['popup_id' => 'popup_show_group_post', 'group_name' => $group->name])
 @include('partials.make_group_popup', ['group' => $group])
+@include('partials.edit_group_popup', ['group' => $group])
