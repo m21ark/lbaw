@@ -5,7 +5,8 @@ function addEventListeners() {
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
-        ['#popup_btn_group_edit', logItem('#popup_show_group_edit')]
+        ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
+        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')]
     ];
 
 

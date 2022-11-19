@@ -28,15 +28,11 @@
 </div>
 
 
-
-
-
-
-
-
 <div id="timeline">
     @foreach ($user->posts as $post)
         @include('partials.post_item', ['post' => $post])
     @endforeach
-
 </div>
+
+<!-- Edit Profile Popup -->
+@include('partials.edit_profile_popup', ['user' => $user])

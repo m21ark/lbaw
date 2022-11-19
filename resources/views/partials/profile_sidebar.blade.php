@@ -5,7 +5,7 @@
         <h3 class="p-2 me-5">About me
             @auth
                 @if (Auth::user()->id == $user->id)
-                    <a href="#" class="btn btn-secondary w-20">Edit</a>
+                    <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
                 @endif
             @endauth
         </h3>
