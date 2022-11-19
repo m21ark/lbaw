@@ -3,7 +3,7 @@ function addEventListeners() {
     // Toggle para botões que escondem paginas
     let listener_list = [
         ['#popup_btn_post', logItem('#popup_show_post')],
-        ['#popup_show_group_post', logItem('#popup_show_group_post')],
+        ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['.group_post_button', logItem('.make_group_post')]
     ];
 
@@ -15,13 +15,12 @@ function addEventListeners() {
     }
     );
 
-    let create_button = document.querySelector('#post_button_action');
-    create_button.addEventListener('click', sendCreatePostRequest(''));
+    let create_button = document.querySelector('#profile_post_button_action');
+    create_button.addEventListener('click', sendCreatePostRequest(true));
 
-    let create_group_post_button = document.querySelector('.make_group_post .form_button');
-    let group_name = document.querySelector('#username');
-    if (group_name !== null)
-        create_group_post_button.addEventListener('click', sendCreatePostRequest(group_name.textContent));
+    let create_group_post_button = document.querySelector('#group_post_button_action');
+    if (create_group_post_button !== null)
+        create_group_post_button.addEventListener('click', sendCreatePostRequest(false));
 
     let remove_groupMember_button = document.querySelector('.leave_group_button');
     if (remove_groupMember_button)
@@ -42,9 +41,9 @@ function togglePostDropDown() {
     document.querySelector('.dropdown_menu').toggleAttribute('hidden')
 }
 
-function logItem(class_name) {
+function logItem(btn_id) {
     return function (e) {
-        const item = document.querySelector(class_name);
+        const item = document.querySelector(btn_id);
         console.log(item);
         item.toggleAttribute('hidden');
     }
@@ -68,25 +67,23 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-function sendCreatePostRequest(group_name_) {
+function sendCreatePostRequest(isProfile) {
     return function (event) {
-        if (group_name_ == '') {
+        if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
-
-            if (textarea.value != null) {
-                let res = confirm('Are you sure you want to post this?');
-                if (res)
-                    sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
-                document.querySelector('#popup_show_post').toggleAttribute('hidden');
-                textarea.value = '';
-            }
+            let res = confirm('Are you sure you want to profile post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+            textarea.value = '';
         }
         else {
-            let name = document.querySelector('.make_group_post textarea[name=text_to_save]').value;
-            console.log(name);
-            console.log("ldldld")
-            if (name != null)
-                sendAjaxRequest('post', '/api/post/', { text: name, group_name: group_name_ }, addedHandler('.make_group_post'));
+            let textarea = document.querySelector('#popup_show_group_post textarea');
+            let res = confirm('Are you sure you want to group post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+            textarea.value = '';
         }
 
         event.preventDefault();

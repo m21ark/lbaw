@@ -51,7 +51,7 @@
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
         @include('partials.make_post_popup', ['popup_id' => 'popup_show_post'])
-   
+
 
     </main>
 

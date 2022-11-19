@@ -6,3 +6,5 @@
     @endforeach
 
 </div>
+
+@include('partials.make_post_popup', ['popup_id' => 'popup_show_group_post', 'group_name' => $group->name])

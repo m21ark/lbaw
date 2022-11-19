@@ -6,16 +6,26 @@
 
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
-                <h3 class="h3 mb-3 font-weight-normal">Make a post</h3>
-                <a href="#" class="btn btn-danger">X</a>
+                @if ($popup_id === 'popup_show_post')
+                    <h3 class="h3 mb-3 font-weight-normal">Make a profile post</h3>
+                @else
+                    <h3 class="h3 mb-3 font-weight-normal">Make a group post</h3>
+                @endif
+
+                <a href="#" class=" btn btn-danger"><strong>X</strong></a>
             </div>
 
 
             <label for="inputText" class="sr-only">Text</label>
             <textarea rows="8" id="inputText" value="{{ old('email') }}" class="form-control mb-3" placeholder="Content"
-                name="text" required autofocus style="resize: none;"></textarea>
+                name="text" required autofocus style="resize: none;"
+                @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
-            <button id="post_button_action" class="btn btn-lg btn-primary mt-3 w-100" type="submit">Post</button>
+            <button
+                @if ($popup_id == 'popup_show_post') id={{ 'profile_post_button_action' }}
+            @else
+            id={{ 'group_post_button_action' }} @endif
+                class="btn btn-lg btn-primary mt-3 w-100" type="submit">Post</button>
             <!-- End popup body -->
 
 
