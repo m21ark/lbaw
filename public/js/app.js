@@ -250,33 +250,52 @@ function updateSearch() {
 
     query_string = searchBar.value
 
+    if (query_string === '') return;
+
     console.log(type_search)
     console.log(query_string)
 
     sendAjaxRequest('get', '/api/search/'+query_string+'/type/'+type_search, {}, function () {
         
         let timeline = document.querySelector('#timeline');
-        console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         
         console.log('Received')
         console.log(received)
         
-        /*
-        
         timeline.innerHTML = '';
         received.forEach(function (searchItem) {
-            timeline.appendChild(createSearchCard(searchItem))
+            if (type_search === 'posts') {
+                timeline.appendChild(createPost(searchItem));
+            } else {
+                timeline.appendChild(createSearchCard(type_search, searchItem))
+            }
+
         })
-        */
-      })
+
+    })
 
 }
 
 
-function createSearchCard() {
-    return 'hello'
+function createSearchCard(type_search, searchItem) {
+    let photo = '', name = ''; 
+    let card = document.createElement('article');
+    card.innerHTML = 'Still searching for a card design<br>'
+
+    if (type_search === 'groups') {
+        
+        
+        
+    } else if (type_search === 'users') {
+        
+        
+    }
+
+    return card;
 }
+
+
 
 
 updateSearchOnInputAndClick();
