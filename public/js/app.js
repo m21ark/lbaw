@@ -398,6 +398,7 @@ function updateFeedOnLoad() {
 updateFeedOnLoad();
 
 
+
 //  ======================================= Search ======================================
 
 function updateSearchOnInputAndClick() {
@@ -405,13 +406,15 @@ function updateSearchOnInputAndClick() {
     let pathname = window.location.pathname
     if (!/\/search\/[#@\w]/.test(pathname)) return;
 
-    if (!document.querySelector('#timeline'))
+    if (!document.querySelector('#timeline')) {
         return;
+    }
 
     let search_filters = document.querySelector('input#search_radio_user')
 
     if (search_filters)
         search_filters.checked = true
+
 
     // Add event listeners when input changes
     const searchBar = document.querySelector('#search_bar')
@@ -429,14 +432,6 @@ function updateSearchOnInputAndClick() {
     }
 
 }
-
-function createSearchCard(type_search, searchResult) {
-
-    let new_card = document.createElement('article');
-    new_card.innerHTML = `<p>${searchResult}</p>`
-    return new_card;
-}
-
 
 
 function updateSearch() {
@@ -465,7 +460,6 @@ function updateSearch() {
     if (query_string === '') return;
 
 
-
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
         let timeline = document.querySelector('#timeline');
@@ -481,14 +475,14 @@ function updateSearch() {
         if (received == null) return;
 
         timeline.innerHTML = '';
-        received.forEach(function (searchItem) {
+        received.forEach(function (searchHit) {
 
             if (type_search === 'posts') {
-                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)));
+                timeline.appendChild(createPost(searchHit));
             } else if (type_search === 'groups') {
-                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)))
+                timeline.appendChild(createGroupCard(searchHit))
             } else {
-                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)))
+                timeline.appendChild(createUserCard(searchHit))
             }
 
         })
@@ -496,6 +490,51 @@ function updateSearch() {
     })
 
 }
+
+
+
+function createUserCard(user) {
+    let new_card = document.createElement('article');
+
+    let bio_short = user.bio;
+    if (bio_short.length > 50)
+        bio_short = user.bio.substring(0, 100) + '...'
+
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="width: 15em;height:29em">
+        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <div class="card-body">
+            <h5 class="card-title">${user.username}</h5>
+            <p class="card-text">${bio_short}</p>
+            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Group</a>
+        </div>
+    </div>
+    `
+    return new_card;
+}
+
+
+
+function createGroupCard(group) {
+    let new_card = document.createElement('article');
+
+    let bio_short = group.description;
+    if (bio_short.length > 50)
+        bio_short = user.bio.substring(0, 100) + '...'
+
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="width: 15em;height:25em">
+        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <div class="card-body">
+            <h5 class="card-title">${group.name}</h5>
+            <p class="card-text">${bio_short}</p>
+            <a href="/profile/${group.name}" class="btn btn-primary w-100">Visit Profile</a>
+        </div>
+    </div>
+    `
+    return new_card;
+}
+
 
 
 

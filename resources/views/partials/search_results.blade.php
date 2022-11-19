@@ -21,6 +21,7 @@
 </div>
 
 
-<div id="timeline">
+<div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">
     <!-- TODO: Add results here -->
+
 </div>
