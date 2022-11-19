@@ -40,6 +40,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\GroupJoinRequest', 'id_user');
     }
 
+    public function groupsMember()
+    {
+        return $this->hasMany('App\Models\GroupJoinRequest', 'id_user')->where('acceptance_status', 'Accepted');
+    }
+
+    public function groupsOwner()
+    {
+        return $this->hasMany('App\Models\Owner', 'id_user');
+    }
+
 
     public function interests()
     {

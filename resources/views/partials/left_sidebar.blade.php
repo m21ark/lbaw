@@ -9,13 +9,15 @@
 
         <a href={{ url('/home') }} class=" btn btn-outline-primary mb-3">Home </a>
         <a href={{ url('/group/mine') }} class=" btn btn-outline-primary mb-3" aria-current="page">My Groups</a>
+
+        @include('partials.participating_groups')
+
         <a href={{ url('/messages/sender_username') }} class=" btn btn-outline-primary mb-3">Messages</a>
 
         @auth
-            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary" type="submit">Post</button>
+            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary"
+                type="submit">Post</button>
         @endauth
 
     </ul>
 </div>
-
-
