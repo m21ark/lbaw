@@ -102,29 +102,6 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-function sendCreatePostRequest(isProfile) {
-    return function (event) {
-        if (isProfile) {
-            let textarea = document.querySelector('#popup_show_post textarea');
-            let res = confirm('Are you sure you want to profile post this?');
-            if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
-            document.querySelector('#popup_show_post').toggleAttribute('hidden');
-            textarea.value = '';
-        }
-        else {
-            let textarea = document.querySelector('#popup_show_group_post textarea');
-            let res = confirm('Are you sure you want to group post this?');
-            if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
-            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
-            textarea.value = '';
-        }
-
-        event.preventDefault();
-    }
-}
-
 function addedHandler(class_name) {
     return function () {
         if (this.status < 200 && this.status >= 300) window.location = '/';
@@ -250,11 +227,74 @@ function sendDeleteProfileRequest() {
 }
 
 
+// ============================================ Post ============================================
+
+
+function sendCreatePostRequest(isProfile) {
+    return function (event) {
+        if (isProfile) {
+            let textarea = document.querySelector('#popup_show_post textarea');
+            let res = confirm('Are you sure you want to profile post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+        else {
+            let textarea = document.querySelector('#popup_show_group_post textarea');
+            let res = confirm('Are you sure you want to group post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+
+        event.preventDefault();
+        location.reload();
+    }
+}
+
+
+function sendEditPostRequest() {
+
+    // TODO : fazer o edit do post baseado no criar do post e no edit do group pq é a msm logica
+    return function (event) {
+        if (isProfile) {
+            let textarea = document.querySelector('#popup_show_post textarea');
+            let res = confirm('Are you sure you want to profile post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+        else {
+            let textarea = document.querySelector('#popup_show_group_post textarea');
+            let res = confirm('Are you sure you want to group post this?');
+            if (res && textarea.value != null)
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+            textarea.value = '';
+        }
+
+        event.preventDefault();
+    }
+}
+
+
+function sendDeletePostRequest() {
+    let id = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+
+    let res = confirm('Are you sure you want to delete this post?');
+    if (res === id)
+        sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
+}
+
+
 
 addEventListeners();
 
 
-// Home =============================================================================
+// =================================== Home ==========================================
 
 function updateFeed(feed) {
 
@@ -351,12 +391,8 @@ function createPost(post) {
 
 function updateFeedOnLoad() {
     let feed_filters = document.querySelector('#feed_radio_viral')
-
-    if (feed_filters) {
+    if (feed_filters)
         feed_filters.checked = true
-    }
-
     updateFeed('viral')
 }
-
 updateFeedOnLoad();

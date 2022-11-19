@@ -23,6 +23,7 @@
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
+                <!-- VALUES ARE WRONG COUNTED CAUSE APART FROM FIRST OWNER, OTHER OWNERS HAVE REQUEST TO JOIN -->
                 <li class="lead">{{ sizeof($group->owners) }} Owners</li>
                 <li class="lead">{{ sizeof($group->members) }} Members</li>
                 <li class="lead">{{ sizeof($group->posts) }} Posts</li>
@@ -68,11 +69,6 @@
 
 
     </div>
-
-
-
-
-
 
     <h3 class="mb-4">Groups for you</h3>
     <div class="list-group align-items-center d-flex mb-4 ">

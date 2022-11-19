@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany('App\Models\Post', 'id_poster');
+        return $this->hasMany('App\Models\Post', 'id_poster')->orderBy('post_date', 'desc');
     }
 
     public function groupJoinRequests()
