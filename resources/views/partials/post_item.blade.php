@@ -30,8 +30,8 @@
                 </div>
 
                 <!-- TODO: Ver imagens da database -->
-                <img src="https://i.imgur.com/xhzhaGA.jpg" class="img-fluid">
-
+                <img src="/../post.jpg" class="img-fluid">
+                
                 <div class="p-2">
                     <p class="text-justify">{{ $post->text }}</p>
 
