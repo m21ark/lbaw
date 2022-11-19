@@ -2,8 +2,8 @@ function addEventListeners() {
 
     // Toggle para botões que escondem paginas
     let listener_list = [
-        ['.make_post_popup', logItem('.make_post')],
-        ['.create_group_button', logItem('.make_group')],
+        ['#popup_btn_post', logItem('#popup_show_post')],
+        ['#popup_show_group_post', logItem('#popup_show_group_post')],
         ['.group_post_button', logItem('.make_group_post')]
     ];
 
@@ -15,7 +15,7 @@ function addEventListeners() {
     }
     );
 
-    let create_button = document.querySelector('.make_post .form_button');
+    let create_button = document.querySelector('#post_button_action');
     create_button.addEventListener('click', sendCreatePostRequest(''));
 
     let create_group_post_button = document.querySelector('.make_group_post .form_button');
@@ -71,11 +71,14 @@ function sendAjaxRequest(method, url, data, handler) {
 function sendCreatePostRequest(group_name_) {
     return function (event) {
         if (group_name_ == '') {
-            let name = document.querySelector('.make_post textarea[name=text_to_save]').value;
-            console.log(name);
-            if (name != null) {
-                sendAjaxRequest('post', '/api/post/', { text: name }, addedHandler('.make_post'));
-                console.log('lçdlddl');
+            let textarea = document.querySelector('#popup_show_post textarea');
+
+            if (textarea.value != null) {
+                let res = confirm('Are you sure you want to post this?');
+                if (res)
+                    sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+                document.querySelector('#popup_show_post').toggleAttribute('hidden');
+                textarea.value = '';
             }
         }
         else {

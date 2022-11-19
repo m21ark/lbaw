@@ -12,7 +12,7 @@
         <a href={{ url('/messages/sender_username') }} class=" btn btn-outline-primary mb-3">Messages</a>
 
         @auth
-            <button c id="post_button" class="mt-5 make_post_popup form_button btn btn-primary" type="submit">Post</button>
+            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary" type="submit">Post</button>
         @endauth
 
     </ul>

@@ -34,9 +34,6 @@
 
     <main>
 
-
-
-
         <nav aria-label="breadcrumb mb-5">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href={{ url('/home') }}>Home</a></li>
@@ -53,10 +50,8 @@
 
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
-        @include('partials.make_post_popup', ['popup_class' => 'make_post'])
-        @include('partials.make_post_popup', ['popup_class' => 'make_group_post'])
-        @include('partials.make_group_popup')
-
+        @include('partials.make_post_popup', ['popup_id' => 'popup_show_post'])
+   
 
     </main>
 
