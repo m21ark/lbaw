@@ -29,19 +29,31 @@ function addEventListeners() {
     if (remove_groupMember_button)
         remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
 
+    // ====================== Group ======================
+
     let create_group_button = document.querySelector('#create_group_button');
     if (create_group_button)
         create_group_button.addEventListener('click', sendCreateGroupRequest);
-
 
     let edit_group_button = document.querySelector('#edit_group_button');
     if (edit_group_button)
         edit_group_button.addEventListener('click', sendEditGroupRequest);
 
-
     let delete_group_button = document.querySelector('#delete_group_button');
     if (delete_group_button)
         delete_group_button.addEventListener('click', sendDeleteGroupRequest);
+
+    // ====================== Profile ======================
+
+    let edit_profile_button = document.querySelector('#edit_profile_button');
+    if (edit_profile_button)
+        edit_profile_button.addEventListener('click', sendEditProfileRequest);
+
+    let delete_profile_button = document.querySelector('#delete_profile_button');
+    if (delete_profile_button)
+        delete_profile_button.addEventListener('click', sendDeleteProfileRequest);
+
+
 
     let close_popups = document.querySelectorAll('.close_popup_btn');
     if (close_popups)
@@ -160,8 +172,6 @@ function sendEditGroupRequest() {
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
 
-    console.log(name, description, visibility, oldName, id_group);
-
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
         return;
@@ -174,16 +184,13 @@ function sendEditGroupRequest() {
 }
 
 function sendDeleteGroupRequest() {
-    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
-    console.log('/api/group/' + oldName);
+    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
         sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
     }
 }
 
-
-// ============================================ END GROUPS ============================================
 
 
 function sendDeleteGroupMemberRequest() {
@@ -200,7 +207,52 @@ function sendDeleteGroupMemberRequest() {
     location.reload();
 }
 
+
+// ============================================ Profile ============================================
+
+
+function sendEditProfileRequest() {
+
+    let username = document.querySelector('#popup_show_profile_edit #user_name').value
+    let email = document.querySelector('#popup_show_profile_edit #user_email').value
+    let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
+    let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
+    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
+
+    let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+    let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+
+    // console.log(username, email, bdate, bio, visibility, oldName, idUser);
+
+    if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to edit your profile?');
+    if (res) {
+        sendAjaxRequest('put', '/api/profile/' + oldName, { username: username, email: email, bdate: bdate, bio: bio, visibility: visibility, oldName: oldName, idUser: idUser }, () => { });
+        //todo: fazer redirect para o perfil editado
+    }
+
+}
+
+
+function sendDeleteProfileRequest() {
+    let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+
+    let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
+    if (res === username) {
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { });
+    } else {
+        alert('Invalid input! Account not deleted!');
+    }
+}
+
+
+
 addEventListeners();
+
 
 // Home =============================================================================
 

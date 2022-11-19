@@ -49,6 +49,9 @@ Route::post('api/group', 'GroupController@create');
 Route::put('api/group/{name}', 'GroupController@edit');
 Route::delete('api/group/{name}', 'GroupController@delete');
 
+// Edit/Delete profile
+Route::put('api/profile/{username}', 'ProfileController@edit');
+Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 
 

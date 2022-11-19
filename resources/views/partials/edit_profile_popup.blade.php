@@ -12,13 +12,12 @@
             <input type="text" id="user_name" value="{{ $user->username }}" data-name="{{ $user->username }}"
                 data-id="{{ $user->id }}" class="form-control mb-3" placeholder="Username">
 
-            <label for="inputEmail" class="sr-only mt-2">Email address</label>
-            <input type="email" id="inputEmail" class="form-control mb-3" value="{{ $user->email }}"
-                placeholder="Email" name="email" required>
+            <label for="user_email" class="sr-only mt-2">Email address</label>
+            <input type="email" id="user_email" class="form-control mb-3" value="{{ $user->email }}"
+                placeholder="Email" required>
 
-            <label for="inputDate" class="sr-only mt-2">Birthdate</label>
-            <input type="date" id="inputDate" class="form-control mb-3" name="birthdate"
-                value="{{ $user->birthdate }}" required>
+            <label for="user_bdate" class="sr-only mt-2">Birthdate</label>
+            <input type="date" id="user_bdate" class="form-control mb-3" value="{{ $user->birthdate }}" required>
 
             <label for="user_bio" class="sr-only">Bio</label>
             <textarea rows="8" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
@@ -27,7 +26,7 @@
             <input class="form-check-input" id="profile_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
 
-
+            <!-- TODO: EDIT ALSO USER INTERESTS -->
             <!-- TODO: Falta imagem de perfil e se quer mudar de passe(cuidado com a hash)-->
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save

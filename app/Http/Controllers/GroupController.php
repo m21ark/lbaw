@@ -92,7 +92,7 @@ class GroupController extends Controller
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
-        $group->visibility = $request->input('visibility');
+        $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
         // todo: add profile image
 
