@@ -34,11 +34,17 @@
 
     <main>
 
+
+
+
         <nav aria-label="breadcrumb mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Library</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data</li>
+                <li class="breadcrumb-item"><a href={{ url('/home') }}>Home</a></li>
+                <?php $segments = ''; ?>
+                @foreach (Request::segments() as $segment)
+                    <?php $segments .= '/' . $segment; ?>
+                    <li class="breadcrumb-item"><a href={{ $segments }}>{{ $segment }}</a></li>
+                @endforeach
             </ol>
         </nav>
 

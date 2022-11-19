@@ -183,7 +183,7 @@ main {
 
 /*  ====================== NAVBAR FILTER ===================== */
 
-.list-group {
+#feed_filter {
     margin: 4rem auto;
 }
 
