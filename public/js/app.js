@@ -396,3 +396,122 @@ function updateFeedOnLoad() {
     updateFeed('viral')
 }
 updateFeedOnLoad();
+
+
+
+// Search =============================================================================
+
+function updateSearchOnInputAndClick() {
+
+    let pathname = window.location.pathname
+    if (!/\/search\/[#@\w]/.test(pathname)) return;
+
+    if (!document.querySelector('#timeline')) {
+        return;
+    }
+
+    let search_filters = document.querySelector('#search_radio_user')
+
+    if (search_filters) {
+        search_filters.checked = true
+    }
+
+    // Add event listeners when input changes
+    const searchBar = document.querySelector('#search_bar')
+
+    if (searchBar) {
+        searchBar.addEventListener('input', function () {
+            updateSearch()
+        })
+    }
+
+
+    // Add event listeners when a radio has a click
+    const filters = document.querySelectorAll('#search_filter input')
+
+    if (filters) {
+        filters.forEach(function (filter) {
+            filter.addEventListener('click', function () {
+                updateSearch()
+            })
+        })
+    }
+
+
+}
+
+
+function updateSearch() {
+    let type_search = '', query_string = '';
+
+    // Get the type_search from the radio input
+    const filters = document.querySelectorAll('#search_filter input')
+
+    if (!filters) return;
+
+    filters.forEach(filter => {
+        if (filter.checked) { type_search = filter.value }
+    })
+
+    // Get the query string from the search bar
+    const searchBar = document.querySelector('#search_bar')
+
+    if (!searchBar) return;
+
+    query_string = searchBar.value
+
+    if (query_string === '') return;
+
+    console.log(type_search)
+    console.log(query_string)
+
+    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
+
+        let timeline = document.querySelector('#timeline');
+        let received = JSON.parse(this.responseText);
+
+        console.log('Received')
+        console.log(received)
+
+        timeline.innerHTML = '';
+        received.forEach(function (searchItem) {
+            if (type_search === 'posts') {
+                timeline.appendChild(createPost(searchItem));
+            } else {
+                timeline.appendChild(createSearchCard(type_search, searchItem))
+            }
+
+        })
+
+    })
+
+}
+
+
+function createSearchCard(type_search, searchItem) {
+    let photo = '', name = '';
+    let card = document.createElement('article');
+    card.innerHTML = 'Still searching for a card design<br>'
+
+    if (type_search === 'groups') {
+
+
+
+    } else if (type_search === 'users') {
+
+
+    }
+
+    return card;
+}
+
+
+
+
+updateSearchOnInputAndClick();
+updateSearch();
+
+
+
+
+

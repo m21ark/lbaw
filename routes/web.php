@@ -37,12 +37,14 @@ Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 
+// ======================================= APIS ========================================
 
+// Get Posts for feed
 Route::get('api/post/feed/{type_feed}', 'PostController@feed');
 Route::post('api/post/', 'PostController@create');
 Route::post('api/post/{id}', 'PostController@delete');
 
-// ======================================= APIS ========================================
+Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@search');
 
 // Create/Update/Delete group
 Route::post('api/group', 'GroupController@create');

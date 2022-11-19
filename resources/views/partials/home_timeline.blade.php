@@ -28,8 +28,6 @@
 
 
 
-
-
 <div id="timeline" class="mt-3">
     <!-- Add posts here -->
 </div>

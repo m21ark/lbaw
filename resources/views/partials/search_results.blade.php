@@ -2,32 +2,23 @@
     id="feed_filter">
 
     <input class="list-group-item-check pe-none" onclick="updateFeed('for_you')" type="radio" name="feed_filter"
-        id="feed_radio_foryou" value="" checked>
-    <label class="list-group-item rounded-3 py-3" for="feed_radio_foryou">
+        id="search_radio_user" value="" checked>
+    <label class="list-group-item rounded-3 py-3" for="search_radio_user">
         User
     </label>
 
     <input class="list-group-item-check pe-none" onclick="updateFeed('viral')" type="radio" name="feed_filter"
-        id="feed_radio_viral" value="">
-    <label class="list-group-item rounded-3 py-3" for="feed_radio_viral">
+        id="search_radio_group" value="">
+    <label class="list-group-item rounded-3 py-3" for="search_radio_group">
         Group
     </label>
 
-    <input class="list-group-item-check pe-none" onclick="updateFeed('friends')" type="radio" name="feed_filter"
-        id="feed_radio_friends" value="">
-    <label class="list-group-item rounded-3 py-3" for="feed_radio_friends">
+    <input class="list-group-item-check pe-none" onclick="updateFeed('groups')" type="radio" name="feed_filter"
+        id="search_radio_post" value="">
+    <label class="list-group-item rounded-3 py-3" for="search_radio_post">
         Post
     </label>
-
-    <input class="list-group-item-check pe-none" onclick="updateFeed('groups')" type="radio" name="feed_filter"
-        id="feed_radio_groups" value="">
-    <label class="list-group-item rounded-3 py-3" for="feed_radio_groups">
-        Comment
-    </label>
 </div>
-
-
-
 
 
 <div id="timeline">

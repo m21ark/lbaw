@@ -561,7 +561,7 @@ paths:
 
       # ========================================================
     
-  /search:
+  /search/{query}:
     get:
       operationId: R106
       summary: "R106: Search"
@@ -582,7 +582,7 @@ paths:
           description: "Ok. Show search page"       
 
 
-  /api/search:
+  /api/search/{query_string}:
     get:
       operationId: R202
       summary: "R202: Search API"
@@ -593,55 +593,66 @@ paths:
 
       parameters:
         - in: query
-          name: query
+          name: query_string
           description: String to use for full-text search
           schema:
             type: string
           required: false
 
-          # boolean filters
-        - in: query
-          name: username
-          description: Include matches on usernames
-          schema:
-            type: boolean
-          required: false
+        # I don't think it's necessary to have filters in this case
+        # because I'm going to use javascript to make each api call
 
         - in: query
-          name: user_bio
-          description: Include matches on users' bios
+          name: type_search
+          description: Filter parameter. Can be "users", "groups" or "posts".
           schema:
-            type: boolean
-          required: false
+            type: string
+          required: true
 
-        - in: query
-          name: group_name
-          description: Include matches on group names
-          schema:
-            type: boolean
-          required: false
+        # boolean filters 
 
-        - in: query
-          name: group_description
-          description: Include matches on group descriptions
-          schema:
-            type: boolean
-          required: false
+        # - in: query
+        #   name: username
+        #   description: Include matches on usernames
+        #   schema:
+        #     type: boolean
+        #   required: false
 
-        - in: query
-          name: post_text
-          description: Include matches on post text
-          schema:
-            type: boolean
-          required: false
+        # - in: query
+        #   name: user_bio
+        #   description: Include matches on users' bios
+        #   schema:
+        #     type: boolean
+        #   required: false
 
-        - in: query
-          name: comment_text
-          description: Include matches on comment text
-          schema:
-            type: boolean
-          required: false
+        # - in: query
+        #   name: group_name
+        #   description: Include matches on group names
+        #   schema:
+        #     type: boolean
+        #   required: false
 
+        # - in: query
+        #   name: group_description
+        #   description: Include matches on group descriptions
+        #   schema:
+        #     type: boolean
+        #   required: false
+
+        # - in: query
+        #   name: post_text
+        #   description: Include matches on post text
+        #   schema:
+        #     type: boolean
+        #   required: false
+
+        # - in: query
+        #   name: comment_text
+        #   description: Include matches on comment text
+        #   schema:
+        #     type: boolean
+        #   required: false
+      
       # TODO, ver se faz sentido retornar so IDs aqui ou o conteudo ja pronto para exibir
       
       ## Falta exemplo de json
