@@ -253,7 +253,7 @@ main {
     opacity: .5;
 }
 
-#feed_filter {
+#feed_filter, #search_filter {
     flex-direction: row;
     margin: 0 auto;
     max-width: 40em;
@@ -264,7 +264,17 @@ main {
     text-align: center;
 }
 
+#search_filter * {
+    width: 32%;
+    text-align: center;
+}
+
+
 #feed_filter .list-group-item {
+    margin: 0.5em;
+}
+
+#search_filter .list-group-item {
     margin: 0.5em;
 }
 

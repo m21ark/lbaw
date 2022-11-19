@@ -34,7 +34,6 @@ class SearchController extends Controller
 
             $searchItems = $this->searchGroups($query_string);
         } else if ($type_search === "posts") {
-
             $searchItems = $this->searchPosts($query_string);
         }
 

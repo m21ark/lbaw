@@ -398,56 +398,58 @@ function updateFeedOnLoad() {
 updateFeedOnLoad();
 
 
-
-// Search =============================================================================
+//  ======================================= Search ======================================
 
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
     if (!/\/search\/[#@\w]/.test(pathname)) return;
 
-    if (!document.querySelector('#timeline')) {
+    if (!document.querySelector('#timeline'))
         return;
-    }
 
-    let search_filters = document.querySelector('#search_radio_user')
+    let search_filters = document.querySelector('input#search_radio_user')
 
-    if (search_filters) {
+    if (search_filters)
         search_filters.checked = true
-    }
 
     // Add event listeners when input changes
     const searchBar = document.querySelector('#search_bar')
 
-    if (searchBar) {
-        searchBar.addEventListener('input', function () {
-            updateSearch()
-        })
-    }
-
+    if (searchBar)
+        searchBar.addEventListener('input', () => { updateSearch() })
 
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', function () {
-                updateSearch()
-            })
+            filter.addEventListener('click', () => { updateSearch() })
         })
     }
 
+}
 
+function createSearchCard(type_search, searchResult) {
+
+    let new_card = document.createElement('article');
+    new_card.innerHTML = `<p>${searchResult}</p>`
+    return new_card;
 }
 
 
+
 function updateSearch() {
+
+
     let type_search = '', query_string = '';
 
     // Get the type_search from the radio input
     const filters = document.querySelectorAll('#search_filter input')
 
     if (!filters) return;
+
+
 
     filters.forEach(filter => {
         if (filter.checked) { type_search = filter.value }
@@ -462,23 +464,31 @@ function updateSearch() {
 
     if (query_string === '') return;
 
-    console.log(type_search)
-    console.log(query_string)
+
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
         let timeline = document.querySelector('#timeline');
-        let received = JSON.parse(this.responseText);
 
-        console.log('Received')
-        console.log(received)
+        if (!timeline) return;
+        let received;
+        try {
+            received = JSON.parse(this.responseText);
+        } catch (error) {
+            // ignore for now
+        }
+
+        if (received == null) return;
 
         timeline.innerHTML = '';
         received.forEach(function (searchItem) {
+
             if (type_search === 'posts') {
-                timeline.appendChild(createPost(searchItem));
+                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)));
+            } else if (type_search === 'groups') {
+                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)))
             } else {
-                timeline.appendChild(createSearchCard(type_search, searchItem))
+                timeline.appendChild(createSearchCard(type_search, JSON.stringify(searchItem)))
             }
 
         })
@@ -488,22 +498,6 @@ function updateSearch() {
 }
 
 
-function createSearchCard(type_search, searchItem) {
-    let photo = '', name = '';
-    let card = document.createElement('article');
-    card.innerHTML = 'Still searching for a card design<br>'
-
-    if (type_search === 'groups') {
-
-
-
-    } else if (type_search === 'users') {
-
-
-    }
-
-    return card;
-}
 
 
 
