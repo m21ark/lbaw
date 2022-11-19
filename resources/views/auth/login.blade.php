@@ -1,25 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <section id="login">
-        <div class="container sign_form">
+    <div class=" d-flex align-items-center justify-content-around">
+
+        <body class="text-center">
             <form method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
 
-                <h2>Login</h2>
-                <label>
-                    Email <input type="text" value="{{ old('email') }}" placeholder="Email" name="email" required
-                        autofocus>
-                </label>
-                @if ($errors->has('email'))
-                    <span class="error">
-                        {{ $errors->first('email') }}
-                    </span>
-                @endif
+                <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3" placeholder="Email"
+                    name="email" required autofocus autofocus="">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
+                    required>
 
-                <label>
-                    Password <input type="password" placeholder="Password" name="password" required>
-                </label>
+                <button class="btn btn-lg btn-primary btn-block mt-4 w-100" type="submit">Login</button>
+
+                <!-- TODO: Make better error message -->
                 @if ($errors->has('password'))
                     <span class="error">
                         {{ $errors->first('password') }}
@@ -27,23 +25,16 @@
                 @endif
 
 
-                <!--
-                    <label>
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                    </label>
-                    -->
+                <div class="mt-3">
+                    <p><span class="bold">Don't have an account?</span> <a class="form_button"
+                            href="{{ route('register') }}">Register</a></p>
 
-                <button class="form_button" type="submit">
-                    Login
-                </button>
-
+                </div>
             </form>
-            <div class="form_alternative">
-                <p><span class="bold">Don't have an account?</span></p>
-                <a class="form_button" href="{{ route('register') }}">Register</a>
-            </div>
-        </div>
-    </section>
+
+
+        </body>
+    </div>
 @endsection
 
 

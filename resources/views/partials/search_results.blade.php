@@ -1,19 +1,27 @@
-<div id="feed_filter">
-    <h3>Filter Results:</h3>
-    <label for="feed_radio_user">User</label>
-    <input type="radio" name="feed_filter" id="feed_radio_user" checked>
+<div class="list-group list-group-checkable form-check d-flex p-3 flex justify-content-between text-bg-light"
+    id="search_filter">
 
-    <label for="feed_radio_group">Group</label>
-    <input type="radio" name="feed_filter" id="feed_radio_group">
+    <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_user" value="users"
+        checked>
+    <label class="list-group-item rounded-3 py-3" for="search_radio_user">
+        User
+    </label>
 
-    <label for="feed_radio_post">Post</label>
-    <input type="radio" name="feed_filter" id="feed_radio_post">
+    <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_group"
+        value="groups">
+    <label class="list-group-item rounded-3 py-3" for="search_radio_group">
+        Group
+    </label>
 
-    <label for="feed_radio_comment">Comment</label>
-    <input type="radio" name="feed_filter" id="feed_radio_comment">
+    <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_post"
+        value="posts">
+    <label class="list-group-item rounded-3 py-3" for="search_radio_post">
+        Post
+    </label>
 </div>
 
 
-<div id="timeline">
+<div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">
     <!-- TODO: Add results here -->
+
 </div>

@@ -26,7 +26,7 @@ class Group extends Model
 
     public function posts()
     {
-        return $this->hasMany('App\Models\Post', 'id_group');
+        return $this->hasMany('App\Models\Post', 'id_group')->orderBy('post_date', 'desc');;
     }
 
     public function groupJoinRequests()
