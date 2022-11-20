@@ -64,15 +64,30 @@ function addEventListeners() {
             });
         }
 
+    let like_btn_post = document.querySelectorAll('.like_btn_post');
+    if (like_btn_post)
+        if (like_btn_post.length > 0) {
+            like_btn_post.forEach(e => {
+                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) });
+            });
+        }
+
+    let like_btn_comment = document.querySelectorAll('.like_btn_comment');
+    if (like_btn_comment)
+        if (like_btn_comment.length > 0) {
+            like_btn_comment.forEach(e => {
+                e.addEventListener('click', () => { sendLikeCommentRequest(e.dataset.uid, e.dataset.id) });
+            });
+        }
+
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
     [].forEach.call(post_dropDowns, function (element) {
-        console.log(element.parentNode)
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
 }
 
 function togglePostDropDown(parent) {
-    return function() {
+    return function () {
         parent.querySelector('.dropdown_menu').toggleAttribute('hidden')
     }
 }
@@ -237,6 +252,26 @@ function sendDeleteProfileRequest() {
         alert('Invalid input! Account not deleted!');
     }
 }
+
+
+
+// ============================================ Likes ============================================
+
+
+
+function sendLikePostRequest(id_user, id_post) {
+    sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
+    location.reload();
+}
+
+
+function sendLikeCommentRequest(id_user, id_comment) {
+    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
+    location.reload();
+}
+
+
+
 
 
 // ============================================ Post ============================================
