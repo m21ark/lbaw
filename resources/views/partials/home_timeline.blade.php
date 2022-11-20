@@ -1,4 +1,5 @@
-<div class="list-group list-group-checkable form-check d-flex p-3 flex justify-content-between text-bg-light"
+<div class="list-group list-group-checkable form-check d-flex p-3 flex justify-content-between text-bg-light @if ($guest)
+d-none @endif"
     id="feed_filter">
 
     <input class="list-group-item-check pe-none" onclick="updateFeed('for_you')" type="radio" name="feed_filter"
