@@ -77,6 +77,7 @@ class SearchController extends Controller
             ->join('post', 'post.id', '=', 'id_post')
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('user', 'user.id', '=', 'post.id_poster')
+            ->where('user.visibility', '=', 'true')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->groupBy('post.id', 'owner', 'user.photo', 'comment.tsvector_comment')
             ->selectRaw('

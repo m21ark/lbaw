@@ -437,9 +437,11 @@ function updateSearchOnInputAndClick() {
         searchBar.addEventListener('input', function () {
             updateSearch()
 
+            let searchBarString = searchBar.value.trim()
+            
             // Update the path on top 
-            if (query_string.trim() !== '') {
-                window.history.pushState('', '', '/search/' + searchBar.value.trim().replaceAll(' ', '%20'))
+            if (searchBarString !== '') {
+                window.history.pushState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
             }
                 
         })
