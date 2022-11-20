@@ -528,7 +528,7 @@ function createGroupCard(group) {
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${group.name}" class="btn btn-primary w-100">Visit Profile</a>
+            <a href="/group/${group.name}" class="btn btn-primary w-100">Visit Group</a>
         </div>
     </div>
     `

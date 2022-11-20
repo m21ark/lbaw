@@ -12,6 +12,9 @@
                     </a>
 
                     <small class="me-5">{{ $post->post_date }}</small>
+
+
+
                     <div class="dropdown">
                         <button class="btn dropdownPostButton" type="button">&vellip;</button>
                         <div class="dropdown_menu " hidden>
@@ -20,16 +23,16 @@
 
                             @auth
                                 @if (Auth::user()->id == $post->owner->id)
-                                    <a class="dropdown-item" href="#">Edit Post</a>
+                                    <a class="dropdown-item" href="/profile/{{ $post->owner->id }}">Edit Post</a>
                                     <a class="dropdown-item" href="#">Delete Post</a>
                                 @else
                                     <a class="dropdown-item" href="#">Send Message</a>
                                 @endif
                             @endauth
-
-
                         </div>
                     </div>
+
+
 
                 </div>
 
