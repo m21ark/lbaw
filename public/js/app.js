@@ -65,17 +65,16 @@ function addEventListeners() {
         }
 
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
-    // console.log(post_dropDowns);
-    // No caso dos post da home q recebem load com javascript nao da :(
-    // Ricardo help. I hate JS
-    if (post_dropDowns.length > 0)
-        for (var i = 0; i < post_dropDowns.length; i++)
-            post_dropDowns[i].addEventListener('click', togglePostDropDown);
-
+    [].forEach.call(post_dropDowns, function (element) {
+        console.log(element.parentNode)
+        element.addEventListener('click', togglePostDropDown(element.parentNode));
+    });
 }
 
-function togglePostDropDown() {
-    document.querySelector('.dropdown_menu').toggleAttribute('hidden')
+function togglePostDropDown(parent) {
+    return function() {
+        parent.querySelector('.dropdown_menu').toggleAttribute('hidden')
+    }
 }
 
 function logItem(btn_id) {
@@ -119,6 +118,7 @@ function addedHandler(class_name) {
         document.querySelector('body').appendChild(alert);
         setTimeout(() => {
             alert.remove();
+            // talvez meter aqui o location.reload(), n sei se valerá a pena
         }, 3000);
     }
 }
