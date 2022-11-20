@@ -104,9 +104,37 @@ function sendAjaxRequest(method, url, data, handler) {
 
 function addedHandler(class_name) {
     return function () {
-        if (this.status < 200 && this.status >= 300) window.location = '/';
-        // create alert notification - use switch
         logItem(class_name)(0);
+        if (this.status < 200 || this.status >= 300) {
+
+            let alert = document.createElement('div');
+            alert.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show');
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = 'Error, something went wrong';
+            alert.style = 'position: fixed; bottom: 0; right: 1em; z-index: 1000;transition: all 0.8s;';
+            document.querySelector('body').appendChild(alert);
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+
+            return;
+        }
+
+        console.log(this.status);
+
+        // location.reload();
+
+        let alert = document.createElement('div');
+        alert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show');
+        alert.setAttribute('role', 'alert');
+        alert.innerHTML = 'Created successfully';
+        alert.style = 'position: fixed; bottom: 0; right: 1em; z-index: 1000;transition: all 0.8s;';
+        document.querySelector('body').appendChild(alert);
+        setTimeout(() => {
+            alert.remove();
+        }, 3000);
+
+
         // talvez dar redirect para a pagina do post
     }
 }
@@ -236,21 +264,18 @@ function sendCreatePostRequest(isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
             let res = confirm('Are you sure you want to profile post this?');
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
-            document.querySelector('#popup_show_post').toggleAttribute('hidden');
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, addedHandler('#popup_show_post'));
             textarea.value = '';
         }
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
             let res = confirm('Are you sure you want to group post this?');
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
-            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
+                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, addedHandler('#popup_show_group_post'));
             textarea.value = '';
         }
 
         event.preventDefault();
-        location.reload();
     }
 }
 
