@@ -1,4 +1,4 @@
-<div class="container mt-5 mb-5 post_item">
+<div class="container mt-5 mb-5 post_item ">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
             <div class="card post_card">
@@ -32,8 +32,6 @@
                         </div>
                     </div>
 
-
-
                 </div>
 
                 <!-- TODO: Ver imagens da database -->
@@ -48,7 +46,7 @@
                         <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
                         <div class="d-flex">
                             <p class="me-3">{{ sizeof($post->likes) }}</p>
-                            <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
+                            <a href="#" class="text-decoration-none"><span class="likeicon">&#x2764;</span></a>
 
                         </div>
                         <div class="d-flex">
@@ -64,10 +62,16 @@
             </div>
 
             @isset($showComments)
-                <div class="card_footer form-control d-flex align-items-center justify-content-between">
-                    <input type="make me-3" name="comment_post" id="comment_post_input" class="form-control mt-3"
+                <div class="card_footer form-control d-flex align-items-center ">
+                    <input type="text" name="comment_post" id="comment_post_input" class="me-2 form-control mt-3 mb-2"
                         placeholder="Make a comment">
-                    <a href="#">&nearr;</a>
+                    <a href="#" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-send" viewBox="0 0 16 16">
+                            <path
+                                d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                        </svg>
+                    </a>
                 </div>
             @endisset
 

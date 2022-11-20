@@ -1,4 +1,4 @@
-<nav id="rightbar" class="text-bg-light">
+<nav id="rightbar" class="text-bg-light ">
     <h2>Recommendations</h2>
     <hr>
 

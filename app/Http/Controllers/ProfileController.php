@@ -27,8 +27,6 @@ class ProfileController extends Controller
 
         $user = User::where('username', $request->input('oldName'))->first();
 
-
-
         if ($user == null || $user->id != $request->input('idUser')) {
             return redirect()->route('home');
         }
