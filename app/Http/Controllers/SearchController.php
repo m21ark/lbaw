@@ -69,7 +69,7 @@ class SearchController extends Controller
     { // this also includes de tsvectors of comments
 
 
-        $comments = Comment::selectRaw('id_post, count(comment.id) as comment_count, tsvector_agg(tsvectors) as tsvector_comment')
+        $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
             ->groupBy('id_post');
 
         $posts = DB::table(DB::raw("({$comments->toSql()}) as comment"))
@@ -77,14 +77,31 @@ class SearchController extends Controller
             ->join('post', 'post.id', '=', 'id_post')
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('user', 'user.id', '=', 'post.id_poster')
-            ->where('user.visibility', '=', 'true')
+            ->whereIn('id_poster', function ($query) {
+                //$id = Auth::user()->id;
+                $id = 1;
+                $query1 = DB::table('friend_request')
+                    ->selectRaw('id_user_sender as friend')
+                    ->from('friend_request')
+                    ->where('id_user_receiver', $id)
+                    ->where('acceptance_status', 'Accepted');
+
+                $query->select('id_user_receiver as friend')
+                    ->from('friend_request')
+                    ->where('id_user_sender', $id)
+                    ->where('acceptance_status', 'Accepted')
+                    ->union($query1);
+            })
+            ->orWhere('user.visibility', '=', 'true')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
-            ->groupBy('post.id', 'owner', 'user.photo', 'comment.tsvector_comment')
+            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
             ->selectRaw('
             post.id, post.text, post_date, username as owner, id_poster, username, photo,
+            comments_count,
             count(like_post.id_user) as likes_count,
             ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
+            ->limit(20)
             ->get();
 
         return $posts;

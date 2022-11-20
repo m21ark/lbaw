@@ -441,7 +441,7 @@ function updateSearchOnInputAndClick() {
             
             // Update the path on top 
             if (searchBarString !== '') {
-                window.history.pushState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
+                window.history.replaceState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
             }
                 
         })
