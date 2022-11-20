@@ -10,15 +10,18 @@
                 <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
 
 
+                <label for="inputUsername" class="sr-only mt-2">Username</label>
+                <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
+                    placeholder="Username" name="username" required autofocus>
+
                 @if ($errors->has('username'))
                     <span class="error">
                         {{ $errors->first('username') }}
                     </span>
                 @endif
-
-                <label for="inputUsername" class="sr-only mt-2">Username</label>
-                <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
-                    placeholder="Username" name="username" required autofocus>
+                
+                <label for="inputEmail" class="sr-only mt-2">Email address</label>
+                <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
 
                 @if ($errors->has('email'))
                     <span class="error">
@@ -26,24 +29,20 @@
                     </span>
                 @endif
 
-                <label for="inputEmail" class="sr-only mt-2">Email address</label>
-                <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
-
 
                 <label for="inputDate" class="sr-only mt-2">Birthdate</label>
                 <input type="date" id="inputDate" class="form-control mb-3" name="birthdate" required>
 
+
+                <label for="inputPassword" class="sr-only mt-2">Password</label>
+                <input type="password" id="inputPassword" class="form-control mb-3" placeholder="Password" name="password"
+                    required>
 
                 @if ($errors->has('password'))
                     <span class="error">
                         {{ $errors->first('password') }}
                     </span>
                 @endif
-
-
-                <label for="inputPassword" class="sr-only mt-2">Password</label>
-                <input type="password" id="inputPassword" class="form-control mb-3" placeholder="Password" name="password"
-                    required>
 
 
                 <label for="inputRPassword" class="sr-only mt-2">Confirm Password</label>

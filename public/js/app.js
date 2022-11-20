@@ -19,7 +19,8 @@ function addEventListeners() {
     );
 
     let create_button = document.querySelector('#profile_post_button_action');
-    create_button.addEventListener('click', sendCreatePostRequest(true));
+    if (create_button)
+        create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
     if (create_group_post_button)
@@ -107,7 +108,7 @@ function addedHandler(class_name) {
         logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
-        alert.innerHTML = 'Created successfully';
+        alert.innerHTML = 'Action successful';
         if (this.status < 200 || this.status >= 300) {
             class_alert = 'alert-danger'
             alert.innerHTML = 'Error, something went wrong';
