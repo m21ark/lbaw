@@ -377,11 +377,15 @@ function createPost(post) {
                             <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
 
                         </div>
+
+
                         <div class="d-flex">
                             <p class="me-3">${post.comments_count}</p>
-                            <a href="#" class="text-decoration-none"><span
+                            <a href="/post/${post.id}" class="text-decoration-none"><span
                                     class="commenticon">&#128172;</span></a>
                         </div>
+
+
 
                     </div>
 
@@ -529,7 +533,7 @@ function createGroupCard(group) {
 
     let bio_short = group.description;
     if (bio_short.length > 50)
-        bio_short = user.bio.substring(0, 100) + '...'
+        bio_short = bio_short.substring(0, 100) + '...'
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:25em">
@@ -537,7 +541,7 @@ function createGroupCard(group) {
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${group.name}" class="btn btn-primary w-100">Visit Profile</a>
+            <a href="/group/${group.name}" class="btn btn-primary w-100">Visit Group</a>
         </div>
     </div>
     `
