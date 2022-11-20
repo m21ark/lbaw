@@ -8,10 +8,10 @@
 
         </div>
 
-        <form class="header_searchbar" >
+        <div class="header_searchbar" >
             <input type="search" class="form-control text-bg-light" placeholder="Search"
                 aria-label="Search" id="search_bar">
-        </form>
+        </div>
 
         <div class="text-end">
 

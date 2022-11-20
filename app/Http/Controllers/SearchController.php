@@ -69,22 +69,20 @@ class SearchController extends Controller
     { // this also includes de tsvectors of comments
 
 
-        $comments = Comment::selectRaw('id, id_post, tsvector_agg(tsvectors) as tsvector_comment')
-            ->groupBy('id', 'id_post');
+        $comments = Comment::selectRaw('id_post, count(comment.id) as comment_count, tsvector_agg(tsvectors) as tsvector_comment')
+            ->groupBy('id_post');
 
         $posts = DB::table(DB::raw("({$comments->toSql()}) as comment"))
             ->mergeBindings($comments->getQuery())
-            ->join('post', 'post.id', '=', 'comment.id_post')
+            ->join('post', 'post.id', '=', 'id_post')
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
+            ->groupBy('post.id', 'owner', 'user.photo', 'comment.tsvector_comment')
             ->selectRaw('
             post.id, post.text, post_date, username as owner, id_poster, username, photo,
             count(like_post.id_user) as likes_count,
-            count(comment.id) as comments_count
-            , ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-
-            ->groupBy('post.id', 'owner', 'user.photo', 'comment.tsvector_comment')
+            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
             ->get();
 

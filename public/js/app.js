@@ -409,7 +409,7 @@ updateFeedOnLoad();
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#?!.@_\w]*/.test(pathname)) return;
+    if (!/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
     if (!document.querySelector('#timeline')) {
         return;
@@ -423,8 +423,8 @@ function updateSearchOnInputAndClick() {
     
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
-    
-    query_string = pathname.match(/(?<=\/search\/)[#?!.@_\w]+/)[0]
+
+    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#?!.@_\w ]+/)[0]
 
     if (query_string) {
         searchBar.value = query_string
@@ -550,18 +550,21 @@ function searchRedirect() {
 
     // Needs to redirect except if it already is in the search page
     let pathname = window.location.pathname
-    if (/\/search\/[#?!.@_\w]*/.test(pathname)) return;
+    if (/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
     const searchBar = document.querySelector('#search_bar')
     if (!searchBar) return;
 
     searchBar.addEventListener('keypress', function (event) {
 
-        //window.location.href = '/post/200'
-        if (event.keyCode === 13) {
-            console.log(this.value)
-            window.location.href = '/search/' + this.value
-            
+        //window.location.href = '/search/hey' + this.value
+    
+        if (event.key !== "Enter") return;
+
+        this.value = this.value.trim()
+
+        if (this.value !== '') {
+            window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
         }
         
     })
