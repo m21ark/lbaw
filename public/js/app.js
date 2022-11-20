@@ -105,37 +105,20 @@ function sendAjaxRequest(method, url, data, handler) {
 function addedHandler(class_name) {
     return function () {
         logItem(class_name)(0);
-        if (this.status < 200 || this.status >= 300) {
-
-            let alert = document.createElement('div');
-            alert.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show');
-            alert.setAttribute('role', 'alert');
-            alert.innerHTML = 'Error, something went wrong';
-            alert.style = 'position: fixed; bottom: 0; right: 1em; z-index: 1000;transition: all 0.8s;';
-            document.querySelector('body').appendChild(alert);
-            setTimeout(() => {
-                alert.remove();
-            }, 3000);
-
-            return;
-        }
-
-        console.log(this.status);
-
-        // location.reload();
-
+        class_alert = 'alert-success'
         let alert = document.createElement('div');
-        alert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show');
-        alert.setAttribute('role', 'alert');
         alert.innerHTML = 'Created successfully';
+        if (this.status < 200 || this.status >= 300) {
+            class_alert = 'alert-danger'
+            alert.innerHTML = 'Error, something went wrong';
+        }
+        alert.classList.add('alert', class_alert, 'alert-dismissible', 'fade', 'show');
+        alert.setAttribute('role', 'alert');
         alert.style = 'position: fixed; bottom: 0; right: 1em; z-index: 1000;transition: all 0.8s;';
         document.querySelector('body').appendChild(alert);
         setTimeout(() => {
             alert.remove();
         }, 3000);
-
-
-        // talvez dar redirect para a pagina do post
     }
 }
 
