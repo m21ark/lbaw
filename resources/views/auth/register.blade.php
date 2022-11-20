@@ -10,23 +10,31 @@
                 <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
 
 
-                <label for="inputUsername" class="sr-only mt-2">Username</label>
-                <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
-                    placeholder="Username" name="username" required autofocus>
+                
 
                 @if ($errors->has('username'))
-                    <span class="error">
+                    <label for="inputUsername" class="sr-only mt-2">Username</label>
+                    <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3 is-invalid"
+                    placeholder="Username" name="username" required autofocus>
+                    <div class="text-danger">
                         {{ $errors->first('username') }}
-                    </span>
+                    </div>
+                @else
+                    <label for="inputUsername" class="sr-only mt-2">Username</label>
+                    <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
+                    placeholder="Username" name="username" required autofocus>
                 @endif
                 
-                <label for="inputEmail" class="sr-only mt-2">Email address</label>
-                <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
 
                 @if ($errors->has('email'))
-                    <span class="error">
+                    <label for="inputEmail" class="sr-only mt-2">Email address</label>
+                    <input type="email" id="inputEmail" class="form-control mb-3 is-invalid" placeholder="Email" name="email" required>
+                    <div class="text-danger">
                         {{ $errors->first('email') }}
-                    </span>
+                    </div>
+                @else
+                    <label for="inputEmail" class="sr-only mt-2">Email address</label>
+                    <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
                 @endif
 
 
@@ -39,9 +47,9 @@
                     required>
 
                 @if ($errors->has('password'))
-                    <span class="error">
+                    <div class="text-danger">
                         {{ $errors->first('password') }}
-                    </span>
+                    </div>
                 @endif
 
 
@@ -52,8 +60,6 @@
 
                 <label for="inputBio" class="sr-only mt-2">Bio</label>
                 <input type="text" id="inputBio" class="form-control mb-3" placeholder="Bio" name="bio" required>
-
-
 
                 <button class="btn btn-lg btn-primary btn-block mt-4 w-100" type="submit">Register</button>
 
