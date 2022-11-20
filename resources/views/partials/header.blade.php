@@ -8,7 +8,7 @@
 
         </div>
 
-        <form class="header_searchbar" action="/search/{{ 'QUERY_STR' }}"  >
+        <form class="header_searchbar" >
             <input type="search" class="form-control text-bg-light" placeholder="Search"
                 aria-label="Search" id="search_bar">
         </form>

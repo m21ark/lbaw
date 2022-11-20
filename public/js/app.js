@@ -19,7 +19,8 @@ function addEventListeners() {
     );
 
     let create_button = document.querySelector('#profile_post_button_action');
-    create_button.addEventListener('click', sendCreatePostRequest(true));
+    if (create_button) 
+        create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
     if (create_group_post_button)
@@ -104,7 +105,7 @@ function sendAjaxRequest(method, url, data, handler) {
 
 function addedHandler(class_name) {
     return function () {
-        if (this.status < 200 && this.status >= 300) window.location = '/';
+        if (this.status < 200 || this.status >= 300) window.location = '/';
         // create alert notification - use switch
         logItem(class_name)(0);
         // talvez dar redirect para a pagina do post
@@ -408,7 +409,7 @@ updateFeedOnLoad();
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#@\w]/.test(pathname)) return;
+    if (!/\/search\/[#?!.@_\w]*/.test(pathname)) return;
 
     if (!document.querySelector('#timeline')) {
         return;
@@ -416,39 +417,46 @@ function updateSearchOnInputAndClick() {
 
     let search_filters = document.querySelector('input#search_radio_user')
 
-    if (search_filters)
+    if (search_filters) {
         search_filters.checked = true
+    }
+    
+    // Search if there is a query_string in the route (and add it to the search bar)
+    const searchBar = document.querySelector('#search_bar')
+    
+    query_string = pathname.match(/(?<=\/search\/)[#?!.@_\w]+/)[0]
 
+    if (query_string) {
+        searchBar.value = query_string
+        updateSearch()
+    }
 
     // Add event listeners when input changes
-    const searchBar = document.querySelector('#search_bar')
+    
+    if (searchBar) {
+        searchBar.addEventListener('input', updateSearch)
+    }
 
-    if (searchBar)
-        searchBar.addEventListener('input', () => { updateSearch() })
-
+    
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', () => { updateSearch() })
+            filter.addEventListener('click', updateSearch)
         })
     }
 
+    updateSearch();
 }
 
 
 function updateSearch() {
-
-
     let type_search = '', query_string = '';
 
     // Get the type_search from the radio input
     const filters = document.querySelectorAll('#search_filter input')
-
     if (!filters) return;
-
-
 
     filters.forEach(filter => {
         if (filter.checked) { type_search = filter.value }
@@ -456,13 +464,11 @@ function updateSearch() {
 
     // Get the query string from the search bar
     const searchBar = document.querySelector('#search_bar')
-
     if (!searchBar) return;
 
     query_string = searchBar.value
 
     if (query_string === '') return;
-
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
@@ -540,13 +546,32 @@ function createGroupCard(group) {
 }
 
 
+function searchRedirect() {
 
+    // Needs to redirect except if it already is in the search page
+    let pathname = window.location.pathname
+    if (/\/search\/[#?!.@_\w]*/.test(pathname)) return;
 
+    const searchBar = document.querySelector('#search_bar')
+    if (!searchBar) return;
 
+    searchBar.addEventListener('keypress', function (event) {
 
+        //window.location.href = '/post/200'
+        if (event.keyCode === 13) {
+            console.log(this.value)
+            window.location.href = '/search/' + this.value
+            
+        }
+        
+    })
+
+}
+
+searchRedirect();
 
 updateSearchOnInputAndClick();
-updateSearch();
+
 
 
 
