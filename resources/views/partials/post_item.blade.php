@@ -53,17 +53,24 @@
                         </div>
                         <div class="d-flex">
                             <p class="me-3">{{ sizeof($post->comments) }}</p>
-                            <a href="#" class="text-decoration-none"><span
+                            <a href="/post/{{ $post->id }}" class="text-decoration-none"><span
                                     class="commenticon">&#128172;</span></a>
                         </div>
 
                     </div>
 
-
                 </div>
 
-
             </div>
+
+            @isset($showComments)
+                <div class="card_footer form-control d-flex align-items-center justify-content-between">
+                    <input type="make me-3" name="comment_post" id="comment_post_input" class="form-control mt-3"
+                        placeholder="Make a comment">
+                    <a href="#">&nearr;</a>
+                </div>
+            @endisset
+
         </div>
     </div>
 </div>
