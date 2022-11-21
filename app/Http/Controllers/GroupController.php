@@ -95,6 +95,19 @@ class GroupController extends Controller
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
         // todo: add profile image
+        if ($request->photo !== null) {
+
+            $group->photo = 'group/' . strval($group->id) . '.jpg';
+
+            try {
+                $request->file('photo')->move(public_path('group/'), $group->id . '.jpg');
+            }
+            catch(Exception $e) {
+                DB::rollBack();
+            }
+
+        }
+        DB::commit();
 
         $group->save();
 

@@ -28,18 +28,18 @@ class ProfileController extends Controller
         $user = Auth::user();
 
 
+        // N é preciso verify uma vez que a cookie de sessão tem de ser passada para o servidor
+
         if ($user == null) {
             return redirect()->route('home');
         }
-
-        //$this->authorize('create');
-
 
         $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
         $user->email = $request->input('email') ?? $user->email; // TODO: Check if email is unique
         $user->bio = $request->input('bio') ?? $user->bio;
+
         // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
 

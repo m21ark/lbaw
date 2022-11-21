@@ -179,22 +179,31 @@ function sendCreateGroupRequest() {
 
 }
 
-function sendEditGroupRequest() {
+function sendEditGroupRequest(event) {
 
+    event.preventDefault();
     let name = document.querySelector('#popup_show_group_edit #group_name').value
     let description = document.querySelector('#popup_show_group_edit #group_description').value
     let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
+    let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
         return;
     }
 
+    let formData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('visibility', visibility);
+    formData.append('id_group', id_group);
+    formData.append('photo', pho);
+
     let res = confirm('Are you sure you want to edit this group?');
     if (res)
-        sendAjaxRequest('put', '/api/group/' + oldName, { name: name, description: description, visibility: visibility, id_group: id_group }, addedHandler('#popup_show_group_edit'));
+        sendFormData('post', '/api/group/' + oldName, formData, addedHandler('#popup_show_group_edit'));
 
 }
 

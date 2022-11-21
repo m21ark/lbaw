@@ -1,6 +1,6 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_group_edit">
-        <form style="width:100%;">
+        <form style="width:100%;" method='post' action={{ route('editGroup', $group->name) }} enctype="multipart/form-data">
 
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
@@ -16,10 +16,12 @@
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
 
-            <label for="group_visibility" class="sr-only me-3">Group Public Visibility</label>
+            <label for="group_photo" class="sr-only">Profile Picture</label>
+            <input type="file" class="form-control" id="group_photo" name="photo" />
+
+            <label for="group_visibility" class="sr-only">Group Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" @if ($group->visibility) checked @endif>
-
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_group_button" type="submit">Save
                 Changes</button>
