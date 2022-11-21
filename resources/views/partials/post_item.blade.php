@@ -7,7 +7,7 @@
 
                     <a href={{ url('/profile/' . $post->owner->username) }}
                         class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="/../user.png" width="60" class="rounded-circle me-3">
+                        <img src="{{asset($post->owner->photo)}}" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
                     </a>
 
