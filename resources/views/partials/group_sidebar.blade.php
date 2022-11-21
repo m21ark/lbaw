@@ -7,9 +7,11 @@
         <div class="card-header">
             <h3 class="p-2 ">{{ $group->name }}
                 <!-- Should only be visible to group owners -->
-                @if (in_array(auth()->user()->id, $group->owners->pluck('id_user')->toArray()))
-                    <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                @endif
+                @auth
+                    @if (in_array(auth()->user()->id, $group->owners->pluck('id_user')->toArray()))
+                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                    @endif
+                @endauth
             </h3>
         </div>
 

@@ -9,9 +9,9 @@
                 <small>{{ $comment->post_date }}</small>
             </div>
             <div class="card-header d-flex justify-content-around align-items-center">
-                <img href="/profile/{{ $comment->user->username }}" src="/{{$comment->user->photo}}" alt="" width="50">
+                <img href="/profile/{{ $comment->poster->username }}" src="/{{$comment->poster->photo}}" alt="" width="50">
                 <a class="text-decoration-none"
-                    href="/profile/{{ $comment->user->username }}">{{ $comment->user->username }}</a>
+                    href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
             </div>
 
             <div class="card-body">

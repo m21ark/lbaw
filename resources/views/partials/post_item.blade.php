@@ -48,6 +48,7 @@
                     <div class="card-footer d-flex justify-content-evenly">
 
                         <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
+                        @auth
                         <div class="d-flex">
                             <p class="me-3">{{ sizeof($post->likes) }}</p>
 
@@ -69,9 +70,11 @@
                                     @endif
 
                                </a>
-
-
                         </div>
+                        @else
+                            <a href="#" class="like_btn_post text-decoration-none">
+                        @endauth
+
                         <div class="d-flex">
                             <p class="me-3">{{ sizeof($post->comments) }}</p>
                             <a href="/post/{{ $post->id }}" class="text-decoration-none"><span
