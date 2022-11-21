@@ -388,7 +388,7 @@ function updateFeed(feed) {
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
-
+        
     })
 }
 
@@ -412,16 +412,12 @@ function createPost(post) {
 
                     <small class="me-5">${post.post_date}</small>
                     <div class="dropdown">
-                        <button class="btn dropdownPostButton" onclick="togglePostDropDown()" type="button">&vellip;</button>
+                        <button class="btn dropdownPostButton" onclick="togglePostDropDown(this.parentNode)()" type="button">&vellip;</button>
                         <div class="dropdown_menu " hidden>
                             <a class="dropdown-item" href="/profile/${post.owner}">Go to
                                 Profile</a>
-                            @if (Auth::user()->id == $post->owner->id)
-                                <a class="dropdown-item" href="#">Edit Post</a>
-                                <a class="dropdown-item" href="#">Delete Post</a>
-                            @else
-                                <a class="dropdown-item" href="#">Send Message</a>
-                            @endif
+                            <a class="dropdown-item" href="#">Send Message</a>
+
 
 
                         </div>

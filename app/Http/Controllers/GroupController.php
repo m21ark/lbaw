@@ -14,15 +14,7 @@ class GroupController extends Controller
 {
     public function show($name)
     {
-        // TODO: use id to get group from database
-
         $group = Group::where('name', $name)->first();
-
-        /* DESNECESSARIO
-        $groupMembers = $group->members()->get();
-        $groupOwners = $group->owners()->get();
-        $groupPosts = $group->posts()->get();
-        */
 
         if ($group == null) {
             //No group with that name so we return to the home page
