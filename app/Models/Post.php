@@ -32,7 +32,7 @@ class Post extends Model
 
     public function images() 
     {
-        return $this->hasManny('App\Models\Image', 'id_post');
+        return $this->hasMany('App\Models\Image', 'id_post');
     }
 
     // Don't add create and update timestamps in database.
