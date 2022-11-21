@@ -599,6 +599,9 @@ function updateUserReportSearchOnInput() {
 
     if (!searchBarPendent || !searchBarPast) return;
 
+    updateUserReportsSearch(searchBarPendent, 'pendent')
+    //updateUserReportsSearch(searchBarPast, 'past')
+
     searchBarPendent.addEventListener('input', function () {
         updateUserReportsSearch(searchBarPendent, 'pendent')
     })
@@ -620,7 +623,6 @@ function updateUserReportsSearch(searchBar, decision) {
 
         if (!display) return;
 
-        console.log(this.responseText)
         const received = JSON.parse(this.responseText)
         display.innerHTML = ''
 
@@ -645,5 +647,6 @@ function createUserReportCard(user) {
 
     return new_card;
 }
+
 
 updateUserReportSearchOnInput()

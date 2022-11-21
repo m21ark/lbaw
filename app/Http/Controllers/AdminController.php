@@ -40,7 +40,10 @@ class AdminController extends Controller
         ->groupBy('user.id');
 
 
-        return $users_reported_post->union($users_reported_comments)->orderBy('report_count')->get();
+        return $users_reported_post->union($users_reported_comments)
+        ->orderBy('report_count')
+        ->limit(5)
+        ->get();
     }
 
 
