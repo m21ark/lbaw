@@ -600,7 +600,7 @@ function updateUserReportSearchOnInput() {
     if (!searchBarPendent || !searchBarPast) return;
 
     updateUserReportsSearch(searchBarPendent, 'pendent')
-    //updateUserReportsSearch(searchBarPast, 'past')
+    updateUserReportsSearch(searchBarPast, 'past')
 
     searchBarPendent.addEventListener('input', function () {
         updateUserReportsSearch(searchBarPendent, 'pendent')
@@ -626,15 +626,24 @@ function updateUserReportsSearch(searchBar, decision) {
         const received = JSON.parse(this.responseText)
         display.innerHTML = ''
 
-        received.forEach(function (userReported) {
-            display.appendChild(createUserReportCard(userReported))
-        })
+        if (decision === 'pendent') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPending(userReported))
+            })
+        
+        } else if (decision === 'past') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPast(userReported))
+            })
+        }
+
+        
 
     })
 
 }
 
-function createUserReportCard(user) {
+function createUserReportCardPending(user) {
     let new_card = document.createElement('div')
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
@@ -648,5 +657,26 @@ function createUserReportCard(user) {
     return new_card;
 }
 
+
+function createUserReportCardPast(user) {
+    let button, new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    if (user.decision === 'Accepted') {
+        button = '<a href="#" class=" btn btn-warning">30d</a>'
+    } else {
+        button = '<a href="#" class=" btn btn-success">REJ</a>'
+    }
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a class="text-muted text-decoration-none">${user.decision_date}</a>
+    ` + button + `
+        <a href="#" class="btn btn-outline-dark">Retake</a>
+    `;
+
+    return new_card;
+}
 
 updateUserReportSearchOnInput()

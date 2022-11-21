@@ -50,6 +50,31 @@ class AdminController extends Controller
 
     public function usersReportesPast(Request $request) {
 
-        return [];
+        $query_string = $request->route('query_string');
+
+        if ($query_string === '*') $query_string = '';
+
+        $users_reported_post = Report::
+        where('id_post', '<>', NULL) 
+        ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
+        ->join('post', 'post.id', '=', 'user_report.id_post')
+        ->join('user', 'user.id', '=', 'post.id_poster')
+        ->where('username', 'LIKE', '%'.$query_string.'%')
+        ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
+        ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
+        
+        $users_reported_comments = Report::
+        where('id_comment', '<>', NULL) 
+        ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
+        ->join('comment', 'comment.id', '=', 'user_report.id_post')
+        ->join('user', 'user.id', '=', 'comment.id_commenter')
+        ->where('username', 'LIKE', '%'.$query_string.'%')
+        ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
+        ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
+
+        return $users_reported_post->union($users_reported_comments)
+        ->orderBy('decision_date', 'desc')
+        ->limit(5)
+        ->get();
     }
 }
