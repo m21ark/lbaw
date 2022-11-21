@@ -417,9 +417,6 @@ function createPost(post) {
                             <a class="dropdown-item" href="/profile/${post.owner}">Go to
                                 Profile</a>
                             <a class="dropdown-item" href="#">Send Message</a>
-
-
-
                         </div>
                     </div>
 
