@@ -5,12 +5,12 @@
     <h3 class="mt-5">Pendent Reports</h3>
     <div class="d-flex align-items-center">
         <h5 class="me-4">Search reports:</h5>
-        <form class="header_searchbar mb-3 mt-3">
-            <input type="search" class="form-control text-bg-light" placeholder="Search" aria-label="Search">
-        </form>
+        <div class="header_searchbar mb-3 mt-3">
+            <input id="searchBarPendent" type="search" class="form-control text-bg-light" placeholder="Search" aria-label="Search">
+        </div>
     </div>
 
-    <div class="list-group  d-flex mb-3 flex-wrap ">
+    <div id="users-reported-pendent" class="list-group  d-flex mb-3 flex-wrap ">
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
             <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
@@ -63,12 +63,12 @@
 
         <div class="d-flex align-items-center">
             <h5 class="me-4">Search reports:</h5>
-            <form class="header_searchbar mb-3 mt-3">
-                <input type="search" class="form-control text-bg-light" placeholder="Search" aria-label="Search">
-            </form>
+            <div class="header_searchbar mb-3 mt-3">
+                <input id="searchBarPast" type="search" class="form-control text-bg-light" placeholder="Search" aria-label="Search">
+            </div>
         </div>
 
-        <div class="list-group  d-flex mb-5 flex-wrap ">
+        <div id="users-reported-past" class="list-group  d-flex mb-5 flex-wrap ">
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
                 <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">

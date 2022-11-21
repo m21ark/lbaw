@@ -30,6 +30,10 @@ class Post extends Model
         return $this->belongsTo('App\Models\Group', 'id_group');
     }
 
+    public function reports()
+    {
+        return $this->hasMany('App\Models\Report', 'id_post');
+    }
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;

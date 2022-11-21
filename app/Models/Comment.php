@@ -19,4 +19,9 @@ class Comment extends Model
     public function likes() {
         return $this->hasMany('App\Models\CommentLike', 'id_comment');
     }
+
+    public function reports()
+    {
+        return $this->hasMany('App\Models\Report', 'id_comment');
+    }
 }

@@ -70,3 +70,7 @@ Route::get('api/group_members/{id}', 'GroupController@getGroupMembers');
 // User Make/Delete Post
 Route::post('api/post', 'PostController@create');
 Route::delete('api/post/{id}', 'PostController@delete');
+
+
+Route::get('api/admin/pendent_reports/{query_string}', 'AdminController@usersReportesPending');
+Route::get('api/admin/past_reports/{query_string}', 'AdminController@usersReportesPast');

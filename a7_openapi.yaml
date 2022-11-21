@@ -688,7 +688,7 @@ paths:
         "404": ## VER 
           description: "Page not available"
                           
-  /api/user/report:
+  /api/admin/report:
     get:
       operationId: 'R204'
       summary: 'R204 Get the messages'

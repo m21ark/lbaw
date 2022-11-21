@@ -589,5 +589,61 @@ updateSearchOnInputAndClick();
 
 
 
+//  ======================================= Admin ======================================
 
 
+function updateUserReportSearchOnInput() {
+    
+    const searchBarPendent = document.querySelector('#searchBarPendent');
+    const searchBarPast = document.querySelector('#searchBarPast');
+
+    if (!searchBarPendent || !searchBarPast) return;
+
+    searchBarPendent.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPendent, 'pendent')
+    })
+
+    searchBarPast.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPast, 'past')
+    })
+}
+
+
+
+function updateUserReportsSearch(searchBar, decision) {
+    let query_string = searchBar.value;
+
+    if (query_string.trim() === '') query_string = '*';
+
+    sendAjaxRequest('get', '/api/admin/' + decision + '_reports/' + query_string, {}, function () {
+        let display = document.querySelector("#users-reported-" + decision)
+
+        if (!display) return;
+
+        console.log(this.responseText)
+        const received = JSON.parse(this.responseText)
+        display.innerHTML = ''
+
+        received.forEach(function (userReported) {
+            display.appendChild(createUserReportCard(userReported))
+        })
+
+    })
+
+}
+
+function createUserReportCard(user) {
+    let new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a>${user.report_count} reports</a>
+        <a href="#" class="btn btn-outline-secondary">Take</a>
+    `
+
+    return new_card;
+}
+
+updateUserReportSearchOnInput()
