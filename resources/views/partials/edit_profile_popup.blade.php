@@ -1,8 +1,9 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_profile_edit">
-        <form style="width:100%;">
+        <form style="width:100%;" method='post' action={{ route('editProfile', $user->username) }} enctype="multipart/form-data">
 
-            <!-- Start popup body -->
+            <!-- Start popup body --> 
+            {{csrf_field()}}
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Edit Profile</h3>
                 <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
@@ -29,7 +30,10 @@
             <!-- TODO: EDIT ALSO USER INTERESTS -->
             <!-- TODO: Falta imagem de perfil e se quer mudar de passe(cuidado com a hash)-->
 
-            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save
+            <label for="profile_pic" class="sr-only me-3">Profile Picture</label>
+            <input type="file" class="form-control" id="profile_pic" name="photo" />
+
+            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_rbutton" type="submit">Save
                 Changes</button>
 
             <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" type="submit">Delete

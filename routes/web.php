@@ -52,8 +52,9 @@ Route::put('api/group/{name}', 'GroupController@edit');
 Route::delete('api/group/{name}', 'GroupController@delete');
 
 // Edit/Delete profile
-Route::put('api/profile/{username}', 'ProfileController@edit');
+Route::post('api/profile/{username}', 'ProfileController@edit') -> name('editProfile'); // N ERA SUPOSTO PASSAR O NOME
 Route::delete('api/profile/{username}', 'ProfileController@delete');
+
 
 
 // Group Add/Remove Owner
@@ -69,8 +70,3 @@ Route::get('api/group_members/{id}', 'GroupController@getGroupMembers');
 // User Make/Delete Post
 Route::post('api/post', 'PostController@create');
 Route::delete('api/post/{id}', 'PostController@delete');
-
-
-// Like Post/Comment
-Route::post('api/like_post', 'LikeController@toggle');
-Route::post('api/like_comment', 'CommentLikeController@toggle');

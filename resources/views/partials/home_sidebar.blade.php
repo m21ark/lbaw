@@ -1,4 +1,4 @@
-<nav id="rightbar" class="text-bg-light ">
+<nav id="rightbar" class="text-bg-light">
     <h2>Recommendations</h2>
     <hr>
 
@@ -15,19 +15,19 @@
     <div class="list-group align-items-center d-flex mb-5 ">
 
         <div class="list-group-item">
-            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{asset('user/user.png')}}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class="btn btn-outline-primary">Follow</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{asset('user/user.png')}}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-outline-primary">Follow</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{asset('user/user.png')}}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-outline-primary">Follow</a>
         </div>

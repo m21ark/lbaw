@@ -183,7 +183,7 @@ function sendEditGroupRequest() {
 
     let res = confirm('Are you sure you want to edit this group?');
     if (res)
-        sendAjaxRequest('put', '/api/group/' + oldName, { name: name, description: description, visibility: visibility, id_group: id_group }, () => { });
+        sendAjaxRequest('put', '/api/group/' + oldName, { name: name, description: description, visibility: visibility, id_group: id_group }, addedHandler('#popup_show_group_edit'));
 
 }
 
@@ -215,8 +215,9 @@ function sendDeleteGroupMemberRequest() {
 // ============================================ Profile ============================================
 
 
-function sendEditProfileRequest() {
+function sendEditProfileRequest(event) {
 
+    event.preventDefault();
     let username = document.querySelector('#popup_show_profile_edit #user_name').value
     let email = document.querySelector('#popup_show_profile_edit #user_email').value
     let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
@@ -225,8 +226,9 @@ function sendEditProfileRequest() {
 
     let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+    let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-    // console.log(username, email, bdate, bio, visibility, oldName, idUser);
+    console.log(username, email, bdate, bio, visibility, oldName, idUser);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -235,7 +237,7 @@ function sendEditProfileRequest() {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendAjaxRequest('put', '/api/profile/' + oldName, { username: username, email: email, bdate: bdate, bio: bio, visibility: visibility, oldName: oldName, idUser: idUser }, () => { });
+        sendAjaxRequest('put', '/api/profile/' + oldName, { username: username, email: email, bdate: bdate, bio: bio, visibility: visibility, oldName: oldName, idUser: idUser , photo: pho }, () => { });
         //todo: fazer redirect para o perfil editado
     }
 
@@ -364,6 +366,7 @@ function updateFeed(feed) {
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
+    console.log(post.photo);
     new_post.innerHTML = `
 
     <div class="container mt-5 mb-5 post_item">
@@ -374,7 +377,7 @@ function createPost(post) {
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
                     <a href="/profile/${post.owner}" class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="/../user.png" width="60" class="rounded-circle me-3">
+                        <img src="/${post.photo}" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">${post.owner}</strong>
                     </a>
 
@@ -548,9 +551,10 @@ function createUserCard(user) {
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
 
+        console.log(user.photo)
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
-        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <img src="/${user.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
@@ -572,7 +576,7 @@ function createGroupCard(group) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:25em">
-        <img src="/../user.png" class="card-img-top" alt="user_avatar">
+        <img src="/${group.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>

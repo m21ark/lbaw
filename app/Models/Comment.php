@@ -12,18 +12,15 @@ class Comment extends Model
     public $timestamps  = false;
     protected $table = 'comment';
 
-    public function post()
-    {
+    public function post() {
         return $this->belongsTo('App\Models\Post', 'id_post');
     }
 
-    public function likes()
-    {
+    public function likes() {
         return $this->hasMany('App\Models\CommentLike', 'id_comment');
     }
 
-    public function user()
-    {
+    public function poster() {
         return $this->belongsTo('App\Models\User', 'id_commenter');
     }
 }
