@@ -25,31 +25,24 @@ class ProfileController extends Controller
 
     public function edit(Request $request)
     {
-
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Saved user");
-
-        //$user = User::where('username', $request->input('oldName'))->first();
-
         $user = Auth::user();
 
 
-        //if ($user == null || $user->id != $request->input('idUser')) {
-        //    return redirect()->route('home');
-        //}
-//
+        if ($user == null) {
+            return redirect()->route('home');
+        }
 
         //$this->authorize('create');
-        $out->writeln($user->username);
+
+
         $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
         $user->email = $request->input('email') ?? $user->email; // TODO: Check if email is unique
         $user->bio = $request->input('bio') ?? $user->bio;
-        // TODO : ADD PROFILE IMAGE AND PASSWORD
+        // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         if ($request->photo !== null) {
 
             $user->photo = 'user/' . strval($user->id) . '.jpg';
@@ -58,7 +51,6 @@ class ProfileController extends Controller
                 $request->file('photo')->move(public_path('user/'), $user->id . '.jpg');
             }
             catch(Exception $e) {
-                $out->writeln($e->getMessage());
                 DB::rollBack();
             }
 

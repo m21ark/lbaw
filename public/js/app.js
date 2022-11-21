@@ -117,6 +117,17 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
+function sendFormData(method, url, data, handler) {
+    let request = new XMLHttpRequest();
+
+    request.open(method, url, true);
+    request.withCredentials = true;
+    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    request.addEventListener('load', handler);
+
+    request.send(data);
+}
+
 function addedHandler(class_name) {
     return function () {
         logItem(class_name)(0);
@@ -228,19 +239,28 @@ function sendEditProfileRequest(event) {
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-    console.log(username, email, bdate, bio, visibility, oldName, idUser);
+    console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
         return;
     }
 
+    let formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('bdate', bdate);
+    formData.append('bio', bio);
+    formData.append('visibility', visibility);
+    formData.append('oldName', oldName);
+    formData.append('photo', pho);
+
+
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendAjaxRequest('put', '/api/profile/' + oldName, { username: username, email: email, bdate: bdate, bio: bio, visibility: visibility, oldName: oldName, idUser: idUser , photo: pho }, () => { });
+        sendFormData('post', '/api/profile/' + oldName, formData, addedHandler('#popup_show_profile_edit'));
         //todo: fazer redirect para o perfil editado
     }
-
 }
 
 

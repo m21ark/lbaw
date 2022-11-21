@@ -33,7 +33,7 @@
             <label for="profile_pic" class="sr-only me-3">Profile Picture</label>
             <input type="file" class="form-control" id="profile_pic" name="photo" />
 
-            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_rbutton" type="submit">Save
+            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save
                 Changes</button>
 
             <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" type="submit">Delete
