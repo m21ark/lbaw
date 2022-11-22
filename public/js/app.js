@@ -160,8 +160,9 @@ function closePopups() {
 
 // ============================================ GROUPS ============================================
 
-function sendCreateGroupRequest() {
+function sendCreateGroupRequest(event) {
 
+    event.preventDefault()
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
@@ -173,7 +174,7 @@ function sendCreateGroupRequest() {
 
     let res = confirm('Are you sure you want to create this group?');
     if (res) {
-        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('.make_group'));
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('#popup_show_group_create'));
         // TODO: Fazer redirect para grupo criado
     }
 
