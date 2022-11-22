@@ -12,7 +12,7 @@
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img " src="../user.png" alt="" width="150">
+            <img class="profile_img " src="{{asset($group->photo)}}" alt="" width="150">
         </div>
 
 
