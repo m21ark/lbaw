@@ -664,10 +664,24 @@ function createUserReportCardPast(user) {
     let button, new_card = document.createElement('div')
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
-    if (user.decision === 'Accepted') {
-        button = `<a href="#" class=" btn btn-danger">BAN</a>`
-    } else if (user.decision === 'Rejected') {
+    if (user.decision === 'Rejected') {
         button = `<a href="#" class=" btn btn-success">REJ</a>`
+    } else if (user.decision === 'Accepted') {
+        let banDate = new Date(user.ban_date).getTime();
+        let today = new Date().getTime();
+        
+        if (user.ban_date != null) {
+            time = Math.ceil((banDate-today) / (1000 * 3600 * 24));
+        } else {
+            time = -1;
+        }
+        
+        if (time > 0) {
+            button = `<a href="#" class=" btn btn-warning">${time}d</a>`
+        } else {
+            button = `<a href="#" class=" btn btn-info">Finished</a>`
+        }
+        
     }
 
     new_card.innerHTML = `

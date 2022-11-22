@@ -14,6 +14,7 @@
         <!-- Reports Here -->
     </div>
 
+
     <div class="list-group  d-flex mb-5 flex-wrap ">
         <hr class="mt-3 mb-3">
         <h3>Past Reports</h3>
@@ -26,48 +27,7 @@
         </div>
 
         <div id="users-reported-past" class="list-group  d-flex mb-5 flex-wrap ">
-
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
-                <a class="me-3" href={{ url('/profile/username') }}>Username</a>
-                <a class="text-muted text-decoration-none">23/05/2002</a>
-                <a href="#" class=" btn btn-danger">INF</a>
-                <a href="#" class="btn btn-outline-dark">Retake</a>
-            </div>
-
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
-                <a class="me-3" href={{ url('/profile/username') }}>Username</a>
-                <a class="text-muted text-decoration-none">23/05/2002</a>
-                <a href="#" class=" btn btn-warning">30d</a>
-                <a href="#" class="btn btn-outline-dark">Retake</a>
-            </div>
-
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
-                <a class="me-3" href={{ url('/profile/username') }}>Username</a>
-                <a class="text-muted text-decoration-none">23/05/2002</a>
-                <a href="#" class=" btn btn-warning">07d</a>
-                <a href="#" class="btn btn-outline-dark">Retake</a>
-            </div>
-
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
-                <a class="me-3" href={{ url('/profile/username') }}>Username</a>
-                <a class="text-muted text-decoration-none">23/05/2002</a>
-                <a href="#" class=" btn btn-danger">INF</a>
-                <a href="#" class="btn btn-outline-dark">Retake</a>
-            </div>
-
-            <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
-                <a class="me-3" href={{ url('/profile/username') }}>Username</a>
-                <a class="text-muted text-decoration-none">23/05/2002</a>
-                <a href="#" class=" btn btn-success">REJ</a>
-                <a href="#" class="btn btn-outline-dark">Retake</a>
-            </div>
-
-
+            <!-- Reports Here -->
         </div>
 
     </div>

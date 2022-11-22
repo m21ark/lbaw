@@ -42,7 +42,7 @@ class AdminController extends Controller
 
         return $users_reported_post->union($users_reported_comments)
         ->orderBy('report_count')
-        ->limit(5)
+        ->limit(6)
         ->get();
     }
 
@@ -70,11 +70,15 @@ class AdminController extends Controller
         ->join('user', 'user.id', '=', 'comment.id_commenter')
         ->where('username', 'LIKE', '%'.$query_string.'%')
         ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
-        ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
+        ->groupBy('user.id','user_report.decision', 'user_report.decision', 'user_report.decision_date');
 
+        
         return $users_reported_post->union($users_reported_comments)
         ->orderBy('decision_date', 'desc')
-        ->limit(5)
+        ->limit(6)
         ->get();
+
+        
+
     }
 }
