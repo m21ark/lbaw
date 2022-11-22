@@ -61,15 +61,16 @@ class PostController extends Controller
         // TODO: Não dá para criar posts se for owner e n percebo pq :(
 
         $post = new Post();
-
+         
+        if ($request->input('group_name') != null) {
+            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
+        }
+        
         $this->authorize('create', $post);
 
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
 
-        if ($request->input('group_name') != null) {
-            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
-        }
         // TODO : ADD IMAGES
 
         $post->save();

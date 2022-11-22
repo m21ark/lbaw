@@ -5,7 +5,7 @@
     <div class="list-group w-auto">
 
         <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-            <img src="../user.png" alt="user_avatar" width="50" height="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 class="mb-0">Third heading</h6>
@@ -16,7 +16,7 @@
         </a>
 
         <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-            <img src="../user.png" alt="user_avatar" width="50" height="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 class="mb-0">Third heading</h6>
@@ -27,7 +27,7 @@
         </a>
 
         <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-            <img src="../user.png" alt="user_avatar" width="50" height="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 class="mb-0">Third heading</h6>
@@ -38,7 +38,7 @@
         </a>
 
         <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-            <img src="../user.png" alt="user_avatar" width="50" height="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 class="mb-0">Third heading</h6>
@@ -49,7 +49,7 @@
         </a>
 
         <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-            <img src="../user.png" alt="user_avatar" width="50" height="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 class="mb-0">Third heading</h6>

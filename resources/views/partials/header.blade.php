@@ -19,7 +19,7 @@
                 <div class="d-flex align-items-center">
                     <a class="text-white text-decoration-none me-3" href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2">{{ Auth::user()->username }}</strong>
-                        <img src="../user.png" alt="logo" width="40" height="40">
+                        <img src="{{asset(Auth::user()->photo)}}" alt="logo" width="40" height="40">
                     </a>
 
                     <a href={{ url('/logout') }} type="button" class="btn btn-light">Logout</a>

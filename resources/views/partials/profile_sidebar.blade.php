@@ -11,7 +11,7 @@
         </h3>
 
         <div class="m-auto">
-            <img class="profile_img " src="../user.png" alt="" width="150">
+            <img class="profile_img " src="{{asset($user->photo)}}" alt="" width="150">
             <h3 id="username" class="">{{ $user->username }}</h3>
         </div>
 
@@ -44,22 +44,22 @@
     <div class="list-group align-items-center mb-5">
 
         <div class="d-flex list-group-item w-100">
-            <img src="../user.png" alt="user_avatar" width="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50">
             <a href="#" class=" p-3">34 Friends</a>
         </div>
 
         <div class="d-flex list-group-item w-100">
-            <img src="../user.png" alt="user_avatar" width="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50">
             <a href="#" class=" p-3">6 Groups</a>
         </div>
 
         <div class="d-flex list-group-item w-100">
-            <img src="../user.png" alt="user_avatar" width="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50">
             <a href="#" class=" p-3">21 Likes</a>
         </div>
 
         <div class="d-flex list-group-item w-100">
-            <img src="../user.png" alt="user_avatar" width="50">
+            <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50">
             <a href="#" class=" p-3">4 Comments</a>
         </div>
 
