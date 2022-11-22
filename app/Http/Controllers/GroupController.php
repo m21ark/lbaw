@@ -86,8 +86,7 @@ class GroupController extends Controller
         $group->description = $request->input('description');
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
-        // todo: add profile image
-        if ($request->photo !== null) {
+        if ($request->hasFile('photo')) {
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 

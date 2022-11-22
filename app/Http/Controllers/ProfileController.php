@@ -42,7 +42,7 @@ class ProfileController extends Controller
         // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
 
-        if ($request->photo !== null) {
+        if ($request->hasFile('photo')) {
 
             $user->photo = 'user/' . strval($user->id) . '.jpg';
 
