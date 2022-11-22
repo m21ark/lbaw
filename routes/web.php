@@ -28,6 +28,7 @@ Route::get('contacts', 'ContactsController@show')->name('contacts');
 Route::get('admin', 'AdminController@show')->name('admin');
 Route::get('features', 'FeaturesController@show')->name('features');
 Route::get('home', 'HomeController@show')->name('home');
+Route::get('not_found', 'NotFoundController@show')->name('not_found');
 
 // TODO: Nestes é preciso passar dps os argumentos corretos
 // para construir as paginas sem ser apenas valores placeholders
@@ -48,13 +49,13 @@ Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@sea
 
 // Create/Update/Delete group
 Route::post('api/group', 'GroupController@create');
-Route::post('api/group/{name}', 'GroupController@edit') -> name('editGroup');
+Route::post('api/group/{name}', 'GroupController@edit')->name('editGroup');
 Route::delete('api/group/{name}', 'GroupController@delete');
 
-// Edit/Delete profile
-Route::post('api/profile/{username}', 'ProfileController@edit') -> name('editProfile');
-Route::delete('api/profile/{username}', 'ProfileController@delete');
 
+
+Route::post('api/profile/{id}', 'ProfileController@edit')->name('editProfile');
+Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 
 // Group Add/Remove Owner
@@ -67,11 +68,12 @@ Route::delete('api/group_member/{id}', 'GroupController@removeGroupMember');
 
 Route::get('api/group_members/{id}', 'GroupController@getGroupMembers');
 
-// User Make/Delete Post
+// User Make/Delete/Edit Post
 Route::post('api/post', 'PostController@create');
 Route::delete('api/post/{id}', 'PostController@delete');
+Route::post('api/post/{id}', 'ProfileController@edit')->name('editPost');
+
 
 // Like Post/Comment
 Route::post('api/like_post', 'LikeController@toggle');
 Route::post('api/like_comment', 'CommentLikeController@toggle');
-

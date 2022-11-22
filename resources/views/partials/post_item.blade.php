@@ -23,9 +23,15 @@
 
                             @auth
                                 @if (Auth::user()->id == $post->owner->id)
-                                    <a class="dropdown-item" href="/profile/{{ $post->owner->id }}">Edit Post</a>
-                                    <a class="dropdown-item" href="#">Delete Post</a>
+                                    @isset($showComments)
+                                        <a class="dropdown-item" id="popup_btn_post_edit" href="#">Edit
+                                            post</a>
+                                    @else
+                                        <a class="dropdown-item" href="/post/{{ $post->id }}">See
+                                            Post</a>
+                                    @endisset
                                 @else
+                                    <a class="dropdown-item" href="#">Report Post</a>
                                     <a class="dropdown-item" href="#">Send Message</a>
                                 @endif
                             @endauth
@@ -86,26 +92,35 @@
                                     class="commenticon">&#128172;</span></a>
                         </div>
 
+
                     </div>
 
                 </div>
 
+                @isset($showComments)
+                    <div class="card_footer form-control d-flex align-items-center ">
+                        <input type="text" name="comment_post" id="comment_post_input"
+                            class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
+                        <a href="#" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-send" viewBox="0 0 16 16">
+                                <path
+                                    d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                            </svg>
+                        </a>
+                    </div>
+                @endisset
+
             </div>
 
-            @isset($showComments)
-                <div class="card_footer form-control d-flex align-items-center ">
-                    <input type="text" name="comment_post" id="comment_post_input" class="me-2 form-control mt-3 mb-2"
-                        placeholder="Make a comment">
-                    <a href="#" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-send" viewBox="0 0 16 16">
-                            <path
-                                d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-                        </svg>
-                    </a>
-                </div>
-            @endisset
+
 
         </div>
     </div>
 </div>
+
+
+@isset($showComments)
+    <!-- TODO: Maybe not very smart to render for each post -->
+    @include('partials.edit_post_popup', ['post' => $post])
+@endisset

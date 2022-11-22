@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\GroupJoinRequest;
 use App\Models\Owner;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

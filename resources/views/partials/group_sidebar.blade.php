@@ -16,7 +16,7 @@
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img " src="{{ asset($group->photo) }}" alt="" width="150">
+            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="" width="150" height="150">
         </div>
 
 
