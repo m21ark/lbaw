@@ -100,11 +100,12 @@
 
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
-
+        @endauth
         <!-- SHould only be visible to group members/owners -->
-        <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
+        @if (Auth::user()->id == $group->$member->pluck("id")->toArray)
+    <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
             Group</button>
 
-    @endauth
+            @endif    
 
 </nav>
