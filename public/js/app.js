@@ -397,7 +397,7 @@ function updateFeed(feed) {
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
-    console.log(post.photo);
+    console.log(post);
     new_post.innerHTML = `
 
     <div class="container mt-5 mb-5 post_item">

@@ -49,9 +49,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Owner', 'id_user');
     }
-
+    
     public function interests()
     {
         return $this->hasMany('App\Models\TopicsInterestUser', 'id_user');
+    }
+
+    public function isAdmin() 
+    {
+        return $this->hasOne('App\Models\Admin', 'id_user');
     }
 }

@@ -9,11 +9,15 @@ use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
     public function show()
-    {   
+    {
+        $this->authorize('view');
+
         $statistics =[
             'posts_c' => Post::count(),
             'users_c' => User::count(),
@@ -21,6 +25,7 @@ class AdminController extends Controller
             'comments_c'=> Comment::count(),
             'likes_c' => Like::count() + CommentLike::count()
         ];
+        
         return view('pages.admin', ['statistics' => $statistics]);
     }
 }
