@@ -96,6 +96,14 @@ function addEventListeners() {
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
+
+    let d_group_sidebar = document.querySelector('.drop_my_group');
+    if (d_group_sidebar)
+        d_group_sidebar.addEventListener('click', function(event) {
+            event.preventDefault();
+            let drop = document.querySelector('.drop_groups');
+            drop.style.display = drop.style.display === 'none' ? '' : 'none';
+        })
 }
 
 function togglePostDropDown(parent) {

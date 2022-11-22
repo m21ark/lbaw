@@ -11,7 +11,7 @@
         <a href={{ url('/home') }} class=" btn btn-outline-primary mb-3">Home </a>
 
         @auth
-        <a href={{ url('/group/mine') }} class=" btn btn-outline-primary mb-3" aria-current="page">My Groups</a>
+        <a href="" class=" btn btn-outline-primary mb-3 drop_my_group" aria-current="page">My Groups</a>
 
         @include('partials.participating_groups')
 
