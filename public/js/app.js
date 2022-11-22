@@ -20,7 +20,7 @@ function addEventListeners() {
     );
 
     let create_button = document.querySelector('#profile_post_button_action');
-    if (create_button)
+    if (create_button) 
         create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
@@ -507,7 +507,7 @@ updateFeedOnLoad();
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#@\w]/.test(pathname)) return;
+    if (!/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
     if (!document.querySelector('#timeline')) {
         return;
@@ -515,39 +515,57 @@ function updateSearchOnInputAndClick() {
 
     let search_filters = document.querySelector('input#search_radio_user')
 
-    if (search_filters)
+    if (search_filters) {
         search_filters.checked = true
-
-
-    // Add event listeners when input changes
+    }
+    
+    // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    if (searchBar)
-        searchBar.addEventListener('input', () => { updateSearch() })
+    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#?!.@_\w ]+/)[0]
 
+    if (query_string) {
+        searchBar.value = query_string
+        updateSearch()
+    }
+
+    // Add event listeners when input changes
+    
+    if (searchBar) {
+        searchBar.addEventListener('input', function () {
+            updateSearch()
+
+            let searchBarString = searchBar.value.trim()
+            
+            // Update the path on top 
+            if (searchBarString !== '') {
+                window.history.replaceState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
+            }
+                
+        })
+        
+    }
+
+    
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', () => { updateSearch() })
+            filter.addEventListener('click', updateSearch)
         })
     }
 
+    updateSearch();
 }
 
 
 function updateSearch() {
-
-
     let type_search = '', query_string = '';
 
     // Get the type_search from the radio input
     const filters = document.querySelectorAll('#search_filter input')
-
     if (!filters) return;
-
-
 
     filters.forEach(filter => {
         if (filter.checked) { type_search = filter.value }
@@ -555,13 +573,11 @@ function updateSearch() {
 
     // Get the query string from the search bar
     const searchBar = document.querySelector('#search_bar')
-
     if (!searchBar) return;
 
     query_string = searchBar.value
 
     if (query_string === '') return;
-
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
@@ -584,8 +600,10 @@ function updateSearch() {
                 timeline.appendChild(createPost(searchHit));
             } else if (type_search === 'groups') {
                 timeline.appendChild(createGroupCard(searchHit))
-            } else {
+            } else if (type_search === 'users') {
                 timeline.appendChild(createUserCard(searchHit))
+            } else if (type_search === 'topics') {
+                timeline.appendChild(createTopicCard(searchHit))
             }
 
         })
@@ -640,15 +658,155 @@ function createGroupCard(group) {
 }
 
 
+function createTopicCard(topic) {
+    let new_card = document.createElement('article');
 
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="height:4em">
+        <div class="d-flex align-items-center card-body">
+            <h4 class="card-title">${topic.topic}</h5>
+        </div>
+    </div>
+    `
+    return new_card;
+}
 
+function searchRedirect() {
 
+    // Needs to redirect except if it already is in the search page
+    let pathname = window.location.pathname
+    if (/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
+    const searchBar = document.querySelector('#search_bar')
+    if (!searchBar) return;
+
+    searchBar.addEventListener('keypress', function (event) {
+
+        //window.location.href = '/search/hey' + this.value
+    
+        if (event.key !== "Enter") return;
+
+        this.value = this.value.trim()
+
+        if (this.value !== '') {
+            window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
+        }
+        
+    })
+
+}
+
+searchRedirect();
 
 updateSearchOnInputAndClick();
-updateSearch();
 
 
 
 
+//  ======================================= Admin ======================================
 
+
+function updateUserReportSearchOnInput() {
+    
+    const searchBarPendent = document.querySelector('#searchBarPendent');
+    const searchBarPast = document.querySelector('#searchBarPast');
+
+    if (!searchBarPendent || !searchBarPast) return;
+
+    // Update on Page Loading
+    updateUserReportsSearch(searchBarPendent, 'pendent')
+    updateUserReportsSearch(searchBarPast, 'past')
+
+    // Add event listeners for both search bars
+    searchBarPendent.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPendent, 'pendent')
+    })
+
+    searchBarPast.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPast, 'past')
+    })
+}
+
+
+
+function updateUserReportsSearch(searchBar, decision) {
+    let query_string = searchBar.value;
+
+    if (query_string.trim() === '') query_string = '*';
+
+    sendAjaxRequest('get', '/api/admin/' + decision + '_reports/' + query_string, {}, function () {
+        let display = document.querySelector("#users-reported-" + decision)
+
+        if (!display) return;
+
+        const received = JSON.parse(this.responseText)
+        display.innerHTML = ''
+
+        if (decision === 'pendent') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPending(userReported))
+            })
+        
+        } else if (decision === 'past') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPast(userReported))
+            })
+        }
+
+        
+
+    })
+
+}
+
+function createUserReportCardPending(user) {
+    let new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a>${user.report_count} reports</a>
+        <a href="#" class="btn btn-outline-secondary">Take</a>
+    `
+
+    return new_card;
+}
+
+
+function createUserReportCardPast(user) {
+    let button, new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    if (user.decision === 'Rejected') {
+        button = `<a href="#" class=" btn btn-success">REJ</a>`
+    } else if (user.decision === 'Accepted') {
+        let banDate = new Date(user.ban_date).getTime();
+        let today = new Date().getTime();
+        
+        if (user.ban_date != null) {
+            time = Math.ceil((banDate-today) / (1000 * 3600 * 24));
+        } else {
+            time = -1;
+        }
+        
+        if (time > 0) {
+            button = `<a href="#" class=" btn btn-warning">${time}d</a>`
+        } else {
+            button = `<a href="#" class=" btn btn-info">Finished</a>`
+        }
+        
+    }
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a class="text-muted text-decoration-none">${user.decision_date}</a>
+    ` + button + `
+        <a href="#" class="btn btn-outline-dark">Retake</a>
+    `;
+
+    return new_card;
+}
+
+updateUserReportSearchOnInput()

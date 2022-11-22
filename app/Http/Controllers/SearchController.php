@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,13 +29,13 @@ class SearchController extends Controller
         $searchItems = [];
 
         if ($type_search === "users") {
-
             $searchItems = $this->searchUsers($query_string);
         } else if ($type_search === "groups") {
-
             $searchItems = $this->searchGroups($query_string);
         } else if ($type_search === "posts") {
             $searchItems = $this->searchPosts($query_string);
+        } else if ($type_search === "topics") {
+            $searchItems = $this->searchTopics($query_string);
         }
 
         return json_encode($searchItems);
@@ -68,26 +69,57 @@ class SearchController extends Controller
     private function searchPosts($query_string)
     { // this also includes de tsvectors of comments
 
-
-        $comments = Comment::selectRaw('id, id_post, tsvector_agg(tsvectors) as tsvector_comment')
-            ->groupBy('id', 'id_post');
+        $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
+            ->groupBy('id_post');
 
         $posts = DB::table(DB::raw("({$comments->toSql()}) as comment"))
             ->mergeBindings($comments->getQuery())
-            ->join('post', 'post.id', '=', 'comment.id_post')
+            ->join('post', 'post.id', '=', 'id_post')
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->join('user', 'user.id', '=', 'post.id_poster')
+            ->join('user', 'user.id', '=', 'post.id_poster');
+
+        if (Auth::check()) {
+            $posts = $posts
+                ->whereIn('id_poster', function ($query) {
+                $id = Auth::user()->id;
+                $query1 = DB::table('friend_request')
+                ->selectRaw('id_user_sender as friend')
+                ->from('friend_request')
+                ->where('id_user_receiver', $id)
+                ->where('acceptance_status', 'Accepted');
+
+                $query->select('id_user_receiver as friend')
+                ->from('friend_request')
+                ->where('id_user_sender', $id)
+                ->where('acceptance_status', 'Accepted')
+                ->union($query1);  
+                })
+                ->orWhere('user.visibility', '=', true);
+        } else {
+            $posts = $posts->where('user.visibility', '=', true);
+        }
+
+        $posts = $posts
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
+            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
             ->selectRaw('
             post.id, post.text, post_date, username as owner, id_poster, username, photo,
+            comments_count,
             count(like_post.id_user) as likes_count,
-            count(comment.id) as comments_count
-            , ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-
-            ->groupBy('post.id', 'owner', 'user.photo', 'comment.tsvector_comment')
+            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
-            ->get();
+            ->limit(20);
+        
+        return $posts->get();
+    }
 
-        return $posts;
+
+    private function searchTopics($query_string) {
+
+        $topics = Topic::where('topic', 'LIKE', '%'.$query_string.'%')
+        ->limit(30)
+        ->get();
+
+        return $topics;
     }
 }

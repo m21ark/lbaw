@@ -1,5 +1,7 @@
 <nav id="rightbar" class="text-bg-light">
-    <h2>Recommendations</h2>
+
+
+<h2>Recommendations</h2>
     <hr>
 
     <h3 class="mt-4 mb-3">Hot Topics</h3>

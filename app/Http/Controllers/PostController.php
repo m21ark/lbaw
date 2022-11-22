@@ -57,6 +57,15 @@ class PostController extends Controller
             $posts = $this->feed_viral()->limit(20)->get();
         }
 
+        
+        // TODO: pass the current log in user to js in order to know if the post is theirs or not
+        /*
+        if (Auth::check()) {
+            $id = Auth::user()->id;
+            $posts[] = $id;
+        }
+        */
+
         return json_encode($posts);
     }
 

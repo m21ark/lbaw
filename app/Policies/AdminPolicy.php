@@ -28,9 +28,9 @@ class AdminPolicy
      * @param  \App\Models\Admin  $admin
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user)
+    public function view(User $user, Admin $admin)
     {
-        return null != (Auth::user()->isAdmin());
+        return null !== $admin;
     }
 
     /**
