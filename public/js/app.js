@@ -6,7 +6,8 @@ function addEventListeners() {
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
-        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')]
+        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
+        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')]
     ];
 
 
@@ -54,6 +55,17 @@ function addEventListeners() {
     if (delete_profile_button)
         delete_profile_button.addEventListener('click', sendDeleteProfileRequest);
 
+    // ====================== Posts ======================
+
+
+
+    let edit_post_button = document.querySelector('#edit_post_button');
+    if (edit_post_button)
+        edit_post_button.addEventListener('click', sendEditPostRequest);
+
+    let delete_post_button = document.querySelector('#delete_post_button');
+    if (delete_post_button)
+        delete_post_button.addEventListener('click', sendDeletePostRequest);
 
 
     let close_popups = document.querySelectorAll('.close_popup_btn');
@@ -68,7 +80,7 @@ function addEventListeners() {
     if (like_btn_post)
         if (like_btn_post.length > 0) {
             like_btn_post.forEach(e => {
-                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) });
+                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) }); // TODO: TIREM ME O MONSTRO E METER ESTA FUNÇAO MAIS BONITA
             });
         }
 
@@ -313,9 +325,18 @@ function sendCreatePostRequest(isProfile) {
     return function (event) {
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
+            
+            let formData = new FormData();
+            formData.append('text', textarea.value);
+            for (var x = 0; x < photos.length; x++) {
+                formData.append("photos[]", photos[x]);
+            }
+            console.log(formData)
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, addedHandler('#popup_show_post'));
+                sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
+            //sendAjaxRequest('post', '/api/post/', { text: textarea.value, photos: photos}, addedHandler('#popup_show_post'));
             textarea.value = '';
         }
         else {
@@ -327,28 +348,31 @@ function sendCreatePostRequest(isProfile) {
         }
 
         event.preventDefault();
-        location.reload()
     }
 }
 
 
 function sendEditPostRequest() {
 
-    // TODO : fazer o edit do post baseado no criar do post e no edit do group pq é a msm logica
     return function (event) {
+
+        let res = confirm('Are you sure you want to edit this post?');
+
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
-            let res = confirm('Are you sure you want to profile post this?');
+
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+                sendAjaxRequest('put', '/api/post/', { text: textarea.value }, () => { });
+
             document.querySelector('#popup_show_post').toggleAttribute('hidden');
             textarea.value = '';
         }
         else {
+
             let textarea = document.querySelector('#popup_show_group_post textarea');
-            let res = confirm('Are you sure you want to group post this?');
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+
+                sendAjaxRequest('put', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
             document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
             textarea.value = '';
         }
@@ -359,11 +383,15 @@ function sendEditPostRequest() {
 
 
 function sendDeletePostRequest() {
-    let id = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+    let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
     let res = confirm('Are you sure you want to delete this post?');
-    if (res === id)
+    if (res)
         sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
+    // location.reload();
+
+    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
+
 }
 
 
@@ -575,14 +603,14 @@ function createUserCard(user) {
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
 
-        console.log(user.photo)
+    console.log(user.photo)
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
         <img src="/${user.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Group</a>
+            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Profile</a>
         </div>
     </div>
     `

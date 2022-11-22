@@ -13,42 +13,42 @@
     <div class="list-group  d-flex mb-3 flex-wrap ">
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
         </div>
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
         </div>
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
         </div>
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
         </div>
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
         </div>
 
         <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-            <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+            <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a>3 reports</a>
             <a href="#" class="btn btn-outline-secondary">Take</a>
@@ -71,7 +71,7 @@
         <div class="list-group  d-flex mb-5 flex-wrap ">
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+                <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
                 <a class="me-3" href={{ url('/profile/username') }}>Username</a>
                 <a class="text-muted text-decoration-none">23/05/2002</a>
                 <a href="#" class=" btn btn-danger">INF</a>
@@ -79,7 +79,7 @@
             </div>
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+                <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
                 <a class="me-3" href={{ url('/profile/username') }}>Username</a>
                 <a class="text-muted text-decoration-none">23/05/2002</a>
                 <a href="#" class=" btn btn-warning">30d</a>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+                <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
                 <a class="me-3" href={{ url('/profile/username') }}>Username</a>
                 <a class="text-muted text-decoration-none">23/05/2002</a>
                 <a href="#" class=" btn btn-warning">07d</a>
@@ -95,7 +95,7 @@
             </div>
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+                <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
                 <a class="me-3" href={{ url('/profile/username') }}>Username</a>
                 <a class="text-muted text-decoration-none">23/05/2002</a>
                 <a href="#" class=" btn btn-danger">INF</a>
@@ -103,7 +103,7 @@
             </div>
 
             <div class="list-group-item d-flex justify-content-between align-items-center mb-2">
-                <img class="me-3" src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" height="50">
+                <img class="me-3" src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" height="50">
                 <a class="me-3" href={{ url('/profile/username') }}>Username</a>
                 <a class="text-muted text-decoration-none">23/05/2002</a>
                 <a href="#" class=" btn btn-success">REJ</a>

@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\GroupJoinRequest;
 use App\Models\Owner;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -86,7 +87,8 @@ class GroupController extends Controller
         $group->description = $request->input('description');
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
-        if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo')) 
+        {
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 

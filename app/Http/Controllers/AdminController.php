@@ -21,8 +21,8 @@ class AdminController extends Controller
         $statistics =[
             'posts_c' => Post::count(),
             'users_c' => User::count(),
-            'groups_c'=> Group::count(),
-            'comments_c'=> Comment::count(),
+            'groups_c' => Group::count(),
+            'comments_c' => Comment::count(),
             'likes_c' => Like::count() + CommentLike::count()
         ];
         
