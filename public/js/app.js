@@ -389,7 +389,7 @@ function updateFeed(feed) {
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
-        
+
     })
 }
 
