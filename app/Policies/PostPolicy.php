@@ -47,10 +47,11 @@ class PostPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user, Post $post)
     {
         return Auth::check();
     }
+
 
     /**
      * Determine whether the user can have access to personalized timeline.

@@ -1,4 +1,3 @@
-
 @auth
     <div class="list-group list-group-checkable form-check d-flex p-3 flex justify-content-between text-bg-light"
         id="feed_filter">

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -16,38 +21,53 @@ class ProfileController extends Controller
             return redirect()->route('home');
         }
 
-        return view('pages.profile', ['user' => $user]);
+        $statistics = [
+            'post_num' => Post::where('id_poster', $user->id)->count(),
+            'comment_num' => DB::table('comment')->where('id_commenter', $user->id)->count(),
+            'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
+            'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
+            'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
+            'friends_num' => DB::table('friend_request')->where('acceptance_status', 'Accepted')->where('id_user_sender', $user->id)->orWhere('id_user_receiver', $user->id)->count(),
+        ];
+
+        return view('pages.profile', ['user' => $user, 'statistics' => $statistics]);
     }
 
     public function edit(Request $request)
     {
-
-        // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        // $out->writeln("Saved user");
-
-        $user = User::where('username', $request->input('oldName'))->first();
+        $user = Auth::user();
 
 
+        // N é preciso verify uma vez que a cookie de sessão tem de ser passada para o servidor
 
-        if ($user == null || $user->id != $request->input('idUser')) {
+        if ($user == null) {
             return redirect()->route('home');
         }
 
-        //$this->authorize('create', Auth::user());
-
-        $user->username = $request->input('username'); // TODO: Check if username is unique
-        $user->birthdate = $request->input('bdate');
+        $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
+        $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
-        $user->email = $request->input('email'); // TODO: Check if email is unique
-        $user->bio = $request->input('bio');
-        // TODO : ADD PROFILE IMAGE AND PASSWORD
+        $user->email = $request->input('email') ?? $user->email; // TODO: Check if email is unique
+        $user->bio = $request->input('bio') ?? $user->bio;
+
+        // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
 
+        if ($request->photo !== null) {
 
+            $user->photo = 'user/' . strval($user->id) . '.jpg';
+
+            try {
+                $request->file('photo')->move(public_path('user/'), $user->id . '.jpg');
+            } catch (Exception $e) {
+                DB::rollBack();
+            }
+        }
+        DB::commit();
         $user->save();
 
 
-        return $user;
+        return redirect()->route('profile', $user->username);
     }
 
 

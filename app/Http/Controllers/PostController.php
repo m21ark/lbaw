@@ -27,6 +27,10 @@ class PostController extends Controller
     {
         // TODO: use id to get post from database
         $post   = Post::withCount('likes', 'comments')->find($id);
+
+        if($post == null)
+            return view('pages.not_found');
+
         // policy, nr_comments_post
         if (!$post->owner->visibility) {
             $this->authorize('view', $post);
@@ -71,14 +75,15 @@ class PostController extends Controller
 
         $post = new Post();
 
+        if ($request->input('group_name') != null) {
+            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
+        }
+
         $this->authorize('create', $post);
 
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
 
-        if ($request->input('group_name') != null) {
-            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
-        }
         // TODO : ADD IMAGES
 
         $post->save();
@@ -86,10 +91,18 @@ class PostController extends Controller
 
     public function delete($id)
     {
-        // TODO ::: TESTAR
         $post = Post::find($id);
         $this->authorize('delete', $post);
-        $post->delete();
+        DB::table('post')->where('id', $id)->delete();
+        return $post;
+    }
+
+    public function edit($id, Request $request)
+    {
+        $post = Post::find($id);
+        $this->authorize('edit', $post);
+        $post->text = $request->input('text');
+        $post->save();
         return $post;
     }
 

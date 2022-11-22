@@ -9,10 +9,17 @@ class Like extends Model
 {
     use HasFactory;
     public $timestamps  = false;
+    public $incrementing = false; // IMPORTANT: ADD THIS TO ASSOCIATIONS WITHOUT id
     protected $table = 'like_post';
 
 
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo('App\Models\Post', 'id_post');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'id_user');
     }
 }

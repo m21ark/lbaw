@@ -24,4 +24,8 @@ class Comment extends Model
     {
         return $this->hasMany('App\Models\Report', 'id_comment');
     }
+    
+    public function poster() {
+        return $this->belongsTo('App\Models\User', 'id_commenter');
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\GroupJoinRequest;
 use App\Models\Owner;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,15 +15,7 @@ class GroupController extends Controller
 {
     public function show($name)
     {
-        // TODO: use id to get group from database
-
         $group = Group::where('name', $name)->first();
-
-        /* DESNECESSARIO
-        $groupMembers = $group->members()->get();
-        $groupOwners = $group->owners()->get();
-        $groupPosts = $group->posts()->get();
-        */
 
         if ($group == null) {
             //No group with that name so we return to the home page
@@ -95,6 +88,19 @@ class GroupController extends Controller
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
         // todo: add profile image
+        if ($request->photo !== null) {
+
+            $group->photo = 'group/' . strval($group->id) . '.jpg';
+
+            try {
+                $request->file('photo')->move(public_path('group/'), $group->id . '.jpg');
+            }
+            catch(Exception $e) {
+                DB::rollBack();
+            }
+
+        }
+        DB::commit();
 
         $group->save();
 

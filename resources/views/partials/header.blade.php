@@ -4,7 +4,7 @@
 
 
         <div class="text-start">
-            <a href="{{ url('/home') }}"><img src="/logo.png" alt="nexus_logo" width="100"></a>
+            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="nexus_logo" width="120"></a>
 
         </div>
 
@@ -17,9 +17,11 @@
 
             @if (Auth::check())
                 <div class="d-flex align-items-center">
-                    <a class="text-white text-decoration-none me-3" href={{ url('/profile/' . Auth::user()->username) }}>
+                    <a class="text-white text-decoration-none me-3"
+                        href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2">{{ Auth::user()->username }}</strong>
-                        <img src="../user.png" alt="logo" width="40" height="40">
+                        <img src="{{ asset(Auth::user()->photo) }}" alt="logo" width="50" height="50"
+                            class="rounded-circle">
                     </a>
 
                     <a href={{ url('/logout') }} type="button" class="btn btn-light">Logout</a>
