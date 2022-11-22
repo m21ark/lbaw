@@ -48,32 +48,37 @@
                     <div class="card-footer d-flex justify-content-evenly">
 
                         <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
-                        @auth
-                        <div class="d-flex">
-                            <p class="me-3">{{ sizeof($post->likes) }}</p>
+                        @if (Auth::check())
+                            <div class="d-flex">
+                                <p class="me-3">{{ sizeof($post->likes) }}</p>
 
-                            <a href="#" class="like_btn_post text-decoration-none" data-uid={{ Auth::user()->id }}
-                                data-id={{ $post->id }}>
+                                <a href="#" class="like_btn_post text-decoration-none" data-uid={{ Auth::user()->id }}
+                                    data-id={{ $post->id }}>
 
-                                    <?php
-                                    $userLiked = false;
-                                    foreach ($post->likes as $like) {
-                                        if (Auth::user()->id == $like->id_user) {
-                                            $userLiked = true;
+                                        <?php
+                                        $userLiked = false;
+                                        foreach ($post->likes as $like) {
+                                            if (Auth::user()->id == $like->id_user) {
+                                                $userLiked = true;
+                                            }
                                         }
-                                    }
-                                    ?>
-                                    @if ($userLiked)
-                                        <h4>&#x2764;</h4>
-                                    @else
-                                        <h2><strong>&#9825;</strong></h2>
-                                    @endif
+                                        ?>
+                                        @if ($userLiked)
+                                            <h4>&#x2764;</h4>
+                                        @else
+                                            <h2><strong>&#9825;</strong></h2>
+                                        @endif
 
-                               </a>
-                        </div>
+                                   </a>
+                            </div>
                         @else
+                         <div class="d-flex">
+                            <p class="me-3">{{ sizeof($post->likes) }}</p>
                             <a href="#" class="like_btn_post text-decoration-none">
-                        @endauth
+                               <h2><strong>&#9825;</strong></h2>
+                            </a>
+                         </div>
+                        @endif
 
                         <div class="d-flex">
                             <p class="me-3">{{ sizeof($post->comments) }}</p>

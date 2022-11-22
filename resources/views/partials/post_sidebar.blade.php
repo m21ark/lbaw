@@ -20,25 +20,29 @@
 
             <div class="pt-3 card-footer d-flex justify-content-around ">
                 <p class="like_count mt-2"><strong>{{ $comment->likes->count() }} Likes</strong></p>
-                <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
-                    data-id={{ $comment->id }} href="#">
+                @auth
+                    <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
+                        data-id={{ $comment->id }} href="#">
 
-                    <?php
-                    $userLiked = false;
-                    foreach ($comment->likes as $like) {
-                        if (Auth::user()->id == $like->id_user) {
-                            $userLiked = true;
+                        <?php
+                        $userLiked = false;
+                        foreach ($comment->likes as $like) {
+                            if (Auth::user()->id == $like->id_user) {
+                                $userLiked = true;
+                            }
                         }
-                    }
-                    ?>
-                    @if ($userLiked)
-                        <h4 class="p-1">&#x2764;</h4>
-                    @else
+                        ?>
+                        @if ($userLiked)
+                            <h4 class="p-1">&#x2764;</h4>
+                        @else
+                            <h2 class="me-1"><strong>&#9825;</strong></h2>
+                        @endif
+                    </a>
+                @else
+                    <a class="like_btn_comment text-decoration-none"> 
                         <h2 class="me-1"><strong>&#9825;</strong></h2>
-                    @endif
-
-
-                </a>
+                    </a>
+                @endauth
             </div>
 
         </div>
