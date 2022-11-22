@@ -599,9 +599,11 @@ function updateUserReportSearchOnInput() {
 
     if (!searchBarPendent || !searchBarPast) return;
 
+    // Update on Page Loading
     updateUserReportsSearch(searchBarPendent, 'pendent')
     updateUserReportsSearch(searchBarPast, 'past')
 
+    // Add event listeners for both search bars
     searchBarPendent.addEventListener('input', function () {
         updateUserReportsSearch(searchBarPendent, 'pendent')
     })
@@ -663,9 +665,9 @@ function createUserReportCardPast(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     if (user.decision === 'Accepted') {
-        button = '<a href="#" class=" btn btn-warning">30d</a>'
-    } else {
-        button = '<a href="#" class=" btn btn-success">REJ</a>'
+        button = `<a href="#" class=" btn btn-danger">BAN</a>`
+    } else if (user.decision === 'Rejected') {
+        button = `<a href="#" class=" btn btn-success">REJ</a>`
     }
 
     new_card.innerHTML = `
