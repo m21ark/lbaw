@@ -6,9 +6,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Group;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class PostController extends Controller
 {
@@ -27,6 +29,10 @@ class PostController extends Controller
     {
         // TODO: use id to get post from database
         $post   = Post::withCount('likes', 'comments')->find($id);
+
+        if($post == null)
+            return view('pages.not_found');
+
         // policy, nr_comments_post
         if (!$post->owner->visibility) {
             $this->authorize('view', $post);
@@ -51,42 +57,81 @@ class PostController extends Controller
             $posts = $this->feed_viral()->limit(20)->get();
         }
 
+        
+        // TODO: pass the current log in user to js in order to know if the post is theirs or not
+        /*
+        if (Auth::check()) {
+            $id = Auth::user()->id;
+            $posts[] = $id;
+        }
+        */
+
         return json_encode($posts);
     }
 
 
     public function create(Request $request)
     {
-
-        // TODO: Não dá para criar posts se for owner e n percebo pq :(
-
+        DB::beginTransaction();
         $post = new Post();
-         
+
         if ($request->input('group_name') != null) {
             $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }
-        
+
         $this->authorize('create', $post);
 
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
 
-        // TODO : ADD IMAGES
-
         $post->save();
+
+        if ($request->hasFile('photos')) 
+        {   
+            $i = 0;
+            foreach ($request->photos as $imagefile)
+            {
+                $image = new Image;
+                $path = 'image/img' . $post->id . '_' . $i . '.jpg';
+                $image->path = $path;
+                $image->id_post = $post->id;
+                $image->save();
+                try {
+                    $imagefile->move(public_path('image/'), 'img' . $post->id . '_' . $i. '.jpg');
+                }
+                catch(Exception $e) {
+                    DB::rollBack();
+                }
+                $i++;
+            }
+        }
+
+        DB::commit();
     }
 
     public function delete($id)
     {
-        // TODO ::: TESTAR
         $post = Post::find($id);
         $this->authorize('delete', $post);
-        $post->delete();
+        DB::table('post')->where('id', $id)->delete();
+        return $post;
+    }
+
+    public function edit($id, Request $request)
+    {
+        $post = Post::find($id);
+        $this->authorize('edit', $post);
+        $post->text = $request->input('text');
+        $post->save();
         return $post;
     }
 
     private function feed_friends()
     {
+
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
 
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->whereIn('id_poster', function ($query) {
@@ -111,6 +156,10 @@ class PostController extends Controller
 
     private function feed_groups()
     {
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
+
         $posts = Post::whereIn('id_group', function ($query) {
             $id = Auth::user()->id;
             $query->select('id_group')
@@ -127,6 +176,7 @@ class PostController extends Controller
 
     private function feed_viral()
     {
+
         $posts_filtered = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('visibility', true)
@@ -144,6 +194,9 @@ class PostController extends Controller
 
     private function feed_for_you()
     {
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
 
         $posts_filtered_groups = $this->feed_groups();
         $posts_groups = DB::table(DB::raw("({$posts_filtered_groups->toSql()}) as sub"))

@@ -30,6 +30,11 @@ class Post extends Model
         return $this->belongsTo('App\Models\Group', 'id_group');
     }
 
+    public function reports()
+    {
+        return $this->hasMany('App\Models\Report', 'id_post');
+    }
+    
     public function images() 
     {
         return $this->hasMany('App\Models\Image', 'id_post');

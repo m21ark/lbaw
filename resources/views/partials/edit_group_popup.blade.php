@@ -17,7 +17,7 @@
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
 
             <label for="group_photo" class="sr-only">Profile Picture</label>
-            <input type="file" class="form-control" id="group_photo" name="photo" />
+            <input type="file" class="form-control" id="group_photo" name="photo">
 
             <label for="group_visibility" class="sr-only">Group Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"

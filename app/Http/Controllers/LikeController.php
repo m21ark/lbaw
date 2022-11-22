@@ -18,7 +18,7 @@ class LikeController extends Controller
             ->where('id_post', $post)
             ->first();
 
-        //$this->authorize('create', Auth::user());
+        //$this->authorize('create', Auth::user()); TODO quando isto estiver a funcionar
 
         if ($like == null) {
 

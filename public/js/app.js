@@ -6,7 +6,8 @@ function addEventListeners() {
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
-        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')]
+        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
+        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')]
     ];
 
 
@@ -19,7 +20,7 @@ function addEventListeners() {
     );
 
     let create_button = document.querySelector('#profile_post_button_action');
-    if (create_button)
+    if (create_button) 
         create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
@@ -54,6 +55,17 @@ function addEventListeners() {
     if (delete_profile_button)
         delete_profile_button.addEventListener('click', sendDeleteProfileRequest);
 
+    // ====================== Posts ======================
+
+
+
+    let edit_post_button = document.querySelector('#edit_post_button');
+    if (edit_post_button)
+        edit_post_button.addEventListener('click', sendEditPostRequest);
+
+    let delete_post_button = document.querySelector('#delete_post_button');
+    if (delete_post_button)
+        delete_post_button.addEventListener('click', sendDeletePostRequest);
 
 
     let close_popups = document.querySelectorAll('.close_popup_btn');
@@ -68,7 +80,7 @@ function addEventListeners() {
     if (like_btn_post)
         if (like_btn_post.length > 0) {
             like_btn_post.forEach(e => {
-                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) });
+                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) }); // TODO: TIREM ME O MONSTRO E METER ESTA FUNÇAO MAIS BONITA
             });
         }
 
@@ -313,9 +325,18 @@ function sendCreatePostRequest(isProfile) {
     return function (event) {
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
+            
+            let formData = new FormData();
+            formData.append('text', textarea.value);
+            for (var x = 0; x < photos.length; x++) {
+                formData.append("photos[]", photos[x]);
+            }
+            console.log(formData)
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, addedHandler('#popup_show_post'));
+                sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
+            //sendAjaxRequest('post', '/api/post/', { text: textarea.value, photos: photos}, addedHandler('#popup_show_post'));
             textarea.value = '';
         }
         else {
@@ -327,28 +348,31 @@ function sendCreatePostRequest(isProfile) {
         }
 
         event.preventDefault();
-        location.reload()
     }
 }
 
 
 function sendEditPostRequest() {
 
-    // TODO : fazer o edit do post baseado no criar do post e no edit do group pq é a msm logica
     return function (event) {
+
+        let res = confirm('Are you sure you want to edit this post?');
+
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
-            let res = confirm('Are you sure you want to profile post this?');
+
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, () => { });
+                sendAjaxRequest('put', '/api/post/', { text: textarea.value }, () => { });
+
             document.querySelector('#popup_show_post').toggleAttribute('hidden');
             textarea.value = '';
         }
         else {
+
             let textarea = document.querySelector('#popup_show_group_post textarea');
-            let res = confirm('Are you sure you want to group post this?');
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
+
+                sendAjaxRequest('put', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
             document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
             textarea.value = '';
         }
@@ -359,11 +383,15 @@ function sendEditPostRequest() {
 
 
 function sendDeletePostRequest() {
-    let id = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
+    let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
     let res = confirm('Are you sure you want to delete this post?');
-    if (res === id)
+    if (res)
         sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
+    // location.reload();
+
+    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
+
 }
 
 
@@ -397,7 +425,7 @@ function updateFeed(feed) {
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
-    console.log(post.photo);
+    console.log(post);
     new_post.innerHTML = `
 
     <div class="container mt-5 mb-5 post_item">
@@ -479,7 +507,7 @@ updateFeedOnLoad();
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#@\w]/.test(pathname)) return;
+    if (!/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
     if (!document.querySelector('#timeline')) {
         return;
@@ -487,39 +515,57 @@ function updateSearchOnInputAndClick() {
 
     let search_filters = document.querySelector('input#search_radio_user')
 
-    if (search_filters)
+    if (search_filters) {
         search_filters.checked = true
-
-
-    // Add event listeners when input changes
+    }
+    
+    // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    if (searchBar)
-        searchBar.addEventListener('input', () => { updateSearch() })
+    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#?!.@_\w ]+/)[0]
 
+    if (query_string) {
+        searchBar.value = query_string
+        updateSearch()
+    }
+
+    // Add event listeners when input changes
+    
+    if (searchBar) {
+        searchBar.addEventListener('input', function () {
+            updateSearch()
+
+            let searchBarString = searchBar.value.trim()
+            
+            // Update the path on top 
+            if (searchBarString !== '') {
+                window.history.replaceState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
+            }
+                
+        })
+        
+    }
+
+    
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', () => { updateSearch() })
+            filter.addEventListener('click', updateSearch)
         })
     }
 
+    updateSearch();
 }
 
 
 function updateSearch() {
-
-
     let type_search = '', query_string = '';
 
     // Get the type_search from the radio input
     const filters = document.querySelectorAll('#search_filter input')
-
     if (!filters) return;
-
-
 
     filters.forEach(filter => {
         if (filter.checked) { type_search = filter.value }
@@ -527,13 +573,11 @@ function updateSearch() {
 
     // Get the query string from the search bar
     const searchBar = document.querySelector('#search_bar')
-
     if (!searchBar) return;
 
     query_string = searchBar.value
 
     if (query_string === '') return;
-
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
@@ -556,8 +600,10 @@ function updateSearch() {
                 timeline.appendChild(createPost(searchHit));
             } else if (type_search === 'groups') {
                 timeline.appendChild(createGroupCard(searchHit))
-            } else {
+            } else if (type_search === 'users') {
                 timeline.appendChild(createUserCard(searchHit))
+            } else if (type_search === 'topics') {
+                timeline.appendChild(createTopicCard(searchHit))
             }
 
         })
@@ -575,14 +621,14 @@ function createUserCard(user) {
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
 
-        console.log(user.photo)
+    console.log(user.photo)
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
         <img src="/${user.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Group</a>
+            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Profile</a>
         </div>
     </div>
     `
@@ -612,15 +658,155 @@ function createGroupCard(group) {
 }
 
 
+function createTopicCard(topic) {
+    let new_card = document.createElement('article');
 
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="height:4em">
+        <div class="d-flex align-items-center card-body">
+            <h4 class="card-title">${topic.topic}</h5>
+        </div>
+    </div>
+    `
+    return new_card;
+}
 
+function searchRedirect() {
 
+    // Needs to redirect except if it already is in the search page
+    let pathname = window.location.pathname
+    if (/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
 
+    const searchBar = document.querySelector('#search_bar')
+    if (!searchBar) return;
+
+    searchBar.addEventListener('keypress', function (event) {
+
+        //window.location.href = '/search/hey' + this.value
+    
+        if (event.key !== "Enter") return;
+
+        this.value = this.value.trim()
+
+        if (this.value !== '') {
+            window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
+        }
+        
+    })
+
+}
+
+searchRedirect();
 
 updateSearchOnInputAndClick();
-updateSearch();
 
 
 
 
+//  ======================================= Admin ======================================
 
+
+function updateUserReportSearchOnInput() {
+    
+    const searchBarPendent = document.querySelector('#searchBarPendent');
+    const searchBarPast = document.querySelector('#searchBarPast');
+
+    if (!searchBarPendent || !searchBarPast) return;
+
+    // Update on Page Loading
+    updateUserReportsSearch(searchBarPendent, 'pendent')
+    updateUserReportsSearch(searchBarPast, 'past')
+
+    // Add event listeners for both search bars
+    searchBarPendent.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPendent, 'pendent')
+    })
+
+    searchBarPast.addEventListener('input', function () {
+        updateUserReportsSearch(searchBarPast, 'past')
+    })
+}
+
+
+
+function updateUserReportsSearch(searchBar, decision) {
+    let query_string = searchBar.value;
+
+    if (query_string.trim() === '') query_string = '*';
+
+    sendAjaxRequest('get', '/api/admin/' + decision + '_reports/' + query_string, {}, function () {
+        let display = document.querySelector("#users-reported-" + decision)
+
+        if (!display) return;
+
+        const received = JSON.parse(this.responseText)
+        display.innerHTML = ''
+
+        if (decision === 'pendent') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPending(userReported))
+            })
+        
+        } else if (decision === 'past') {
+            received.forEach(function (userReported) {
+                display.appendChild(createUserReportCardPast(userReported))
+            })
+        }
+
+        
+
+    })
+
+}
+
+function createUserReportCardPending(user) {
+    let new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a>${user.report_count} reports</a>
+        <a href="#" class="btn btn-outline-secondary">Take</a>
+    `
+
+    return new_card;
+}
+
+
+function createUserReportCardPast(user) {
+    let button, new_card = document.createElement('div')
+    new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
+
+    if (user.decision === 'Rejected') {
+        button = `<a href="#" class=" btn btn-success">REJ</a>`
+    } else if (user.decision === 'Accepted') {
+        let banDate = new Date(user.ban_date).getTime();
+        let today = new Date().getTime();
+        
+        if (user.ban_date != null) {
+            time = Math.ceil((banDate-today) / (1000 * 3600 * 24));
+        } else {
+            time = -1;
+        }
+        
+        if (time > 0) {
+            button = `<a href="#" class=" btn btn-warning">${time}d</a>`
+        } else {
+            button = `<a href="#" class=" btn btn-info">Finished</a>`
+        }
+        
+    }
+
+    new_card.innerHTML = `
+        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
+        <a class="text-muted text-decoration-none">${user.decision_date}</a>
+    ` + button + `
+        <a href="#" class="btn btn-outline-dark">Retake</a>
+    `;
+
+    return new_card;
+}
+
+updateUserReportSearchOnInput()
