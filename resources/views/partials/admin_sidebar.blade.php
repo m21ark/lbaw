@@ -63,38 +63,38 @@
     <div class="list-group align-items-center d-flex mb-5 mt-4">
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-danger">INF</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-warning">07d</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-warning">30d</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-success">REJ</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-warning">07d</a>
         </div>
 
 
         <div class="list-group-item">
-            <img class="me-3" src="{{ asset('user/user.png') }}" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Username</a>
             <a href="#" class=" btn btn-success">REJ</a>
         </div>

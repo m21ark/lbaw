@@ -4,7 +4,7 @@
 
 
         <div class="text-start">
-            <a href="{{ url('/home') }}"><img src="/logo.png" alt="nexus_logo" width="120"></a>
+            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="nexus_logo" width="120"></a>
 
         </div>
 
