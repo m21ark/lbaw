@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class CommentLike extends Model
 {
     use HasFactory;
-
-    protected $table = 'like_comment';
     public $timestamps  = false;
+    public $incrementing = false; // IMPORTANT: ADD THIS TO ASSOCIATIONS WITHOUT id
+    protected $table = 'like_comment';
 
-    public function comment() {
+    public function comment()
+    {
         return $this->belongsTo('App\Models\Comment', 'id_comment');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'id_user');
     }
 }

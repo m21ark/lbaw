@@ -48,11 +48,11 @@ Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@sea
 
 // Create/Update/Delete group
 Route::post('api/group', 'GroupController@create');
-Route::put('api/group/{name}', 'GroupController@edit');
+Route::post('api/group/{name}', 'GroupController@edit') -> name('editGroup');
 Route::delete('api/group/{name}', 'GroupController@delete');
 
 // Edit/Delete profile
-Route::put('api/profile/{username}', 'ProfileController@edit');
+Route::post('api/profile/{username}', 'ProfileController@edit') -> name('editProfile');
 Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 
