@@ -7,7 +7,7 @@
 
                     <a href={{ url('/profile/' . $post->owner->username) }}
                         class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="{{asset($post->owner->photo)}}" width="60" class="rounded-circle me-3">
+                        <img src="{{ asset($post->owner->photo) }}" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
                     </a>
 
@@ -35,11 +35,11 @@
                 </div>
 
                 <!-- TODO: Ver imagens da database -->
-                
+
                 @if (!$post->images->isEmpty())
-                    @include('partials.post_carousel_image')    
+                    @include('partials.post_carousel_image')
                 @endif
-                
+
 
                 <div class="p-2">
                     <p class="text-justify">{{ $post->text }}</p>
@@ -52,32 +52,32 @@
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
 
-                                <a href="#" class="like_btn_post text-decoration-none" data-uid={{ Auth::user()->id }}
-                                    data-id={{ $post->id }}>
+                                <a href="#" class="like_btn_post text-decoration-none"
+                                    data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
 
-                                        <?php
-                                        $userLiked = false;
-                                        foreach ($post->likes as $like) {
-                                            if (Auth::user()->id == $like->id_user) {
-                                                $userLiked = true;
-                                            }
+                                    <?php
+                                    $userLiked = false;
+                                    foreach ($post->likes as $like) {
+                                        if (Auth::user()->id == $like->id_user) {
+                                            $userLiked = true;
                                         }
-                                        ?>
-                                        @if ($userLiked)
-                                            <h4>&#x2764;</h4>
-                                        @else
-                                            <h2><strong>&#9825;</strong></h2>
-                                        @endif
+                                    }
+                                    ?>
+                                    @if ($userLiked)
+                                        <h4>&#x2764;</h4>
+                                    @else
+                                        <h2><strong>&#9825;</strong></h2>
+                                    @endif
 
-                                   </a>
+                                </a>
                             </div>
                         @else
-                         <div class="d-flex">
-                            <p class="me-3">{{ sizeof($post->likes) }}</p>
-                            <a href="#" class="like_btn_post text-decoration-none">
-                               <h2><strong>&#9825;</strong></h2>
-                            </a>
-                         </div>
+                            <div class="d-flex">
+                                <p class="me-3">{{ sizeof($post->likes) }}</p>
+                                <a href="#" class="like_btn_post text-decoration-none">
+                                    <h2><strong>&#9825;</strong></h2>
+                                </a>
+                            </div>
                         @endif
 
                         <div class="d-flex">

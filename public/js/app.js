@@ -582,7 +582,7 @@ function createUserCard(user) {
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Group</a>
+            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Profile</a>
         </div>
     </div>
     `
