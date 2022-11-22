@@ -327,6 +327,7 @@ function sendCreatePostRequest(isProfile) {
         }
 
         event.preventDefault();
+        location.reload()
     }
 }
 
