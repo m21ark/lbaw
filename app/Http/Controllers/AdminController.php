@@ -13,12 +13,12 @@ use App\Models\User;
 class AdminController extends Controller
 {
     public function show()
-    {   
-        $statistics =[
+    {
+        $statistics = [
             'posts_c' => Post::count(),
             'users_c' => User::count(),
-            'groups_c'=> Group::count(),
-            'comments_c'=> Comment::count(),
+            'groups_c' => Group::count(),
+            'comments_c' => Comment::count(),
             'likes_c' => Like::count() + CommentLike::count()
         ];
         return view('pages.admin', ['statistics' => $statistics]);
