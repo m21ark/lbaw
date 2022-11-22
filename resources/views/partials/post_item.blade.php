@@ -17,7 +17,7 @@
 
                     <div class="dropdown">
                         <button class="btn dropdownPostButton" type="button">&vellip;</button>
-                        <div class="dropdown_menu " hidden>
+                        <div class="dropdown_menu" style="z-index: 200000" hidden>
                             <a class="dropdown-item" href="{{ url('/profile/' . $post->owner->username) }}">Go to
                                 Profile</a>
 

@@ -140,8 +140,7 @@ function sendFormData(method, url, data, handler) {
     request.send(data);
 }
 
-function
-(class_name) {
+function addedHandler(class_name) {
     return function () {
         logItem(class_name)(0);
         class_alert = 'alert-success'
@@ -381,6 +380,7 @@ function sendDeletePostRequest() {
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
         sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
+    location.reload();
 
 }
 

@@ -1,6 +1,6 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_post_edit">
-        <form>
+        <form style="width:100%;" method='put' action={{ route('editPost', $post->id) }} enctype="multipart/form-data">
 
 
             <!-- Start popup body -->
@@ -11,22 +11,21 @@
 
 
             <label for="post_text" class="sr-only">Description</label>
-            <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text"
-                style="resize: none;">{{ $post->text }}</textarea>
+            <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text" style="resize: none;">{{ $post->text }}</textarea>
 
             <label for="group_photo" class="sr-only">Images</label>
             <input type="file" class="form-control" id="group_photo" name="photo" />
 
-            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_post_button" >Save <!-- type="submit" -->
-                Changes</button>
+            <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_post_button" type="submit">Save
+                <!--  -->
+                Changes
+            </button>
 
-            <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_post_button" data-id="{{ $post->id }}">Delete
-                Post</button>
-            <!-- End popup body -->
 
         </form>
+
+        <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_post_button"
+            data-id="{{ $post->id }}">Delete
+            Post</button>
     </div>
 @endif
-
-
-<!-- style="width:100%;" method='put' action={ route('editPost', $post->id) } enctype="multipart/form-data" -->
