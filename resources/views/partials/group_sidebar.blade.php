@@ -18,7 +18,7 @@
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img " src="{{asset($group->photo)}}" alt="" width="150">
+            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="" width="150" height="150">
         </div>
 
 
@@ -31,7 +31,9 @@
             <ul class="list-unstyled">
                 <!-- VALUES ARE WRONG COUNTED CAUSE APART FROM FIRST OWNER, OTHER OWNERS HAVE REQUEST TO JOIN -->
                 <li class="lead">{{ sizeof($group->owners) }} Owners</li>
-                <li class="lead">{{ sizeof($group->members) }} Members</li>
+                <li class="lead">
+                    {{ sizeof($group->members->whereNotIn('id_user', $group->owners->pluck('id_user')->toArray())) }}
+                    Members</li>
                 <li class="lead">{{ sizeof($group->posts) }} Posts</li>
             </ul>
         </div>
@@ -47,7 +49,7 @@
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
-                <img src="http://localhost:8000/user/user.png" alt="user_avatar" width="50">
+                <img src="{{ asset($owner->user->photo) }}" alt="user_avatar" width="50" class="rounded-circle">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 
@@ -64,7 +66,7 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="http://localhost:8000/user/user.png" alt="user_avatar" width="50">
+                    <img src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50" class="rounded-circle">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
@@ -80,19 +82,22 @@
     <div class="list-group align-items-center d-flex mb-4 ">
 
         <div class="list-group-item">
-            <img class="me-3" src="http://localhost:8000/user/user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
+                height="50 class="rounded-circle">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="http://localhost:8000/user/user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
+                height="50" class="rounded-circle">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="http://localhost:8000/user/user.png" alt="user_avatar" width="50">
+            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
+                height="50 class="rounded-circle">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>

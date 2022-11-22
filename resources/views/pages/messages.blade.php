@@ -4,7 +4,7 @@
     <div id="message_frame" class="card">
 
         <div class="message_head card-header text-bg-primary">
-            <a href="#"><img src="{{ asset('user/user.png')}}" alt="" width="60"></a>
+            <a href="#"><img src="{{ asset('user/user.jpg')}}" alt="" width="60"></a>
             <a href="#">Username</a>
             <a href="#">&vellip;</a>
         </div>

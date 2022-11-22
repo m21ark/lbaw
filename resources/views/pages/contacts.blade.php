@@ -7,12 +7,12 @@
     <p>  English Customer Help +44 912345678
     </p>
     <p> French Customer Help  +33 912345678
-    </p>    
+    </p>
 
     <div class="list-group">
             <div class="list-group-item">
                 <div class="text-bg-light d-flex align-items-center mb-3">
-                    <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50" class="me-4">
+                    <img src="{{ asset('user/user.jpg')}}" alt="user_avatar" width="50" class="me-4">
                     <h3>David</h3>
                 </div>
                 <p> <p>Estudante do 3 ano da lincenciatura de informatica e computaçao na feup ,especialista em sql.</p>
@@ -22,7 +22,7 @@
     <div class="list-group">
             <div class="list-group-item">
                 <div class="text-bg-light d-flex align-items-center mb-3">
-                    <img src="{{ asset('user/user.png')}}"  alt="user_avatar" width="50" class="me-4">
+                    <img src="{{ asset('user/user.jpg')}}"  alt="user_avatar" width="50" class="me-4">
                     <h3>João</h3>
                 </div>
                 <p>Estudante do 3 ano da lincenciatura de informatica e computaçao na feup ,especialista em php.</p>
@@ -32,7 +32,7 @@
     <div class="list-group">
             <div class="list-group-item">
                 <div class="text-bg-light d-flex align-items-center mb-3">
-                    <img src="{{ asset('user/user.png')}}"  alt="user_avatar" width="50" class="me-4">
+                    <img src="{{ asset('user/user.jpg')}}"  alt="user_avatar" width="50" class="me-4">
                     <h3>Marco</h3>
                 </div>
                 <p>Estudante do 3 ano da lincenciatura de informatica e computaçao na feup , especialista em bootstap</p>
@@ -42,7 +42,7 @@
     <div class="list-group">
             <div class="list-group-item">
                 <div class="text-bg-light d-flex align-items-center mb-3">
-                    <img src="{{ asset('user/user.png')}}"  alt="user_avatar" width="50" class="me-4">
+                    <img src="{{ asset('user/user.jpg')}}"  alt="user_avatar" width="50" class="me-4">
                     <h3>Ricardo</h3>
                 </div>
                  <p>Estudante do 3 ano da lincenciatura de informatica e computaçao na feup , especialista em JavaScript.</p>

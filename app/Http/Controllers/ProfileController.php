@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,16 @@ class ProfileController extends Controller
             return redirect()->route('home');
         }
 
-        return view('pages.profile', ['user' => $user]);
+        $statistics = [
+            'post_num' => Post::where('id_poster', $user->id)->count(),
+            'comment_num' => DB::table('comment')->where('id_commenter', $user->id)->count(),
+            'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
+            'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
+            'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
+            'friends_num' => DB::table('friend_request')->where('acceptance_status', 'Accepted')->where('id_user_sender', $user->id)->orWhere('id_user_receiver', $user->id)->count(),
+        ];
+
+        return view('pages.profile', ['user' => $user, 'statistics' => $statistics]);
     }
 
     public function edit(Request $request)
@@ -49,11 +59,9 @@ class ProfileController extends Controller
 
             try {
                 $request->file('photo')->move(public_path('user/'), $user->id . '.jpg');
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 DB::rollBack();
             }
-
         }
         DB::commit();
         $user->save();
