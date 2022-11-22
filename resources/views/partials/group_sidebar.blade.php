@@ -6,17 +6,13 @@
 
         <div class="card-header">
             <h3 class="p-2 ">{{ $group->name }}
-                <!-- Should only be visible to group owners -->
-                @auth
-                    @if (in_array(auth()->user()->id, $group->owners->pluck('id_user')->toArray()))
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                    @endif
-                @endauth
+                <!-- Should oly be visible to group owners -->
+                <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
             </h3>
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img " src="{{asset($group->photo)}}" alt="" width="150">
+            <img class="profile_img " src="../user.png" alt="" width="150">
         </div>
 
 
@@ -27,8 +23,9 @@
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
+                <!-- VALUES ARE WRONG COUNTED CAUSE APART FROM FIRST OWNER, OTHER OWNERS HAVE REQUEST TO JOIN -->
                 <li class="lead">{{ sizeof($group->owners) }} Owners</li>
-                <li class="lead">{{ sizeof($group->members->whereNotIn('id_user', $group->owners->pluck('id_user')->toArray())) }} Members</li>
+                <li class="lead">{{ sizeof($group->members) }} Members</li>
                 <li class="lead">{{ sizeof($group->posts) }} Posts</li>
             </ul>
         </div>
@@ -44,7 +41,7 @@
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
-                <img src="{{asset($owner->user->photo)}}" alt="user_avatar" width="50">
+                <img src="../user.png" alt="user_avatar" width="50">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 
@@ -61,7 +58,7 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="{{ asset('user/user.png')}}" alt="user_avatar" width="50">
+                    <img src="../user.png" alt="user_avatar" width="50">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
@@ -77,19 +74,19 @@
     <div class="list-group align-items-center d-flex mb-4 ">
 
         <div class="list-group-item">
-            <img class="me-3" src="{{asset('group/group_default.png')}}" alt="user_avatar" width="50">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{asset('group/group_default.png')}}" alt="user_avatar" width="50">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
 
         <div class="list-group-item">
-            <img class="me-3" src="{{asset('group/group_default.png')}}" alt="user_avatar" width="50">
+            <img class="me-3" src="../user.png" alt="user_avatar" width="50">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
@@ -103,12 +100,21 @@
 
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
-        @endauth
-        <!-- SHould only be visible to group members/owners -->
-        @if (Auth::user()->id == $group->$member->pluck("id")->toArray)
-    <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
+    
             Group</button>
+        @endauth
 
-            @endif    
+        @foreach ($group->members as $member)
+            @if (in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
+            <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
+            Group</button>
+                
+            @endif
+        @endforeach
+
+    
+
+
+           
 
 </nav>
