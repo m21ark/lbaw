@@ -502,8 +502,10 @@ function updateSearch() {
                 timeline.appendChild(createPost(searchHit));
             } else if (type_search === 'groups') {
                 timeline.appendChild(createGroupCard(searchHit))
-            } else {
+            } else if (type_search === 'users') {
                 timeline.appendChild(createUserCard(searchHit))
+            } else if (type_search === 'topics') {
+                timeline.appendChild(createTopicCard(searchHit))
             }
 
         })
@@ -556,6 +558,19 @@ function createGroupCard(group) {
     return new_card;
 }
 
+
+function createTopicCard(topic) {
+    let new_card = document.createElement('article');
+
+    new_card.innerHTML = `
+    <div class="card mt-4 me-3" style="height:4em">
+        <div class="d-flex align-items-center card-body">
+            <h4 class="card-title">${topic.topic}</h5>
+        </div>
+    </div>
+    `
+    return new_card;
+}
 
 function searchRedirect() {
 

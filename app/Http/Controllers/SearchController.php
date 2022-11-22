@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,13 +29,13 @@ class SearchController extends Controller
         $searchItems = [];
 
         if ($type_search === "users") {
-
             $searchItems = $this->searchUsers($query_string);
         } else if ($type_search === "groups") {
-
             $searchItems = $this->searchGroups($query_string);
         } else if ($type_search === "posts") {
             $searchItems = $this->searchPosts($query_string);
+        } else if ($type_search === "topics") {
+            $searchItems = $this->searchTopics($query_string);
         }
 
         return json_encode($searchItems);
@@ -75,21 +76,11 @@ class SearchController extends Controller
             ->mergeBindings($comments->getQuery())
             ->join('post', 'post.id', '=', 'id_post')
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->join('user', 'user.id', '=', 'post.id_poster')
-            ->orWhere('user.visibility', '=', true)
-            ->join('like_post', 'like_post.id_post', '=', 'post.id')
-            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
-            ->selectRaw('
-            post.id, post.text, post_date, username as owner, id_poster, username, photo,
-            comments_count,
-            count(like_post.id_user) as likes_count,
-            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-            ->orderBy('ranking', 'desc')
-            ->limit(20);
+            ->join('user', 'user.id', '=', 'post.id_poster');
 
         if (Auth::check()) {
-            return $posts
-            ->whereIn('id_poster', function ($query) {
+            $posts = $posts
+                ->whereIn('id_poster', function ($query) {
                 $id = Auth::user()->id;
                 $query1 = DB::table('friend_request')
                 ->selectRaw('id_user_sender as friend')
@@ -101,11 +92,34 @@ class SearchController extends Controller
                 ->from('friend_request')
                 ->where('id_user_sender', $id)
                 ->where('acceptance_status', 'Accepted')
-                ->union($query1);
-                  
-            })->get();
+                ->union($query1);  
+                })
+                ->orWhere('user.visibility', '=', true);
+        } else {
+            $posts = $posts->where('user.visibility', '=', true);
         }
 
+        $posts = $posts
+            ->join('like_post', 'like_post.id_post', '=', 'post.id')
+            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
+            ->selectRaw('
+            post.id, post.text, post_date, username as owner, id_poster, username, photo,
+            comments_count,
+            count(like_post.id_user) as likes_count,
+            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
+            ->orderBy('ranking', 'desc')
+            ->limit(20);
+        
         return $posts->get();
+    }
+
+
+    private function searchTopics($query_string) {
+
+        $topics = Topic::where('topic', 'LIKE', '%'.$query_string.'%')
+        ->limit(30)
+        ->get();
+
+        return $topics;
     }
 }
