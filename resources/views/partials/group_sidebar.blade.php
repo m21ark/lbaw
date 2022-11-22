@@ -6,11 +6,13 @@
 
         <div class="card-header">
             <h3 class="p-2 ">{{ $group->name }}
-                <!-- Should only be visible to group owners -->
+                <!-- Should oly be visible to group owners -->
+
                 @auth
-                    @if (in_array(auth()->user()->id, $group->owners->pluck('id_user')->toArray()))
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                    @endif
+
+                @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()))
+                <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                @endif
                 @endauth
             </h3>
         </div>
@@ -27,6 +29,7 @@
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
+                <!-- VALUES ARE WRONG COUNTED CAUSE APART FROM FIRST OWNER, OTHER OWNERS HAVE REQUEST TO JOIN -->
                 <li class="lead">{{ sizeof($group->owners) }} Owners</li>
                 <li class="lead">
                     {{ sizeof($group->members->whereNotIn('id_user', $group->owners->pluck('id_user')->toArray())) }}
@@ -108,11 +111,21 @@
 
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
+    
 
-        <!-- SHould only be visible to group members/owners -->
-        <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
+        @endauth
+
+      @auth
+            @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+            <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
             Group</button>
+                
+            @endif
+      
+@endauth
+    
 
-    @endauth
+
+           
 
 </nav>
