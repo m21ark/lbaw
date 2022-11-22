@@ -41,9 +41,9 @@ class GroupPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(?User $user)
     {
-        return $user->id !== null;
+        return optional($user)->id !== null;
     }
 
     /**
@@ -55,7 +55,7 @@ class GroupPolicy
      */
     public function update(User $user, Group $group)
     {
-        //
+        return in_array($user->id, $group->owners->pluck('id_user')->toArray());
     }
 
     /**

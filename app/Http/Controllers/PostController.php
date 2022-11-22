@@ -57,9 +57,7 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
-
-        // TODO: Não dá para criar posts se for owner e n percebo pq :(
-
+        DB::beginTransaction();
         $post = new Post();
          
         if ($request->input('group_name') != null) {
@@ -72,6 +70,8 @@ class PostController extends Controller
         $post->id_poster = Auth::user()->id;
 
         // TODO : ADD IMAGES
+
+        DB::commit();
 
         $post->save();
     }
@@ -87,6 +87,10 @@ class PostController extends Controller
 
     private function feed_friends()
     {
+
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
 
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->whereIn('id_poster', function ($query) {
@@ -111,6 +115,10 @@ class PostController extends Controller
 
     private function feed_groups()
     {
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
+
         $posts = Post::whereIn('id_group', function ($query) {
             $id = Auth::user()->id;
             $query->select('id_group')
@@ -127,6 +135,7 @@ class PostController extends Controller
 
     private function feed_viral()
     {
+
         $posts_filtered = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('visibility', true)
@@ -144,6 +153,9 @@ class PostController extends Controller
 
     private function feed_for_you()
     {
+        if (!Auth::check()) {
+            return response()->json(['Please login' => 401]);
+        }
 
         $posts_filtered_groups = $this->feed_groups();
         $posts_groups = DB::table(DB::raw("({$posts_filtered_groups->toSql()}) as sub"))
