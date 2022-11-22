@@ -366,25 +366,21 @@ function sendEditPostRequest() {
 
         let res = confirm('Are you sure you want to edit this post?');
 
-        if (isProfile) {
-            let textarea = document.querySelector('#popup_show_post textarea');
+        let textarea = document.querySelector('#popup_show_post_edit textarea');
+        let photos = document.querySelector('#popup_show_post_edit #edit_post_photos').files;
+        let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
-            if (res && textarea.value != null)
-                sendAjaxRequest('put', '/api/post/', { text: textarea.value }, () => { });
 
-            document.querySelector('#popup_show_post').toggleAttribute('hidden');
-            textarea.value = '';
-        }
-        else {
-
-            let textarea = document.querySelector('#popup_show_group_post textarea');
-            if (res && textarea.value != null)
-
-                sendAjaxRequest('put', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
-            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
-            textarea.value = '';
+        let formData = new FormData();
+        formData.append('text', textarea.value);
+        for (var x = 0; x < photos.length; x++) {
+            formData.append("photos[]", photos[x]);
         }
 
+        console.log(formData)
+        if (res && textarea.value != null)
+            sendFormData('post', '/api/post/'+id, formData, addedHandler('#popup_show_post_edit'));
+                
         event.preventDefault();
     }
 }

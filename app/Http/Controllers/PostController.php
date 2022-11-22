@@ -86,6 +86,13 @@ class PostController extends Controller
 
         $post->save();
 
+        $this->upload_img($request, $post);
+
+        DB::commit();
+    }
+
+    public function upload_img(Request $request, Post $post)
+    {
         if ($request->hasFile('photos')) 
         {   
             $i = 0;
@@ -105,8 +112,6 @@ class PostController extends Controller
                 $i++;
             }
         }
-
-        DB::commit();
     }
 
     public function delete($id)
@@ -119,11 +124,19 @@ class PostController extends Controller
 
     public function edit($id, Request $request)
     {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln($request);
+        DB::beginTransaction();
+        
         $post = Post::find($id);
-        $this->authorize('edit', $post);
+        //$this->authorize('update', $post);
         $post->text = $request->input('text');
+        
         $post->save();
-        return $post;
+        $this->upload_img($request, $post);
+
+        DB::commit();
+        // return $post;
     }
 
     private function feed_friends()
