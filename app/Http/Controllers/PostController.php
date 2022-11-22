@@ -6,9 +6,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Group;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class PostController extends Controller
 {
@@ -73,25 +75,28 @@ class PostController extends Controller
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
 
+        $post->save();
+
         if ($request->hasFile('photos')) 
-        {
+        {   
+            $i = 0;
             foreach ($request->photos as $imagefile)
             {
                 $image = new Image;
-                $path = 'image/img' . Image::next() . '.jpg';
+                $path = 'image/img' . $post->id . '_' . $i . '.jpg';
                 $image->path = $path;
                 $image->id_post = $post->id;
                 $image->save();
                 try {
-                    $imagefile->move(public_path('image/'), 'img'. Image::next(). '.jpg');
+                    $imagefile->move(public_path('image/'), 'img' . $post->id . '_' . $i. '.jpg');
                 }
                 catch(Exception $e) {
                     DB::rollBack();
                 }
+                $i++;
             }
         }
 
-        $post->save();
         DB::commit();
     }
 
