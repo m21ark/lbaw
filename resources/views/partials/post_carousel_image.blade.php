@@ -1,4 +1,4 @@
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleControls" class="carousel slide" data-interval="false">
     <div class="carousel-inner">
         @for ( $i = 0; $i < count($post->images); $i++)
             <div class="carousel-item <?php if ($i == 0) {echo 'active';} ?>">
