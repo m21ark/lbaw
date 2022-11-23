@@ -28,7 +28,7 @@ Route::get('contacts', 'ContactsController@show')->name('contacts');
 Route::get('admin', 'AdminController@show')->name('admin');
 Route::get('features', 'FeaturesController@show')->name('features');
 Route::get('home', 'HomeController@show')->name('home');
-Route::get('not_found', 'NotFoundController@show')->name('not_found');
+Route::get('404', 'NotFoundController@show')->name('not_found');
 
 // TODO: Nestes é preciso passar dps os argumentos corretos
 // para construir as paginas sem ser apenas valores placeholders
@@ -52,8 +52,7 @@ Route::post('api/group/{name}', 'GroupController@edit')->name('editGroup');
 Route::delete('api/group/{name}', 'GroupController@delete');
 
 
-
-Route::post('api/profile/{username}', 'ProfileController@edit')->name('editProfile');
+Route::post('api/profile/{id}', 'ProfileController@edit')->name('editProfile');
 Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 
@@ -77,6 +76,7 @@ Route::delete('api/post/{id}', 'PostController@delete');
 
 Route::get('api/admin/pendent_reports/{query_string}', 'AdminController@usersReportesPending');
 Route::get('api/admin/past_reports/{query_string}', 'AdminController@usersReportesPast');
+Route::post('api/post/{id}', 'PostController@edit')->name('editPost');
 
 
 // Like Post/Comment

@@ -39,10 +39,11 @@ class GroupController extends Controller
 
     public function create(Request $request)
     {
-        // Insert group
-        $group = new Group();
+        if ($request->user() === null) {
+            return response()->json(['failure' => 401]);
+        }
 
-        //$this->authorize('create', Auth::user());
+        $group = new Group();
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
@@ -64,7 +65,7 @@ class GroupController extends Controller
 
 
     public function delete($name)
-    {
+    {   // TODO : ESTA POLICY DPS DE TRATAR DO TRIGGER
 
         $group = Group::where('name', $name)->first();
         //$this->authorize('delete', $group); // TODO
@@ -76,19 +77,18 @@ class GroupController extends Controller
     public function edit(Request $request)
     {
 
+        DB::beginTransaction();
         $id_group = $request->input('id_group');
         $group = Group::find($id_group);
 
-        // TODO : MAKE POLICY
-        //$this->authorize('edit', $group);
-
+        $this->authorize('update', $group);
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
-        // todo: add profile image
-        if ($request->photo !== null) {
+        if ($request->hasFile('photo')) 
+        {
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 
@@ -111,6 +111,9 @@ class GroupController extends Controller
 
     public function addGroupOwner($idUser, $idGroup)
     {
+        /*
+            N DEVE ESTAR AQUI
+        */
 
         $owner = new Owner();
 
@@ -125,8 +128,12 @@ class GroupController extends Controller
 
     public function removeGroupOwner($id)
     {
+        /*
+            N DEVE ESTAR AQUI e talvez nem faça sentido
+        */
+
         $owner = Owner::find($id);
-        $this->authorize('delete', $owner); // TODO
+        //$this->authorize('delete', $owner); // TODO
         $owner->delete();
 
         return $owner;
@@ -135,10 +142,13 @@ class GroupController extends Controller
 
     public function addGroupMember($idUser, $idGroup)
     {
+        /*
+            N DEVE ESTAR AQUI
+        */
 
         $request = new GroupJoinRequest();
 
-        $this->authorize('create', $request);
+        //$this->authorize('create', $request);
 
         $request->id_user = $idUser; // TODO
         $request->id_group = $idGroup;
@@ -152,9 +162,13 @@ class GroupController extends Controller
 
     public function removeGroupMember($idGroup)
     {
+        /*
+            N DEVE ESTAR AQUI
+        */
 
         $id_user = Auth::user()->id;
 
+        // TODO Policy
 
         DB::table('group_join_request')
             ->where('id_group', $idGroup)->where('id_user', $id_user)

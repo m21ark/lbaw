@@ -21,14 +21,15 @@
                 name="text" required autofocus style="resize: none;"
                 @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
+            <label for="post_photos" class="sr-only">Photos</label>
+            <input type="file" class="form-control" id="post_photos" name="photos" multiple>
+
             <button
                 @if ($popup_id == 'popup_show_post') id={{ 'profile_post_button_action' }}
             @else
             id={{ 'group_post_button_action' }} @endif
                 class="btn btn-lg btn-primary mt-3 w-100" type="submit">Post</button>
             <!-- End popup body -->
-
-
         </form>
     </div>
 @endif

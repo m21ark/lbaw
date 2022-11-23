@@ -4,7 +4,7 @@
     <div class="card border-secondary mb-4">
         <h3 class="p-2 me-5">About me
             @auth
-                @if (Auth::user()->id == $user->id)
+                @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
                     <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
                 @endif
             @endauth
@@ -35,6 +35,16 @@
 
         </div>
 
+        @if (Auth::user()->isAdmin)
+            <div class="mt-4 pt-4 card-footer">
+                <h4>Admin Information</h4>
+                <hr>
+                <?php $ban_date = $user->ban_date ?? 'N/A'; ?>
+                <p>Birthdate: {{ $user->birthdate }}</p>
+                <p>Email: {{ $user->email }}</p>
+                <p>Banned until: {{ $ban_date }}</p>
+            </div>
+        @endif
 
     </div>
 

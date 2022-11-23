@@ -35,15 +35,14 @@ class ProfileController extends Controller
 
     public function edit(Request $request)
     {
+
         $user = Auth::user();
-
-
-        // N é preciso verify uma vez que a cookie de sessão tem de ser passada para o servidor
 
         if ($user == null) {
             return redirect()->route('home');
         }
 
+        DB::beginTransaction();
         $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
@@ -53,7 +52,7 @@ class ProfileController extends Controller
         // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
 
-        if ($request->photo !== null) {
+        if ($request->hasFile('photo')) {
 
             $user->photo = 'user/' . strval($user->id) . '.jpg';
 
@@ -63,9 +62,9 @@ class ProfileController extends Controller
                 DB::rollBack();
             }
         }
-        DB::commit();
         $user->save();
-
+        
+        DB::commit();
 
         return redirect()->route('profile', $user->username);
     }

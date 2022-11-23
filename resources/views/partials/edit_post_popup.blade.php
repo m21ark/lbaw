@@ -1,7 +1,7 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_post_edit">
-        <form style="width:100%;" method='put' action={{ route('editPost', $post->id) }} enctype="multipart/form-data">
-
+        <form style="width:100%;" method='post' action={{ route('editPost', $post->id) }} enctype="multipart/form-data">
+            {{ csrf_field() }}
 
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
@@ -13,8 +13,8 @@
             <label for="post_text" class="sr-only">Description</label>
             <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text" style="resize: none;">{{ $post->text }}</textarea>
 
-            <label for="group_photo" class="sr-only">Images</label>
-            <input type="file" class="form-control" id="group_photo" name="photo" />
+            <label for="edit_post_photos" class="sr-only">Photos</label>
+            <input type="file" class="form-control" id="edit_post_photos" name="photos" multiple>
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_post_button" type="submit">Save
                 <!--  -->

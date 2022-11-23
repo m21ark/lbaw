@@ -10,7 +10,7 @@
 
                 @auth
 
-                @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()))
+                @if ((in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()))  || (Auth::user()->isAdmin))
                 <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
                 @endif
                 @endauth
@@ -66,7 +66,7 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50" class="rounded-circle">
+                    <img src="{{ asset($member->user->photo) }}" alt="user_avatar" width="50" class="rounded-circle">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
@@ -111,7 +111,7 @@
 
         <!-- Temporary placement -->
         <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
-    
+
 
         @endauth
 
@@ -119,13 +119,13 @@
             @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
             <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
             Group</button>
-                
+
             @endif
-      
+
 @endauth
-    
 
 
-           
+
+
 
 </nav>

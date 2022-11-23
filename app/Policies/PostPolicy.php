@@ -73,7 +73,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        //
+        return in_array(Auth::user()->id, $user->posts->pluck('id_poster')->toArray());
     }
 
     /**

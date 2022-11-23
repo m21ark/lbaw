@@ -1,4 +1,5 @@
 @auth
+    <div class="drop_groups" style="display:none">
     @if (Auth::user()->groupsOwner->count() > 0)
         <div class="mt-3 container">
             <h5>Owner Groups</h5>
@@ -24,4 +25,5 @@
             </ul>
         </div>
     @endif
+    </div>
 @endauth

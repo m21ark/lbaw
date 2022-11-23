@@ -61,7 +61,7 @@ function addEventListeners() {
 
     let edit_post_button = document.querySelector('#edit_post_button');
     if (edit_post_button)
-        edit_post_button.addEventListener('click', sendEditPostRequest);
+        edit_post_button.addEventListener('click',  sendEditPostRequest);
 
     let delete_post_button = document.querySelector('#delete_post_button');
     if (delete_post_button)
@@ -80,7 +80,7 @@ function addEventListeners() {
     if (like_btn_post)
         if (like_btn_post.length > 0) {
             like_btn_post.forEach(e => {
-                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) });
+                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) }); // TODO: TIREM ME O MONSTRO E METER ESTA FUNÇAO MAIS BONITA
             });
         }
 
@@ -96,6 +96,14 @@ function addEventListeners() {
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
+
+    let d_group_sidebar = document.querySelector('.drop_my_group');
+    if (d_group_sidebar)
+        d_group_sidebar.addEventListener('click', function(event) {
+            event.preventDefault();
+            let drop = document.querySelector('.drop_groups');
+            drop.style.display = drop.style.display === 'none' ? '' : 'none';
+        })
 }
 
 function togglePostDropDown(parent) {
@@ -325,52 +333,65 @@ function sendCreatePostRequest(isProfile) {
     return function (event) {
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
+            
+            let formData = new FormData();
+            formData.append('text', textarea.value);
+            for (var x = 0; x < photos.length; x++) {
+                formData.append("photos[]", photos[x]);
+            }
+            console.log(formData)
+
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value }, addedHandler('#popup_show_post'));
+                sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
             textarea.value = '';
         }
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
+            
             let res = confirm('Are you sure you want to group post this?');
+            let photos = document.querySelector('#popup_show_group_post #post_photos').files;
+
+            let formData = new FormData();
+            formData.append('text', textarea.value);
+            formData.append('group_name', textarea.dataset.group);
+            for (var x = 0; x < photos.length; x++) {
+                formData.append("photos[]", photos[x]);
+            }
+
+            console.log(formData)
+
             if (res && textarea.value != null)
-                sendAjaxRequest('post', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, addedHandler('#popup_show_group_post'));
+                sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
             textarea.value = '';
         }
 
         event.preventDefault();
-        location.reload()
     }
 }
 
 
-function sendEditPostRequest() {
+function sendEditPostRequest(event) {
 
-    return function (event) {
+    let res = confirm('Are you sure you want to edit this post?');
 
-        let res = confirm('Are you sure you want to edit this post?');
+    let textarea = document.querySelector('#popup_show_post_edit textarea');
+    let photos = document.querySelector('#popup_show_post_edit #edit_post_photos').files;
+    let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
-        if (isProfile) {
-            let textarea = document.querySelector('#popup_show_post textarea');
 
-            if (res && textarea.value != null)
-                sendAjaxRequest('put', '/api/post/', { text: textarea.value }, () => { });
-
-            document.querySelector('#popup_show_post').toggleAttribute('hidden');
-            textarea.value = '';
-        }
-        else {
-
-            let textarea = document.querySelector('#popup_show_group_post textarea');
-            if (res && textarea.value != null)
-
-                sendAjaxRequest('put', '/api/post/', { text: textarea.value, group_name: textarea.dataset.group }, () => { });
-            document.querySelector('#popup_show_group_post').toggleAttribute('hidden');
-            textarea.value = '';
-        }
-
-        event.preventDefault();
+    let formData = new FormData();
+    formData.append('text', textarea.value);
+    for (var x = 0; x < photos.length; x++) {
+        formData.append("photos[]", photos[x]);
     }
+
+    console.log(formData)
+    if (res && textarea.value != null)
+        sendFormData('post', '/api/post/'+id, formData, addedHandler('#popup_show_post_edit'));
+            
+    event.preventDefault();
 }
 
 
@@ -380,7 +401,9 @@ function sendDeletePostRequest() {
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
         sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
-    location.reload();
+    // location.reload();
+
+    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
 
 }
 
@@ -401,6 +424,7 @@ function updateFeed(feed) {
     }
 
     sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+        
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
@@ -488,7 +512,7 @@ function createPost(post) {
 
     new_post.innerHTML = `
 
-    <div class="container mt-5 mb-5 post_item ">
+<div class="container mt-5 mb-5 post_item ">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
             <div class="card post_card">

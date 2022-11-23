@@ -9,7 +9,8 @@ class Image extends Model
 {
     use HasFactory;
     protected $table = 'image';
-
+    public $timestamps  = false;
+    
     public function post()
     {
         return $this->belongsTo('App\Models\Post');
