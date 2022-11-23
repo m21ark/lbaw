@@ -32,7 +32,7 @@ class PostController extends Controller
         $post   = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
-            return view('pages.not_found');
+            return view('pages.404');
 
         // policy, nr_comments_post
         if (!$post->owner->visibility) {
