@@ -66,7 +66,7 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="{{ asset('user/user.jpg') }}" alt="user_avatar" width="50" class="rounded-circle">
+                    <img src="{{ asset($member->user->photo) }}" alt="user_avatar" width="50" class="rounded-circle">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
