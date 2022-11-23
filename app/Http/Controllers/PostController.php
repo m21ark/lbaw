@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\File; 
 
 class PostController extends Controller
 {
@@ -74,11 +75,12 @@ class PostController extends Controller
     {
         DB::beginTransaction();
         $post = new Post();
-
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln($request->input('text'));
         if ($request->input('group_name') != null) {
             $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }
-
+        //TODO
         $this->authorize('create', $post);
 
         $post->text = $request->input('text');
@@ -86,6 +88,13 @@ class PostController extends Controller
 
         $post->save();
 
+        $this->upload_img($request, $post);
+
+        DB::commit();
+    }
+
+    public function upload_img(Request $request, Post $post)
+    {
         if ($request->hasFile('photos')) 
         {   
             $i = 0;
@@ -105,8 +114,6 @@ class PostController extends Controller
                 $i++;
             }
         }
-
-        DB::commit();
     }
 
     public function delete($id)
@@ -117,13 +124,24 @@ class PostController extends Controller
         return $post;
     }
 
-    public function edit($id, Request $request)
+    public function edit(Request $request, $id)
     {
+        
+        DB::beginTransaction();
+
         $post = Post::find($id);
-        $this->authorize('edit', $post);
+
+        $this->authorize('update', $post);
+        
         $post->text = $request->input('text');
-        $post->save();
-        return $post;
+        
+        File::delete($post->images->pluck('path')->toArray());
+        $post->images()->delete();
+        $post->save(); 
+
+        $this->upload_img($request, $post);
+
+        DB::commit();
     }
 
     private function feed_friends()
