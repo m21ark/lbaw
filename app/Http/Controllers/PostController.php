@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -31,7 +31,7 @@ class PostController extends Controller
         // TODO: use id to get post from database
         $post   = Post::withCount('likes', 'comments')->find($id);
 
-        if($post == null)
+        if ($post == null)
             return view('pages.not_found');
 
         // policy, nr_comments_post
@@ -58,7 +58,7 @@ class PostController extends Controller
             $posts = $this->feed_viral()->limit(20)->get();
         }
 
-        
+
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
         /*
         if (Auth::check()) {
@@ -95,20 +95,17 @@ class PostController extends Controller
 
     public function upload_img(Request $request, Post $post)
     {
-        if ($request->hasFile('photos')) 
-        {   
+        if ($request->hasFile('photos')) {
             $i = 0;
-            foreach ($request->photos as $imagefile)
-            {
+            foreach ($request->photos as $imagefile) {
                 $image = new Image;
                 $path = 'image/img' . $post->id . '_' . $i . '.jpg';
                 $image->path = $path;
                 $image->id_post = $post->id;
                 $image->save();
                 try {
-                    $imagefile->move(public_path('image/'), 'img' . $post->id . '_' . $i. '.jpg');
-                }
-                catch(Exception $e) {
+                    $imagefile->move(public_path('image/'), 'img' . $post->id . '_' . $i . '.jpg');
+                } catch (Exception $e) {
                     DB::rollBack();
                 }
                 $i++;
@@ -126,18 +123,18 @@ class PostController extends Controller
 
     public function edit(Request $request, $id)
     {
-        
+
         DB::beginTransaction();
 
         $post = Post::find($id);
 
         $this->authorize('update', $post);
-        
+
         $post->text = $request->input('text');
-        
+
         File::delete($post->images->pluck('path')->toArray());
         $post->images()->delete();
-        $post->save(); 
+        $post->save();
 
         $this->upload_img($request, $post);
 
