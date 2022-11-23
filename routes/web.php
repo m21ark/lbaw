@@ -42,9 +42,8 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 
 // Get Posts for feed
 Route::get('api/post/feed/{type_feed}', 'PostController@feed');
-Route::post('api/post/', 'PostController@create');
-Route::post('api/post/{id}', 'PostController@delete');
 
+// Get Items of search
 Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@search');
 
 // Create/Update/Delete group
@@ -54,7 +53,7 @@ Route::delete('api/group/{name}', 'GroupController@delete');
 
 
 
-Route::post('api/profile/{id}', 'ProfileController@edit')->name('editProfile');
+Route::post('api/profile/{username}', 'ProfileController@edit')->name('editProfile');
 Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 
@@ -62,20 +61,22 @@ Route::delete('api/profile/{username}', 'ProfileController@delete');
 Route::post('api/group_owner/{id}', 'GroupController@addGroupOwner'); // talvez n seja post
 Route::delete('api/group_owner/{id}', 'GroupController@removeGroupOwner');
 
+
 // Group Add/Remove Member
+Route::get('api/group_members/{id}', 'GroupController@getGroupMembers');
 Route::post('api/group_member/', 'GroupController@addGroupMember');
 Route::delete('api/group_member/{id}', 'GroupController@removeGroupMember');
 
-Route::get('api/group_members/{id}', 'GroupController@getGroupMembers');
+
 
 // User Make/Delete/Edit Post
 Route::post('api/post', 'PostController@create');
+Route::post('api/post', 'ProfileController@edit')->name('editPost');
 Route::delete('api/post/{id}', 'PostController@delete');
 
 
 Route::get('api/admin/pendent_reports/{query_string}', 'AdminController@usersReportesPending');
 Route::get('api/admin/past_reports/{query_string}', 'AdminController@usersReportesPast');
-Route::post('api/post/{id}', 'ProfileController@edit')->name('editPost');
 
 
 // Like Post/Comment

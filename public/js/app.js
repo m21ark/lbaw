@@ -402,9 +402,9 @@ function updateFeed(feed) {
 
     sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
         let received = JSON.parse(this.responseText);
-
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
+
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
@@ -415,35 +415,112 @@ function updateFeed(feed) {
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
-    console.log(post.photo);
+
+    let images = '', bottom = '', like = '', dropdown = '';
+
+    if (post.hasLiked) {
+        like = '<h4>&#x2764;</h4>'
+    } else {
+        like = '<h2><strong>&#9825;</strong></h2>'
+    }
+
+    if (post.auth !== 0) {
+        if (post.isOwner) {
+            dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
+        } else {
+            dropdown = `                                    
+            <a class="dropdown-item" href="#">Report Post</a>
+            <a class="dropdown-item" href="#">Send Message</a>`
+        }
+
+        bottom = `
+        <div class="d-flex">
+            <p class="me-3">${post.likes_count}</p>
+
+            <a href="#" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
+
+               ${like}
+
+            </a>
+        </div>
+        `
+        
+    } else {
+
+        bottom = `
+        <div class="d-flex">
+            <p class="me-3">${post.likes_count}</p>
+            <a href="#" class="like_btn_post text-decoration-none">
+                <h2><strong>&#9825;</strong></h2>
+            </a>
+        </div>
+        `
+    }
+    
+    if (post.images.length !== 0) {
+        let imageDiv = '';
+
+        post.images.forEach( function (image) {
+            imageDiv += `
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
+                </div>
+            `
+        })
+
+        images = `
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                ${imageDiv}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        `
+    }
+
+
+
     new_post.innerHTML = `
 
-    <div class="container mt-5 mb-5 post_item">
+    <div class="container mt-5 mb-5 post_item ">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
             <div class="card post_card">
 
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                    <a href="/profile/${post.owner}" class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="/${post.photo}" width="60" class="rounded-circle me-3">
+                    <a href='/profile/${post.owner}' . 
+                        class="text-decoration-none d-flex flex-row align-items-center">
+                        <img src="${post.photo}" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">${post.owner}</strong>
                     </a>
 
                     <small class="me-5">${post.post_date}</small>
+
+
+
                     <div class="dropdown">
-                        <button class="btn dropdownPostButton" onclick="togglePostDropDown(this.parentNode)()" type="button">&vellip;</button>
-                        <div class="dropdown_menu " hidden>
-                            <a class="dropdown-item" href="/profile/${post.owner}">Go to
-                                Profile</a>
-                            <a class="dropdown-item" href="#">Send Message</a>
+                        <button class="btn dropdownPostButton" type="button">&vellip;</button>
+                        <div class="dropdown_menu" style="z-index: 200000" hidden>
+                            <a class="dropdown-item" href='/profile/${post.owner}'>Go to Profile</a>
+
+                            ${dropdown}
+
                         </div>
                     </div>
 
                 </div>
 
                 <!-- TODO: Ver imagens da database -->
-                <img src="/../post.jpg" class="img-fluid">
+
+                ${images}
+
 
                 <div class="p-2">
                     <p class="text-justify">${post.text}</p>
@@ -452,12 +529,8 @@ function createPost(post) {
                     <div class="card-footer d-flex justify-content-evenly">
 
                         <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
-                        <div class="d-flex">
-                            <p class="me-3">${post.likes_count}</p>
-                            <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
 
-                        </div>
-
+                        ${bottom}
 
                         <div class="d-flex">
                             <p class="me-3">${post.comments_count}</p>
@@ -466,14 +539,14 @@ function createPost(post) {
                         </div>
 
 
-
                     </div>
-
 
                 </div>
 
-
             </div>
+
+
+
         </div>
     </div>
 </div>

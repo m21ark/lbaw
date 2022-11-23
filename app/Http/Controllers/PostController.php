@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Group;
 use App\Models\User;
+use App\Models\Image;
+use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -44,25 +46,43 @@ class PostController extends Controller
 
         if ($request->route('type_feed') === "for_you") {
             //$this->authorize('feed', $posts);
-            $posts = $this->feed_for_you()->limit(20)->get();
+            $posts = $this->feed_for_you();
         } else if ($request->route('type_feed') === "friends") {
             //$this->authorize('feed', $posts);
-            $posts = $this->feed_friends()->limit(20)->get();
+            $posts = $this->feed_friends();
         } else if ($request->route('type_feed') === "groups") {
             //$this->authorize('feed', $posts);
-            $posts = $this->feed_groups()->limit(20)->get();
+            $posts = $this->feed_groups();
         } else if ($request->route('type_feed') === "viral") {
-            $posts = $this->feed_viral()->limit(20)->get();
+            $posts = $this->feed_viral();
         }
 
         
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
-        /*
-        if (Auth::check()) {
-            $id = Auth::user()->id;
-            $posts[] = $id;
+
+        $posts = $posts->limit(20)->get();
+
+        foreach ($posts as $post) {
+            $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            if ($post->owner === Auth::user()->username) {
+                $post->isOwner = true;
+            } else {
+                $post->isOwner = false;
+            }
+
+            $post->hasLiked = false;
+            $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
+            if ($like) {
+                $post->hasLiked = true;
+            }
+            
+            if (Auth::check()) {
+                $post->auth = Auth::user()->id;
+            } else {
+                $posts->auth = 0;
+            }
+
         }
-        */
 
         return json_encode($posts);
     }
@@ -110,6 +130,7 @@ class PostController extends Controller
     {
 
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
+            ->with('images')
             ->whereIn('id_poster', function ($query) {
                 $id = Auth::user()->id;
                 $query1 = DB::table('friend_request')
@@ -138,7 +159,7 @@ class PostController extends Controller
                 ->from('group_join_request')
                 ->where('id_user', $id)
                 ->where('acceptance_status', 'Accepted');
-        })
+            })
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
@@ -147,7 +168,8 @@ class PostController extends Controller
     }
 
     private function feed_viral()
-    {
+    {  
+        
         $posts_filtered = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('visibility', true)
@@ -159,6 +181,12 @@ class PostController extends Controller
             ->mergeBindings($posts_filtered->getQuery()) // you need to get underlying Query Builder
             ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
             ->orderBy('ranking', 'desc');
+    
+            
+
+        //->join('image', 'image.id_post', '=', 'post.id')
+        //, string_agg (path, ',') image,
+        // string_agg(path, ',') as images
 
         return $posts;
     }
