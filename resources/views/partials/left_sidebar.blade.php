@@ -19,9 +19,14 @@
         @auth
             <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary"
                 type="submit">Post</button>
+
+            @if (Auth::user()->isAdmin)
+                <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3">Admin Console</a>
+            @endif
         @endauth
 
-        @if (!Auth::check())
+
+        @guest
             <hr class="mt-4">
 
             <h3>Your not logged in!</h3>
@@ -30,7 +35,8 @@
             <a href={{ url('/about') }} class=" btn btn-outline-primary mb-3">About</a>
             <a href={{ url('/contacts') }} class=" btn btn-outline-primary mb-3">Contacts </a>
             <a href={{ url('/features') }} class=" btn btn-outline-primary mb-3">Features</a>
-        @endif
+        @endguest
+
 
     </ul>
 </div>
