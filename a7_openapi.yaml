@@ -359,7 +359,7 @@ paths:
       tags:
         - "M02: Feed"
       parameters:
-        - in: query
+        - in: path
           name: type_feed
           description: 'Filter parameter. Can be "for_you", "friends", "groups", "viral" '
           schema:
