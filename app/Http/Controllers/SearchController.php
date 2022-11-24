@@ -7,6 +7,8 @@ use App\Models\Group;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Topic;
+use App\Models\Image;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -108,9 +110,30 @@ class SearchController extends Controller
             count(like_post.id_user) as likes_count,
             ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
-            ->limit(20);
+            ->limit(20)
+            ->get();
         
-        return $posts->get();
+        foreach ($posts as $post) {
+            $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->hasLiked = false;
+            $post->isOwner = false;
+            $post->auth = 0;
+
+            if (!Auth::check()) continue;
+            $post->auth = Auth::user()->id;
+
+            if ($post->owner === Auth::user()->username) {
+                $post->isOwner = true;
+            }
+            
+            $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
+            if ($like !== []) {
+                $post->hasLiked = true;
+            }
+
+        }
+
+        return $posts;
     }
 
 

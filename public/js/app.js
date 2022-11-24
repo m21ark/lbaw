@@ -521,7 +521,7 @@ function createPost(post) {
 
                     <a href='/profile/${post.owner}' . 
                         class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="${post.photo}" width="60" class="rounded-circle me-3">
+                        <img src="/${post.photo}" width="60" class="rounded-circle me-3">
                         <strong class="font-weight-bold">${post.owner}</strong>
                     </a>
 
