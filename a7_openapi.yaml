@@ -586,7 +586,7 @@ paths:
             description: 'Forbidden access to resource, the profile is not yours'
                       
     delete:
-      operationId: 'R108: Delete a Profile'
+      operationId: 'R108'
       summary: 'R108: Delete a Profile'
       description: 'Deletes a profile. Access: USR'
       tags:
