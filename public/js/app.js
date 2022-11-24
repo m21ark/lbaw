@@ -20,7 +20,7 @@ function addEventListeners() {
     );
 
     let create_button = document.querySelector('#profile_post_button_action');
-    if (create_button) 
+    if (create_button)
         create_button.addEventListener('click', sendCreatePostRequest(true));
 
     let create_group_post_button = document.querySelector('#group_post_button_action');
@@ -61,7 +61,7 @@ function addEventListeners() {
 
     let edit_post_button = document.querySelector('#edit_post_button');
     if (edit_post_button)
-        edit_post_button.addEventListener('click',  sendEditPostRequest);
+        edit_post_button.addEventListener('click', sendEditPostRequest);
 
     let delete_post_button = document.querySelector('#delete_post_button');
     if (delete_post_button)
@@ -99,7 +99,7 @@ function addEventListeners() {
 
     let d_group_sidebar = document.querySelector('.drop_my_group');
     if (d_group_sidebar)
-        d_group_sidebar.addEventListener('click', function(event) {
+        d_group_sidebar.addEventListener('click', function (event) {
             event.preventDefault();
             let drop = document.querySelector('.drop_groups');
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
@@ -335,7 +335,7 @@ function sendCreatePostRequest(isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
             let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
-            
+
             let formData = new FormData();
             formData.append('text', textarea.value);
             for (var x = 0; x < photos.length; x++) {
@@ -349,7 +349,7 @@ function sendCreatePostRequest(isProfile) {
         }
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
-            
+
             let res = confirm('Are you sure you want to group post this?');
             let photos = document.querySelector('#popup_show_group_post #post_photos').files;
 
@@ -389,8 +389,8 @@ function sendEditPostRequest(event) {
 
     console.log(formData)
     if (res && textarea.value != null)
-        sendFormData('post', '/api/post/'+id, formData, addedHandler('#popup_show_post_edit'));
-            
+        sendFormData('post', '/api/post/' + id, formData, addedHandler('#popup_show_post_edit'));
+
     event.preventDefault();
 }
 
@@ -424,7 +424,7 @@ function updateFeed(feed) {
     }
 
     sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
-        
+
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
@@ -452,7 +452,7 @@ function createPost(post) {
         if (post.isOwner) {
             dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
         } else {
-            dropdown = `                                    
+            dropdown = `
             <a class="dropdown-item" href="#">Report Post</a>
             <a class="dropdown-item" href="#">Send Message</a>`
         }
@@ -468,7 +468,7 @@ function createPost(post) {
             </a>
         </div>
         `
-        
+
     } else {
 
         bottom = `
@@ -480,11 +480,11 @@ function createPost(post) {
         </div>
         `
     }
-    
+
     if (post.images.length !== 0) {
         let imageDiv = '';
 
-        post.images.forEach( function (image) {
+        post.images.forEach(function (image) {
             imageDiv += `
                 <div class="carousel-item active">
                     <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
@@ -504,7 +504,7 @@ function createPost(post) {
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </a>
         </div>
-        
+
         `
     }
 
@@ -512,13 +512,13 @@ function createPost(post) {
 
     new_post.innerHTML = `
 
-<div class="container mt-5 mb-5 post_item ">
+<div class="container mt-5 mb-5 post_item" style="width:50em">
     <div class="row d-flex align-items-center mw-50 justify-content-center ">
             <div class="card post_card">
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                        <a href='/profile/${post.owner}' . 
+                        <a href='/profile/${post.owner}' .
                             class="text-decoration-none d-flex flex-row align-items-center">
                             <img src="/${post.photo}" width="60" class="rounded-circle me-3">
                             <strong class="font-weight-bold">${post.owner}</strong>
@@ -599,7 +599,7 @@ function updateSearchOnInputAndClick() {
     if (search_filters) {
         search_filters.checked = true
     }
-    
+
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
@@ -611,25 +611,25 @@ function updateSearchOnInputAndClick() {
     }
 
     // Add event listeners when input changes
-    
+
     if (searchBar) {
         searchBar.addEventListener('input', function () {
             updateSearch()
 
             let searchBarString = searchBar.value.trim()
-            
-            // Update the path on top 
+
+            // Update the path on top
             if (searchBarString !== '') {
                 window.history.replaceState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
             } else {
                 window.history.replaceState('', '', '/search/*')
             }
-                
+
         })
-        
+
     }
 
-    
+
     // Add event listeners when a radio has a click
     const filters = document.querySelectorAll('#search_filter input')
 
@@ -660,7 +660,7 @@ function updateSearch() {
 
     query_string = searchBar.value
 
-    if (query_string === '') 
+    if (query_string === '')
         query_string = '*';
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
@@ -705,7 +705,6 @@ function createUserCard(user) {
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
 
-    console.log(user.photo)
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
         <img height="50%" src="/${user.photo}" class="card-img-top" alt="user_avatar">
@@ -767,7 +766,7 @@ function searchRedirect() {
     searchBar.addEventListener('keypress', function (event) {
 
         //window.location.href = '/search/hey' + this.value
-    
+
         if (event.key !== "Enter") return;
 
         this.value = this.value.trim()
@@ -777,7 +776,7 @@ function searchRedirect() {
         } else {
             window.location.href = '/search/*';
         }
-        
+
     })
 
 }
@@ -793,7 +792,7 @@ updateSearchOnInputAndClick();
 
 
 function updateUserReportSearchOnInput() {
-    
+
     const searchBarPendent = document.querySelector('#searchBarPendent');
     const searchBarPast = document.querySelector('#searchBarPast');
 
@@ -832,14 +831,14 @@ function updateUserReportsSearch(searchBar, decision) {
             received.forEach(function (userReported) {
                 display.appendChild(createUserReportCardPending(userReported))
             })
-        
+
         } else if (decision === 'past') {
             received.forEach(function (userReported) {
                 display.appendChild(createUserReportCardPast(userReported))
             })
         }
 
-        
+
 
     })
 
@@ -869,19 +868,19 @@ function createUserReportCardPast(user) {
     } else if (user.decision === 'Accepted') {
         let banDate = new Date(user.ban_date).getTime();
         let today = new Date().getTime();
-        
+
         if (user.ban_date != null) {
-            time = Math.ceil((banDate-today) / (1000 * 3600 * 24));
+            time = Math.ceil((banDate - today) / (1000 * 3600 * 24));
         } else {
             time = -1;
         }
-        
+
         if (time > 0) {
             button = `<a href="#" class=" btn btn-warning">${time}d</a>`
         } else {
             button = `<a href="#" class=" btn btn-info">Finished</a>`
         }
-        
+
     }
 
     new_card.innerHTML = `

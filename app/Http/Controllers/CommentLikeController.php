@@ -16,10 +16,9 @@ class CommentLikeController extends Controller
         $user = $request->input('id_user');
         $comment = $request->input('id_comment');
 
-        $like = CommentLike::
-            ->where('id_user', $user)
-            ->where('id_comment', $comment)
-            ->first();
+        $like = CommentLike::where('id_user', $user)
+                            ->where('id_comment', $comment)
+                            ->first();
 
         if ($like == null) {
 

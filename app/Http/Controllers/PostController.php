@@ -76,12 +76,11 @@ class PostController extends Controller
             if ($post->owner === Auth::user()->username) {
                 $post->isOwner = true;
             }
-            
+
             $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            if ($like !== []) {
+            if (sizeof($like) > 0) {
                 $post->hasLiked = true;
             }
-
         }
 
         return json_encode($posts);
@@ -199,7 +198,7 @@ class PostController extends Controller
                 ->from('group_join_request')
                 ->where('id_user', $id)
                 ->where('acceptance_status', 'Accepted');
-            })
+        })
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
@@ -208,8 +207,8 @@ class PostController extends Controller
     }
 
     private function feed_viral()
-    {  
-        
+    {
+
         $posts_filtered = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('visibility', true)
@@ -221,8 +220,8 @@ class PostController extends Controller
             ->mergeBindings($posts_filtered->getQuery()) // you need to get underlying Query Builder
             ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
             ->orderBy('ranking', 'desc');
-    
-            
+
+
 
         //->join('image', 'image.id_post', '=', 'post.id')
         //, string_agg (path, ',') image,

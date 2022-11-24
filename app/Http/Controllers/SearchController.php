@@ -50,7 +50,7 @@ class SearchController extends Controller
     {
 
         $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('username', 'LIKE', '%'.$query_string.'%')
+            ->orWhere('username', 'LIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
             ->limit(40)
@@ -64,7 +64,7 @@ class SearchController extends Controller
     {
 
         $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('name', 'LIKE', '%'.$query_string.'%')
+            ->orWhere('name', 'LIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
             ->limit(40)
@@ -89,18 +89,18 @@ class SearchController extends Controller
         if (Auth::check()) {
             $posts = $posts
                 ->whereIn('id_poster', function ($query) {
-                $id = Auth::user()->id;
-                $query1 = DB::table('friend_request')
-                ->selectRaw('id_user_sender as friend')
-                ->from('friend_request')
-                ->where('id_user_receiver', $id)
-                ->where('acceptance_status', 'Accepted');
+                    $id = Auth::user()->id;
+                    $query1 = DB::table('friend_request')
+                        ->selectRaw('id_user_sender as friend')
+                        ->from('friend_request')
+                        ->where('id_user_receiver', $id)
+                        ->where('acceptance_status', 'Accepted');
 
-                $query->select('id_user_receiver as friend')
-                ->from('friend_request')
-                ->where('id_user_sender', $id)
-                ->where('acceptance_status', 'Accepted')
-                ->union($query1);  
+                    $query->select('id_user_receiver as friend')
+                        ->from('friend_request')
+                        ->where('id_user_sender', $id)
+                        ->where('acceptance_status', 'Accepted')
+                        ->union($query1);
                 })
                 ->orWhere('user.visibility', '=', true);
         } else {
@@ -118,7 +118,7 @@ class SearchController extends Controller
             ->orderBy('ranking', 'desc')
             ->limit(20)
             ->get();
-        
+
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->hasLiked = false;
@@ -131,23 +131,26 @@ class SearchController extends Controller
             if ($post->owner === Auth::user()->username) {
                 $post->isOwner = true;
             }
-            
+
             $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            if ($like !== []) {
+            $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+            $out->writeln("|" . $like . "|");
+
+            if (sizeof($like) > 0) {
                 $post->hasLiked = true;
             }
-
         }
 
         return $posts;
     }
 
 
-    private function searchTopics($query_string) {
+    private function searchTopics($query_string)
+    {
 
-        $topics = Topic::where('topic', 'LIKE', '%'.$query_string.'%')
-        ->limit(30)
-        ->get();
+        $topics = Topic::where('topic', 'LIKE', '%' . $query_string . '%')
+            ->limit(30)
+            ->get();
 
         return $topics;
     }
