@@ -7,6 +7,8 @@ use App\Models\Group;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Topic;
+use App\Models\Image;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +27,8 @@ class SearchController extends Controller
 
         $query_string = $request->route('query_string');
         $type_search = $request->route('type_search');
+
+        if ($query_string === '*') $query_string = '';
 
         $searchItems = [];
 
@@ -46,8 +50,10 @@ class SearchController extends Controller
     {
 
         $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
+            ->orWhere('username', 'LIKE', '%'.$query_string.'%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
+            ->limit(40)
             ->get();
 
         return $users;
@@ -58,8 +64,10 @@ class SearchController extends Controller
     {
 
         $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
+            ->orWhere('name', 'LIKE', '%'.$query_string.'%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
+            ->limit(40)
             ->get();
 
         return $groups;
@@ -99,7 +107,7 @@ class SearchController extends Controller
             $posts = $posts->where('user.visibility', '=', true);
         }
 
-        $posts = $posts
+        $posts = $posts->whereRaw('(post.tsvectors || tsvector_comment)::tsvector @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
             ->selectRaw('
@@ -108,9 +116,30 @@ class SearchController extends Controller
             count(like_post.id_user) as likes_count,
             ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
-            ->limit(20);
+            ->limit(20)
+            ->get();
         
-        return $posts->get();
+        foreach ($posts as $post) {
+            $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->hasLiked = false;
+            $post->isOwner = false;
+            $post->auth = 0;
+
+            if (!Auth::check()) continue;
+            $post->auth = Auth::user()->id;
+
+            if ($post->owner === Auth::user()->username) {
+                $post->isOwner = true;
+            }
+            
+            $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
+            if ($like !== []) {
+                $post->hasLiked = true;
+            }
+
+        }
+
+        return $posts;
     }
 
 

@@ -424,10 +424,11 @@ function updateFeed(feed) {
     }
 
     sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+        
         let received = JSON.parse(this.responseText);
-
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
+
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
@@ -438,66 +439,133 @@ function updateFeed(feed) {
 function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
-    console.log(post);
+
+    let images = '', bottom = '', like = '', dropdown = '';
+
+    if (post.hasLiked) {
+        like = '<h4>&#x2764;</h4>'
+    } else {
+        like = '<h2><strong>&#9825;</strong></h2>'
+    }
+
+    if (post.auth !== 0) {
+        if (post.isOwner) {
+            dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
+        } else {
+            dropdown = `                                    
+            <a class="dropdown-item" href="#">Report Post</a>
+            <a class="dropdown-item" href="#">Send Message</a>`
+        }
+
+        bottom = `
+        <div class="d-flex">
+            <p class="me-3">${post.likes_count}</p>
+
+            <a href="#" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
+
+               ${like}
+
+            </a>
+        </div>
+        `
+        
+    } else {
+
+        bottom = `
+        <div class="d-flex">
+            <p class="me-3">${post.likes_count}</p>
+            <a href="#" class="like_btn_post text-decoration-none">
+                <h2><strong>&#9825;</strong></h2>
+            </a>
+        </div>
+        `
+    }
+    
+    if (post.images.length !== 0) {
+        let imageDiv = '';
+
+        post.images.forEach( function (image) {
+            imageDiv += `
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
+                </div>
+            `
+        })
+
+        images = `
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                ${imageDiv}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        </div>
+        
+        `
+    }
+
+
+
     new_post.innerHTML = `
 
-    <div class="container mt-5 mb-5 post_item">
-    <div class="row d-flex align-items-center justify-content-center ">
-        <div>
+<div class="container mt-5 mb-5 post_item ">
+    <div class="row d-flex align-items-center mw-50 justify-content-center ">
             <div class="card post_card">
+                <div>
+                    <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                <div class="card-header d-flex justify-content-between p-2 px-3">
+                        <a href='/profile/${post.owner}' . 
+                            class="text-decoration-none d-flex flex-row align-items-center">
+                            <img src="/${post.photo}" width="60" class="rounded-circle me-3">
+                            <strong class="font-weight-bold">${post.owner}</strong>
+                        </a>
 
-                    <a href="/profile/${post.owner}" class="text-decoration-none d-flex flex-row align-items-center">
-                        <img src="/${post.photo}" width="60" class="rounded-circle me-3">
-                        <strong class="font-weight-bold">${post.owner}</strong>
-                    </a>
+                        <small class="me-5">${post.post_date}</small>
 
-                    <small class="me-5">${post.post_date}</small>
-                    <div class="dropdown">
-                        <button class="btn dropdownPostButton" onclick="togglePostDropDown(this.parentNode)()" type="button">&vellip;</button>
-                        <div class="dropdown_menu " hidden>
-                            <a class="dropdown-item" href="/profile/${post.owner}">Go to
-                                Profile</a>
-                            <a class="dropdown-item" href="#">Send Message</a>
+
+                        <div class="dropdown">
+                            <button class="btn dropdownPostButton" onclick="togglePostDropDown(this.parentNode)()" type="button">&vellip;</button>
+                            <div class="dropdown_menu" style="z-index: 200000" hidden>
+                                <a class="dropdown-item" href='/profile/${post.owner}'>Go to Profile</a>
+
+                                ${dropdown}
+
+                            </div>
                         </div>
-                    </div>
-
-                </div>
-
-                <!-- TODO: Ver imagens da database -->
-                <img src="/../post.jpg" class="img-fluid">
-
-                <div class="p-2">
-                    <p class="text-justify">${post.text}</p>
-
-
-                    <div class="card-footer d-flex justify-content-evenly">
-
-                        <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
-                        <div class="d-flex">
-                            <p class="me-3">${post.likes_count}</p>
-                            <a href="#" class="text-decoration-none"><span class="likeicon">&#128077;</span></a>
-
-                        </div>
-
-
-                        <div class="d-flex">
-                            <p class="me-3">${post.comments_count}</p>
-                            <a href="/post/${post.id}" class="text-decoration-none"><span
-                                    class="commenticon">&#128172;</span></a>
-                        </div>
-
-
 
                     </div>
 
+                    <!-- TODO: Ver imagens da database -->
 
+                    ${images}
+
+
+                    <div class="p-2">
+                        <p class="text-justify">${post.text}</p>
+
+
+                        <div class="card-footer d-flex justify-content-evenly">
+
+                            <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
+
+                            ${bottom}
+
+                            <div class="d-flex">
+                                <p class="me-3">${post.comments_count}</p>
+                                <a href="/post/${post.id}" class="text-decoration-none"><span
+                                        class="commenticon">&#128172;</span></a>
+                            </div>
+
+
+                        </div>
+
+                    </div>
                 </div>
-
-
             </div>
-        </div>
     </div>
 </div>
 
@@ -520,7 +588,7 @@ updateFeedOnLoad();
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
+    if (!/\/search\/[#\*?!.@_\w ]*/.test(pathname)) return;
 
     if (!document.querySelector('#timeline')) {
         return;
@@ -535,10 +603,10 @@ function updateSearchOnInputAndClick() {
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#?!.@_\w ]+/)[0]
+    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#\*?!.@_\w ]+/)[0]
 
     if (query_string) {
-        searchBar.value = query_string
+        if (query_string !== '*') searchBar.value = query_string
         updateSearch()
     }
 
@@ -553,6 +621,8 @@ function updateSearchOnInputAndClick() {
             // Update the path on top 
             if (searchBarString !== '') {
                 window.history.replaceState('', '', '/search/' + searchBarString.replaceAll(' ', '%20'))
+            } else {
+                window.history.replaceState('', '', '/search/*')
             }
                 
         })
@@ -590,7 +660,8 @@ function updateSearch() {
 
     query_string = searchBar.value
 
-    if (query_string === '') return;
+    if (query_string === '') 
+        query_string = '*';
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
 
@@ -637,7 +708,7 @@ function createUserCard(user) {
     console.log(user.photo)
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
-        <img src="/${user.photo}" class="card-img-top" alt="user_avatar">
+        <img height="50%" src="/${user.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
@@ -659,7 +730,7 @@ function createGroupCard(group) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:25em">
-        <img src="/${group.photo}" class="card-img-top" alt="user_avatar">
+        <img height="60%" src="/${group.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
@@ -688,7 +759,7 @@ function searchRedirect() {
 
     // Needs to redirect except if it already is in the search page
     let pathname = window.location.pathname
-    if (/\/search\/[#?!.@_\w ]*/.test(pathname)) return;
+    if (/\/search\/[#*?!.@_\w ]*/.test(pathname)) return;
 
     const searchBar = document.querySelector('#search_bar')
     if (!searchBar) return;
@@ -703,6 +774,8 @@ function searchRedirect() {
 
         if (this.value !== '') {
             window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
+        } else {
+            window.location.href = '/search/*';
         }
         
     })
@@ -777,7 +850,7 @@ function createUserReportCardPending(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     new_card.innerHTML = `
-        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
         <a href="#" class="btn btn-outline-secondary">Take</a>
@@ -812,7 +885,7 @@ function createUserReportCardPast(user) {
     }
 
     new_card.innerHTML = `
-        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
