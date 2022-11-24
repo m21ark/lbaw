@@ -530,7 +530,7 @@ function createPost(post) {
 
 
                     <div class="dropdown">
-                        <button class="btn dropdownPostButton" type="button">&vellip;</button>
+                        <button class="btn dropdownPostButton" onclick="togglePostDropDown(this.parentNode)()" type="button">&vellip;</button>
                         <div class="dropdown_menu" style="z-index: 200000" hidden>
                             <a class="dropdown-item" href='/profile/${post.owner}'>Go to Profile</a>
 
