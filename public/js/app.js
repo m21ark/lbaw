@@ -851,7 +851,7 @@ function createUserReportCardPending(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     new_card.innerHTML = `
-        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
         <a href="#" class="btn btn-outline-secondary">Take</a>
@@ -886,7 +886,7 @@ function createUserReportCardPast(user) {
     }
 
     new_card.innerHTML = `
-        <img class="me-3" src="../user.png" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
