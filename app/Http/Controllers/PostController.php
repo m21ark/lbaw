@@ -81,9 +81,6 @@ class PostController extends Controller
             if ($like !== []) {
                 $post->hasLiked = true;
             }
-            
-                
-            
 
         }
 
