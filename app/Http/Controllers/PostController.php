@@ -66,23 +66,24 @@ class PostController extends Controller
 
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->hasLiked = false;
+            $post->isOwner = false;
+            $post->auth = 0;
+
+            if (!Auth::check()) continue;
+            $post->auth = Auth::user()->id;
+
             if ($post->owner === Auth::user()->username) {
                 $post->isOwner = true;
-            } else {
-                $post->isOwner = false;
             }
-
-            $post->hasLiked = false;
+            
             $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            if ($like) {
+            if ($like !== []) {
                 $post->hasLiked = true;
             }
             
-            if (Auth::check()) {
-                $post->auth = Auth::user()->id;
-            } else {
-                $posts->auth = 0;
-            }
+                
+            
 
         }
 
