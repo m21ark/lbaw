@@ -70,7 +70,6 @@ Route::delete('api/group_member/{id}', 'GroupController@removeGroupMember');
 
 // User Make/Delete/Edit Post
 Route::post('api/post', 'PostController@create');
-Route::post('api/post', 'ProfileController@edit')->name('editPost');
 Route::delete('api/post/{id}', 'PostController@delete');
 
 
