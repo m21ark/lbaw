@@ -170,7 +170,7 @@ paths:
   /about:
     get:
       operationId: R801
-      summary: "R801: About"
+      summary: "R801: About Page"
       description: "Show Nexus About page. Access: PUB"
       tags:
         - "M08: User Administration and Static pages"
@@ -184,7 +184,7 @@ paths:
   /contacts:
     get:
       operationId: R802
-      summary: "R802: Contacts"
+      summary: "R802: Contacts Page"
       description: "Show Nexus Contact page. Access: PUB"
       tags:
         - "M08: User Administration and Static pages"
@@ -212,7 +212,7 @@ paths:
   /features:
     get:
       operationId: R804
-      summary: "R804: Features"
+      summary: "R804: Main Features Page"
       description: "Show Nexus Feature page. Access: PUB"
       tags:
         - "M08: User Administration and Static pages"
@@ -226,7 +226,7 @@ paths:
   /home: 
     get:
       operationId: R202
-      summary: 'R202 View home page'
+      summary: 'R202 View Home Page'
       description: 'Show the home page Access: PUB'
       tags:
         - "M02: Feed"
@@ -238,7 +238,7 @@ paths:
   /404:
     get:
       operationId: R805
-      summary: "R805: Not Found"
+      summary: "R805: Not Found Page"
       description: "Show Nexus Not Found page. Access: PUB"
       tags:
         - "M08: User Administration and Static pages"
