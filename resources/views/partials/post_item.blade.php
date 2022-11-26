@@ -31,8 +31,8 @@
                                             Post</a>
                                     @endisset
                                 @else
-                                    <a class="dropdown-item" href="#">Report Post</a>
-                                    <a class="dropdown-item" href="#">Send Message</a>
+                                    <a class="dropdown-item" href="#!">Report Post</a>
+                                    <a class="dropdown-item" href="#!">Send Message</a>
                                 @endif
                             @endauth
                         </div>
@@ -58,7 +58,7 @@
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
 
-                                <a href="#" class="like_btn_post text-decoration-none"
+                                <a href="#!" class="like_btn_post text-decoration-none"
                                     data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
 
                                     <?php
@@ -70,9 +70,9 @@
                                     }
                                     ?>
                                     @if ($userLiked)
-                                        <h4>&#x2764;</h4>
+                                        <h3 data-liked='1' style="font-size:1.3em;">&#x2764;</h3>
                                     @else
-                                        <h2><strong>&#9825;</strong></h2>
+                                        <h3 data-liked='0' style="font-size:1.3em;">&#9825;</h3>
                                     @endif
 
                                 </a>
@@ -80,7 +80,7 @@
                         @else
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
-                                <a href="#" class="like_btn_post text-decoration-none">
+                                <a href="#!" class="like_btn_post text-decoration-none">
                                     <h2><strong>&#9825;</strong></h2>
                                 </a>
                             </div>
@@ -101,7 +101,7 @@
                     <div class="card_footer form-control d-flex align-items-center ">
                         <input type="text" name="comment_post" id="comment_post_input"
                             class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
-                        <a href="#" class="btn btn-primary">
+                        <a href="#!" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-send" viewBox="0 0 16 16">
                                 <path

@@ -281,20 +281,51 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
+
+    let like_icon = event.firstElementChild
+
+    hasLiked = like_icon.dataset.liked === '1'
+
+    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
+
+    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
+
+    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
+
+    if (hasLiked)
+        like_icon.style.fontSize = '1.3em'
+    else
+        like_icon.style.fontSize = '1.2em'
+
+
     let id_user = event.dataset.uid
     let id_post = event.dataset.id
-    console.log(`id_user: ${id_user} id_post: ${id_post}`)
+    // console.log(`id_user: ${id_user} id_post: ${id_post}`)
     sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
-
 }
 
-
 function sendLikeCommentRequest(event) {
+
+    let like_icon = event.firstElementChild
+
+    hasLiked = like_icon.dataset.liked === '1'
+
+    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
+
+    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
+
+    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
+
+    if (hasLiked)
+        like_icon.style.fontSize = '1.3em'
+    else
+        like_icon.style.fontSize = '1.2em'
+
+
+
     let id_user = event.dataset.uid
     let id_comment = event.dataset.id
-    console.log(`id_user: ${id_user} id_comment: ${id_comment}`)
     sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
-
 }
 
 
@@ -417,9 +448,9 @@ function createPost(post) {
     let images = '', bottom = '', like = '', dropdown = '';
 
     if (post.hasLiked) {
-        like = '<h4>&#x2764;</h4>'
+        like = '<h3 data-liked="1">&#x2764;</h3>'
     } else {
-        like = '<h2><strong>&#9825;</strong></h2>'
+        like = '<h3 data-liked="0">&#9825;</h3>'
     }
 
     if (post.auth !== 0) {
