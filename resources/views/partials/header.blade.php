@@ -20,7 +20,7 @@
                     <a class="text-white text-decoration-none me-3"
                         href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2">{{ Auth::user()->username }}</strong>
-                        <img src="{{ asset(Auth::user()->photo) }}" alt="logo" width="50" height="50"
+                        <img src="{{ asset(Auth::user()->photo) }}" alt="logo" width="40" height="40"
                             class="rounded-circle">
                     </a>
 

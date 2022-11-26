@@ -1,45 +1,113 @@
 /* Site layout */
 
 
+@media (min-width: 80em) {
+    body {
+        width: 90%;
+        box-shadow: 2px 2px 5px lightgray;
+        display: grid;
+        grid-template-columns: 1fr 4fr 1.5fr;
+        grid-template-rows: auto auto auto;
 
-body {
-    width: 90%;
-    box-shadow: 2px 2px 5px lightgray;
-    display: grid;
-    grid-template-columns: 1fr 4fr 1.5fr;
-    grid-template-rows: auto auto auto;
+        grid-template-areas: "header  header header"
+            "navbar  content rightbar"
+            "footer  footer footer";
+    }
 
-    grid-template-areas: "header  header header"
-        "navbar  content rightbar"
-        "footer  footer footer";
+
+    /*  Header  */
+
+    header {
+        grid-area: header;
+    }
+
+
+
+    main {
+        grid-area: content;
+        margin: 1.5em;
+    }
+
+    #leftbar {
+        grid-area: navbar;
+        width: 280px;
+    }
+
+    #rightbar {
+        grid-area: rightbar;
+        padding: 2em 1.5em;
+        min-width: 22em;
+    }
+
+    #footer {
+        grid-area: footer;
+    }
+
+    #small_leftbar {
+        display: none;
+    }
 }
 
 
-/*  Header  */
 
-header {
-    grid-area: header;
+@media (max-width: 80em) {
+
+    body {
+        width: 90%;
+        box-shadow: 2px 2px 5px lightgray;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+
+        grid-template-areas: "header"
+            "content"
+            "leftbar";
+    }
+
+    body {
+        width: 100%;
+    }
+
+    #rightbar {
+        display: none;
+    }
+
+    main {
+        grid-area: content;
+        margin: 5.5em 1em;
+    }
+
+    header {
+        grid-area: header;
+        position: fixed;
+        width: 100%;
+        z-index: 10;
+        box-shadow: 0px 3px 20px rgb(221, 221, 221);
+    }
+
+
+    #leftbar {
+        display: none;
+    }
+
+    #small_leftbar {
+        grid-area: leftbar;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        z-index: 10;
+        box-shadow: 0px -3px 20px rgb(221, 221, 221);
+    }
+
+
+
+    #footer {
+        display: none;
+    }
+
+
 }
 
-
-main {
-    grid-area: content;
-    margin: 1.5em;
-}
-
-#leftbar {
-    grid-area: navbar;
-}
-
-#rightbar {
-    grid-area: rightbar;
-    padding: 2em 1.5em;
-    min-width: 22em;
-}
-
-#footer {
-    grid-area: footer;
-}
 
 /*  ====================== AJUSTES =====================*/
 

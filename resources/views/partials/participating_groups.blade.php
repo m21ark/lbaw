@@ -1,5 +1,5 @@
 @auth
-    <div class="drop_groups" style="display:none">
+    <div class="drop_groups bg-light" style="display:none;position:absolute;">
     @if (Auth::user()->groupsOwner->count() > 0)
         <div class="mt-3 container">
             <h5>Owner Groups</h5>
