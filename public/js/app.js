@@ -19,78 +19,32 @@ function addEventListeners() {
     }
     );
 
-    let create_button = document.querySelector('#profile_post_button_action');
-    if (create_button)
-        create_button.addEventListener('click', sendCreatePostRequest(true));
 
-    let create_group_post_button = document.querySelector('#group_post_button_action');
-    if (create_group_post_button)
-        create_group_post_button.addEventListener('click', sendCreatePostRequest(false));
+    // POST ACTIONS
+    assignFunctionClick('#profile_post_button_action', sendCreatePostRequest(true))
+    assignFunctionClick('#group_post_button_action', sendCreatePostRequest(true))
+    assignFunctionClick('#edit_post_button', sendEditPostRequest)
+    assignFunctionClick('#delete_post_button', sendDeletePostRequest)
 
-    let remove_groupMember_button = document.querySelector('#leave_group_button');
-    if (remove_groupMember_button)
-        remove_groupMember_button.addEventListener('click', sendDeleteGroupMemberRequest);
+    // GROUP ACTIONS
+    assignFunctionClick('#create_group_button', sendCreateGroupRequest)
+    assignFunctionClick('#edit_group_button', sendEditGroupRequest)
+    assignFunctionClick('#delete_group_button', sendDeleteGroupRequest)
 
-    // ====================== Group ======================
+    // PROFILE ACTIONS
+    assignFunctionClick('#edit_profile_button', sendEditProfileRequest)
+    assignFunctionClick('#delete_profile_button', sendDeleteProfileRequest)
 
-    let create_group_button = document.querySelector('#create_group_button');
-    if (create_group_button)
-        create_group_button.addEventListener('click', sendCreateGroupRequest);
+    // GROUP MEMBERS ACTIONS
+    assignFunctionClick('#leave_group_button', sendDeleteGroupMemberRequest)
 
-    let edit_group_button = document.querySelector('#edit_group_button');
-    if (edit_group_button)
-        edit_group_button.addEventListener('click', sendEditGroupRequest);
+    // LIKES ACTIONS
+    assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
+    assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
 
-    let delete_group_button = document.querySelector('#delete_group_button');
-    if (delete_group_button)
-        delete_group_button.addEventListener('click', sendDeleteGroupRequest);
+    // CLOSE POP-UPS ACTION
+    assignFunctionClickAll('.close_popup_btn', closePopups)
 
-    // ====================== Profile ======================
-
-    let edit_profile_button = document.querySelector('#edit_profile_button');
-    if (edit_profile_button)
-        edit_profile_button.addEventListener('click', sendEditProfileRequest);
-
-    let delete_profile_button = document.querySelector('#delete_profile_button');
-    if (delete_profile_button)
-        delete_profile_button.addEventListener('click', sendDeleteProfileRequest);
-
-    // ====================== Posts ======================
-
-
-
-    let edit_post_button = document.querySelector('#edit_post_button');
-    if (edit_post_button)
-        edit_post_button.addEventListener('click', sendEditPostRequest);
-
-    let delete_post_button = document.querySelector('#delete_post_button');
-    if (delete_post_button)
-        delete_post_button.addEventListener('click', sendDeletePostRequest);
-
-
-    let close_popups = document.querySelectorAll('.close_popup_btn');
-    if (close_popups)
-        if (close_popups.length > 0) {
-            close_popups.forEach(e => {
-                e.addEventListener('click', closePopups);
-            });
-        }
-
-    let like_btn_post = document.querySelectorAll('.like_btn_post');
-    if (like_btn_post)
-        if (like_btn_post.length > 0) {
-            like_btn_post.forEach(e => {
-                e.addEventListener('click', () => { sendLikePostRequest(e.dataset.uid, e.dataset.id) }); // TODO: TIREM ME O MONSTRO E METER ESTA FUNÇAO MAIS BONITA
-            });
-        }
-
-    let like_btn_comment = document.querySelectorAll('.like_btn_comment');
-    if (like_btn_comment)
-        if (like_btn_comment.length > 0) {
-            like_btn_comment.forEach(e => {
-                e.addEventListener('click', () => { sendLikeCommentRequest(e.dataset.uid, e.dataset.id) });
-            });
-        }
 
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
     [].forEach.call(post_dropDowns, function (element) {
@@ -104,6 +58,20 @@ function addEventListeners() {
             let drop = document.querySelector('.drop_groups');
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
         })
+}
+
+function assignFunctionClick(querySelector, func) {
+    let aux = document.querySelector(querySelector);
+    if (aux)
+        aux.addEventListener('click', func);
+}
+
+function assignFunctionClickAll(querySelector, func) {
+
+    let aux = document.querySelectorAll(querySelector);
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', () => func(e)));
 }
 
 function togglePostDropDown(parent) {
@@ -312,19 +280,22 @@ function sendDeleteProfileRequest() {
 
 
 
-function sendLikePostRequest(id_user, id_post) {
+function sendLikePostRequest(event) {
+    let id_user = event.dataset.uid
+    let id_post = event.dataset.id
+    console.log(`id_user: ${id_user} id_post: ${id_post}`)
     sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
-    location.reload();
+
 }
 
 
-function sendLikeCommentRequest(id_user, id_comment) {
+function sendLikeCommentRequest(event) {
+    let id_user = event.dataset.uid
+    let id_comment = event.dataset.id
+    console.log(`id_user: ${id_user} id_comment: ${id_comment}`)
     sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
-    location.reload();
+
 }
-
-
-
 
 
 // ============================================ Post ============================================
@@ -435,6 +406,8 @@ function updateFeed(feed) {
         })
 
     })
+
+    setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
 }
 
 function createPost(post) {
@@ -462,7 +435,7 @@ function createPost(post) {
         <div class="d-flex">
             <p class="me-3">${post.likes_count}</p>
 
-            <a href="#" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
+            <a href="#!" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
 
                ${like}
 
@@ -475,7 +448,7 @@ function createPost(post) {
         bottom = `
         <div class="d-flex">
             <p class="me-3">${post.likes_count}</p>
-            <a href="#" class="like_btn_post text-decoration-none">
+            <a href="#!" class="like_btn_post text-decoration-none">
                 <h2><strong>&#9825;</strong></h2>
             </a>
         </div>
@@ -695,6 +668,7 @@ function updateSearch() {
 
     })
 
+    setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
 }
 
 

@@ -17,17 +17,18 @@ class CommentLikeController extends Controller
         $comment = $request->input('id_comment');
 
         $like = CommentLike::where('id_user', $user)
-                            ->where('id_comment', $comment)
-                            ->first();
+            ->where('id_comment', $comment)
+            ->first();
 
-        if ($like == null) {
-
+        if ($like === null) {
             $like = new CommentLike();
             $like->id_user = $user;
             $like->id_comment = $comment;
             $like->save();
         } else {
-            $like->delete();
+            $like = CommentLike::where('id_user', $user)
+                ->where('id_comment', $comment)
+                ->delete();
         }
 
         return $like;
