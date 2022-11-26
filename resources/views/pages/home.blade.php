@@ -12,10 +12,10 @@
 
 @if (Auth::check())
     @section('rightbar')
-        @include('partials.home_sidebar')
+        @include('partials.sidebar.home_sidebar')
     @endsection
 @else
     @section('rightbar')
-        @include('partials.guest_sidebar')
+        @include('partials.sidebar.guest_sidebar')
     @endsection
 @endif

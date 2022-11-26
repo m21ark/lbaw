@@ -6,8 +6,8 @@
     @include('partials.search_results')
 @endsection
 
-@auth 
+@auth
 @section('rightbar')
-    @include('partials.home_sidebar')
+    @include('partials.sidebar.home_sidebar')
 @endsection
 @endauth

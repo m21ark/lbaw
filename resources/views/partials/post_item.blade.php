@@ -122,5 +122,5 @@
 
 @isset($showComments)
     <!-- TODO: Maybe not very smart to render for each post -->
-    @include('partials.edit_post_popup', ['post' => $post])
+    @include('partials.popup.edit_post_popup', ['post' => $post])
 @endisset

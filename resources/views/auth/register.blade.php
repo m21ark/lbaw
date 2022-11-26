@@ -10,7 +10,7 @@
                 <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
 
 
-                
+
 
                 @if ($errors->has('username'))
                     <label for="inputUsername" class="sr-only mt-2">Username</label>
@@ -24,7 +24,7 @@
                     <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
                     placeholder="Username" name="username" required autofocus>
                 @endif
-                
+
 
                 @if ($errors->has('email'))
                     <label for="inputEmail" class="sr-only mt-2">Email address</label>
@@ -79,5 +79,5 @@
 
 
 @section('rightbar')
-    @include('partials.guest_sidebar')
+    @include('partials.sidebar.guest_sidebar')
 @endsection

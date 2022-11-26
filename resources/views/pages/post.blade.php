@@ -5,5 +5,5 @@
 @endsection
 
 @section('rightbar')
-    @include('partials.post_sidebar')
+    @include('partials.sidebar.post_sidebar')
 @endsection

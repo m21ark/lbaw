@@ -27,5 +27,5 @@
 @endsection
 
 @section('rightbar')
-    @include('partials.messages_sidebar')
+    @include('partials.sidebar.messages_sidebar')
 @endsection

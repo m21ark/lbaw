@@ -6,5 +6,5 @@
 
 
 @section('rightbar')
-    @include('partials.profile_sidebar')
+    @include('partials.sidebar.profile_sidebar')
 @endsection

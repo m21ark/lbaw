@@ -35,4 +35,4 @@
 </div>
 
 <!-- Edit Profile Popup -->
-@include('partials.edit_profile_popup', ['user' => $user])
+@include('partials.popup.edit_profile_popup', ['user' => $user])

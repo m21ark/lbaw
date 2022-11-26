@@ -30,7 +30,7 @@
     @include('partials.header')
 
     <!-- Left Sidebar -->
-    @include('partials.left_sidebar')
+    @include('partials.sidebar.left_sidebar')
 
     @yield('rightbar')
 
@@ -53,7 +53,7 @@
 
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
-        @include('partials.make_post_popup', ['popup_id' => 'popup_show_post'])
+        @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
 
 
     </main>
