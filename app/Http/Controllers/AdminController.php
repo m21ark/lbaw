@@ -19,7 +19,7 @@ class AdminController extends Controller
     public function show()
     {
         if (!Auth::check())
-            return redirect('403');
+            return redi404rect('403');
 
         $this->authorize('view', Auth::user()->isAdmin);
 
@@ -30,7 +30,7 @@ class AdminController extends Controller
             'comments_c' => Comment::count(),
             'likes_c' => Like::count() + CommentLike::count()
         ];
-        
+
         return view('pages.admin', ['statistics' => $statistics]);
     }
 
@@ -42,7 +42,7 @@ class AdminController extends Controller
         if ($query_string === '*') $query_string = '';
 
         $users_reported_post = Report::
-        where('id_post', '<>', NULL) 
+        where('id_post', '<>', NULL)
         ->where('user_report.decision', 'Pendent')
         ->join('post', 'post.id', '=', 'user_report.id_post')
         ->join('user', 'user.id', '=', 'post.id_poster')
@@ -75,16 +75,16 @@ class AdminController extends Controller
         if ($query_string === '*') $query_string = '';
 
         $users_reported_post = Report::
-        where('id_post', '<>', NULL) 
+        where('id_post', '<>', NULL)
         ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
         ->join('post', 'post.id', '=', 'user_report.id_post')
         ->join('user', 'user.id', '=', 'post.id_poster')
         ->where('username', 'LIKE', '%'.$query_string.'%')
         ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
         ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
-        
+
         $users_reported_comments = Report::
-        where('id_comment', '<>', NULL) 
+        where('id_comment', '<>', NULL)
         ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
         ->join('comment', 'comment.id', '=', 'user_report.id_post')
         ->join('user', 'user.id', '=', 'comment.id_commenter')
@@ -92,13 +92,13 @@ class AdminController extends Controller
         ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
         ->groupBy('user.id','user_report.decision', 'user_report.decision', 'user_report.decision_date');
 
-        
+
         return $users_reported_post->union($users_reported_comments)
         ->orderBy('decision_date', 'desc')
         ->limit(6)
         ->get();
 
-        
+
 
     }
 }
