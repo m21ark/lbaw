@@ -42,6 +42,10 @@ function addEventListeners() {
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
 
+    // COMMENT ACTIONS
+    assignFunctionClick('#comment_post_send', sendCreateCommentRequest)
+
+
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
 
@@ -281,51 +285,52 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
-
-    let like_icon = event.firstElementChild
-
-    hasLiked = like_icon.dataset.liked === '1'
-
-    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
-    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
-    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
-
-    if (hasLiked)
-        like_icon.style.fontSize = '1.3em'
-    else
-        like_icon.style.fontSize = '1.2em'
-
-
+    toggleLikeHTML(event)
     let id_user = event.dataset.uid
     let id_post = event.dataset.id
-    // console.log(`id_user: ${id_user} id_post: ${id_post}`)
     sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
 }
 
 function sendLikeCommentRequest(event) {
+    toggleLikeHTML(event)
+    let id_user = event.dataset.uid
+    let id_comment = event.dataset.id
+    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
+}
 
+function toggleLikeHTML(event) {
     let like_icon = event.firstElementChild
-
     hasLiked = like_icon.dataset.liked === '1'
 
     event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
     like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
     like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
 
     if (hasLiked)
         like_icon.style.fontSize = '1.3em'
     else
         like_icon.style.fontSize = '1.2em'
+}
 
 
+// ============================================ Comments ============================================
 
-    let id_user = event.dataset.uid
-    let id_comment = event.dataset.id
-    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
+function sendCreateCommentRequest() {
+
+    let text = document.querySelector('#comment_post_input').value
+    let id_post = document.querySelector('#comment_post_input').dataset.pid
+    let id_user = document.querySelector('#comment_post_input').dataset.uid
+
+    if (text === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to comment this post?');
+    console.log(text, id_post, id_user);
+    if (res)
+        sendAjaxRequest('post', '/api/comment/' + id_post, { id_user: id_user, id_post: id_post, text: text }, () => { });
+
 }
 
 

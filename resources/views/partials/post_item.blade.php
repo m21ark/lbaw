@@ -99,9 +99,9 @@
 
                 @isset($showComments)
                     <div class="card_footer form-control d-flex align-items-center ">
-                        <input type="text" name="comment_post" id="comment_post_input"
+                        <input type="text" name="comment_post" data-uid={{ Auth::user()->id }} data-pid={{ $post->id }} id="comment_post_input"
                             class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
-                        <a href="#!" class="btn btn-primary">
+                        <a href="#!" class="btn btn-primary" id="comment_post_send">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-send" viewBox="0 0 16 16">
                                 <path
