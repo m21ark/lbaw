@@ -240,14 +240,15 @@ function sendDeleteGroupRequest() {
 
 function sendDeleteGroupMemberRequest() {
 
-    let id = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
+    let id_group = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
+    let id_user = document.querySelector('#leave_group_button').getAttribute('data-idUser');
 
     let res = confirm("Are you sure you want to leave this group?");
 
     if (!res)
         return;
 
-    sendAjaxRequest('delete', '/api/group_member/' + id, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
 
     location.reload();
 }

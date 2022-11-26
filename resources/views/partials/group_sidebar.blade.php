@@ -10,15 +10,16 @@
 
                 @auth
 
-                @if ((in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()))  || (Auth::user()->isAdmin))
-                <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                @endif
+                    @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
+                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                    @endif
                 @endauth
             </h3>
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="" width="150" height="150">
+            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="" width="150"
+                height="150">
         </div>
 
 
@@ -66,7 +67,8 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="{{ asset($member->user->photo) }}" alt="user_avatar" width="50" class="rounded-circle">
+                    <img src="{{ asset($member->user->photo) }}" alt="user_avatar" width="50"
+                        class="rounded-circle">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
@@ -113,16 +115,16 @@
         <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
 
 
-        @endauth
+    @endauth
 
-      @auth
-            @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
-            <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}">Leave
-            Group</button>
+    @auth
+        @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+            <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}"
+                data-idUser="{{ Auth::user()->id }}">Leave
+                Group</button>
+        @endif
 
-            @endif
-
-@endauth
+    @endauth
 
 
 
