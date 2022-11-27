@@ -22,7 +22,6 @@
     }
 
 
-
     main {
         grid-area: content;
         margin: 1.5em;
@@ -46,6 +45,13 @@
     #small_leftbar {
         display: none;
     }
+
+    #post_comment_section{
+
+        margin-right: 1em;
+    }
+
+
 }
 
 
@@ -105,11 +111,21 @@
         display: none;
     }
 
+    #post_comment_section{
+        margin: -6em auto 7em auto;
+        min-width: 40em;
+        grid-row: 3;
+    }
+
+
 
 }
 
-
 /*  ====================== AJUSTES =====================*/
+
+
+
+
 
 .profile_img {
     display: block;

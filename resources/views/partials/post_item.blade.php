@@ -40,7 +40,6 @@
 
                 </div>
 
-                <!-- TODO: Ver imagens da database -->
 
                 @if (!$post->images->isEmpty())
                     @include('partials.post_carousel_image')
@@ -53,7 +52,6 @@
 
                     <div class="card-footer d-flex justify-content-evenly">
 
-                        <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
                         @if (Auth::check())
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
@@ -99,8 +97,9 @@
 
                 @isset($showComments)
                     <div class="card_footer form-control d-flex align-items-center ">
-                        <input type="text" name="comment_post" data-uid={{ Auth::user()->id }} data-pid={{ $post->id }} id="comment_post_input"
-                            class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
+                        <input type="text" name="comment_post" data-uid={{ Auth::user()->id }}
+                            data-pid={{ $post->id }} id="comment_post_input" class="me-2 form-control mt-3 mb-2"
+                            placeholder="Make a comment">
                         <a href="#!" class="btn btn-primary" id="comment_post_send">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-send" viewBox="0 0 16 16">
@@ -113,14 +112,6 @@
 
             </div>
 
-
-
         </div>
     </div>
 </div>
-
-
-@isset($showComments)
-    <!-- TODO: Maybe not very smart to render for each post -->
-    @include('partials.popup.edit_post_popup', ['post' => $post])
-@endisset
