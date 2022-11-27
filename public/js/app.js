@@ -328,8 +328,10 @@ function sendCreateCommentRequest() {
 
     let res = confirm('Are you sure you want to comment this post?');
     console.log(text, id_post, id_user);
-    if (res)
-        sendAjaxRequest('post', '/api/comment/' + id_post, { id_user: id_user, id_post: id_post, text: text }, () => { });
+    if (res) {
+        sendAjaxRequest('post', `/api/comment/${id_post}/${text}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        location.reload();
+    }
 
 }
 

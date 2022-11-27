@@ -23,7 +23,7 @@
                 <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $comment->likes->count() }}</p>
                 @auth
                     <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
-                        data-id={{ $comment->id }} href="#">
+                        data-id={{ $comment->id }} href="#!">
 
                         <?php
                         $userLiked = false;
