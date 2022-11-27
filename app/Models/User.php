@@ -65,4 +65,26 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Report', 'id_reporter');
     }
+
+    public function messagesSended()
+    {
+        return $this->hasMany('App\Models\Message', 'id_sender');
+    }
+
+    public function messagesReceived()
+    {
+        return $this->hasMany('App\Models\Message', 'id_receiver');
+    }
+
+    public function messages()
+    {
+        return $this->messagesSended->merge($this->messagesReceived);
+    }
+
+    public function getContactedUsers()
+    {
+        $messages = $this->messages()->sortByDesc('id');
+        
+        return $messages->unique('id_receiver')->unique('id_sender');
+    }
 }
