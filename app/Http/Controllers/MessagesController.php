@@ -18,7 +18,7 @@ class MessagesController extends Controller
         if ($request->text === null)
             return response()->json(['Text cannot be null' => 400]);
         
-        // TODO POLICY ... tem de se verificar se são amigos
+        // TODO POLICY ... tem de se verificar se são amigos ... se bem que isto já está implementado na bd
 
         $sms = new Message();
         $sms->text = $request->text;

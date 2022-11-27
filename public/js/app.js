@@ -9,6 +9,19 @@ function addEventListeners() {
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
         ['#sms_send_btn', sendMessage],
+        ['#profile_post_button_action', sendCreatePostRequest(true)],
+        ['#group_post_button_action', sendCreatePostRequest(false)],
+        ['#edit_post_button', sendEditPostRequest],
+        ['#delete_post_button', sendDeletePostRequest],
+        ['#create_group_button', sendCreateGroupRequest],
+        ['#edit_group_button', sendEditGroupRequest],
+        ['#delete_group_button', sendDeleteGroupRequest],
+        ['#edit_profile_button', sendEditProfileRequest],
+        ['#delete_profile_button', sendDeleteProfileRequest],
+        ['#leave_group_button', sendDeleteGroupMemberRequest],
+        ['#comment_post_send', sendCreateCommentRequest],
+        ['#edit_comment_button', sendEditCommentRequest],
+        ['#delete_comment_button', sendDeleteCommentRequest]
     ];
 
 
@@ -21,33 +34,9 @@ function addEventListeners() {
     );
 
 
-
-    // POST ACTIONS
-    assignFunctionClick('#profile_post_button_action', sendCreatePostRequest(true))
-    assignFunctionClick('#group_post_button_action', sendCreatePostRequest(false))
-    assignFunctionClick('#edit_post_button', sendEditPostRequest)
-    assignFunctionClick('#delete_post_button', sendDeletePostRequest)
-
-    // GROUP ACTIONS
-    assignFunctionClick('#create_group_button', sendCreateGroupRequest)
-    assignFunctionClick('#edit_group_button', sendEditGroupRequest)
-    assignFunctionClick('#delete_group_button', sendDeleteGroupRequest)
-
-    // PROFILE ACTIONS
-    assignFunctionClick('#edit_profile_button', sendEditProfileRequest)
-    assignFunctionClick('#delete_profile_button', sendDeleteProfileRequest)
-
-    // GROUP MEMBERS ACTIONS
-    assignFunctionClick('#leave_group_button', sendDeleteGroupMemberRequest)
-
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
-
-    // COMMENT ACTIONS
-    assignFunctionClick('#comment_post_send', sendCreateCommentRequest)
-    assignFunctionClick('#edit_comment_button', sendEditCommentRequest)
-    assignFunctionClick('#delete_comment_button', sendDeleteCommentRequest)
 
     // OPEN COMMENT POPUPS
     commentPopupsController();
@@ -373,7 +362,8 @@ function sendEditCommentRequest() {
     let res = confirm('Are you sure you want edit this comment?');
     if (res) {
         sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
-        location.reload();
+        //location.reload();
+        logItem('#popup_show_comment_edit')(0);
     }
 
 }
