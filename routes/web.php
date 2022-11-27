@@ -95,3 +95,7 @@ Route::get('api/admin/past_reports/{query_string}', 'AdminController@usersReport
 
 Route::post('api/like_post', 'LikeController@toggle');
 Route::post('api/like_comment', 'CommentLikeController@toggle');
+
+// ======================= Messages ===========================
+
+Route::post('api/message/{id}', 'MessagesController@create');

@@ -5,7 +5,7 @@
         @if ($sender !=null)
             <div class="message_head card-header text-bg-primary">
                 <a href="/profile/{{$sender->username}}"><img src="/{{ $sender->photo}}" alt="" width="60"></a>
-                <a href="/profile/{{$sender->username}}">{{$sender->username}}</a>
+                <a href="/profile/{{$sender->username}} data-id={{$sender->id}}">{{$sender->username}}</a>
                 <a href="#">&vellip;</a>
             </div>
         

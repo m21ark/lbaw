@@ -7,7 +7,7 @@ function addEventListeners() {
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
-        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')]
+        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
     ];
 
 
@@ -22,7 +22,7 @@ function addEventListeners() {
 
     // POST ACTIONS
     assignFunctionClick('#profile_post_button_action', sendCreatePostRequest(true))
-    assignFunctionClick('#group_post_button_action', sendCreatePostRequest(true))
+    assignFunctionClick('#group_post_button_action', sendCreatePostRequest(false))
     assignFunctionClick('#edit_post_button', sendEditPostRequest)
     assignFunctionClick('#delete_post_button', sendDeletePostRequest)
 
@@ -44,6 +44,8 @@ function addEventListeners() {
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
+
+
 
 
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');

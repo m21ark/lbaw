@@ -5,9 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Message;
 
 class MessagesController extends Controller
 {
+
+    public function create($id, Request $request)
+    {
+        if (!Auth::check() )
+            return response()->json(['failure' => 403]);
+
+        if ($request->text === null)
+            return response()->json(['Text cannot be null' => 400]);
+        
+        // TODO POLICY ... tem de se verificar se são amigos
+
+        $sms = new Message();
+        $sms->text = $request->text;
+        $sms->id_sender = Auth::user()->id;
+        $sms->id_receiver = $id;
+
+        $sms->save();
+
+        return response()->json(['Successfully created' => 201]);
+    }
+
+
     public function show($sender_username)
     {
 
