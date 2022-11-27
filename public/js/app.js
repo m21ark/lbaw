@@ -8,6 +8,7 @@ function addEventListeners() {
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
+        ['#sms_send_btn', sendMessage],
     ];
 
 
@@ -18,6 +19,7 @@ function addEventListeners() {
         });
     }
     );
+
 
 
     // POST ACTIONS
@@ -42,6 +44,17 @@ function addEventListeners() {
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
 
+    // COMMENT ACTIONS
+    assignFunctionClick('#comment_post_send', sendCreateCommentRequest)
+    assignFunctionClick('#edit_comment_button', sendEditCommentRequest)
+    assignFunctionClick('#delete_comment_button', sendDeleteCommentRequest)
+
+    // OPEN COMMENT POPUPS
+    commentPopupsController();
+
+    // document.querySelector('.popup_show_comment_edit').toggleAttribute('hidden')
+
+
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
 
@@ -60,6 +73,20 @@ function addEventListeners() {
             let drop = document.querySelector('.drop_groups');
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
         })
+}
+
+function commentPopupsController() {
+    let aux = document.querySelectorAll('.popup_btn_comment_edit');
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', (e) => {
+                let id = e.currentTarget.dataset.id
+                let elem = document.querySelector('#popup_show_comment_edit')
+                elem.toggleAttribute('hidden')
+                document.querySelector('#comment_text_edit').value = e.currentTarget.dataset.text
+                document.querySelector('#edit_comment_button').setAttribute('data-id', id)
+                document.querySelector('#delete_comment_button').setAttribute('data-id', id)
+            }));
 }
 
 function assignFunctionClick(querySelector, func) {
@@ -120,7 +147,8 @@ function sendFormData(method, url, data, handler) {
 
 function addedHandler(class_name) {
     return function () {
-        logItem(class_name)(0);
+        if (class_name != null)
+            logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
         alert.innerHTML = 'Action successful';
@@ -169,6 +197,7 @@ function sendCreateGroupRequest(event) {
     }
 
 }
+
 
 function sendEditGroupRequest(event) {
 
@@ -283,52 +312,83 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
-
-    let like_icon = event.firstElementChild
-
-    hasLiked = like_icon.dataset.liked === '1'
-
-    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
-    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
-    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
-
-    if (hasLiked)
-        like_icon.style.fontSize = '1.3em'
-    else
-        like_icon.style.fontSize = '1.2em'
-
-
+    toggleLikeHTML(event)
     let id_user = event.dataset.uid
     let id_post = event.dataset.id
-    // console.log(`id_user: ${id_user} id_post: ${id_post}`)
     sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
 }
 
 function sendLikeCommentRequest(event) {
+    toggleLikeHTML(event)
+    let id_user = event.dataset.uid
+    let id_comment = event.dataset.id
+    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
+}
 
+function toggleLikeHTML(event) {
     let like_icon = event.firstElementChild
-
     hasLiked = like_icon.dataset.liked === '1'
 
     event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
     like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
     like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
 
     if (hasLiked)
         like_icon.style.fontSize = '1.3em'
     else
         like_icon.style.fontSize = '1.2em'
-
-
-
-    let id_user = event.dataset.uid
-    let id_comment = event.dataset.id
-    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
 }
+
+
+// ============================================ Comments ============================================
+
+function sendCreateCommentRequest() {
+
+    let text = document.querySelector('#comment_post_input').value
+    let id_post = document.querySelector('#comment_post_input').dataset.pid
+    let id_user = document.querySelector('#comment_post_input').dataset.uid
+
+    if (text === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to publish this comment?');
+    if (res) {
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        location.reload();
+    }
+
+}
+
+function sendEditCommentRequest() {
+    let id_comment = document.querySelector('#edit_comment_button').dataset.id
+    let text = document.querySelector('#comment_text_edit').value
+
+    if (text === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want edit this comment?');
+    if (res) {
+        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
+        location.reload();
+    }
+
+}
+
+
+function sendDeleteCommentRequest() {
+    let id_comment = document.querySelector('#delete_comment_button').dataset.id
+
+    let res = confirm('Are you sure you want delete this comment?');
+    if (res) {
+        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
+        location.reload();
+    }
+}
+
 
 
 // ============================================ Post ============================================
@@ -412,6 +472,37 @@ function sendDeletePostRequest() {
 
 }
 
+
+// ==================================== MESSAGES =====================================
+
+function sendMessage(event) {
+    event.preventDefault();
+    let text = document.querySelector('#sms_input').value;
+    let receiver = document.querySelector('#sms_rcv');
+
+    sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, {text : text}, uploadSms(true, text))
+}
+
+function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVEZ VER ISSO DPS
+    return function () {
+        const art = document.createElement("article");
+
+        art.classList.add('message_txt');
+        art.classList.add(isSender ? 'text_sender' : 'text_rcv');
+
+        date = new Date().toLocaleString().replace(',','').replaceAll('/', '-');
+
+        var p1 = document.createElement('p');
+        p1.innerHTML = date;
+
+        var p2 = document.createElement('p');
+        p2.innerHTML = message;
+
+        art.appendChild(p1);
+        art.appendChild(p2);
+        document.querySelector('.message_body').append(art); 
+    }
+}
 
 
 addEventListeners();

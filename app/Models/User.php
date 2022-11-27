@@ -78,13 +78,17 @@ class User extends Authenticatable
 
     public function messages()
     {
-        return $this->messagesSended->merge($this->messagesReceived);
+        return $this->messagesSended->merge($this->messagesReceived)->sortBy('id');
     }
 
     public function getContactedUsers()
     {
         $messages = $this->messages()->sortByDesc('id');
         
-        return $messages->unique('id_receiver')->unique('id_sender');
+        return $messages->unique(function ($item) {
+            $max = $item['id_receiver'] > $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
+            $min = $item['id_receiver'] <= $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
+            return $max.$min;
+        });
     }
 }

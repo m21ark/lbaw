@@ -23,7 +23,7 @@ class MessagesController extends Controller
         $sms = new Message();
         $sms->text = $request->text;
         $sms->id_sender = Auth::user()->id;
-        $sms->id_receiver = $id;
+        $sms->id_receiver = intval($id);
 
         $sms->save();
 
