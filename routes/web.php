@@ -100,4 +100,5 @@ Route::post('api/like_comment', 'CommentLikeController@toggle');
 // ======================= COMMENTING CRUD  =======================
 
 Route::post('api/comment/{id_post}', 'CommentController@create');
-Route::put('api/comment/edit', 'CommentController@edit');
+Route::put('api/comment', 'CommentController@edit');
+Route::delete('api/comment/{id_comment}', 'CommentController@delete');

@@ -1,12 +1,17 @@
 <nav id="rightbar" class="text-bg-light">
     <h3 class="mb-4">Comment Section</h3>
 
-
-
+    @include('partials.popup.edit_comment_popup')
     @foreach ($post->comments as $comment)
         <div class="card border-secondary mb-4">
 
-            <div class="card-header text-center">
+            <div class="card-header d-flex justify-content-center">
+                @auth
+                    @if (Auth::user()->id == $comment->id_commenter)
+                        <a href="#!" data-id={{ $comment->id }} data-text="{{ $comment->text }}"
+                            class="text-decoration-none popup_btn_comment_edit me-4">🖉</a>
+                    @endif
+                @endauth
                 <small>{{ $comment->post_date }}</small>
             </div>
             <div class="card-header d-flex justify-content-around align-items-center">

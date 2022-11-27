@@ -19,18 +19,18 @@ class CommentController extends Controller
         ]);
     }
 
+    public function edit(Request $request)
+    {
+        $comment = Comment::find($request->input('id_comment'));
+        //$this->authorize('edit', $comment);
+        $comment->text = $request->input('text');
+        $comment->save();
+    }
+
     public function delete($id_comment)
     {
         $comment = Comment::find($id_comment);
-        $this->authorize('delete', $comment);
+        //$this->authorize('delete', $comment);
         $comment->delete();
-    }
-
-    public function edit($id_comment, Request $request)
-    {
-        $comment = Comment::find($id_comment);
-        $this->authorize('edit', $comment);
-        $comment->text = $request->input('text');
-        $comment->save();
     }
 }
