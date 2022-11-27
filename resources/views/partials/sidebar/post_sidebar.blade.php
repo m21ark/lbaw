@@ -2,6 +2,7 @@
     <h3 class="mb-4">Comment Section</h3>
 
 
+
     @foreach ($post->comments as $comment)
         <div class="card border-secondary mb-4">
 
@@ -10,7 +11,7 @@
             </div>
             <div class="card-header d-flex justify-content-around align-items-center">
                 <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}" alt=""
-                    width="50">
+                    width="50" class="rounded-circle">
                 <a class="text-decoration-none"
                     href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
             </div>
@@ -33,6 +34,7 @@
                             }
                         }
                         ?>
+
                         @if ($userLiked)
                             <h3 class="me-1 p-1" data-liked='1' style="font-size:1.2em;">&#x2764;</h3>
                         @else
