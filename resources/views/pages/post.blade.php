@@ -33,6 +33,10 @@
 
                 <div class="card-body">
                     <p class="card-text">{{ $comment->text }}</p>
+
+                    @if ($comment->id_parent)
+                    <p>parent: {{ $comment->id_parent }}</p>
+                    @endif
                 </div>
 
                 <div class="pt-3 card-footer d-flex justify-content-center ">

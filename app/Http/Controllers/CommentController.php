@@ -23,7 +23,6 @@ class CommentController extends Controller
         $out->writeln($matches[0]);
 
 
-
         if (sizeof($matches[0]) === 0) {
             DB::table('comment')->insert([
                 'id_post' => $id_post,
@@ -34,37 +33,20 @@ class CommentController extends Controller
 
             $username = $matches[0][0];
 
-            if ($username)
-                $out->writeln('username= ' . $username);
-            else
-                $out->writeln('username= null');
-
-
-            /*
-            select "comment".id from "comment"
-            join "user" on (id_commenter = "user".id)
-            join "post" on (id_post = "post".id)
-            where "user".id = 4 and post.id=5;
-            */
-
             $aux = DB::table('comment')
                 ->join('user', 'user.id', '=', 'comment.id_commenter')
                 ->join('post', 'post.id', '=', 'comment.id_post')
                 ->where('user.username', $username)
                 ->where('post.id', $id_post)->get('comment.id')->first();
 
-            $out->writeln('here1');
-            $out->writeln($aux === null);
-            $out->writeln($aux->id);
-            $out->writeln('here2');
-
-            return null;
-            DB::table('comment')->insert([
-                'id_post' => $id_post,
-                'id_commenter' => Auth::user()->id,
-                'text' => $text,
-                'id_parent' => 6969,
-            ]);
+            if ($aux) {
+                DB::table('comment')->insert([
+                    'id_post' => $id_post,
+                    'id_commenter' => Auth::user()->id,
+                    'text' => $text,
+                    'id_parent' => $aux->id,
+                ]);
+            }
         }
     }
 
