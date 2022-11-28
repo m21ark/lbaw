@@ -1,4 +1,4 @@
-<div class="container mt-5 mb-5 post_item ">
+<div class="container mt-5 mb-5 post_item " id="post_main_page">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
             <div class="card post_card">

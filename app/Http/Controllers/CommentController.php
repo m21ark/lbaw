@@ -14,14 +14,9 @@ class CommentController extends Controller
     {
         // $this->authorize('create', Comment::class);
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-
         $text = $request->input('text');
 
         preg_match_all('/(?<=@)\w+/m', $text, $matches);
-
-        $out->writeln($matches[0]);
-
 
         if (sizeof($matches[0]) === 0) {
             DB::table('comment')->insert([

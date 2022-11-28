@@ -43,13 +43,15 @@ function addEventListeners() {
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
 
+
     // COMMENT ACTIONS
     assignFunctionClick('#comment_post_send', sendCreateCommentRequest)
     assignFunctionClick('#edit_comment_button', sendEditCommentRequest)
     assignFunctionClick('#delete_comment_button', sendDeleteCommentRequest)
 
     // OPEN COMMENT POPUPS
-    commentPopupsController();
+    commentPopupsController()
+    commentRepliesController()
 
     // document.querySelector('.popup_show_comment_edit').toggleAttribute('hidden')
 
@@ -83,6 +85,18 @@ function commentPopupsController() {
                 document.querySelector('#comment_text_edit').value = e.currentTarget.dataset.text
                 document.querySelector('#edit_comment_button').setAttribute('data-id', id)
                 document.querySelector('#delete_comment_button').setAttribute('data-id', id)
+            }));
+}
+
+function commentRepliesController(){
+    let aux = document.querySelectorAll('.comment_reply_btn');
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', (e) => {
+                let inp =  document.querySelector('#comment_post_input')
+                inp.value  = '@' + e.currentTarget.dataset.username + ' '
+                inp.setAttribute('data-parent', e.currentTarget.dataset.id)
+                inp.focus()
             }));
 }
 

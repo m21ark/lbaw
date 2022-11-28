@@ -18,11 +18,14 @@
                 <div class="card-header d-flex justify-content-center">
                     @auth
                         @if (Auth::user()->id == $comment->id_commenter)
-                            <a href="#!" data-id={{ $comment->id }} data-text="{{ $comment->text }}"
+                            <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
                                 class="text-decoration-none popup_btn_comment_edit me-4">🖉</a>
                         @endif
                     @endauth
                     <small>{{ $comment->post_date }}</small>
+                    @auth
+                        <a href="#" class="text-decoration-none comment_reply_btn" data-id="{{ $comment->id }}" data-username="{{ $comment->poster->username }}">Reply</a>
+                    @endauth
                 </div>
                 <div class="card-header d-flex justify-content-around align-items-center">
                     <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}"
@@ -35,7 +38,7 @@
                     <p class="card-text">{{ $comment->text }}</p>
 
                     @if ($comment->id_parent)
-                    <p>parent: {{ $comment->id_parent }}</p>
+                        <p>parent: {{ $comment->id_parent }}</p>
                     @endif
                 </div>
 
