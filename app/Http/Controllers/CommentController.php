@@ -26,13 +26,18 @@ class CommentController extends Controller
             ]);
         } else if (sizeof($matches[0]) === 1) {
 
+            // TODO adicionar notificação de erro
+            // TODO guardar o @ do user no texto é má ideia
+            // pq se o user mudar de nome deixa de fazer sentido
+
             $username = $matches[0][0];
 
             $aux = DB::table('comment')
                 ->join('user', 'user.id', '=', 'comment.id_commenter')
                 ->join('post', 'post.id', '=', 'comment.id_post')
                 ->where('user.username', $username)
-                ->where('post.id', $id_post)->get('comment.id')->first();
+                ->where('post.id', $id_post)
+                ->get('comment.id')->first();
 
             if ($aux) {
                 DB::table('comment')->insert([

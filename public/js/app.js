@@ -52,6 +52,7 @@ function addEventListeners() {
     // OPEN COMMENT POPUPS
     commentPopupsController()
     commentRepliesController()
+    commentRepliesShow()
 
     // document.querySelector('.popup_show_comment_edit').toggleAttribute('hidden')
 
@@ -88,16 +89,29 @@ function commentPopupsController() {
             }));
 }
 
-function commentRepliesController(){
+function commentRepliesController() {
     let aux = document.querySelectorAll('.comment_reply_btn');
     if (aux)
         if (aux.length > 0)
             aux.forEach(e => e.addEventListener('click', (e) => {
-                let inp =  document.querySelector('#comment_post_input')
-                inp.value  = '@' + e.currentTarget.dataset.username + ' '
+                let inp = document.querySelector('#comment_post_input')
+                inp.value = '@' + e.currentTarget.dataset.username + ' '
                 inp.setAttribute('data-parent', e.currentTarget.dataset.id)
                 inp.focus()
             }));
+}
+
+function commentRepliesShow() {
+
+    let aux = document.querySelectorAll('.reveal_comment_replies');
+    if (!aux) return;
+
+    if (aux.length > 0)
+        aux.forEach(e => e.addEventListener('click', (e) => {
+            let aux2 = document.querySelector('#comment_reply_section_' + e.currentTarget.dataset.id);
+            if (!aux2) return;
+            aux2.toggleAttribute('hidden')
+        }));
 }
 
 function assignFunctionClick(querySelector, func) {
@@ -353,9 +367,11 @@ function toggleLikeHTML(event) {
 
 function sendCreateCommentRequest() {
 
-    let text = document.querySelector('#comment_post_input').value
-    let id_post = document.querySelector('#comment_post_input').dataset.pid
-    let id_user = document.querySelector('#comment_post_input').dataset.uid
+    let elem = document.querySelector('#comment_post_input')
+    let text = elem.value
+    let id_post = elem.dataset.pid
+    let id_user = elem.dataset.uid
+    let id_parent = elem.dataset.parent
 
     if (text === '') {
         alert('Invalid input');
@@ -364,7 +380,7 @@ function sendCreateCommentRequest() {
 
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
-        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text, id_parent: id_parent }, () => { });
         location.reload();
     }
 

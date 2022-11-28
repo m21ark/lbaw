@@ -21,5 +21,3 @@
         @include('partials.popup.edit_post_popup', ['post' => $post])
     @endisset
 @endsection
-
-
