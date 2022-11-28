@@ -38,6 +38,7 @@ function addEventListeners() {
 
     // GROUP MEMBERS ACTIONS
     assignFunctionClick('#leave_group_button', sendDeleteGroupMemberRequest)
+    assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
 
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
@@ -125,7 +126,7 @@ function assignFunctionClickAll(querySelector, func) {
     let aux = document.querySelectorAll(querySelector);
     if (aux)
         if (aux.length > 0)
-            aux.forEach(e => e.addEventListener('click', () => func(e)));
+            aux.forEach(e => e.addEventListener('click', (e) => func(e)));
 }
 
 function togglePostDropDown(parent) {
@@ -257,6 +258,25 @@ function sendDeleteGroupRequest() {
         sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
     }
 }
+
+function sendKickpMemberRequest(event) {
+
+    let e = event.currentTarget
+
+    let id_group = e.getAttribute('data-idGroup')
+    let id_user = e.getAttribute('data-idUser')
+
+    let res = confirm("Are you sure you want to kick this user?");
+
+    if (!res)
+        return;
+
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+
+    location.reload();
+}
+
+
 
 
 
