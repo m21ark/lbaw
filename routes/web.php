@@ -106,3 +106,10 @@ Route::post('api/message/{id}', 'MessagesController@create');
 Route::post('api/comment/{id_post}', 'CommentController@create');
 Route::put('api/comment', 'CommentController@edit');
 Route::delete('api/comment/{id_comment}', 'CommentController@delete');
+
+// ======================= NOTIFICATIONS ==========================
+
+Route::get('api/user/notifications', 'NotificationController@get');
+Route::get('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+
+

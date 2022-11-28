@@ -91,4 +91,9 @@ class User extends Authenticatable
             return $max.$min;
         });
     }
+
+    public function notifications()
+    {
+        return $this->hasMany('App\Models\Notification', 'id_user');
+    }
 }

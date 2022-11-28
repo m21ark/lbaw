@@ -984,3 +984,29 @@ function createUserReportCardPast(user) {
 }
 
 updateUserReportSearchOnInput()
+
+
+// ========================== GETTING NOTIFICATIONS ===============================
+
+
+var _notfications = []
+
+function getNotifications() {
+    sendAjaxRequest('get', "/api/user/notifications", {}, function () {
+
+        let received = JSON.parse(this.responseText);
+        _notfications = _notfications.concat(received);
+    });
+}
+
+getNotifications();
+
+async function markAsSeen($id) {
+    sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+        if (this.status == 200) {   
+            let _x = _notfications.findIndex(x => x.id == $id);
+            _notfications[_x].seen = true;
+        }
+    });
+}
+
