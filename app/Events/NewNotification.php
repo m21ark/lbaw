@@ -17,6 +17,7 @@ class NewNotification implements ShouldBroadcast
     public $type;
     public $sender;
     public $message;
+    public $photo;
 
     private $channel;
 
@@ -25,12 +26,13 @@ class NewNotification implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($channel, $type, $sender, $message)
+    public function __construct($channel, $type, $sender, $message, $photo)
     {
         // para teste
         $this->channel = $channel;
         $this->type = $type;
         $this->sender = $sender;
+        $this->photo = $photo;
         $this->message  = $message;
     }
 

@@ -15,7 +15,7 @@ if (user_header != null) {
             uploadSms(false, data.message)();
         }
         else {
-            addNotification(data.sender + ' message you: ' + data.message, data.sender);
+            addNotification(data.sender + ' message you: ' + data.message, data.sender, data.photo);
         }
     });
 }
@@ -27,13 +27,13 @@ function createElementFromHTML(htmlString) {
     return div.firstChild;
 }
 
-function addNotification(message_body, sender) {
+function addNotification(message_body, sender, photo) {
     let notf_container = document.querySelector('#notf_container');
     // add js bootstrap Toast to notf_container 
     let notf = createElementFromHTML(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="..." class="rounded me-2" alt="...">
+          <img src="/${photo}" class="rounded me-2 img-fluid" alt="${sender} photo" style="max-width: 100%; height: auto; width: 3em">
           <strong class="me-auto">${sender}</strong>
           <small class="text-muted">just now</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
