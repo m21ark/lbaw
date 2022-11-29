@@ -471,6 +471,7 @@ function sendMessage(event) {
     let receiver = document.querySelector('#sms_rcv');
 
     sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, {text : text}, uploadSms(true, text))
+    document.querySelector('#sms_input').value = ''
 }
 
 function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVEZ VER ISSO DPS
@@ -988,24 +989,30 @@ updateUserReportSearchOnInput()
 
 // ========================== GETTING NOTIFICATIONS ===============================
 
-
-var _notfications = []
+/*
+    All the notifications in this array.
+    when a push happens this array should be updated 
+*/
+var _notifications = []
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
 
         let received = JSON.parse(this.responseText);
-        _notfications = _notfications.concat(received);
+        _notifications = _notifications.concat(received);
     });
 }
 
 getNotifications();
 
+/*
+    this should mark a notification as seen when tapping in the notf.
+*/
 async function markAsSeen($id) {
     sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
         if (this.status == 200) {   
-            let _x = _notfications.findIndex(x => x.id == $id);
-            _notfications[_x].seen = true;
+            let _x = _notifications.findIndex(x => x.id == $id);
+            _notifications[_x].seen = true;
         }
     });
 }
