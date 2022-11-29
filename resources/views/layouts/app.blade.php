@@ -19,8 +19,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!-- Javascript -->
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script type="text/javascript" src={{ asset('js/app.js') }} defer></script>
 
+    
 
 </head>
 

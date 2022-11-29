@@ -1,3 +1,26 @@
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
+var pusher = new Pusher('c827040c068ce8231c02', {
+    cluster: 'eu'
+});
+
+let user_header = document.querySelector('#auth_id');
+if (user_header != null) {
+    let id = user_header.dataset.id;
+    var channel = pusher.subscribe('App.User.' + id);
+    channel.bind('my-event', function (data) {
+
+        if (data.type == "message" && window.location.pathname == '/messages/' + data.sender) 
+        {
+            uploadSms(false, data.message)();
+            console.log("ldldl")
+        }
+        else {
+            alert(data);
+        }
+    });
+}
 function addEventListeners() {
 
     // Toggle para botões que escondem paginas
@@ -38,7 +61,7 @@ function addEventListeners() {
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
     assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
-    
+
     // OPEN COMMENT POPUPS
     commentPopupsController()
     commentRepliesController()
@@ -514,7 +537,7 @@ function sendMessage(event) {
     let text = document.querySelector('#sms_input').value;
     let receiver = document.querySelector('#sms_rcv');
 
-    sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, {text : text}, uploadSms(true, text))
+    sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, { text: text }, uploadSms(true, text))
     document.querySelector('#sms_input').value = ''
 }
 
@@ -525,7 +548,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
         art.classList.add('message_txt');
         art.classList.add(isSender ? 'text_sender' : 'text_rcv');
 
-        date = new Date().toLocaleString().replace(',','').replaceAll('/', '-');
+        date = new Date().toLocaleString().replace(',', '').replaceAll('/', '-');
 
         var p1 = document.createElement('p');
         p1.innerHTML = date;
@@ -535,7 +558,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
 
         art.appendChild(p1);
         art.appendChild(p2);
-        document.querySelector('.message_body').append(art); 
+        document.querySelector('.message_body').append(art);
     }
 }
 
@@ -1054,7 +1077,7 @@ getNotifications();
 */
 async function markAsSeen($id) {
     sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
-        if (this.status == 200) {   
+        if (this.status == 200) {
             let _x = _notifications.findIndex(x => x.id == $id);
             _notifications[_x].seen = true;
         }

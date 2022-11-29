@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Message;
+use App\Events\NewNotification;
 
 class MessagesController extends Controller
 {
@@ -24,6 +25,8 @@ class MessagesController extends Controller
         $sms->text = $request->text;
         $sms->id_sender = Auth::user()->id;
         $sms->id_receiver = intval($id);
+
+        event(new NewNotification(intval($id), 'message', Auth::user()->username, $request->text));
 
         $sms->save();
 
