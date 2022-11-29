@@ -57,7 +57,7 @@
         <!-- TODO: Put this somewherelse -->
         @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
 
-
+        @include('partials.notification_stack')
     </main>
 
     @include('partials.footer')

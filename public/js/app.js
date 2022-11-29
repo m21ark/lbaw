@@ -11,16 +11,49 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        if (data.type == "message" && window.location.pathname == '/messages/' + data.sender) 
-        {
+        if (data.type == "message" && window.location.pathname == '/messages/' + data.sender) {
             uploadSms(false, data.message)();
-            console.log("ldldl")
         }
         else {
-            alert(data);
+            addNotification(data.sender + ' message you: ' + data.message, data.sender);
         }
     });
 }
+
+function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+
+    return div.firstChild;
+}
+
+function addNotification(message_body, sender) {
+    let notf_container = document.querySelector('#notf_container');
+    // add js bootstrap Toast to notf_container 
+    let notf = createElementFromHTML(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="..." class="rounded me-2" alt="...">
+          <strong class="me-auto">${sender}</strong>
+          <small class="text-muted">just now</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          ${message_body}
+        </div>
+    </div>`);
+
+    notf_container.appendChild(notf)
+
+    _n =new bootstrap.Toast(notf, {delay:5000, animation:true});
+     
+    _n.show()
+    
+    setTimeout(() => toastElement.remove(), 5000); // let a certain margin to allow the "hiding toast animation"
+    //_n.dispose()
+}
+
+
 function addEventListeners() {
 
     // Toggle para botões que escondem paginas

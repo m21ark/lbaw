@@ -28,7 +28,7 @@ class LikeController extends Controller
             $like->id_post = $post;
             $like->save();
 
-            event(new NewNotification('hello world'));
+            // event(new NewNotification('hello world'));
 
         } else {
 
