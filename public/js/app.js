@@ -37,19 +37,17 @@ function addEventListeners() {
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
-
+    assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
+    
     // OPEN COMMENT POPUPS
-    commentPopupsController();
-
-    // document.querySelector('.popup_show_comment_edit').toggleAttribute('hidden')
-
+    commentPopupsController()
+    commentRepliesController()
+    commentRepliesShow()
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
 
-
-
-
+    // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
@@ -78,6 +76,31 @@ function commentPopupsController() {
             }));
 }
 
+function commentRepliesController() {
+    let aux = document.querySelectorAll('.comment_reply_btn');
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', (e) => {
+                let inp = document.querySelector('#comment_post_input')
+                inp.value = '@' + e.currentTarget.dataset.username + ' '
+                inp.setAttribute('data-parent', e.currentTarget.dataset.id)
+                inp.focus()
+            }));
+}
+
+function commentRepliesShow() {
+
+    let aux = document.querySelectorAll('.reveal_comment_replies');
+    if (!aux) return;
+
+    if (aux.length > 0)
+        aux.forEach(e => e.addEventListener('click', (e) => {
+            let aux2 = document.querySelector('#comment_reply_section_' + e.currentTarget.dataset.id);
+            if (!aux2) return;
+            aux2.toggleAttribute('hidden')
+        }));
+}
+
 function assignFunctionClick(querySelector, func) {
     let aux = document.querySelector(querySelector);
     if (aux)
@@ -89,7 +112,7 @@ function assignFunctionClickAll(querySelector, func) {
     let aux = document.querySelectorAll(querySelector);
     if (aux)
         if (aux.length > 0)
-            aux.forEach(e => e.addEventListener('click', () => func(e)));
+            aux.forEach(e => e.addEventListener('click', (e) => func(e)));
 }
 
 function togglePostDropDown(parent) {
@@ -224,6 +247,25 @@ function sendDeleteGroupRequest() {
     }
 }
 
+function sendKickpMemberRequest(event) {
+
+    let e = event.currentTarget
+
+    let id_group = e.getAttribute('data-idGroup')
+    let id_user = e.getAttribute('data-idUser')
+
+    let res = confirm("Are you sure you want to kick this user?");
+
+    if (!res)
+        return;
+
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+
+    location.reload();
+}
+
+
+
 
 
 function sendDeleteGroupMemberRequest() {
@@ -333,9 +375,11 @@ function toggleLikeHTML(event) {
 
 function sendCreateCommentRequest() {
 
-    let text = document.querySelector('#comment_post_input').value
-    let id_post = document.querySelector('#comment_post_input').dataset.pid
-    let id_user = document.querySelector('#comment_post_input').dataset.uid
+    let elem = document.querySelector('#comment_post_input')
+    let text = elem.value
+    let id_post = elem.dataset.pid
+    let id_user = elem.dataset.uid
+    let id_parent = elem.dataset.parent
 
     if (text === '') {
         alert('Invalid input');
@@ -344,7 +388,7 @@ function sendCreateCommentRequest() {
 
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
-        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text, id_parent: id_parent }, () => { });
         location.reload();
     }
 

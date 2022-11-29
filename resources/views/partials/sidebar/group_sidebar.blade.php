@@ -36,6 +36,7 @@
                     {{ sizeof($group->members->whereNotIn('id_user', $group->owners->pluck('id_user')->toArray())) }}
                     Members</li>
                 <li class="lead">{{ sizeof($group->posts) }} Posts</li>
+
             </ul>
         </div>
 
@@ -73,6 +74,11 @@
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
+
+                    @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
+                        <a class='btn btn-outline-secondary kick_member_button' data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
+                    @endif
+
                 </div>
             @endif
         @endforeach

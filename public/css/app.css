@@ -379,3 +379,11 @@
     width: 30em;
     z-index: 1
 }
+
+
+
+.comment_reply_section
+{
+    margin: 0 auto;
+    width: 65%;
+}
