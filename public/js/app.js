@@ -1147,7 +1147,25 @@ function timeSince(date) {
     return Math.floor(seconds) + " seconds";
   }
 
-
+function createCustomMessageBody(notf) {
+    
+    if (notf.tipo == "Comment") {
+        return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+    }
+    else if (notf.tipo == "FriendRequest") {
+        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
+    }
+    else if (notf.tipo == "Like") {
+        if (notf.id_post != null)
+            return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
+        else 
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> your Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+    }
+    else if (notf.tipo == "UserMention") {
+        return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
+    }
+    
+}
 
 function createNotificationList(event) {
     event.preventDefault();
@@ -1161,17 +1179,16 @@ function createNotificationList(event) {
     // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
     // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
-            console.log(_notifications[i]);
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
             <div class="toast-header">
               <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
-              <strong class="me-auto">User</strong>
+              <strong class="me-auto">${_notifications[i].sender.username}</strong>
               <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-              You have a new ${_notifications[i].type}.
+              ${createCustomMessageBody(_notifications[i])}.
             </div>
         </div>`);
 
