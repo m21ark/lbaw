@@ -8,7 +8,7 @@ use App\Models\Notification;
 
 class NotificationController extends Controller
 {
-    public function get() 
+    public function get()
     {
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
