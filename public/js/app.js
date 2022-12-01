@@ -12,6 +12,12 @@ if (user_header != null) {
     channel.bind('my-event', function (data) {
 
         console.log(JSON.stringify(data));
+        // TODO: VER O CASO DO REPLY
+        let notfiableJsonPrototype = {
+            id_post: data.obj.id_post,
+            sender: data.sender,
+            tipo: data.type,
+        }
         if (data.type == "message") 
         {
             if (window.location.pathname == '/messages/' + data.sender.username) {
@@ -23,12 +29,10 @@ if (user_header != null) {
         }
         else if (data.type == "Like")
         {
-            // TODO: VER O CASO DO REPLY
-            let notfiableJsonPrototype = {
-                id_post: data.obj.id_post,
-                sender: data.sender,
-                tipo: data.type,
-            }
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
+        else if (data.type == "Comment")
+        {
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
@@ -453,7 +457,7 @@ function sendCreateCommentRequest() {
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
         sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
-        location.reload();
+        //location.reload();
     }
 
 }

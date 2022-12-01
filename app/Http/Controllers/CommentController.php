@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\NewNotification;
 
 class CommentController extends Controller
 {
@@ -19,11 +20,16 @@ class CommentController extends Controller
         preg_match_all('/(?<=@)\w+/m', $text, $matches);
 
         if (sizeof($matches[0]) === 0) {
-            DB::table('comment')->insert([
-                'id_post' => $id_post,
-                'id_commenter' => Auth::user()->id,
-                'text' => $text,
-            ]);
+
+            $comment = new Comment();
+            $comment->id_post = $id_post;
+            $comment->id_commenter = Auth::user()->id;
+            $comment->text = $text;
+            $comment->save();
+
+            event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
+            , $comment));
+
         } else if (sizeof($matches[0]) === 1) {
 
             // TODO adicionar notificação de erro
@@ -40,12 +46,14 @@ class CommentController extends Controller
                 ->get('comment.id')->first();
 
             if ($aux) {
-                DB::table('comment')->insert([
-                    'id_post' => $id_post,
-                    'id_commenter' => Auth::user()->id,
-                    'text' => $text,
-                    'id_parent' => $aux->id,
-                ]);
+                $comment = new Comment();
+                $comment->id_post = $id_post;
+                $comment->id_commenter = Auth::user()->id;
+                $comment->text = $text;
+                $comment->id_parent = $aux->id;
+                $comment->save();
+                event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
+                 , $comment));
             }
         }
     }

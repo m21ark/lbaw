@@ -2,7 +2,6 @@
     @if ($comment->id_parent !== null)
         @continue
     @endif
-
     <div class="card mb-4">
 
         <div class="card-header d-flex justify-content-center">
