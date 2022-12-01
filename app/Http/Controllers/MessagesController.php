@@ -26,10 +26,10 @@ class MessagesController extends Controller
         $sms->id_sender = Auth::user()->id;
         $sms->id_receiver = intval($id);
 
-        event(new NewNotification(intval($id), 'message', Auth::user()->username, 
-            $request->text, Auth::user()->photo));
-
         $sms->save();
+        
+        event(new NewNotification(intval($id), 'message', Auth::user(), 
+            $sms));
 
         return response()->json(['Successfully created' => 201]);
     }

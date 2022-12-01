@@ -11,11 +11,25 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        if (data.type == "message" && window.location.pathname == '/messages/' + data.sender) {
-            uploadSms(false, data.message)();
+        console.log(JSON.stringify(data));
+        if (data.type == "message") 
+        {
+            if (window.location.pathname == '/messages/' + data.sender.username) {
+            uploadSms(false, data.obj.text)();
+            } 
+            else {
+                addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
+            }
         }
-        else {
-            addNotification(data.sender + ' message you: ' + data.message, data.sender, data.photo);
+        else if (data.type == "Like")
+        {
+            // TODO: VER O CASO DO REPLY
+            let notfiableJsonPrototype = {
+                id_post: data.obj.id_post,
+                sender: data.sender,
+                tipo: data.type,
+            }
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
 }
@@ -27,14 +41,14 @@ function createElementFromHTML(htmlString) {
     return div.firstChild;
 }
 
-function addNotification(message_body, sender, photo) {
+function addNotification(message_body, sender) {
     let notf_container = document.querySelector('#notf_container');
     // add js bootstrap Toast to notf_container 
     let notf = createElementFromHTML(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="/${photo}" class="rounded me-2 img-fluid" alt="${sender} photo" style="max-width: 100%; height: auto; width: 3em">
-          <strong class="me-auto">${sender}</strong>
+          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} photo" style="max-width: 100%; height: auto; width: 3em">
+          <strong class="me-auto">${sender.username}</strong>
           <small class="text-muted">just now</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
@@ -49,7 +63,7 @@ function addNotification(message_body, sender, photo) {
 
     _n.show()
 
-    setTimeout(() => toastElement.remove(), 7000);
+    //setTimeout(() => toastElement.remove(), 7000);
     //_n.dispose()
 }
 

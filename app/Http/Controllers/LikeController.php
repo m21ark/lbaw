@@ -6,6 +6,7 @@ use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Events\NewNotification;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -28,7 +29,9 @@ class LikeController extends Controller
             $like->id_post = $post;
             $like->save();
 
-            // event(new NewNotification('hello world'));
+            // QUE RAIO ???? TODO: DESCOBRIR QUE MAGIA ESTA AQUI
+            event(new NewNotification(intval($like->post->owner->id), 'Like', Auth::user()
+            , $like->toArray()));
 
         } else {
 
