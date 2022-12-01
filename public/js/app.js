@@ -1154,13 +1154,16 @@ function createNotificationList(event) {
     
     let notifications = document.querySelector('#notifications_container');
 
-    if (notifications.style.display == 'none') {
+    console.log(notifications.style.display);
+    if (notifications.style.display == 'none' || notifications.style.display == '') {
         notifications.style.display = 'block';
 
+    // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
+    // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
             console.log(_notifications[i]);
             let notf = createElementFromHTML(`
-        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
             <div class="toast-header">
               <img src="/User/user.jpg" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
               <strong class="me-auto">User</strong>

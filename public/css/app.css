@@ -103,6 +103,13 @@
         display: none;
     }
 
+    /*  CHANGE THIS LATTER  */
+    #notifications_container {
+        grid-area: navbar;
+        width: 0px;
+        display: none;
+    }
+
     #small_leftbar {
         grid-area: leftbar;
         position: fixed;
