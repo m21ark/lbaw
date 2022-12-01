@@ -1098,7 +1098,7 @@ var _notifications = []
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-
+        console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
     });
@@ -1148,13 +1148,13 @@ function timeSince(date) {
   }
 
 
+
 function createNotificationList(event) {
     event.preventDefault();
 
     
     let notifications = document.querySelector('#notifications_container');
 
-    console.log(notifications.style.display);
     if (notifications.style.display == 'none' || notifications.style.display == '') {
         notifications.style.display = 'block';
 
@@ -1165,9 +1165,9 @@ function createNotificationList(event) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
             <div class="toast-header">
-              <img src="/User/user.jpg" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
               <strong class="me-auto">User</strong>
-              <small class="text-muted">${timeSince(_notifications[i].notification_date)}</small>
+              <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
