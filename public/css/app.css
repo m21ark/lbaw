@@ -29,7 +29,14 @@
 
     #leftbar {
         grid-area: navbar;
-        width: 280px;
+        width: 100px;
+    }
+
+    #notifications_container {
+        grid-area: navbar;
+        width: 180px;
+        margin-left: 100px;
+        display: none;
     }
 
     #rightbar {

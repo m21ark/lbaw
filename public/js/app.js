@@ -45,11 +45,11 @@ function addNotification(message_body, sender, photo) {
 
     notf_container.appendChild(notf)
 
-    _n =new bootstrap.Toast(notf, {delay:5000, animation:true});
-     
+    _n = new bootstrap.Toast(notf, { delay: 5000, animation: true });
+
     _n.show()
-    
-    setTimeout(() => toastElement.remove(), 5000); // let a certain margin to allow the "hiding toast animation"
+
+    setTimeout(() => toastElement.remove(), 7000);
     //_n.dispose()
 }
 
@@ -77,7 +77,8 @@ function addEventListeners() {
         ['#leave_group_button', sendDeleteGroupMemberRequest],
         ['#comment_post_send', sendCreateCommentRequest],
         ['#edit_comment_button', sendEditCommentRequest],
-        ['#delete_comment_button', sendDeleteCommentRequest]
+        ['#delete_comment_button', sendDeleteCommentRequest],
+        ['#notification_icon', createNotificationList],
     ];
 
 
@@ -1116,4 +1117,32 @@ async function markAsSeen($id) {
         }
     });
 }
+
+
+
+function createNotificationList(event) {
+    event.preventDefault();
+    let notifications = document.querySelector('#notifications_container');
+
+    for (let i = 0; i < _notifications.length; i++) {
+
+        let notf = createElementFromHTML(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="/User/user.jpg" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+          <strong class="me-auto">User</strong>
+          <small class="text-muted">${}</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          You have a new ${_notifications[i].type}.
+        </div>
+    </div>`);
+
+        notifications.appendChild(notf);
+    }
+    console.log("dkd")
+    notifications.style.display = 'auto';
+}
+
 
