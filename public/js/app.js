@@ -16,6 +16,7 @@ if (user_header != null) {
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
             sender: data.sender,
+            notification_date: Date.now(),
             tipo: data.type,
         }
         if (data.type == "message") 
@@ -29,10 +30,12 @@ if (user_header != null) {
         }
         else if (data.type == "Like")
         {
+            _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "Comment")
         {
+            _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
@@ -1120,13 +1123,15 @@ getNotifications();
 /*
     this should mark a notification as seen when tapping in the notf.
 */
-async function markAsSeen($id) {
-    sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+function markAsSeen($id, e) {
+    return function() {sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
         if (this.status == 200) {
             let _x = _notifications.findIndex(x => x.id == $id);
-            _notifications[_x].seen = true;
-        }
+            _notifications.splice(_x, 1);
+            e.remove();
+        } 
     });
+    }
 }
 
 // taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
@@ -1202,8 +1207,8 @@ function createNotificationList(event) {
               ${createCustomMessageBody(_notifications[i])}.
             </div>
         </div>`);
-
             notifications.appendChild(notf);
+            notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
         }
     } else {
         notifications.style.display = 'none';

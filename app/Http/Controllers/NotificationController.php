@@ -18,8 +18,12 @@ class NotificationController extends Controller
         foreach (Auth::user()->notifications as $not) {
             $user[] = $not->sender;
         }
-            
-        return json_encode(Auth::user()->notifications);
+        
+        $nots = Auth::user()->notifications->filter(function ($obj) {
+            return $obj->seen == False;
+        })->values();
+
+        return json_encode($nots);
     }
 
 
