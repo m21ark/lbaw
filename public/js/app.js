@@ -1118,31 +1118,65 @@ async function markAsSeen($id) {
     });
 }
 
+// taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
+function timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+  
+    var interval = seconds / 31536000;
+  
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
 
 
 function createNotificationList(event) {
     event.preventDefault();
+
+    
     let notifications = document.querySelector('#notifications_container');
 
-    for (let i = 0; i < _notifications.length; i++) {
+    if (notifications.style.display == 'none') {
+        notifications.style.display = 'block';
 
-        let notf = createElementFromHTML(`
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <img src="/User/user.jpg" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
-          <strong class="me-auto">User</strong>
-          <small class="text-muted">${}</small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-          You have a new ${_notifications[i].type}.
-        </div>
-    </div>`);
+        for (let i = 0; i < _notifications.length; i++) {
+            console.log(_notifications[i]);
+            let notf = createElementFromHTML(`
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            <div class="toast-header">
+              <img src="/User/user.jpg" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+              <strong class="me-auto">User</strong>
+              <small class="text-muted">${timeSince(_notifications[i].notification_date)}</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              You have a new ${_notifications[i].type}.
+            </div>
+        </div>`);
 
-        notifications.appendChild(notf);
+            notifications.appendChild(notf);
+        }
+    } else {
+        notifications.style.display = 'none';
     }
-    console.log("dkd")
-    notifications.style.display = 'auto';
 }
 
 

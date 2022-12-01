@@ -34,7 +34,7 @@
 
     #notifications_container {
         grid-area: navbar;
-        width: 180px;
+        width: 280px;
         margin-left: 100px;
         display: none;
     }

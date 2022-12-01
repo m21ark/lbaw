@@ -1,7 +1,4 @@
 <div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light" id="notifications_container">
-    <div id="static_notf_container" >
-        <a href="">OLAAAAAAAAAAAAAAAAAA</a>
-    </div>
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
