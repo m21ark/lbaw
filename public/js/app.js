@@ -1196,6 +1196,7 @@ function createNotificationList(event) {
         }
     } else {
         notifications.style.display = 'none';
+        notifications.innerHTML = '';
     }
 }
 
