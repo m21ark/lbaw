@@ -1,7 +1,7 @@
 <div class="container mt-5 mb-5 post_item " id="post_main_page">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
-            <div class="card post_card">
+            <div class="card post_card p-0">
 
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
@@ -46,8 +46,8 @@
                 @endif
 
 
-                <div class="p-2">
-                    <p class="text-justify">{{ $post->text }}</p>
+                <div>
+                    <p class="text-justify p-2">{{ $post->text }}</p>
 
 
                     <div class="card-footer d-flex justify-content-evenly">

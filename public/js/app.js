@@ -19,11 +19,11 @@ if (user_header != null) {
             notification_date: Date.now(),
             tipo: data.type,
         }
-        if (data.type == "message") 
+        if (data.type == "message")
         {
             if (window.location.pathname == '/messages/' + data.sender.username) {
             uploadSms(false, data.obj.text)();
-            } 
+            }
             else {
                 addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
             }
@@ -50,7 +50,7 @@ function createElementFromHTML(htmlString) {
 
 function addNotification(message_body, sender) {
     let notf_container = document.querySelector('#notf_container');
-    // add js bootstrap Toast to notf_container 
+    // add js bootstrap Toast to notf_container
     let notf = createElementFromHTML(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
@@ -718,7 +718,7 @@ function createPost(post) {
 
 <div class="container mt-5 mb-5 post_item" style="width:50em">
     <div class="row d-flex align-items-center mw-50 justify-content-center ">
-            <div class="card post_card">
+            <div class="card post_card p-0">
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
 
@@ -748,8 +748,8 @@ function createPost(post) {
                     ${images}
 
 
-                    <div class="p-2">
-                        <p class="text-justify">${post.text}</p>
+                    <div>
+                        <p class="text-justify p-3">${post.text}</p>
 
 
                         <div class="card-footer d-flex justify-content-evenly">
@@ -1106,7 +1106,7 @@ updateUserReportSearchOnInput()
 
 /*
     All the notifications in this array.
-    when a push happens this array should be updated 
+    when a push happens this array should be updated
 */
 var _notifications = []
 
@@ -1129,7 +1129,7 @@ function markAsSeen($id, e) {
             let _x = _notifications.findIndex(x => x.id == $id);
             _notifications.splice(_x, 1);
             e.remove();
-        } 
+        }
     });
     }
 }
@@ -1138,9 +1138,9 @@ function markAsSeen($id, e) {
 function timeSince(date) {
 
     var seconds = Math.floor((new Date() - date) / 1000);
-  
+
     var interval = seconds / 31536000;
-  
+
     if (interval > 1) {
       return Math.floor(interval) + " years";
     }
@@ -1164,7 +1164,7 @@ function timeSince(date) {
   }
 
 function createCustomMessageBody(notf) {
-    
+
     if (notf.tipo == "Comment") {
         return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
     }
@@ -1174,19 +1174,19 @@ function createCustomMessageBody(notf) {
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
-        else 
+        else
             return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> your Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
     }
-    
+
 }
 
 function createNotificationList(event) {
     event.preventDefault();
 
-    
+
     let notifications = document.querySelector('#notifications_container');
 
     if (notifications.style.display == 'none' || notifications.style.display == '') {
