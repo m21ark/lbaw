@@ -1,3 +1,80 @@
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
+var pusher = new Pusher('c827040c068ce8231c02', {
+    cluster: 'eu'
+});
+
+let user_header = document.querySelector('#auth_id');
+if (user_header != null) {
+    let id = user_header.dataset.id;
+    var channel = pusher.subscribe('App.User.' + id);
+    channel.bind('my-event', function (data) {
+
+        console.log(JSON.stringify(data));
+        // TODO: VER O CASO DO REPLY
+        let notfiableJsonPrototype = {
+            id_post: data.obj.id_post,
+            sender: data.sender,
+            notification_date: Date.now(),
+            tipo: data.type,
+        }
+        if (data.type == "message")
+        {
+            if (window.location.pathname == '/messages/' + data.sender.username) {
+            uploadSms(false, data.obj.text)();
+            }
+            else {
+                addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
+            }
+        }
+        else if (data.type == "Like")
+        {
+            _notifications.push(notfiableJsonPrototype);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
+        else if (data.type == "Comment")
+        {
+            _notifications.push(notfiableJsonPrototype);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
+    });
+}
+
+function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+
+    return div.firstChild;
+}
+
+function addNotification(message_body, sender) {
+    let notf_container = document.querySelector('#notf_container');
+    // add js bootstrap Toast to notf_container
+    let notf = createElementFromHTML(`
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} photo" style="max-width: 100%; height: auto; width: 3em">
+          <strong class="me-auto">${sender.username}</strong>
+          <small class="text-muted">just now</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          ${message_body}
+        </div>
+    </div>`);
+
+    notf_container.appendChild(notf)
+
+    _n = new bootstrap.Toast(notf, { delay: 5000, animation: true });
+
+    _n.show()
+
+    //setTimeout(() => toastElement.remove(), 7000);
+    //_n.dispose()
+}
+
+
 function addEventListeners() {
 
     // Toggle para botões que escondem paginas
@@ -7,7 +84,22 @@ function addEventListeners() {
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
-        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')]
+        ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
+        ['#sms_send_btn', sendMessage],
+        ['#profile_post_button_action', sendCreatePostRequest(true)],
+        ['#group_post_button_action', sendCreatePostRequest(false)],
+        ['#edit_post_button', sendEditPostRequest],
+        ['#delete_post_button', sendDeletePostRequest],
+        ['#create_group_button', sendCreateGroupRequest],
+        ['#edit_group_button', sendEditGroupRequest],
+        ['#delete_group_button', sendDeleteGroupRequest],
+        ['#edit_profile_button', sendEditProfileRequest],
+        ['#delete_profile_button', sendDeleteProfileRequest],
+        ['#leave_group_button', sendDeleteGroupMemberRequest],
+        ['#comment_post_send', sendCreateCommentRequest],
+        ['#edit_comment_button', sendEditCommentRequest],
+        ['#delete_comment_button', sendDeleteCommentRequest],
+        ['#notification_icon', createNotificationList],
     ];
 
 
@@ -20,32 +112,20 @@ function addEventListeners() {
     );
 
 
-    // POST ACTIONS
-    assignFunctionClick('#profile_post_button_action', sendCreatePostRequest(true))
-    assignFunctionClick('#group_post_button_action', sendCreatePostRequest(true))
-    assignFunctionClick('#edit_post_button', sendEditPostRequest)
-    assignFunctionClick('#delete_post_button', sendDeletePostRequest)
-
-    // GROUP ACTIONS
-    assignFunctionClick('#create_group_button', sendCreateGroupRequest)
-    assignFunctionClick('#edit_group_button', sendEditGroupRequest)
-    assignFunctionClick('#delete_group_button', sendDeleteGroupRequest)
-
-    // PROFILE ACTIONS
-    assignFunctionClick('#edit_profile_button', sendEditProfileRequest)
-    assignFunctionClick('#delete_profile_button', sendDeleteProfileRequest)
-
-    // GROUP MEMBERS ACTIONS
-    assignFunctionClick('#leave_group_button', sendDeleteGroupMemberRequest)
-
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
+    assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
+    assignFunctionClickAll('.reveal_comment_replies', toggleReplySectionShow)
+
+    // OPEN COMMENT POPUPS
+    commentPopupsController()
+    commentRepliesController()
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
 
-
+    // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
@@ -60,6 +140,38 @@ function addEventListeners() {
         })
 }
 
+function commentPopupsController() {
+    let aux = document.querySelectorAll('.popup_btn_comment_edit');
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', (e) => {
+                let id = e.currentTarget.dataset.id
+                let elem = document.querySelector('#popup_show_comment_edit')
+                elem.toggleAttribute('hidden')
+                document.querySelector('#comment_text_edit').value = e.currentTarget.dataset.text
+                document.querySelector('#edit_comment_button').setAttribute('data-id', id)
+                document.querySelector('#delete_comment_button').setAttribute('data-id', id)
+            }));
+}
+
+function commentRepliesController() {
+    let aux = document.querySelectorAll('.comment_reply_btn');
+    if (aux)
+        if (aux.length > 0)
+            aux.forEach(e => e.addEventListener('click', (e) => {
+                let inp = document.querySelector('#comment_post_input')
+                inp.value = '@' + e.currentTarget.dataset.username + ' '
+                inp.setAttribute('data-parent', e.currentTarget.dataset.id)
+                inp.focus()
+            }));
+}
+
+function toggleReplySectionShow(e) {
+    let id = e.currentTarget.dataset.id
+    let elem = document.querySelector('#comment_reply_section_' + id)
+    elem.toggleAttribute('hidden')
+}
+
 function assignFunctionClick(querySelector, func) {
     let aux = document.querySelector(querySelector);
     if (aux)
@@ -71,7 +183,7 @@ function assignFunctionClickAll(querySelector, func) {
     let aux = document.querySelectorAll(querySelector);
     if (aux)
         if (aux.length > 0)
-            aux.forEach(e => e.addEventListener('click', () => func(e)));
+            aux.forEach(e => e.addEventListener('click', (e) => func(e)));
 }
 
 function togglePostDropDown(parent) {
@@ -118,7 +230,8 @@ function sendFormData(method, url, data, handler) {
 
 function addedHandler(class_name) {
     return function () {
-        logItem(class_name)(0);
+        if (class_name != null)
+            logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
         alert.innerHTML = 'Action successful';
@@ -168,6 +281,7 @@ function sendCreateGroupRequest(event) {
 
 }
 
+
 function sendEditGroupRequest(event) {
 
     event.preventDefault();
@@ -203,6 +317,25 @@ function sendDeleteGroupRequest() {
         sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
     }
 }
+
+function sendKickpMemberRequest(event) {
+
+    let e = event.currentTarget
+
+    let id_group = e.getAttribute('data-idGroup')
+    let id_user = e.getAttribute('data-idUser')
+
+    let res = confirm("Are you sure you want to kick this user?");
+
+    if (!res)
+        return;
+
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+
+    location.reload();
+}
+
+
 
 
 
@@ -281,52 +414,86 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
-
-    let like_icon = event.firstElementChild
-
-    hasLiked = like_icon.dataset.liked === '1'
-
-    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
-    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
-    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
-
-    if (hasLiked)
-        like_icon.style.fontSize = '1.3em'
-    else
-        like_icon.style.fontSize = '1.2em'
-
-
-    let id_user = event.dataset.uid
-    let id_post = event.dataset.id
-    // console.log(`id_user: ${id_user} id_post: ${id_post}`)
+    let e = event.currentTarget
+    toggleLikeHTML(e)
+    let id_user = e.dataset.uid
+    let id_post = e.dataset.id
     sendAjaxRequest('post', '/api/like_post', { id_user: id_user, id_post: id_post }, () => { });
 }
 
 function sendLikeCommentRequest(event) {
+    let e = event.currentTarget
+    toggleLikeHTML(e)
+    let id_user = e.dataset.uid
+    let id_comment = e.dataset.id
+    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
+}
 
+function toggleLikeHTML(event) {
     let like_icon = event.firstElementChild
-
     hasLiked = like_icon.dataset.liked === '1'
 
     event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-
     like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-
     like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
 
     if (hasLiked)
         like_icon.style.fontSize = '1.3em'
     else
         like_icon.style.fontSize = '1.2em'
-
-
-
-    let id_user = event.dataset.uid
-    let id_comment = event.dataset.id
-    sendAjaxRequest('post', '/api/like_comment', { id_user: id_user, id_comment: id_comment }, () => { });
 }
+
+
+// ============================================ Comments ============================================
+
+function sendCreateCommentRequest() {
+
+    let text = document.querySelector('#comment_post_input').value
+    let id_post = document.querySelector('#comment_post_input').dataset.pid
+    let id_user = document.querySelector('#comment_post_input').dataset.uid
+
+    if (text === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to publish this comment?');
+    if (res) {
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        //location.reload();
+    }
+
+}
+
+function sendEditCommentRequest() {
+    let id_comment = document.querySelector('#edit_comment_button').dataset.id
+    let text = document.querySelector('#comment_text_edit').value
+
+    if (text === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want edit this comment?');
+    if (res) {
+        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
+        //location.reload();
+        logItem('#popup_show_comment_edit')(0);
+    }
+
+}
+
+
+function sendDeleteCommentRequest() {
+    let id_comment = document.querySelector('#delete_comment_button').dataset.id
+
+    let res = confirm('Are you sure you want delete this comment?');
+    if (res) {
+        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
+        location.reload();
+    }
+}
+
 
 
 // ============================================ Post ============================================
@@ -411,6 +578,38 @@ function sendDeletePostRequest() {
 }
 
 
+// ==================================== MESSAGES =====================================
+
+function sendMessage(event) {
+    event.preventDefault();
+    let text = document.querySelector('#sms_input').value;
+    let receiver = document.querySelector('#sms_rcv');
+
+    sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, { text: text }, uploadSms(true, text))
+    document.querySelector('#sms_input').value = ''
+}
+
+function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVEZ VER ISSO DPS
+    return function () {
+        const art = document.createElement("article");
+
+        art.classList.add('message_txt');
+        art.classList.add(isSender ? 'text_sender' : 'text_rcv');
+
+        date = new Date().toLocaleString().replace(',', '').replaceAll('/', '-');
+
+        var p1 = document.createElement('p');
+        p1.innerHTML = date;
+
+        var p2 = document.createElement('p');
+        p2.innerHTML = message;
+
+        art.appendChild(p1);
+        art.appendChild(p2);
+        document.querySelector('.message_body').append(art);
+    }
+}
+
 
 addEventListeners();
 
@@ -459,7 +658,7 @@ function createPost(post) {
         } else {
             dropdown = `
             <a class="dropdown-item" href="#">Report Post</a>
-            <a class="dropdown-item" href="#">Send Message</a>`
+            <a class="dropdown-item" href="/messages/${post.owner}">Send Message</a>`
         }
 
         bottom = `
@@ -519,7 +718,7 @@ function createPost(post) {
 
 <div class="container mt-5 mb-5 post_item" style="width:50em">
     <div class="row d-flex align-items-center mw-50 justify-content-center ">
-            <div class="card post_card">
+            <div class="card post_card p-0">
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
 
@@ -549,8 +748,8 @@ function createPost(post) {
                     ${images}
 
 
-                    <div class="p-2">
-                        <p class="text-justify">${post.text}</p>
+                    <div>
+                        <p class="text-justify p-3">${post.text}</p>
 
 
                         <div class="card-footer d-flex justify-content-evenly">
@@ -901,3 +1100,120 @@ function createUserReportCardPast(user) {
 }
 
 updateUserReportSearchOnInput()
+
+
+// ========================== GETTING NOTIFICATIONS ===============================
+
+/*
+    All the notifications in this array.
+    when a push happens this array should be updated
+*/
+var _notifications = []
+
+function getNotifications() {
+    sendAjaxRequest('get', "/api/user/notifications", {}, function () {
+        console.log(this.responseText)
+        let received = JSON.parse(this.responseText);
+        _notifications = _notifications.concat(received);
+    });
+}
+
+getNotifications();
+
+/*
+    this should mark a notification as seen when tapping in the notf.
+*/
+function markAsSeen($id, e) {
+    return function() {sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+        if (this.status == 200) {
+            let _x = _notifications.findIndex(x => x.id == $id);
+            _notifications.splice(_x, 1);
+            e.remove();
+        }
+    });
+    }
+}
+
+// taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
+function timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " years";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+  }
+
+function createCustomMessageBody(notf) {
+
+    if (notf.tipo == "Comment") {
+        return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+    }
+    else if (notf.tipo == "FriendRequest") {
+        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
+    }
+    else if (notf.tipo == "Like") {
+        if (notf.id_post != null)
+            return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
+        else
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> your Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+    }
+    else if (notf.tipo == "UserMention") {
+        return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
+    }
+
+}
+
+function createNotificationList(event) {
+    event.preventDefault();
+
+
+    let notifications = document.querySelector('#notifications_container');
+
+    if (notifications.style.display == 'none' || notifications.style.display == '') {
+        notifications.style.display = 'block';
+
+    // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
+    // tb meter um numero limitado
+        for (let i = 0; i < _notifications.length; i++) {
+            let notf = createElementFromHTML(`
+        <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            <div class="toast-header">
+              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+              <strong class="me-auto">${_notifications[i].sender.username}</strong>
+              <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              ${createCustomMessageBody(_notifications[i])}.
+            </div>
+        </div>`);
+            notifications.appendChild(notf);
+            notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
+        }
+    } else {
+        notifications.style.display = 'none';
+        notifications.innerHTML = '';
+    }
+}
+
+

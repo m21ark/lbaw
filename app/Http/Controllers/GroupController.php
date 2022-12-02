@@ -87,7 +87,7 @@ class GroupController extends Controller
         $group->description = $request->input('description');
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
-        if ($request->hasFile('photo')) 
+        if ($request->hasFile('photo'))
         {
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
@@ -160,18 +160,16 @@ class GroupController extends Controller
     }
 
 
-    public function removeGroupMember($idGroup)
+    public function removeGroupMember($idGroup, $idUser)
     {
         /*
             N DEVE ESTAR AQUI
         */
 
-        $id_user = Auth::user()->id;
-
         // TODO Policy
 
         DB::table('group_join_request')
-            ->where('id_group', $idGroup)->where('id_user', $id_user)
+            ->where('id_group', $idGroup)->where('id_user', $idUser)
             ->update(['acceptance_status' => 'Rejected']);
     }
 }

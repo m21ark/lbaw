@@ -1,3 +1,5 @@
+<div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light" id="notifications_container">
+</div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
 
@@ -6,19 +8,36 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
 
-        <a href="/home" class=" btn btn-outline-primary mb-3">Home </a>
+        <a href="/home" class=" btn mb-3">
+            <i class="fa-solid fa-house fa-2x"></i>
+        </a>
 
         @auth
-            <a href="" class=" btn btn-outline-primary mb-3 drop_my_group" aria-current="page">My Groups</a>
+            <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->        
+            <a href="" class=" btn mb-3 drop_my_group" aria-current="page">
+                <i class="fa-solid fa-people-group fa-2x"></i>
+            </a>
+
+            <a href="" class=" btn mb-3" aria-current="page" id="notification_icon">
+                <i class="fa-solid fa-bell fa-2x"></i>
+                <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+            </a>
 
             @include('partials.participating_groups')
 
-            <a href={{ url('/messages/sender_username') }} class=" btn btn-outline-primary mb-3">Messages</a>
+            <a href={{ url('/messages/sender_username') }} class=" btn mb-3">
+                <i class="fa-solid fa-envelope fa-2x"></i>
+                <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+            </a>
+
         @endauth
 
         @auth
             <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary"
-                type="submit">Post</button>
+                type="submit">
+                
+                <i class="fa-regular fa-square-plus fa-2x"></i>
+            </button>
 
             @if (Auth::user()->isAdmin)
                 <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3">Admin Console</a>

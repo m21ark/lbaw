@@ -22,7 +22,6 @@
     }
 
 
-
     main {
         grid-area: content;
         margin: 1.5em;
@@ -30,7 +29,14 @@
 
     #leftbar {
         grid-area: navbar;
-        width: 280px;
+        width: 100px;
+    }
+
+    #notifications_container {
+        grid-area: navbar;
+        width: 350px;
+        margin-left: 100px;
+        display: none;
     }
 
     #rightbar {
@@ -46,6 +52,13 @@
     #small_leftbar {
         display: none;
     }
+
+    #post_comment_section{
+
+        margin-right: 1em;
+    }
+
+
 }
 
 
@@ -90,6 +103,13 @@
         display: none;
     }
 
+    /*  CHANGE THIS LATTER  */
+    #notifications_container {
+        grid-area: navbar;
+        width: 0px;
+        display: none;
+    }
+
     #small_leftbar {
         grid-area: leftbar;
         position: fixed;
@@ -105,11 +125,21 @@
         display: none;
     }
 
+    #post_comment_section{
+        margin: -6em auto 7em auto;
+        min-width: 40em;
+        grid-row: 3;
+    }
+
+
 
 }
 
-
 /*  ====================== AJUSTES =====================*/
+
+
+
+
 
 .profile_img {
     display: block;
@@ -362,4 +392,12 @@
     margin-right: auto;
     width: 30em;
     z-index: 1
+}
+
+
+
+.comment_reply_section
+{
+    margin: 0 auto;
+    width: 65%;
 }

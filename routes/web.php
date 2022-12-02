@@ -95,3 +95,21 @@ Route::get('api/admin/past_reports/{query_string}', 'AdminController@usersReport
 
 Route::post('api/like_post', 'LikeController@toggle');
 Route::post('api/like_comment', 'CommentLikeController@toggle');
+
+
+// ======================= Messages ===========================
+
+Route::post('api/message/{id}', 'MessagesController@create');
+
+// ======================= COMMENTING CRUD  =======================
+
+Route::post('api/comment/{id_post}', 'CommentController@create');
+Route::put('api/comment', 'CommentController@edit');
+Route::delete('api/comment/{id_comment}', 'CommentController@delete');
+
+// ======================= NOTIFICATIONS ==========================
+
+Route::get('api/user/notifications', 'NotificationController@get');
+Route::get('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+
+

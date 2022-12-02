@@ -91,8 +91,7 @@ class PostController extends Controller
     {
         DB::beginTransaction();
         $post = new Post();
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln($request->input('text'));
+
         if ($request->input('group_name') != null) {
             $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }

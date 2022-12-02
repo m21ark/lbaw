@@ -1,7 +1,7 @@
-<div class="container mt-5 mb-5 post_item ">
+<div class="container mt-5 mb-5 post_item " id="post_main_page">
     <div class="row d-flex align-items-center justify-content-center ">
         <div>
-            <div class="card post_card">
+            <div class="card post_card p-0">
 
                 <div class="card-header d-flex justify-content-between p-2 px-3">
 
@@ -32,7 +32,7 @@
                                     @endisset
                                 @else
                                     <a class="dropdown-item" href="#!">Report Post</a>
-                                    <a class="dropdown-item" href="#!">Send Message</a>
+                                    <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send Message</a>
                                 @endif
                             @endauth
                         </div>
@@ -40,20 +40,18 @@
 
                 </div>
 
-                <!-- TODO: Ver imagens da database -->
 
                 @if (!$post->images->isEmpty())
                     @include('partials.post_carousel_image')
                 @endif
 
 
-                <div class="p-2">
-                    <p class="text-justify">{{ $post->text }}</p>
+                <div>
+                    <p class="text-justify p-2">{{ $post->text }}</p>
 
 
                     <div class="card-footer d-flex justify-content-evenly">
 
-                        <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
                         @if (Auth::check())
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
@@ -99,9 +97,10 @@
 
                 @isset($showComments)
                     <div class="card_footer form-control d-flex align-items-center ">
-                        <input type="text" name="comment_post" id="comment_post_input"
-                            class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
-                        <a href="#!" class="btn btn-primary">
+                        <input type="text" name="comment_post" data-uid={{ Auth::user()->id }}
+                            data-pid={{ $post->id }} id="comment_post_input" class="me-2 form-control mt-3 mb-2"
+                            placeholder="Make a comment">
+                        <a href="#!" class="btn btn-primary" id="comment_post_send">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-send" viewBox="0 0 16 16">
                                 <path
@@ -113,14 +112,6 @@
 
             </div>
 
-
-
         </div>
     </div>
 </div>
-
-
-@isset($showComments)
-    <!-- TODO: Maybe not very smart to render for each post -->
-    @include('partials.popup.edit_post_popup', ['post' => $post])
-@endisset

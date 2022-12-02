@@ -34,8 +34,8 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\Report', 'id_post');
     }
-    
-    public function images() 
+
+    public function images()
     {
         return $this->hasMany('App\Models\Image', 'id_post');
     }

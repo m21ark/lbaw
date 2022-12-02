@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\NewNotification;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -26,6 +28,11 @@ class LikeController extends Controller
             $like->id_user = $user;
             $like->id_post = $post;
             $like->save();
+
+            // QUE RAIO ???? TODO: DESCOBRIR QUE MAGIA ESTA AQUI
+            event(new NewNotification(intval($like->post->owner->id), 'Like', Auth::user()
+            , $like->toArray()));
+
         } else {
 
             DB::table('like_post')
