@@ -112,4 +112,16 @@ Route::delete('api/comment/{id_comment}', 'CommentController@delete');
 Route::get('api/user/notifications', 'NotificationController@get');
 Route::get('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
 
+// ======================= Reports ==========================
 
+Route::post('api/report', 'ReportController@create');
+Route::put('api/report', 'ReportController@edit');
+Route::delete('api/report/{id}', 'ReportController@delete');
+
+/*
+sendAjaxRequest('post', '/api/report', {
+    description:'quero banir te pq n gosto de ti',
+     id_post:3,
+     id_comment:null
+ }, ()=>{})
+*/

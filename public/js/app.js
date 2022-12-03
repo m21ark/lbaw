@@ -11,7 +11,7 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
@@ -371,7 +371,7 @@ function sendEditProfileRequest(event) {
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-    console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
+   // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -511,7 +511,7 @@ function sendCreatePostRequest(isProfile) {
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
-            console.log(formData)
+            //console.log(formData)
 
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
@@ -530,7 +530,7 @@ function sendCreatePostRequest(isProfile) {
                 formData.append("photos[]", photos[x]);
             }
 
-            console.log(formData)
+            //console.log(formData)
 
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
@@ -557,7 +557,7 @@ function sendEditPostRequest(event) {
         formData.append("photos[]", photos[x]);
     }
 
-    console.log(formData)
+    //console.log(formData)
     if (res && textarea.value != null)
         sendFormData('post', '/api/post/' + id, formData, addedHandler('#popup_show_post_edit'));
 
@@ -1112,7 +1112,7 @@ var _notifications = []
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-        console.log(this.responseText)
+       // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
     });

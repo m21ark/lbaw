@@ -41,6 +41,19 @@ class AdminController extends Controller
 
         if ($query_string === '*') $query_string = '';
 
+        /*
+        select username, "user_report".* from "user_report" 
+        join post on(post.id = id_post)
+        join "user" on (post.id_poster = "user".id)
+        where decision = 'Pendent';
+
+        select * from "user_report"
+        join post on (post.id = user_report.id_post)
+        join "user" on ("user".id = post.id_poster) 
+        where username LIKE '%' and id_post IS NOT NULL and user_report.decision = 'Pendent';
+
+        */
+
         $users_reported_post = Report::
         where('id_post', '<>', NULL)
         ->where('user_report.decision', 'Pendent')
