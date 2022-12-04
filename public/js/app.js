@@ -1125,7 +1125,7 @@ getNotifications();
     this should mark a notification as seen when tapping in the notf.
 */
 function markAsSeen($id, e) {
-    return function() {sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+    return function() {sendAjaxRequest('put', "/api/user/notification/" + $id + "/seen", {}, function () {
         if (this.status == 200) {
             let _x = _notifications.findIndex(x => x.id == $id);
             _notifications.splice(_x, 1);
@@ -1196,8 +1196,10 @@ function createNotificationList(event) {
         notifications.style.visibility = 'visible';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        [].forEach.call(side_bar_elms, function(e) {
-            e.removeChild(e.lastChild);
+        console.log(side_bar_elms);
+        [].forEach.call(side_bar_elms, function(e, i) {
+            if (i != 5 && i != 6)
+                e.removeChild(e.lastChild);
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
@@ -1225,9 +1227,10 @@ function createNotificationList(event) {
         notifications.innerHTML = '';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        let side_bar_text = ["Home", "Friends Request", "My Groups", "Notifications", "Messages", ""];
+        let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function(e, i) {
-            if (side_bar_text[i] != "") {
+            if (side_bar_text[i] != "" && i != 6) {
+                console.log("OLA")
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
             }
@@ -1236,5 +1239,11 @@ function createNotificationList(event) {
         bar.style.width = "20em";
     }
 }
+
+// ==================================== FRIENDS REQUESTS ============================================
+
+
+
+
 
 

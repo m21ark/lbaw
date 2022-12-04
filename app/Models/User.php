@@ -96,4 +96,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Notification', 'id_user');
     }
+
+    public function friendsRequests()
+    {
+        return $this->hasMany('App\Models\FriendsRequest', 'id_user_receiver');
+    }
 }
