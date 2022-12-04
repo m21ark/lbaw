@@ -45,14 +45,21 @@ class CommentController extends Controller
                 ->where('post.id', $id_post)
                 ->get('comment.id')->first();
 
-            if ($aux) {
+            if ($aux) { // TODO: TRANSACTION
                 $comment = new Comment();
                 $comment->id_post = $id_post;
                 $comment->id_commenter = Auth::user()->id;
                 $comment->text = $text;
+                $comment->save();
+                
+                event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
+                 , $comment));
+                
                 $comment->id_parent = $aux->id;
                 $comment->save();
-                event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
+                
+                $parent_comment = Comment::find($comment->id_parent);
+                event(new NewNotification(intval($parent_comment->id_commenter), 'Comment', Auth::user()
                  , $comment));
             }
         }

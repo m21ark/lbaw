@@ -17,6 +17,7 @@ if (user_header != null) {
             id_post: data.obj.id_post,
             sender: data.sender,
             notification_date: Date.now(),
+            id_parent: data.obj.id_parent,
             tipo: data.type,
         }
         if (data.type == "message")
@@ -1166,7 +1167,10 @@ function timeSince(date) {
 function createCustomMessageBody(notf) {
 
     if (notf.tipo == "Comment") {
-        return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        if (notf.id_parent == null)
+            return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        else
+            return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
         return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
@@ -1175,7 +1179,7 @@ function createCustomMessageBody(notf) {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> your Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
@@ -1186,12 +1190,18 @@ function createCustomMessageBody(notf) {
 function createNotificationList(event) {
     event.preventDefault();
 
-
     let notifications = document.querySelector('#notifications_container');
 
-    if (notifications.style.display == 'none' || notifications.style.display == '') {
-        notifications.style.display = 'block';
+    if (notifications.style.visibility == 'hidden' || notifications.style.visibility == '') {
+        notifications.style.visibility = 'visible';
 
+        let side_bar_elms = document.querySelectorAll('.enc');
+        [].forEach.call(side_bar_elms, function(e) {
+            e.removeChild(e.lastChild);
+        })
+        let bar = document.querySelector('#leftbar');
+        bar.style.width = "100px";
+        
     // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
     // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
@@ -1211,8 +1221,19 @@ function createNotificationList(event) {
             notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
         }
     } else {
-        notifications.style.display = 'none';
+        notifications.style.visibility = 'hidden';
         notifications.innerHTML = '';
+
+        let side_bar_elms = document.querySelectorAll('.enc');
+        let side_bar_text = ["Home", "Friends Request", "My Groups", "Notifications", "Messages", ""];
+        [].forEach.call(side_bar_elms, function(e, i) {
+            if (side_bar_text[i] != "") {
+                let textNode = document.createTextNode(side_bar_text[i]);
+                e.appendChild(textNode);
+            }
+        })
+        let bar = document.querySelector('#leftbar');
+        bar.style.width = "20em";
     }
 }
 

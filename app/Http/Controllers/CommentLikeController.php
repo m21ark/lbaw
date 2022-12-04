@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\CommentLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\NewNotification;
+use Illuminate\Support\Facades\Auth;
+
 
 class CommentLikeController extends Controller
 {
@@ -25,6 +28,10 @@ class CommentLikeController extends Controller
             $like->id_user = $user;
             $like->id_comment = $comment;
             $like->save();
+
+            event(new NewNotification(intval($like->comment->poster->id), 'Like', Auth::user()
+            , $like->toArray()));
+
         } else {
             $like = CommentLike::where('id_user', $user)
                 ->where('id_comment', $comment)
