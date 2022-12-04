@@ -17,6 +17,7 @@ if (user_header != null) {
             id_post: data.obj.id_post,
             sender: data.sender,
             notification_date: Date.now(),
+            id_parent: data.obj.id_parent,
             tipo: data.type,
         }
         if (data.type == "message")
@@ -1166,7 +1167,11 @@ function timeSince(date) {
 function createCustomMessageBody(notf) {
 
     if (notf.tipo == "Comment") {
-        return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        console.log(notf);
+        if (notf.id_parent == null)
+            return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        else
+            return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
         return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
