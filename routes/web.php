@@ -15,6 +15,8 @@ Route::get('/', 'Auth\LoginController@home');
 
 // ======================= STATIC PAGES =======================
 
+Route::get('statistics', 'AdminController@showStatistics');
+
 Route::get('features', function () {
     return view('pages.features');
 })->name('features');

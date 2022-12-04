@@ -23,6 +23,11 @@ class AdminController extends Controller
 
         $this->authorize('view', Auth::user()->isAdmin);
 
+        return view('pages.admin', ['reports' => Report::get()]);
+    }
+
+    public function showStatistics()
+    {
         $statistics = [
             'posts_c' => Post::count(),
             'users_c' => User::count(),
@@ -32,7 +37,7 @@ class AdminController extends Controller
             'likes_c' => Like::count() + CommentLike::count()
         ];
 
-        return view('pages.admin', ['statistics' => $statistics, 'reports'=> Report::get()]);
+        return view('pages.admin_stats', ['statistics' => $statistics, 'reports' => Report::get()]);
     }
 
 

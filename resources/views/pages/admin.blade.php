@@ -7,8 +7,3 @@
 <p>
     {{ $reports }}
 </p>
-
-
-@section('rightbar')
-    @include('partials.sidebar.admin_sidebar')
-@endsection

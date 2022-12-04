@@ -51,6 +51,7 @@
 
             @if (Auth::user()->isAdmin)
                 <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Console</a>
+                <a href="/statistics" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Stats</a>
             @endif
         @endauth
 
