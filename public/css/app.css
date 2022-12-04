@@ -3,7 +3,7 @@
 
 @media (min-width: 80em) {
     body {
-        width: 90%;
+        width: 100%;
         box-shadow: 2px 2px 5px lightgray;
         display: grid;
         grid-template-columns: 1fr 4fr 1.5fr;
@@ -29,14 +29,15 @@
 
     #leftbar {
         grid-area: navbar;
-        width: 100px;
+        width: 20em;
+        margin-right: 8.5em;
     }
 
     #notifications_container {
         grid-area: navbar;
         width: 350px;
         margin-left: 100px;
-        display: none;
+        visibility: hidden;
     }
 
     #rightbar {

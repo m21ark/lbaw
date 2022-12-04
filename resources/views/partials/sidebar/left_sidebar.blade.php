@@ -8,39 +8,49 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
 
-        <a href="/home" class=" btn mb-3">
+        <a href="/home" class=" btn mb-3 enc">
             <i class="fa-solid fa-house fa-2x"></i>
+            Home
         </a>
 
         @auth
             <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->        
-            <a href="" class=" btn mb-3 drop_my_group" aria-current="page">
-                <i class="fa-solid fa-people-group fa-2x"></i>
+
+            <a href="" class=" btn mb-3 drop_my_group enc" aria-current="page">
+                <i class="fa-solid fa-user-group fa-2x"></i>
+                Friends Requests
             </a>
 
-            <a href="" class=" btn mb-3" aria-current="page" id="notification_icon">
+            <a href="" class=" btn mb-3 drop_my_group enc" aria-current="page">
+                <i class="fa-solid fa-people-group fa-2x"></i>
+                My Groups
+            </a>
+
+            <a href="" class=" btn mb-3 enc" aria-current="page" id="notification_icon">
                 <i class="fa-solid fa-bell fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+                Notifications
             </a>
 
             @include('partials.participating_groups')
 
-            <a href={{ url('/messages/sender_username') }} class=" btn mb-3">
+            <a href={{ url('/messages/sender_username') }} class=" btn mb-3 enc">
                 <i class="fa-solid fa-envelope fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+                Messages
             </a>
 
         @endauth
 
         @auth
-            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary"
+            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc"
                 type="submit">
                 
                 <i class="fa-regular fa-square-plus fa-2x"></i>
             </button>
 
             @if (Auth::user()->isAdmin)
-                <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3">Admin Console</a>
+                <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Console</a>
             @endif
         @endauth
 
