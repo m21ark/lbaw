@@ -8,44 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class FriendsRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\FriendsRequest  $friendsRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function show(FriendsRequest $friendsRequest)
+    public function show()
     {
         if (!Auth::check())
             return redirect()->route('home');
@@ -53,37 +17,34 @@ class FriendsRequestController extends Controller
         return view('pages.friends_requests', ['user' => Auth::user()]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\FriendsRequest  $friendsRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(FriendsRequest $friendsRequest)
+
+    public function accept($id_sender)
     {
-        //
+        return update_request($id_sender, "Rejected");
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\FriendsRequest  $friendsRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, FriendsRequest $friendsRequest)
+    public function reject($id_sender)
     {
-        //
+        return update_request($id_sender, "Rejected");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\FriendsRequest  $friendsRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(FriendsRequest $friendsRequest)
+    public function update_request($id_sender, $new_state)
     {
-        //
+        validator($request->route()->parameters(), [
+            'id_sender' => 'required|exists:users,id',
+        ])->validate();
+
+        if (!Auth::check())
+        return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        // TODO :ADD policy
+        $request = FriendsRequest::where('id_user_sender', '=', $id_sender)
+        ->where('id_user_receiver', '=', Auth:user()->id)
+        ->first();
+        
+        $request->acceptance_status = $new_state;
+        $request->save();
+
+        return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
 }
