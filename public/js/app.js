@@ -101,6 +101,8 @@ function addEventListeners() {
         ['#edit_comment_button', sendEditCommentRequest],
         ['#delete_comment_button', sendDeleteCommentRequest],
         ['#notification_icon', createNotificationList],
+        ['.friends_request_accept', sendFriendRequestResponse(true)],
+        ['.friends_request_reject', sendFriendRequestResponse(false)],
     ];
 
 
@@ -1243,7 +1245,20 @@ function createNotificationList(event) {
 // ==================================== FRIENDS REQUESTS ============================================
 
 
-
+function sendFriendRequestResponse(accept) {
+    return function() {
+        let id = this.id.split("_")[1];
+        let response = accept ? "accept" : "reject";
+        console.log(response);
+        sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
+            if (this.status == 200) {
+                let friend_request = document.querySelector("#friend_request_" + id);
+                friend_request.remove();
+            }
+            addedHandler(null).call(this);
+        });
+    }
+}
 
 
 

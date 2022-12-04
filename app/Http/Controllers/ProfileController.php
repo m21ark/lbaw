@@ -27,7 +27,7 @@ class ProfileController extends Controller
             'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
             'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
             'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
-            'friends_num' => DB::table('friend_request')->where('acceptance_status', 'Accepted')->where('id_user_sender', $user->id)->orWhere('id_user_receiver', $user->id)->count(),
+            'friends_num' => $user->friends()->count(),
         ];
 
         return view('pages.profile', ['user' => $user, 'statistics' => $statistics]);

@@ -101,4 +101,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\FriendsRequest', 'id_user_receiver');
     }
+
+    public function sendingRequests()
+    {
+        return $this->hasMany('App\Models\FriendsRequest', 'id_user_sender');
+    }
+
+    public function friends() 
+    {
+        return $this->friendsRequests->concat($this->sendingRequests)->where('acceptance_status', 'Accepted');
+    }
 }

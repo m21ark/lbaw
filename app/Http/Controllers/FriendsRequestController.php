@@ -18,32 +18,30 @@ class FriendsRequestController extends Controller
     }
 
 
-    public function accept($id_sender)
+    public function accept($id_sender, Request $request)
     {
-        return update_request($id_sender, "Rejected");
+        return $this->update_request($id_sender, "Accepted", $request);
     }
 
-    public function reject($id_sender)
+    public function reject($id_sender, Request $request)
     {
-        return update_request($id_sender, "Rejected");
+        return $this->update_request($id_sender, "Rejected", $request);
     }
 
-    public function update_request($id_sender, $new_state)
+    public function update_request($id_sender, $new_state, Request $request)
     {
-        validator($request->route()->parameters(), [
-            'id_sender' => 'required|exists:users,id',
-        ])->validate();
+        //validator($request->route()->parameters(), [
+        //    'id_sender' => 'required|exists:user,id',
+        //])->validate();
 
         if (!Auth::check())
-        return response()->json(['You need to authenticate to use this endpoint' => 403]);
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
         // TODO :ADD policy
-        $request = FriendsRequest::where('id_user_sender', '=', $id_sender)
-        ->where('id_user_receiver', '=', Auth:user()->id)
-        ->first();
-        
-        $request->acceptance_status = $new_state;
-        $request->save();
+        $frequest = FriendsRequest::where('id_user_sender', '=', $id_sender)
+        ->where('id_user_receiver', '=', Auth::user()->id)
+        ->update(['acceptance_status' => $new_state]);
+
 
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }

@@ -11,7 +11,7 @@ class FriendsRequest extends Model
     public $timestamps  = false;
     public $incrementing = false; 
     protected $table = 'friend_request';
-    protected $primaryKey = ['id_user_sender', 'id_user_receiver'];
+
 
     public function receiver()
     {
