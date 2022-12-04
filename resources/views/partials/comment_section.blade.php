@@ -3,7 +3,7 @@
         @continue
     @endif
     <div class="card mb-4">
-
+        <a href="#!" class="btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">Report</a>
         <div class="card-header d-flex justify-content-center">
             @auth
                 @if (Auth::user()->id == $comment->id_commenter)
@@ -102,8 +102,10 @@
                         </div>
 
                         <div class="pt-3 card-footer d-flex justify-content-center ">
+
                             <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $reply->likes->count() }}</p>
                             @auth
+
                                 <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
                                     data-id={{ $reply->id }} href="#!">
 

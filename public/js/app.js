@@ -83,7 +83,7 @@ function addEventListeners() {
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
-        ['#popup_btn_report_post_create', logItem('#popup_show_report_create')],
+        ['#popup_btn_report_post_create', popupControllReportPost],
         ['#sms_send_btn', sendMessage],
         ['#profile_post_button_action', sendCreatePostRequest(true)],
         ['#group_post_button_action', sendCreatePostRequest(false)],
@@ -117,6 +117,7 @@ function addEventListeners() {
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
     assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
     assignFunctionClickAll('.reveal_comment_replies', toggleReplySectionShow)
+    assignFunctionClickAll('.popup_btn_report_comment_create', sendCreateReportCommentRequest)
 
     // OPEN COMMENT POPUPS
     commentPopupsController()
@@ -496,6 +497,11 @@ function sendDeleteCommentRequest() {
 
 // ============================================ Reports ============================================
 
+function popupControllReportPost() {
+    document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
+    document.querySelector('#create_report_button').dataset.comment = 0
+}
+
 function sendCreateReportRequest() {
     let id_post = document.querySelector('#create_report_button').dataset.post
     let id_comment = document.querySelector('#create_report_button').dataset.comment
@@ -509,10 +515,15 @@ function sendCreateReportRequest() {
     let res = confirm('Are you sure you want to submit this report?');
     if (res) {
         sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, () => { });
-        location.reload();
+        document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
     }
 }
 
+function sendCreateReportCommentRequest(event) {
+    const popup = document.querySelector('#popup_show_report_create');
+    document.querySelector('#create_report_button').dataset.comment = event.currentTarget.dataset.id
+    popup.toggleAttribute('hidden');
+}
 
 // ============================================ Post ============================================
 

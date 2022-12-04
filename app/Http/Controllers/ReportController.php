@@ -24,28 +24,20 @@ class ReportController extends Controller
     public function create(Request $request)
     {
         // TODO: POLICY
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-
-
-        $out->writeln($request);
-
         $report = new Report();
         $report->report_date = date('Y-m-d H:i:s');
         $report->description = $request->description;
 
-        $report->id_post = $request->id_post;
-        if ($request->id_comment > 0) {
-            $out->writeln('NOT NULL IF');
+        if ($request->id_comment > 0)
             $report->id_comment = $request->id_comment;
-        }
+        else
+            $report->id_post = $request->id_post;
 
-        $out->writeln('AFTER IF');
         $report->id_reporter = Auth::user()->id;
         $report->id_admin = null;
 
-        $out->writeln('before save');
         $report->save();
-        $out->writeln('after save');
+
         return $report;
     }
 
