@@ -23,11 +23,12 @@ class AdminController extends Controller
 
         $this->authorize('view', Auth::user()->isAdmin);
 
-        $statistics =[
+        $statistics = [
             'posts_c' => Post::count(),
             'users_c' => User::count(),
             'groups_c' => Group::count(),
             'comments_c' => Comment::count(),
+            'reports_c' => Report::count(),
             'likes_c' => Like::count() + CommentLike::count()
         ];
 
@@ -35,83 +36,78 @@ class AdminController extends Controller
     }
 
 
-    public function usersReportesPending(Request $request) {
+    public function usersReportesPending(Request $request)
+    {
 
         $query_string = $request->route('query_string');
 
         if ($query_string === '*') $query_string = '';
 
         /*
-        select username, "user_report".* from "user_report" 
+        select username, "user_report".* from "user_report"
         join post on(post.id = id_post)
         join "user" on (post.id_poster = "user".id)
         where decision = 'Pendent';
 
         select * from "user_report"
         join post on (post.id = user_report.id_post)
-        join "user" on ("user".id = post.id_poster) 
+        join "user" on ("user".id = post.id_poster)
         where username LIKE '%' and id_post IS NOT NULL and user_report.decision = 'Pendent';
 
         */
 
-        $users_reported_post = Report::
-        where('id_post', '<>', NULL)
-        ->where('user_report.decision', 'Pendent')
-        ->join('post', 'post.id', '=', 'user_report.id_post')
-        ->join('user', 'user.id', '=', 'post.id_poster')
-        ->where('username', 'LIKE', '%'.$query_string.'%')
-        ->select('user.id', 'user.username', 'user.photo', DB::raw('count(user_report.id) as report_count'))
-        ->groupBy('user.id');
+        $users_reported_post = Report::where('id_post', '<>', NULL)
+            ->where('user_report.decision', 'Pendent')
+            ->join('post', 'post.id', '=', 'user_report.id_post')
+            ->join('user', 'user.id', '=', 'post.id_poster')
+            ->where('username', 'LIKE', '%' . $query_string . '%')
+            ->select('user.id', 'user.username', 'user.photo', DB::raw('count(user_report.id) as report_count'))
+            ->groupBy('user.id');
 
-        $users_reported_comments = Report::
-        where('id_comment', '<>', NULL)
-        ->where('user_report.decision', 'Pendent')
-        ->join('comment', 'comment.id', '=', 'user_report.id_comment')
-        ->join('user', 'user.id', '=', 'comment.id_commenter')
-        ->where('username', 'LIKE', '%'.$query_string.'%')
-        ->select('user.id', 'user.username', 'user.photo', DB::raw('count(user_report.id) as report_count'))
-        ->groupBy('user.id');
+        $users_reported_comments = Report::where('id_comment', '<>', NULL)
+            ->where('user_report.decision', 'Pendent')
+            ->join('comment', 'comment.id', '=', 'user_report.id_comment')
+            ->join('user', 'user.id', '=', 'comment.id_commenter')
+            ->where('username', 'LIKE', '%' . $query_string . '%')
+            ->select('user.id', 'user.username', 'user.photo', DB::raw('count(user_report.id) as report_count'))
+            ->groupBy('user.id');
 
 
         return $users_reported_post->union($users_reported_comments)
-        ->orderBy('report_count')
-        ->limit(6)
-        ->get();
+            ->orderBy('report_count')
+            ->limit(10)
+            ->get();
     }
 
 
 
-    public function usersReportesPast(Request $request) {
+    public function usersReportesPast(Request $request)
+    {
 
         $query_string = $request->route('query_string');
 
         if ($query_string === '*') $query_string = '';
 
-        $users_reported_post = Report::
-        where('id_post', '<>', NULL)
-        ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
-        ->join('post', 'post.id', '=', 'user_report.id_post')
-        ->join('user', 'user.id', '=', 'post.id_poster')
-        ->where('username', 'LIKE', '%'.$query_string.'%')
-        ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
-        ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
+        $users_reported_post = Report::where('id_post', '<>', NULL)
+            ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
+            ->join('post', 'post.id', '=', 'user_report.id_post')
+            ->join('user', 'user.id', '=', 'post.id_poster')
+            ->where('username', 'LIKE', '%' . $query_string . '%')
+            ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
+            ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
 
-        $users_reported_comments = Report::
-        where('id_comment', '<>', NULL)
-        ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
-        ->join('comment', 'comment.id', '=', 'user_report.id_post')
-        ->join('user', 'user.id', '=', 'comment.id_commenter')
-        ->where('username', 'LIKE', '%'.$query_string.'%')
-        ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
-        ->groupBy('user.id','user_report.decision', 'user_report.decision', 'user_report.decision_date');
+        $users_reported_comments = Report::where('id_comment', '<>', NULL)
+            ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
+            ->join('comment', 'comment.id', '=', 'user_report.id_post')
+            ->join('user', 'user.id', '=', 'comment.id_commenter')
+            ->where('username', 'LIKE', '%' . $query_string . '%')
+            ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
+            ->groupBy('user.id', 'user_report.decision', 'user_report.decision', 'user_report.decision_date');
 
 
         return $users_reported_post->union($users_reported_comments)
-        ->orderBy('decision_date', 'desc')
-        ->limit(6)
-        ->get();
-
-
-
+            ->orderBy('decision_date', 'desc')
+            ->limit(10)
+            ->get();
     }
 }

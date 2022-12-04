@@ -13,11 +13,11 @@ class ReportController extends Controller
     id SERIAL PRIMARY KEY,
     report_date DATE NOT NULL,
     "description" TEXT,
-    decision_date DATE, 
+    decision_date DATE,
     decision accept_st,
     id_reporter INTEGER NOT NULL REFERENCES "user"(id),
     id_admin INTEGER REFERENCES administrator(id),
-    id_comment INTEGER REFERENCES "comment"(id), 
+    id_comment INTEGER REFERENCES "comment"(id),
     id_post INTEGER REFERENCES post(id)
     */
 
@@ -27,7 +27,7 @@ class ReportController extends Controller
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
 
 
-        $out->writeln( $request);
+        $out->writeln($request);
 
         $report = new Report();
         $report->report_date = date('Y-m-d H:i:s');

@@ -7,7 +7,7 @@
 @endsection
 
 @auth
-@section('rightbar')
-    @include('partials.sidebar.home_sidebar')
-@endsection
+    @section('rightbar')
+        @include('partials.sidebar.home_sidebar')
+    @endsection
 @endauth

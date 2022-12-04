@@ -1201,7 +1201,7 @@ function createNotificationList(event) {
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
-        
+
     // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
     // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
