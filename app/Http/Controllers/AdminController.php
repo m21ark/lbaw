@@ -32,7 +32,7 @@ class AdminController extends Controller
             'likes_c' => Like::count() + CommentLike::count()
         ];
 
-        return view('pages.admin', ['statistics' => $statistics]);
+        return view('pages.admin', ['statistics' => $statistics, 'reports'=> Report::get()]);
     }
 
 

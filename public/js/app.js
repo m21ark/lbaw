@@ -20,22 +20,19 @@ if (user_header != null) {
             id_parent: data.obj.id_parent,
             tipo: data.type,
         }
-        if (data.type == "message")
-        {
+        if (data.type == "message") {
             if (window.location.pathname == '/messages/' + data.sender.username) {
-            uploadSms(false, data.obj.text)();
+                uploadSms(false, data.obj.text)();
             }
             else {
                 addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
             }
         }
-        else if (data.type == "Like")
-        {
+        else if (data.type == "Like") {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
-        else if (data.type == "Comment")
-        {
+        else if (data.type == "Comment") {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
@@ -86,6 +83,7 @@ function addEventListeners() {
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
+        ['#popup_btn_report_post_create', logItem('#popup_show_report_create')],
         ['#sms_send_btn', sendMessage],
         ['#profile_post_button_action', sendCreatePostRequest(true)],
         ['#group_post_button_action', sendCreatePostRequest(false)],
@@ -101,6 +99,7 @@ function addEventListeners() {
         ['#edit_comment_button', sendEditCommentRequest],
         ['#delete_comment_button', sendDeleteCommentRequest],
         ['#notification_icon', createNotificationList],
+        ['#create_report_button', sendCreateReportRequest],
     ];
 
 
@@ -372,7 +371,7 @@ function sendEditProfileRequest(event) {
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-   // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
+    // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -495,6 +494,24 @@ function sendDeleteCommentRequest() {
     }
 }
 
+// ============================================ Reports ============================================
+
+function sendCreateReportRequest() {
+    let id_post = document.querySelector('#create_report_button').dataset.post
+    let id_comment = document.querySelector('#create_report_button').dataset.comment
+    let description = document.querySelector('#report_description').value
+
+    if (description === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to submit this report?');
+    if (res) {
+        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, () => { });
+        location.reload();
+    }
+}
 
 
 // ============================================ Post ============================================
@@ -1113,7 +1130,7 @@ var _notifications = []
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-       // console.log(this.responseText)
+        // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
     });
@@ -1125,13 +1142,14 @@ getNotifications();
     this should mark a notification as seen when tapping in the notf.
 */
 function markAsSeen($id, e) {
-    return function() {sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
-        if (this.status == 200) {
-            let _x = _notifications.findIndex(x => x.id == $id);
-            _notifications.splice(_x, 1);
-            e.remove();
-        }
-    });
+    return function () {
+        sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+            if (this.status == 200) {
+                let _x = _notifications.findIndex(x => x.id == $id);
+                _notifications.splice(_x, 1);
+                e.remove();
+            }
+        });
     }
 }
 
@@ -1143,26 +1161,26 @@ function timeSince(date) {
     var interval = seconds / 31536000;
 
     if (interval > 1) {
-      return Math.floor(interval) + " years";
+        return Math.floor(interval) + " years";
     }
     interval = seconds / 2592000;
     if (interval > 1) {
-      return Math.floor(interval) + " months";
+        return Math.floor(interval) + " months";
     }
     interval = seconds / 86400;
     if (interval > 1) {
-      return Math.floor(interval) + " days";
+        return Math.floor(interval) + " days";
     }
     interval = seconds / 3600;
     if (interval > 1) {
-      return Math.floor(interval) + " hours";
+        return Math.floor(interval) + " hours";
     }
     interval = seconds / 60;
     if (interval > 1) {
-      return Math.floor(interval) + " minutes";
+        return Math.floor(interval) + " minutes";
     }
     return Math.floor(seconds) + " seconds";
-  }
+}
 
 function createCustomMessageBody(notf) {
 
@@ -1173,7 +1191,7 @@ function createCustomMessageBody(notf) {
             return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
+        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username + "</a>" + " wants to connect"; // TODO. accept/reject
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
@@ -1196,14 +1214,14 @@ function createNotificationList(event) {
         notifications.style.visibility = 'visible';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        [].forEach.call(side_bar_elms, function(e) {
+        [].forEach.call(side_bar_elms, function (e) {
             e.removeChild(e.lastChild);
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
 
-    // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
-    // tb meter um numero limitado
+        // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
+        // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
@@ -1226,7 +1244,7 @@ function createNotificationList(event) {
 
         let side_bar_elms = document.querySelectorAll('.enc');
         let side_bar_text = ["Home", "Friends Request", "My Groups", "Notifications", "Messages", ""];
-        [].forEach.call(side_bar_elms, function(e, i) {
+        [].forEach.call(side_bar_elms, function (e, i) {
             if (side_bar_text[i] != "") {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);

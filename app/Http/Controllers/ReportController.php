@@ -34,11 +34,18 @@ class ReportController extends Controller
         $report->description = $request->description;
 
         $report->id_post = $request->id_post;
-        //$report->id_comment = $request->id_comment;
+        if ($request->id_comment > 0) {
+            $out->writeln('NOT NULL IF');
+            $report->id_comment = $request->id_comment;
+        }
+
+        $out->writeln('AFTER IF');
         $report->id_reporter = Auth::user()->id;
         $report->id_admin = null;
 
+        $out->writeln('before save');
         $report->save();
+        $out->writeln('after save');
         return $report;
     }
 

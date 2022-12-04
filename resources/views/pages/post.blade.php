@@ -4,6 +4,12 @@
     <div id="timeline">
         @include('partials.post_item', ['post' => $post, 'showComments' => true])
     </div>
+
+    <!-- Temporary placement -->
+    @include('partials.popup.make_report_popup')
+    <a href="#!" class="btn btn-outline-secondary" id="popup_btn_report_post_create">Report Post</a>
+
+
 @endsection
 
 @section('rightbar')
