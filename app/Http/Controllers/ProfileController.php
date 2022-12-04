@@ -22,11 +22,11 @@ class ProfileController extends Controller
         }
 
         $statistics = [
-            'post_num' => Post::where('id_poster', $user->id)->count(),
-            'comment_num' => DB::table('comment')->where('id_commenter', $user->id)->count(),
-            'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
-            'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
-            'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
+            'post_num' => $user->posts->count(),
+            'comment_num' => $user->comments->count(),
+            'like_comment_num' => $user->like_in_comments->count(),
+            'like_post_num' => $user->like_in_post->count(),
+            'group_num' => $user->groupsMember->count(),
             'friends_num' => $user->friends()->count(),
         ];
 

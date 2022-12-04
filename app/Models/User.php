@@ -111,4 +111,20 @@ class User extends Authenticatable
     {
         return $this->friendsRequests->concat($this->sendingRequests)->where('acceptance_status', 'Accepted');
     }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'id_commenter');
+    }
+
+    public function like_in_comments() 
+    {
+        return $this->hasMany('App\Models\CommentLike', 'id_user');
+    }
+
+    public function like_in_post() 
+    {
+        return $this->hasMany('App\Models\Like', 'id_user');
+    }
+
 }
