@@ -44,17 +44,26 @@ class ReportController extends Controller
     public function edit(Request $request)
     {
         // TODO: POLICY
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("HERE1");
         $report = Report::find($request->id);
+        $out->writeln("HERE1_3");
+        $out->writeln(Auth::user()->id === null);
         $report->id_admin = Auth::user()->id;
+        $out->writeln("HERE2");
         $report->decision = $request->decision;
         $report->decision_date = date('Y-m-d H:i:s');
+        $out->writeln("HERE3");
+        // TODO ALTERAR BANDATE NO USER
         $report->save();
+        $out->writeln("HERE4");
         return $report;
     }
 
     public function delete(int $id)
     {
         // TODO: POLICY
+        // TODO NEM SEI SE FAZ SENTIDO APAGAR REPORT NEM COMO SERIA?
         $report = Report::find($id);
         $report->delete();
         return $report;

@@ -119,9 +119,8 @@ Route::put('api/report', 'ReportController@edit');
 Route::delete('api/report/{id}', 'ReportController@delete');
 
 /*
-sendAjaxRequest('post', '/api/report', {
-    description:'quero banir te pq n gosto de ti',
-     id_post:3,
-     id_comment:null
+sendAjaxRequest('PUT', '/api/report', {
+    id:25,
+    decision: 'Accepted'
  }, ()=>{})
 */
