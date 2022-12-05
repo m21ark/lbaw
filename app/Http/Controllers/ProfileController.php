@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -30,7 +31,8 @@ class ProfileController extends Controller
             'friends_num' => $user->friends()->count(),
         ];
 
-        return view('pages.profile', ['user' => $user, 'statistics' => $statistics]);
+        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : null;
+        return view('pages.profile', ['user' => $user, 'statistics' => $statistics, 'friends' => $friends]);
     }
 
     public function edit(Request $request)

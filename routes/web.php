@@ -117,5 +117,5 @@ Route::put('api/user/notification/{id}/seen', 'NotificationController@markAsSeen
 
 Route::put('api/user/friend/request/{id_sender}/accept', 'FriendsRequestController@accept');
 Route::put('api/user/friend/request/{id_sender}/reject', 'FriendsRequestController@reject');
-
+Route::post('api/user/friend/request/{id_rcv}/send', 'FriendsRequestController@send');
 

@@ -7,6 +7,13 @@
                 @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
                     <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
                 @endif
+                @if (!$friends && in_array(Auth::user()->id ,$user->friendsRequests->pluck('id_user_sender')->toArray()))
+                    <i class="fa-solid fa-user-clock"></i>
+                @elseif (!$friends && $user->id != Auth::user()->id)
+                    <span class="send_request"><i class="fa-solid fa-user-plus" data-id="{{$user->id}}"></i></span>
+                @elseif ($user->id && $user->id != Auth::user()->id)
+                    <i class="fa-solid fa-user-check delete_friendship" data-id="{{$user->id}}"></i>
+                @endif
             @endauth
         </h3>
 

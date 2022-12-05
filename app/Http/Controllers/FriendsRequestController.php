@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FriendsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NewNotification;
 
 class FriendsRequestController extends Controller
 {
@@ -17,6 +18,27 @@ class FriendsRequestController extends Controller
         return view('pages.friends_requests', ['user' => Auth::user()]);
     }
 
+    public function send($id_rcv, Request $request) 
+    {
+        if (!Auth::check())
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        // TODO : E PRECISO OUTRA POLICIE ? no caso de se já ter enviado um pedido
+         
+         validator($request->route()->parameters(), [
+             'id_rcv' => 'required|exists:user,id',
+         ])->validate();
+
+        $frequest = new FriendsRequest();
+        $frequest->id_user_sender = Auth::user()->id;
+        $frequest->id_user_receiver = $id_rcv;
+        $frequest->save();
+
+        event(new NewNotification(intval($id_rcv), 'FriendRequest', Auth::user()
+            , $frequest->toArray()));
+
+        return response()->json(['The request was sent' => 200]);
+    }
 
     public function accept($id_sender, Request $request)
     {
@@ -30,9 +52,9 @@ class FriendsRequestController extends Controller
 
     public function update_request($id_sender, $new_state, Request $request)
     {
-        //validator($request->route()->parameters(), [
-        //    'id_sender' => 'required|exists:user,id',
-        //])->validate();
+        validator($request->route()->parameters(), [
+            'id_sender' => 'required|exists:user,id',
+        ])->validate();
 
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);

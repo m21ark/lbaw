@@ -10,8 +10,6 @@ if (user_header != null) {
     let id = user_header.dataset.id;
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
-
-        console.log(JSON.stringify(data));
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
@@ -35,6 +33,11 @@ if (user_header != null) {
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "Comment")
+        {
+            _notifications.push(notfiableJsonPrototype);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
+        else if (data.type == "FriendRequest")
         {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
@@ -103,6 +106,7 @@ function addEventListeners() {
         ['#notification_icon', createNotificationList],
         ['.friends_request_accept', sendFriendRequestResponse(true)],
         ['.friends_request_reject', sendFriendRequestResponse(false)],
+        ['.send_request', sendRequest],
     ];
 
 
@@ -1260,5 +1264,21 @@ function sendFriendRequestResponse(accept) {
     }
 }
 
+
+function sendRequest() {
+    //send request
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('send_request');
+            child.classList.add('fa-user-clock');
+            parent.removeEventListener('click', sendRequest);
+        }
+        addedHandler(null).call(this);
+    });
+}
 
 
