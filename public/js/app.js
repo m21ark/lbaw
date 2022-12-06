@@ -101,6 +101,7 @@ function addEventListeners() {
         ['#notification_icon', createNotificationList],
         ['#create_report_button', sendCreateReportRequest],
         ['#reject_all_reports', sendRejectAllReportsRequest],
+        ['#ban_user_btn', sendBanUserRequest]
     ];
 
 
@@ -167,6 +168,18 @@ function commentPopupsController() {
                 document.querySelector('#edit_comment_button').setAttribute('data-id', id)
                 document.querySelector('#delete_comment_button').setAttribute('data-id', id)
             }));
+}
+
+function sendBanUserRequest(event) {
+    const elem = document.querySelector('#ban_time_select')
+    userID = elem.dataset.userid
+    value = elem.value
+
+    console.log(userID, value)
+
+    let res = confirm('Are you sure you want to ban this user?');
+    if (res) // TODO: CHECK WHERE WOULD BE MORE LOGICAL TO SEND REQUEST
+        sendAjaxRequest('put', `/api/user/ban/${userID}`, { userID: userID, value: value }, () => { });
 }
 
 function commentRepliesController() {

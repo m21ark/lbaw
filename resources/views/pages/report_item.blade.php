@@ -14,13 +14,12 @@
                     <h5>Reject all reports</h5>
                 </a>
 
-
                 <div>
-                    <a href="#!" class="mt-1 btn btn-danger">
+                    <a id="ban_user_btn" href="#!" class="mt-1 btn btn-danger">
                         <!-- 7dias, 30dias, 3meses, 1ano, permanente -->
                         <h5>Ban User</h5>
                     </a>
-                    <select class="p-3">
+                    <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">
                         <option selected value="1">7 days</option>
                         <option value="2">15 days</option>
                         <option value="3">30 days</option>
