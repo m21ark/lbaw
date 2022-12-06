@@ -62,8 +62,8 @@
     </div>
 
 
-    <div class="mt-4 text-bg-light p-4">
-        <h3>Reports</h3>
+    <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
+        <h3 class="mb-3">Reports</h3>
         @foreach ($reports as $report)
             <div class="card p-3 mb-4">
                 <h5>Made:</h5>
@@ -78,7 +78,7 @@
                 <h5>Reported content:</h5>
 
                 @if ($report->id_post === null)
-                    <p>comment</p>
+                    @include('partials.comment_item', ['comment' => $report->comment])
                 @else
                     @include('partials.post_item', ['post' => $report->post])
                 @endif
