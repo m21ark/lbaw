@@ -111,6 +111,11 @@ function addEventListeners() {
     }
     );
 
+    assignFunctionClick('#report_toggle', () => {
+        document.querySelector('#pendent_report_list').toggleAttribute('hidden')
+        document.querySelector('#past_report_list').toggleAttribute('hidden')
+    })
+
 
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
@@ -140,6 +145,7 @@ function addEventListeners() {
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
         })
 }
+
 
 function commentPopupsController() {
     let aux = document.querySelectorAll('.popup_btn_comment_edit');
@@ -524,6 +530,8 @@ function sendCreateReportCommentRequest(event) {
     document.querySelector('#create_report_button').dataset.comment = event.currentTarget.dataset.id
     popup.toggleAttribute('hidden');
 }
+
+
 
 // ============================================ Post ============================================
 
@@ -1086,7 +1094,7 @@ function createUserReportCardPending(user) {
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
-        <a href="#" class="btn btn-outline-secondary">Take</a>
+        <a href="#" class="btn btn-outline-dark">View</a>
     `
 
     return new_card;
@@ -1122,7 +1130,7 @@ function createUserReportCardPast(user) {
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
-        <a href="#" class="btn btn-outline-dark">Retake</a>
+        <a href="#" class="btn btn-outline-dark">Edit</a>
     `;
 
     return new_card;
