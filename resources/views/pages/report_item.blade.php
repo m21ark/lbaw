@@ -9,6 +9,17 @@
             </h3>
             <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
 
+            <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
+                <a href="#!" class="btn btn-warning">
+                    <h5>Reject all reports</h5>
+                </a>
+
+                <a href="#!" class="mt-1 btn btn-danger">
+                    <!-- 7dias, 30dias, 3meses, 1ano, permanente -->
+                    <h5>Ban User</h5>
+                </a>
+            </div>
+
             <h3>Bio</h3>
             <p class="card-text">{{ $user->bio }}</p>
         </div>
@@ -51,28 +62,23 @@
 
     </div>
 
-    <div class="mt-4 d-flex justify-content-evenly">
-        <a href="#!" class="btn btn-warning p-3">
-            <h5>Reject all reports</h5>
-        </a>
 
-        <a href="#!" class="btn btn-danger p-3">
-            <h5>Ban User</h5>
-        </a>
-    </div>
 
 
     <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Reports</h3>
         @foreach ($reports as $report)
             <div class="card p-3 mb-4">
-                <h5>Made:</h5>
-                <p>{{ $report->report_date }} by <a
-                        href="/profile/{{ $report->reporter->username }}">{{ $report->reporter->username }}</a></p>
-
-                <hr>
                 <h5>Report description:</h5>
                 <p>{{ $report->description }}</p>
+                <a href="#!" class="position-absolute mt-3 btn btn-outline-danger"
+                    style="width: 20%;right:2em">Reject</a>
+
+
+                <p><b>Made by: </b> <a class="text-decoration-none"
+                        href="/profile/{{ $report->reporter->username }}">{{ $report->reporter->username }}</a> on
+                    {{ $report->report_date }}</p>
+
 
                 <hr>
                 <h5>Reported content:</h5>
@@ -83,7 +89,7 @@
                     @include('partials.post_item', ['post' => $report->post])
                 @endif
 
-                <hr>
+
                 <h5>Other information:</h5>
                 <ul>
                     <li>Decision: {{ $report->decision }}</li>
@@ -91,7 +97,7 @@
                     <li>Decision made by: {{ $report->id_admin ?? 'N/A' }}</li>
                 </ul>
 
-                <a href="#!" class="mt-3 btn btn-outline-danger" style="width: 20%;margin:auto">Remove</a>
+
             </div>
         @endforeach
     </div>
