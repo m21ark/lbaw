@@ -65,8 +65,34 @@
     <div class="mt-4 text-bg-light p-4">
         <h3>Reports</h3>
         @foreach ($reports as $report)
-            <p class="mt-5">{{ $report }}</p>
+            <div class="card p-3 mb-4">
+                <h5>Made:</h5>
+                <p>{{ $report->report_date }} by <a
+                        href="/profile/{{ $report->reporter->username }}">{{ $report->reporter->username }}</a></p>
+
+                <hr>
+                <h5>Report description:</h5>
+                <p>{{ $report->description }}</p>
+
+                <hr>
+                <h5>Reported content:</h5>
+
+                @if ($report->id_post === null)
+                    <p>comment</p>
+                @else
+                    @include('partials.post_item', ['post' => $report->post])
+                @endif
+
+                <hr>
+                <h5>Other information:</h5>
+                <ul>
+                    <li>Decision: {{ $report->decision }}</li>
+                    <li>Decision date: {{ $report->decision_date ?? 'N/A' }}</li>
+                    <li>Decision made by: {{ $report->id_admin ?? 'N/A' }}</li>
+                </ul>
+
+                <a href="#!" class="mt-3 btn btn-outline-danger" style="width: 20%;margin:auto">Remove</a>
+            </div>
         @endforeach
     </div>
-
 @endsection
