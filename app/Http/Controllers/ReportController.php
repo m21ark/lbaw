@@ -80,10 +80,12 @@ class ReportController extends Controller
 
     public function rejectAll(Int $userID)
     {
-        return null;
+
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
         $out->writeln("HERE1");
+        return null;
 
+        $userID = 3;
         $reportsPost = Report::select('user_report.*')
             ->where('id_post', '<>', NULL)
             ->where('user_report.decision', 'Pendent')

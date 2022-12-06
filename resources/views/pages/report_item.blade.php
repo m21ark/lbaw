@@ -14,10 +14,22 @@
                     <h5>Reject all reports</h5>
                 </a>
 
-                <a href="#!" class="mt-1 btn btn-danger">
-                    <!-- 7dias, 30dias, 3meses, 1ano, permanente -->
-                    <h5>Ban User</h5>
-                </a>
+
+                <div>
+                    <a href="#!" class="mt-1 btn btn-danger">
+                        <!-- 7dias, 30dias, 3meses, 1ano, permanente -->
+                        <h5>Ban User</h5>
+                    </a>
+                    <select class="p-3">
+                        <option selected value="1">7 days</option>
+                        <option value="2">15 days</option>
+                        <option value="3">30 days</option>
+                        <option value="4">3 months</option>
+                        <option value="5">6 months</option>
+                        <option value="6">1 year</option>
+                        <option value="7">Permanent</option>
+                    </select>
+                </div>
             </div>
 
             <h3>Bio</h3>
