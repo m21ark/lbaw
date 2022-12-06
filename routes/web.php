@@ -8,14 +8,19 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
-// ======================= HOME PAGES =======================
+// ======================= HOME PAGE =======================
+
+Route::get('/', 'Auth\LoginController@home');
+
+
+// ======================= ADMIN PAGES =======================
 
 Route::get('admin', 'AdminController@show')->name('admin');
-Route::get('/', 'Auth\LoginController@home');
+Route::get('admin/statistics', 'AdminController@showStatistics');
 
 // ======================= STATIC PAGES =======================
 
-Route::get('statistics', 'AdminController@showStatistics');
+
 
 Route::get('features', function () {
     return view('pages.features');

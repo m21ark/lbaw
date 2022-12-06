@@ -40,7 +40,6 @@ class AdminController extends Controller
         return view('pages.admin_stats', ['statistics' => $statistics, 'reports' => Report::get()]);
     }
 
-
     public function usersReportesPending(Request $request)
     {
 
@@ -100,6 +99,7 @@ class AdminController extends Controller
             ->where('username', 'LIKE', '%' . $query_string . '%')
             ->select('user.id', 'user.username', 'user.photo', 'user.ban_date', 'user_report.decision', 'user_report.decision_date')
             ->groupBy('user.id', 'user_report.decision', 'user_report.decision_date');
+
 
         $users_reported_comments = Report::where('id_comment', '<>', NULL)
             ->whereIn('user_report.decision', ['Accepted', 'Rejected'])
