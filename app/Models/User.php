@@ -49,18 +49,17 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Owner', 'id_user');
     }
-    
+
     public function interests()
     {
         return $this->hasMany('App\Models\TopicsInterestUser', 'id_user');
     }
 
-
-    public function isAdmin() 
+    public function isAdmin()
     {
         return $this->hasOne('App\Models\Admin', 'id_user');
     }
-    
+
     public function reportsMade()
     {
         return $this->hasMany('App\Models\Report', 'id_reporter');
@@ -84,7 +83,7 @@ class User extends Authenticatable
     public function getContactedUsers()
     {
         $messages = $this->messages()->sortByDesc('id');
-        
+
         return $messages->unique(function ($item) {
             $max = $item['id_receiver'] > $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
             $min = $item['id_receiver'] <= $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
