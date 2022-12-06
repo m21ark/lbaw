@@ -100,6 +100,7 @@ function addEventListeners() {
         ['#delete_comment_button', sendDeleteCommentRequest],
         ['#notification_icon', createNotificationList],
         ['#create_report_button', sendCreateReportRequest],
+        ['#reject_all_reports', sendRejectAllReportsRequest],
     ];
 
 
@@ -146,6 +147,13 @@ function addEventListeners() {
         })
 }
 
+function sendRejectAllReportsRequest(event) {
+    userID = document.querySelector('#reject_all_reports').dataset.userid
+
+    let res = confirm('Are you sure you want to reject all reports?');
+    if (res)
+        sendAjaxRequest('put', `/api/report/reject_all/${userID}`, {}, () => { });
+}
 
 function commentPopupsController() {
     let aux = document.querySelectorAll('.popup_btn_comment_edit');

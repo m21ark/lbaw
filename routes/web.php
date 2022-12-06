@@ -122,10 +122,11 @@ Route::get('api/user/notifications', 'NotificationController@get');
 Route::get('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
 
 // ======================= Reports ==========================
-
+Route::put('/api/report/reject_all/{userID}', 'RequestController@rejectAll');
 Route::post('api/report', 'ReportController@create');
 Route::put('api/report', 'ReportController@edit');
 Route::delete('api/report/{id}', 'ReportController@delete');
+
 
 /*
 sendAjaxRequest('PUT', '/api/report', {

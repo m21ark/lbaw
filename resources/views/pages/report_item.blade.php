@@ -10,7 +10,7 @@
             <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
 
             <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
-                <a href="#!" class="btn btn-warning">
+                <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
                     <h5>Reject all reports</h5>
                 </a>
 
@@ -63,16 +63,14 @@
     </div>
 
 
-
-
     <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Reports</h3>
         @foreach ($reports as $report)
             <div class="card p-3 mb-4">
                 <h5>Report description:</h5>
                 <p>{{ $report->description }}</p>
-                <a href="#!" class="position-absolute mt-3 btn btn-outline-danger"
-                    style="width: 20%;right:2em">Reject</a>
+                <a href="#!" class="position-absolute mt-3 btn btn-outline-danger" style="width: 20%;right:2em"
+                    data-reportid="{{ $report->id }}">Reject</a>
 
 
                 <p><b>Made by: </b> <a class="text-decoration-none"
