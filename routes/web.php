@@ -18,6 +18,8 @@ Route::get('/', 'Auth\LoginController@home');
 Route::get('admin', 'AdminController@show')->name('admin');
 Route::get('admin/statistics', 'AdminController@showStatistics');
 
+Route::get('admin/report/{username}', 'ReportController@show');
+
 // ======================= STATIC PAGES =======================
 
 

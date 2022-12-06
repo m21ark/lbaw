@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -20,6 +23,24 @@ class ReportController extends Controller
     id_comment INTEGER REFERENCES "comment"(id),
     id_post INTEGER REFERENCES post(id)
     */
+
+    public function show(String $username)
+    {
+        $user = User::where('username', $username)->first();
+        if ($user === null)
+            return redirect('404');
+
+        $statistics = [
+            'post_num' => Post::where('id_poster', $user->id)->count(),
+            'comment_num' => DB::table('comment')->where('id_commenter', $user->id)->count(),
+            'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
+            'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
+            'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
+            'friends_num' => DB::table('friend_request')->where('acceptance_status', 'Accepted')->where('id_user_sender', $user->id)->orWhere('id_user_receiver', $user->id)->count(),
+        ];
+
+        return view('pages.report_item', ['user' => $user, 'statistics' => $statistics, 'report' => Report::first()]);
+    }
 
     public function create(Request $request)
     {
