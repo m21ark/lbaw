@@ -107,6 +107,7 @@ function addEventListeners() {
         ['.friends_request_accept', sendFriendRequestResponse(true)],
         ['.friends_request_reject', sendFriendRequestResponse(false)],
         ['.send_request', sendRequest],
+        ['.cancel_request', deleteFriendship],
     ];
 
 
@@ -1276,9 +1277,28 @@ function sendRequest() {
             child.classList.remove('send_request');
             child.classList.add('fa-user-clock');
             parent.removeEventListener('click', sendRequest);
+            parent.addEventListener('click', deleteFriendship);
+            parent.classList.add('cancel_request');
+            parent.classList.remove('send_request');
         }
         addedHandler(null).call(this);
     });
 }
 
-
+function deleteFriendship() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('delete', "/api/user/friend/" + child.dataset.id, {},
+    function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-user-clock');
+            child.classList.add('fa-user-plus');
+            child.classList.add('send_request');
+            parent.removeEventListener('click', deleteFriendship);
+            parent.addEventListener('click', sendRequest);
+            parent.classList.remove('cancel_request');
+            parent.classList.add('send_request');
+        }
+        addedHandler(null).call(this);
+    });
+}

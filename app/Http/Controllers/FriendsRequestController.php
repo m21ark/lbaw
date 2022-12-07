@@ -67,4 +67,25 @@ class FriendsRequestController extends Controller
 
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
+
+    public function delete($id, Request $request)
+    {
+        validator($request->route()->parameters(), [
+            'id' => 'required|exists:user,id',
+        ])->validate();
+
+        if (!Auth::check())
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        // TODO :ADD policy
+        FriendsRequest::where('id_user_sender', '=', Auth::user()->id)
+        ->where('id_user_receiver', '=', $id)
+        ->delete();
+
+        FriendsRequest::where('id_user_sender', '=', $id)
+        ->where('id_user_receiver', '=', Auth::user()->id)
+        ->delete();
+
+        return response()->json(['The request was deleted with success' => 200]);
+    }
 }
