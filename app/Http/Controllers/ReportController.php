@@ -55,7 +55,29 @@ class ReportController extends Controller
 
         $reports = $reportsPost->union($reportsComments)->get();
 
-        return view('pages.report_item', ['user' => $user, 'statistics' => $statistics, 'reports' => $reports]);
+        $reportsPost_decided = Report::select('user_report.*')
+            ->where('id_post', '<>', NULL)
+            ->where('user_report.decision', '<>', 'Pendent')
+            ->join('post', 'post.id', '=', 'user_report.id_post')
+            ->join('user', 'user.id', '=', 'post.id_poster')
+            ->where('username', $username);
+
+        $reportsComments_decided = Report::select('user_report.*')
+            ->where('id_comment', '<>', NULL)
+            ->where('user_report.decision', '<>', 'Pendent')
+            ->join('comment', 'comment.id', '=', 'user_report.id_comment')
+            ->join('user', 'user.id', '=', 'comment.id_commenter')
+            ->where('username', $username);
+
+
+        $decided_reports = $reportsPost_decided->union($reportsComments_decided)->get();
+
+        return view('pages.report_item', [
+            'user' => $user,
+            'statistics' => $statistics,
+            'reports' => $reports,
+            'decided_reports' => $decided_reports
+        ]);
     }
 
     public function create(Request $request)
