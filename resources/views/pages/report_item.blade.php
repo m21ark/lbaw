@@ -78,7 +78,7 @@
 
 
 
-    <div class="mt-4 d-flex justify-content-center">
+    <div class="mt-5 d-flex justify-content-center">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
             <input type="checkbox" id="report_toggle">
@@ -88,10 +88,10 @@
     </div>
 
     <div id="pendent_report_list" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Pendent Reports
+        <h3 class="mb-3">Pendent Reports ({{ sizeof($reports) }})
 
             @if (count($reports) !== 0)
-                <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
+                <a id="reject_all_reports" href="#!" class="btn btn-warning ms-3" data-userid="{{ $user->id }}">
                     Reject all reports
                 </a>
             @endif
@@ -129,7 +129,7 @@
 
 
     <div id="past_report_list" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Past Reports</h3>
+        <h3 class="mb-3">Past Reports ({{ sizeof($decided_reports) }})</h3>
 
         @if (count($decided_reports) === 0)
             <p class="text-center">No past reports to view</p>
