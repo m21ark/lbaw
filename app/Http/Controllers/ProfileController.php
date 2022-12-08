@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -22,15 +23,16 @@ class ProfileController extends Controller
         }
 
         $statistics = [
-            'post_num' => Post::where('id_poster', $user->id)->count(),
-            'comment_num' => DB::table('comment')->where('id_commenter', $user->id)->count(),
-            'like_comment_num' => DB::table('like_comment')->where('id_user', $user->id)->count(),
-            'like_post_num' => DB::table('like_post')->where('id_user', $user->id)->count(),
-            'group_num' => DB::table('group_join_request')->where('id_user', $user->id)->where('acceptance_status', 'Accepted')->count(),
-            'friends_num' => DB::table('friend_request')->where('acceptance_status', 'Accepted')->where('id_user_sender', $user->id)->orWhere('id_user_receiver', $user->id)->count(),
+            'post_num' => $user->posts->count(),
+            'comment_num' => $user->comments->count(),
+            'like_comment_num' => $user->like_in_comments->count(),
+            'like_post_num' => $user->like_in_post->count(),
+            'group_num' => $user->groupsMember->count(),
+            'friends_num' => $user->friends()->count(),
         ];
 
-        return view('pages.profile', ['user' => $user, 'statistics' => $statistics]);
+        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : null;
+        return view('pages.profile', ['user' => $user, 'statistics' => $statistics, 'friends' => $friends]);
     }
 
     public function edit(Request $request)
@@ -63,7 +65,7 @@ class ProfileController extends Controller
             }
         }
         $user->save();
-        
+
         DB::commit();
 
         return redirect()->route('profile', $user->username);

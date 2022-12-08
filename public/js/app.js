@@ -11,30 +11,32 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
             sender: data.sender,
             notification_date: Date.now(),
+            id_parent: data.obj.id_parent,
             tipo: data.type,
         }
-        if (data.type == "message")
-        {
+        if (data.type == "message") {
             if (window.location.pathname == '/messages/' + data.sender.username) {
-            uploadSms(false, data.obj.text)();
+                uploadSms(false, data.obj.text)();
             }
             else {
                 addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
             }
         }
-        else if (data.type == "Like")
-        {
+        else if (data.type == "Like") {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
-        else if (data.type == "Comment")
-        {
+        else if (data.type == "Comment") {
+            _notifications.push(notfiableJsonPrototype);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
+        else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
@@ -85,6 +87,7 @@ function addEventListeners() {
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
+        ['#popup_btn_report_post_create', popupControllReportPost],
         ['#sms_send_btn', sendMessage],
         ['#profile_post_button_action', sendCreatePostRequest(true)],
         ['#group_post_button_action', sendCreatePostRequest(false)],
@@ -100,6 +103,14 @@ function addEventListeners() {
         ['#edit_comment_button', sendEditCommentRequest],
         ['#delete_comment_button', sendDeleteCommentRequest],
         ['#notification_icon', createNotificationList],
+        ['#create_report_button', sendCreateReportRequest],
+        ['#reject_all_reports', sendRejectAllReportsRequest],
+        ['#ban_user_btn', sendBanUserRequest],
+        ['#unban_user_btn', sendUnbanUserRequest],
+        ['.friends_request_accept', sendFriendRequestResponse(true)],
+        ['.friends_request_reject', sendFriendRequestResponse(false)],
+        ['.send_request', sendRequest],
+        ['.cancel_request', deleteFriendship]
     ];
 
 
@@ -111,12 +122,20 @@ function addEventListeners() {
     }
     );
 
+    assignFunctionClick('#report_toggle', () => {
+        document.querySelector('#pendent_report_list').toggleAttribute('hidden')
+        document.querySelector('#past_report_list').toggleAttribute('hidden')
+    })
+
+    assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
+
 
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
     assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
     assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
     assignFunctionClickAll('.reveal_comment_replies', toggleReplySectionShow)
+    assignFunctionClickAll('.popup_btn_report_comment_create', sendCreateReportCommentRequest)
 
     // OPEN COMMENT POPUPS
     commentPopupsController()
@@ -136,8 +155,25 @@ function addEventListeners() {
         d_group_sidebar.addEventListener('click', function (event) {
             event.preventDefault();
             let drop = document.querySelector('.drop_groups');
+            console.log(drop)
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
         })
+}
+
+function sendRejectAllReportsRequest(event) {
+    userID = document.querySelector('#reject_all_reports').dataset.userid
+
+    let res = confirm('Are you sure you want to reject all reports?');
+    if (res)
+        sendAjaxRequest('put', `/api/report/reject_all/${userID}`, {}, () => { });
+}
+
+function sendRejectReportRequest(event) {
+    id = event.currentTarget.dataset.reportid
+
+    let res = confirm('Are you sure you want to reject this report?');
+    if (res)
+        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => { });
 }
 
 function commentPopupsController() {
@@ -152,6 +188,26 @@ function commentPopupsController() {
                 document.querySelector('#edit_comment_button').setAttribute('data-id', id)
                 document.querySelector('#delete_comment_button').setAttribute('data-id', id)
             }));
+}
+
+function sendBanUserRequest(event) {
+    const elem = document.querySelector('#ban_time_select')
+    userID = elem.dataset.userid
+    time_selected = elem.value
+
+    console.log(userID, time_selected)
+
+    let res = confirm('Are you sure you want to ban this user?');
+    if (res)
+        sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
+}
+
+function sendUnbanUserRequest(event) {
+    userID = document.querySelector('#unban_user_btn').dataset.userid
+
+    let res = confirm('Are you sure you want to unban this user?');
+    if (res)
+        sendAjaxRequest('put', `/api/user/ban/${userID}/8`, {}, () => { });
 }
 
 function commentRepliesController() {
@@ -371,7 +427,7 @@ function sendEditProfileRequest(event) {
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-    console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
+    // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -494,6 +550,36 @@ function sendDeleteCommentRequest() {
     }
 }
 
+// ============================================ Reports ============================================
+
+function popupControllReportPost() {
+    document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
+    document.querySelector('#create_report_button').dataset.comment = 0
+}
+
+function sendCreateReportRequest() {
+    let id_post = document.querySelector('#create_report_button').dataset.post
+    let id_comment = document.querySelector('#create_report_button').dataset.comment
+    let description = document.querySelector('#report_description').value
+
+    if (description === '') {
+        alert('Invalid input');
+        return;
+    }
+
+    let res = confirm('Are you sure you want to submit this report?');
+    if (res) {
+        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, () => { });
+        document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
+    }
+}
+
+function sendCreateReportCommentRequest(event) {
+    const popup = document.querySelector('#popup_show_report_create');
+    document.querySelector('#create_report_button').dataset.comment = event.currentTarget.dataset.id
+    popup.toggleAttribute('hidden');
+}
+
 
 
 // ============================================ Post ============================================
@@ -511,7 +597,7 @@ function sendCreatePostRequest(isProfile) {
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
-            console.log(formData)
+            //console.log(formData)
 
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
@@ -530,7 +616,7 @@ function sendCreatePostRequest(isProfile) {
                 formData.append("photos[]", photos[x]);
             }
 
-            console.log(formData)
+            //console.log(formData)
 
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
@@ -557,7 +643,7 @@ function sendEditPostRequest(event) {
         formData.append("photos[]", photos[x]);
     }
 
-    console.log(formData)
+    //console.log(formData)
     if (res && textarea.value != null)
         sendFormData('post', '/api/post/' + id, formData, addedHandler('#popup_show_post_edit'));
 
@@ -1057,7 +1143,7 @@ function createUserReportCardPending(user) {
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
-        <a href="#" class="btn btn-outline-secondary">Take</a>
+        <a href="/admin/report/${user.username}" class="btn btn-outline-dark">View</a>
     `
 
     return new_card;
@@ -1093,7 +1179,7 @@ function createUserReportCardPast(user) {
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
-        <a href="#" class="btn btn-outline-dark">Retake</a>
+        <a href="/admin/report/${user.username}" class="btn btn-outline-dark">Edit</a>
     `;
 
     return new_card;
@@ -1112,7 +1198,7 @@ var _notifications = []
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-        console.log(this.responseText)
+        // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
     });
@@ -1124,13 +1210,14 @@ getNotifications();
     this should mark a notification as seen when tapping in the notf.
 */
 function markAsSeen($id, e) {
-    return function() {sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
-        if (this.status == 200) {
-            let _x = _notifications.findIndex(x => x.id == $id);
-            _notifications.splice(_x, 1);
-            e.remove();
-        }
-    });
+    return function () {
+        sendAjaxRequest('put', "/api/user/notification/" + $id + "/seen", {}, function () {
+            if (this.status == 200) {
+                let _x = _notifications.findIndex(x => x.id == $id);
+                _notifications.splice(_x, 1);
+                e.remove();
+            }
+        });
     }
 }
 
@@ -1142,40 +1229,43 @@ function timeSince(date) {
     var interval = seconds / 31536000;
 
     if (interval > 1) {
-      return Math.floor(interval) + " years";
+        return Math.floor(interval) + " years";
     }
     interval = seconds / 2592000;
     if (interval > 1) {
-      return Math.floor(interval) + " months";
+        return Math.floor(interval) + " months";
     }
     interval = seconds / 86400;
     if (interval > 1) {
-      return Math.floor(interval) + " days";
+        return Math.floor(interval) + " days";
     }
     interval = seconds / 3600;
     if (interval > 1) {
-      return Math.floor(interval) + " hours";
+        return Math.floor(interval) + " hours";
     }
     interval = seconds / 60;
     if (interval > 1) {
-      return Math.floor(interval) + " minutes";
+        return Math.floor(interval) + " minutes";
     }
     return Math.floor(seconds) + " seconds";
-  }
+}
 
 function createCustomMessageBody(notf) {
 
     if (notf.tipo == "Comment") {
-        return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        if (notf.id_parent == null)
+            return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
+        else
+            return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username +"</a>" + " wants to connect"; // TODO. accept/reject
+        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username + "</a>" + " wants to connect"; // TODO. accept/reject
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> your Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
@@ -1186,14 +1276,22 @@ function createCustomMessageBody(notf) {
 function createNotificationList(event) {
     event.preventDefault();
 
-
     let notifications = document.querySelector('#notifications_container');
 
-    if (notifications.style.display == 'none' || notifications.style.display == '') {
-        notifications.style.display = 'block';
+    if (notifications.style.visibility == 'hidden' || notifications.style.visibility == '') {
+        notifications.style.visibility = 'visible';
 
-    // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
-    // tb meter um numero limitado
+        let side_bar_elms = document.querySelectorAll('.enc');
+        console.log(side_bar_elms);
+        [].forEach.call(side_bar_elms, function (e, i) {
+            if (i != 5 && i != 6)
+                e.removeChild(e.lastChild);
+        })
+        let bar = document.querySelector('#leftbar');
+        bar.style.width = "100px";
+
+        // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
+        // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
@@ -1211,9 +1309,75 @@ function createNotificationList(event) {
             notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
         }
     } else {
-        notifications.style.display = 'none';
+        notifications.style.visibility = 'hidden';
         notifications.innerHTML = '';
+
+        let side_bar_elms = document.querySelectorAll('.enc');
+        let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
+        [].forEach.call(side_bar_elms, function (e, i) {
+            if (side_bar_text[i] != "" && i != 6) {
+                console.log("OLA")
+                let textNode = document.createTextNode(side_bar_text[i]);
+                e.appendChild(textNode);
+            }
+        })
+        let bar = document.querySelector('#leftbar');
+        bar.style.width = "20em";
+    }
+}
+
+// ==================================== FRIENDS REQUESTS ============================================
+
+
+function sendFriendRequestResponse(accept) {
+    return function () {
+        let id = this.id.split("_")[1];
+        let response = accept ? "accept" : "reject";
+        console.log(response);
+        sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
+            if (this.status == 200) {
+                let friend_request = document.querySelector("#friend_request_" + id);
+                friend_request.remove();
+            }
+            addedHandler(null).call(this);
+        });
     }
 }
 
 
+function sendRequest() {
+    //send request
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('send_request');
+            child.classList.add('fa-user-clock');
+            parent.removeEventListener('click', sendRequest);
+            parent.addEventListener('click', deleteFriendship);
+            parent.classList.add('cancel_request');
+            parent.classList.remove('send_request');
+        }
+        addedHandler(null).call(this);
+    });
+}
+
+function deleteFriendship() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('delete', "/api/user/friend/" + child.dataset.id, {},
+        function (e) {
+            if (this.status == 200) {
+                child.classList.remove('fa-user-clock');
+                child.classList.add('fa-user-plus');
+                child.classList.add('send_request');
+                parent.removeEventListener('click', deleteFriendship);
+                parent.addEventListener('click', sendRequest);
+                parent.classList.remove('cancel_request');
+                parent.classList.add('send_request');
+            }
+            addedHandler(null).call(this);
+        });
+}

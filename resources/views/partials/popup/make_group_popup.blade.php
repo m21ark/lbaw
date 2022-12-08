@@ -2,7 +2,6 @@
     <div class="pop_up" hidden id="popup_show_group_create">
         <form style="width:100%;">
 
-
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Create your Group</h3>

@@ -7,6 +7,13 @@
                 @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
                     <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
                 @endif
+                @if (!$friends && in_array(Auth::user()->id, $user->friendsRequests->pluck('id_user_sender')->toArray()))
+                    <span class="cancel_request"><i class="fa-solid fa-user-clock" data-id="{{ $user->id }}"></i></span>
+                @elseif (!$friends && $user->id != Auth::user()->id)
+                    <span class="send_request"><i class="fa-solid fa-user-plus" data-id="{{ $user->id }}"></i></span>
+                @elseif ($user->id && $user->id != Auth::user()->id)
+                    <span class="cancel_request"><i class="fa-solid fa-user-check" data-id="{{ $user->id }}"></i></span>
+                @endif
             @endauth
         </h3>
 
@@ -43,7 +50,8 @@
                     <?php $ban_date = $user->ban_date ?? 'N/A'; ?>
                     <p>Birthdate: {{ $user->birthdate }}</p>
                     <p>Email: {{ $user->email }}</p>
-                    <p>Banned until: {{ $ban_date }}</p>
+                    <p>Ban status: <a class="ms-2" href="/admin/report/{{ $user->username }}">{{ $ban_date }}</a>
+                    </p>
                 </div>
             @endif
         @endauth

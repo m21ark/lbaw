@@ -76,7 +76,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
 
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-outline-secondary kick_member_button' data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
+                        <a class='btn btn-outline-secondary kick_member_button' data-idUser="{{ $member->user->id }}"
+                            data-idGroup="{{ $group->id }}">Kick</a>
                     @endif
 
                 </div>
