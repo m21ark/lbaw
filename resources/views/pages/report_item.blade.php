@@ -78,9 +78,9 @@
         <h3 class="mb-3">Reports</h3>
         @foreach ($reports as $report)
             <div class="card p-3 mb-4">
-                <h5>Report description:</h5>
+                <h5 class="mb-4">Report description:</h5>
                 <p>{{ $report->description }}</p>
-                <a href="#!" class="position-absolute mt-3 btn btn-outline-danger" style="width: 20%;right:2em"
+                <a href="#!" class="position-absolute btn btn-outline-danger" style="width: 20%;right:2em"
                     data-reportid="{{ $report->id }}">Reject</a>
 
 

@@ -81,11 +81,8 @@ class ReportController extends Controller
     public function rejectAll(Int $userID)
     {
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("HERE1");
-        return null;
+        // TODO POLICY
 
-        $userID = 3;
         $reportsPost = Report::select('user_report.*')
             ->where('id_post', '<>', NULL)
             ->where('user_report.decision', 'Pendent')
@@ -93,7 +90,6 @@ class ReportController extends Controller
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->where('user.id', $userID);
 
-        $out->writeln("HERE2");
 
         $reportsComments = Report::select('user_report.*')
             ->where('id_comment', '<>', NULL)
@@ -102,16 +98,15 @@ class ReportController extends Controller
             ->join('user', 'user.id', '=', 'comment.id_commenter')
             ->where('user.id', $userID);
 
-        $out->writeln("HERE3");
         $reports = $reportsPost->union($reportsComments)->get();
-        $out->writeln("HERE4");
+
         foreach ($reports as $report) {
             $report->decision = 'Rejected';
             $report->decision_date = date('Y-m-d H:i:s');
+            $report->id_admin = Auth::user()->id;
             $report->save();
-            $out->writeln("HERE6");
         }
-        $out->writeln("HERE5");
+
         return $reports;
     }
 
