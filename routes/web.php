@@ -51,6 +51,7 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
+Route::get('user/friends/requests', 'FriendsRequestController@show');
 
 // ======================================= APIS ========================================
 
@@ -119,7 +120,15 @@ Route::delete('api/comment/{id_comment}', 'CommentController@delete');
 // ======================= NOTIFICATIONS ==========================
 
 Route::get('api/user/notifications', 'NotificationController@get');
-Route::get('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+Route::put('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+
+// ======================= FRIENDS REQUEST ========================
+
+Route::put('api/user/friend/request/{id_sender}/accept', 'FriendsRequestController@accept');
+Route::put('api/user/friend/request/{id_sender}/reject', 'FriendsRequestController@reject');
+Route::post('api/user/friend/request/{id_rcv}/send', 'FriendsRequestController@send');
+Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
+
 
 // ======================= Reports ==========================
 Route::put('api/report/reject_all/{userID}', 'ReportController@rejectAll');

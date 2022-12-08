@@ -17,7 +17,7 @@
         @auth
             <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->
 
-            <a href="" class=" btn mb-3 drop_my_group enc" aria-current="page">
+            <a href={{ url('/user/friends/requests') }} class=" btn mb-3 enc" aria-current="page">
                 <i class="fa-solid fa-user-group fa-2x"></i>
                 Friends Requests
             </a>

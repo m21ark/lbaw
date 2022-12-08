@@ -87,12 +87,42 @@ class User extends Authenticatable
         return $messages->unique(function ($item) {
             $max = $item['id_receiver'] > $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
             $min = $item['id_receiver'] <= $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
-            return $max.$min;
+            return $max . $min;
         });
     }
 
     public function notifications()
     {
         return $this->hasMany('App\Models\Notification', 'id_user');
+    }
+
+    public function friendsRequests()
+    {
+        return $this->hasMany('App\Models\FriendsRequest', 'id_user_receiver');
+    }
+
+    public function sendingRequests()
+    {
+        return $this->hasMany('App\Models\FriendsRequest', 'id_user_sender');
+    }
+
+    public function friends()
+    {
+        return $this->friendsRequests->concat($this->sendingRequests)->where('acceptance_status', 'Accepted');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'id_commenter');
+    }
+
+    public function like_in_comments()
+    {
+        return $this->hasMany('App\Models\CommentLike', 'id_user');
+    }
+
+    public function like_in_post()
+    {
+        return $this->hasMany('App\Models\Like', 'id_user');
     }
 }

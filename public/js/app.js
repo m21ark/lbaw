@@ -36,6 +36,10 @@ if (user_header != null) {
             _notifications.push(notfiableJsonPrototype);
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
+        else if (data.type == "FriendRequest") {
+            _notifications.push(notfiableJsonPrototype);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+        }
     });
 }
 
@@ -102,7 +106,11 @@ function addEventListeners() {
         ['#create_report_button', sendCreateReportRequest],
         ['#reject_all_reports', sendRejectAllReportsRequest],
         ['#ban_user_btn', sendBanUserRequest],
-        ['#unban_user_btn', sendUnbanUserRequest]
+        ['#unban_user_btn', sendUnbanUserRequest],
+        ['.friends_request_accept', sendFriendRequestResponse(true)],
+        ['.friends_request_reject', sendFriendRequestResponse(false)],
+        ['.send_request', sendRequest],
+        ['.cancel_request', deleteFriendship]
     ];
 
 
@@ -147,6 +155,7 @@ function addEventListeners() {
         d_group_sidebar.addEventListener('click', function (event) {
             event.preventDefault();
             let drop = document.querySelector('.drop_groups');
+            console.log(drop)
             drop.style.display = drop.style.display === 'none' ? '' : 'none';
         })
 }
@@ -1202,7 +1211,7 @@ getNotifications();
 */
 function markAsSeen($id, e) {
     return function () {
-        sendAjaxRequest('get', "/api/user/notification/" + $id + "/seen", {}, function () {
+        sendAjaxRequest('put', "/api/user/notification/" + $id + "/seen", {}, function () {
             if (this.status == 200) {
                 let _x = _notifications.findIndex(x => x.id == $id);
                 _notifications.splice(_x, 1);
@@ -1273,8 +1282,10 @@ function createNotificationList(event) {
         notifications.style.visibility = 'visible';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        [].forEach.call(side_bar_elms, function (e) {
-            e.removeChild(e.lastChild);
+        console.log(side_bar_elms);
+        [].forEach.call(side_bar_elms, function (e, i) {
+            if (i != 5 && i != 6)
+                e.removeChild(e.lastChild);
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
@@ -1302,9 +1313,10 @@ function createNotificationList(event) {
         notifications.innerHTML = '';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        let side_bar_text = ["Home", "Friends Request", "My Groups", "Notifications", "Messages", ""];
+        let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "") {
+            if (side_bar_text[i] != "" && i != 6) {
+                console.log("OLA")
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
             }
@@ -1314,4 +1326,58 @@ function createNotificationList(event) {
     }
 }
 
+// ==================================== FRIENDS REQUESTS ============================================
 
+
+function sendFriendRequestResponse(accept) {
+    return function () {
+        let id = this.id.split("_")[1];
+        let response = accept ? "accept" : "reject";
+        console.log(response);
+        sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
+            if (this.status == 200) {
+                let friend_request = document.querySelector("#friend_request_" + id);
+                friend_request.remove();
+            }
+            addedHandler(null).call(this);
+        });
+    }
+}
+
+
+function sendRequest() {
+    //send request
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('fa-user-plus');
+            child.classList.remove('send_request');
+            child.classList.add('fa-user-clock');
+            parent.removeEventListener('click', sendRequest);
+            parent.addEventListener('click', deleteFriendship);
+            parent.classList.add('cancel_request');
+            parent.classList.remove('send_request');
+        }
+        addedHandler(null).call(this);
+    });
+}
+
+function deleteFriendship() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('delete', "/api/user/friend/" + child.dataset.id, {},
+        function (e) {
+            if (this.status == 200) {
+                child.classList.remove('fa-user-clock');
+                child.classList.add('fa-user-plus');
+                child.classList.add('send_request');
+                parent.removeEventListener('click', deleteFriendship);
+                parent.addEventListener('click', sendRequest);
+                parent.classList.remove('cancel_request');
+                parent.classList.add('send_request');
+            }
+            addedHandler(null).call(this);
+        });
+}
