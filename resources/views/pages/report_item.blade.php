@@ -1,11 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+
+
     <h2 class="mt-5">User Report</h2>
     <div class="d-flex justify-content-center">
 
+
         <div class="mt-4 p-4 card text-bg-light" style="width:50%;max-width:35em">
-            <h3 id="username"><a class="text-decoration-none" href="/profile/{{ $user->username }}">{{ $user->username }}</a>
+            <h3 id="username"><a class="text-decoration-none"
+                    href="/profile/{{ $user->username }}">{{ $user->username }}</a>
             </h3>
             <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
 
@@ -79,7 +83,17 @@
     </div>
 
 
-    <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
+
+    <div class="mt-4 d-flex justify-content-center">
+        <h4 class="me-3">Pendent Reports</h4>
+        <label class="switch">
+            <input type="checkbox" id="report_toggle">
+            <span class="slider round"></span>
+        </label>
+        <h4 class="ms-3">Past Reports</h4>
+    </div>
+
+    <div id="pendent_report_list" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Pendent Reports</h3>
 
         @if (count($reports) === 0)
@@ -112,7 +126,7 @@
     </div>
 
 
-    <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
+    <div id="past_report_list" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Past Reports</h3>
 
         @if (count($decided_reports) === 0)
