@@ -119,6 +119,8 @@ function addEventListeners() {
         document.querySelector('#past_report_list').toggleAttribute('hidden')
     })
 
+    assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
+
 
     // LIKES ACTIONS
     assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
@@ -155,6 +157,14 @@ function sendRejectAllReportsRequest(event) {
     let res = confirm('Are you sure you want to reject all reports?');
     if (res)
         sendAjaxRequest('put', `/api/report/reject_all/${userID}`, {}, () => { });
+}
+
+function sendRejectReportRequest(event) {
+    id = event.currentTarget.dataset.reportid
+
+    let res = confirm('Are you sure you want to reject this report?');
+    if (res)
+        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => { });
 }
 
 function commentPopupsController() {

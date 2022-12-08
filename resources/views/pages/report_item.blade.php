@@ -104,7 +104,7 @@
             <div class="card p-3 mb-4">
                 <h5 class="mb-4">Report description:</h5>
                 <p>{{ $report->description }}</p>
-                <a href="#!" class="position-absolute btn btn-outline-danger" style="width: 20%;right:2em"
+                <a href="#!" class="position-absolute btn btn-outline-danger reject_user_report_btn" style="width: 20%;right:2em"
                     data-reportid="{{ $report->id }}">Reject</a>
 
 
