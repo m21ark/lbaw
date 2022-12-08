@@ -1,4 +1,5 @@
-<div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light" id="notifications_container">
+<div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light"
+    id="notifications_container">
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
@@ -14,9 +15,9 @@
         </a>
 
         @auth
-            <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->        
+            <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->
 
-            <a href={{url('/user/friends/requests')}} class=" btn mb-3 enc" aria-current="page">
+            <a href={{ url('/user/friends/requests') }} class=" btn mb-3 enc" aria-current="page">
                 <i class="fa-solid fa-user-group fa-2x"></i>
                 Friends Requests
             </a>
@@ -43,14 +44,14 @@
         @endauth
 
         @auth
-            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc"
-                type="submit">
-                
+            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
+
                 <i class="fa-regular fa-square-plus fa-2x"></i>
             </button>
 
             @if (Auth::user()->isAdmin)
                 <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Console</a>
+                <a href="/admin/statistics" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Stats</a>
             @endif
         @endauth
 

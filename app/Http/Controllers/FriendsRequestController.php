@@ -18,24 +18,28 @@ class FriendsRequestController extends Controller
         return view('pages.friends_requests', ['user' => Auth::user()]);
     }
 
-    public function send($id_rcv, Request $request) 
+    public function send($id_rcv, Request $request)
     {
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
         // TODO : E PRECISO OUTRA POLICIE ? no caso de se já ter enviado um pedido
-         
-         validator($request->route()->parameters(), [
-             'id_rcv' => 'required|exists:user,id',
-         ])->validate();
+
+        validator($request->route()->parameters(), [
+            'id_rcv' => 'required|exists:user,id',
+        ])->validate();
 
         $frequest = new FriendsRequest();
         $frequest->id_user_sender = Auth::user()->id;
         $frequest->id_user_receiver = $id_rcv;
         $frequest->save();
 
-        event(new NewNotification(intval($id_rcv), 'FriendRequest', Auth::user()
-            , $frequest->toArray()));
+        event(new NewNotification(
+            intval($id_rcv),
+            'FriendRequest',
+            Auth::user(),
+            $frequest->toArray()
+        ));
 
         return response()->json(['The request was sent' => 200]);
     }
@@ -61,8 +65,8 @@ class FriendsRequestController extends Controller
 
         // TODO :ADD policy
         $frequest = FriendsRequest::where('id_user_sender', '=', $id_sender)
-        ->where('id_user_receiver', '=', Auth::user()->id)
-        ->update(['acceptance_status' => $new_state]);
+            ->where('id_user_receiver', '=', Auth::user()->id)
+            ->update(['acceptance_status' => $new_state]);
 
 
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
@@ -79,12 +83,12 @@ class FriendsRequestController extends Controller
 
         // TODO :ADD policy
         FriendsRequest::where('id_user_sender', '=', Auth::user()->id)
-        ->where('id_user_receiver', '=', $id)
-        ->delete();
+            ->where('id_user_receiver', '=', $id)
+            ->delete();
 
         FriendsRequest::where('id_user_sender', '=', $id)
-        ->where('id_user_receiver', '=', Auth::user()->id)
-        ->delete();
+            ->where('id_user_receiver', '=', Auth::user()->id)
+            ->delete();
 
         return response()->json(['The request was deleted with success' => 200]);
     }

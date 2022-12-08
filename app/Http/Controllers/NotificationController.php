@@ -18,7 +18,7 @@ class NotificationController extends Controller
         foreach (Auth::user()->notifications as $not) {
             $user[] = $not->sender;
         }
-        
+
         $nots = Auth::user()->notifications->filter(function ($obj) {
             return $obj->seen == False;
         })->values();
@@ -27,13 +27,13 @@ class NotificationController extends Controller
     }
 
 
-    public function markAsSeen($id) 
+    public function markAsSeen($id)
     {
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
         $not = Notification::find($id);
-            
+
         $this->authorize('update', $not);
 
         $not->seen = True;

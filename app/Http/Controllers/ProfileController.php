@@ -65,7 +65,7 @@ class ProfileController extends Controller
             }
         }
         $user->save();
-        
+
         DB::commit();
 
         return redirect()->route('profile', $user->username);

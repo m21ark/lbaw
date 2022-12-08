@@ -29,9 +29,12 @@ class CommentLikeController extends Controller
             $like->id_comment = $comment;
             $like->save();
 
-            event(new NewNotification(intval($like->comment->poster->id), 'Like', Auth::user()
-            , $like->toArray()));
-
+            event(new NewNotification(
+                intval($like->comment->poster->id),
+                'Like',
+                Auth::user(),
+                $like->toArray()
+            ));
         } else {
             $like = CommentLike::where('id_user', $user)
                 ->where('id_comment', $comment)

@@ -9,7 +9,7 @@ class FriendsRequest extends Model
 {
     use HasFactory;
     public $timestamps  = false;
-    public $incrementing = false; 
+    public $incrementing = false;
     protected $table = 'friend_request';
 
 

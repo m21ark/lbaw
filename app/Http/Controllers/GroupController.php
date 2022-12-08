@@ -87,18 +87,15 @@ class GroupController extends Controller
         $group->description = $request->input('description');
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
-        if ($request->hasFile('photo'))
-        {
+        if ($request->hasFile('photo')) {
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 
             try {
                 $request->file('photo')->move(public_path('group/'), $group->id . '.jpg');
-            }
-            catch(Exception $e) {
+            } catch (Exception $e) {
                 DB::rollBack();
             }
-
         }
         DB::commit();
 

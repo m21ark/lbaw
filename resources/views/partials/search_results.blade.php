@@ -19,7 +19,8 @@
         Post
     </label>
 
-    <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_topic" value="topics">
+    <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_topic"
+        value="topics">
     <label class="list-group-item rounded-3 py-3" for="search_radio_topic">
         Topic
     </label>

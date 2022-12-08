@@ -8,9 +8,9 @@
 
         </div>
 
-        <div class="header_searchbar" >
-            <input type="search" class="form-control text-bg-light" placeholder="Search"
-                aria-label="Search" id="search_bar">
+        <div class="header_searchbar">
+            <input type="search" class="form-control text-bg-light" placeholder="Search" aria-label="Search"
+                id="search_bar">
         </div>
 
         <div class="text-end">
@@ -19,7 +19,8 @@
                 <div class="d-flex align-items-center">
                     <a class="text-white text-decoration-none me-3"
                         href={{ url('/profile/' . Auth::user()->username) }}>
-                        <strong class="me-2" id="auth_id" data-id={{Auth::user()->id}}>{{ Auth::user()->username }}</strong>
+                        <strong class="me-2" id="auth_id"
+                            data-id={{ Auth::user()->id }}>{{ Auth::user()->username }}</strong>
                         <img src="{{ asset(Auth::user()->photo) }}" alt="logo" width="40" height="40"
                             class="rounded-circle">
                     </a>

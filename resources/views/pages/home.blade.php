@@ -14,8 +14,4 @@
     @section('rightbar')
         @include('partials.sidebar.home_sidebar')
     @endsection
-@else
-    @section('rightbar')
-        @include('partials.sidebar.guest_sidebar')
-    @endsection
 @endif

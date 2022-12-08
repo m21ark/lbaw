@@ -8,12 +8,21 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register', 'Auth\RegisterController@register');
 
-// ======================= HOME PAGES =======================
+// ======================= HOME PAGE =======================
 
-Route::get('admin', 'AdminController@show')->name('admin');
 Route::get('/', 'Auth\LoginController@home');
 
+
+// ======================= ADMIN PAGES =======================
+
+Route::get('admin', 'AdminController@show')->name('admin');
+Route::get('admin/statistics', 'AdminController@showStatistics');
+
+Route::get('admin/report/{username}', 'ReportController@show');
+
 // ======================= STATIC PAGES =======================
+
+
 
 Route::get('features', function () {
     return view('pages.features');
@@ -121,4 +130,10 @@ Route::post('api/user/friend/request/{id_rcv}/send', 'FriendsRequestController@s
 Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
 
 
+// ======================= Reports ==========================
+Route::put('api/report/reject_all/{userID}', 'ReportController@rejectAll');
+Route::post('api/report', 'ReportController@create');
+Route::put('api/report', 'ReportController@edit');
+Route::delete('api/report/{id}', 'ReportController@delete');
 
+Route::put('api/user/ban/{userID}/{time_option}', 'ReportController@banUser');
