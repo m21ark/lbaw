@@ -1,24 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-
-
     <h2 class="mt-5">User Report</h2>
     <div class="d-flex justify-content-center">
 
 
         <div class="mt-4 p-4 card text-bg-light" style="width:50%;max-width:35em">
-            <h3 id="username"><a class="text-decoration-none"
-                    href="/profile/{{ $user->username }}">{{ $user->username }}</a>
+            <h3 id="username"><a class="text-decoration-none" href="/profile/{{ $user->username }}">{{ $user->username }}</a>
             </h3>
             <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
 
             <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
 
                 @if ($user->ban_date === null)
-                    <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
-                        <h5>Reject all reports</h5>
-                    </a>
                     <div>
                         <a id="ban_user_btn" href="#!" class="mt-1 btn btn-danger">
                             <h5>Ban User</h5>
@@ -94,7 +88,15 @@
     </div>
 
     <div id="pendent_report_list" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Pendent Reports</h3>
+        <h3 class="mb-3">Pendent Reports
+
+            @if (count($reports) !== 0)
+                <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
+                    Reject all reports
+                </a>
+            @endif
+
+        </h3>
 
         @if (count($reports) === 0)
             <p class="text-center">No pending reports to view</p>
@@ -104,8 +106,8 @@
             <div class="card p-3 mb-4">
                 <h5 class="mb-4">Report description:</h5>
                 <p>{{ $report->description }}</p>
-                <a href="#!" class="position-absolute btn btn-outline-danger reject_user_report_btn" style="width: 20%;right:2em"
-                    data-reportid="{{ $report->id }}">Reject</a>
+                <a href="#!" class="position-absolute btn btn-outline-danger reject_user_report_btn"
+                    style="width: 20%;right:2em" data-reportid="{{ $report->id }}">Reject</a>
 
 
                 <p><b>Made by: </b> <a class="text-decoration-none"

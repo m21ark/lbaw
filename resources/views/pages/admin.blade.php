@@ -46,10 +46,4 @@
 
         </div>
     </div>
-
-
-
-    <p class="m-5 p-5">
-        {{ $reports }}
-    </p>
 @endsection

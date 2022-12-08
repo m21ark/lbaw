@@ -43,7 +43,7 @@
                     <?php $ban_date = $user->ban_date ?? 'N/A'; ?>
                     <p>Birthdate: {{ $user->birthdate }}</p>
                     <p>Email: {{ $user->email }}</p>
-                    <p>Banned until: {{ $ban_date }}</p>
+                    <p>Ban status: <a class="ms-2" href="/admin/report/{{ $user->username }}">{{ $ban_date }}</a></p>
                 </div>
             @endif
         @endauth

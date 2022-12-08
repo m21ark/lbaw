@@ -86,6 +86,7 @@ class ReportController extends Controller
         $report = new Report();
         $report->report_date = date('Y-m-d H:i:s');
         $report->description = $request->description;
+        $report->decision = 'Pendent';
 
         if ($request->id_comment > 0)
             $report->id_comment = $request->id_comment;
