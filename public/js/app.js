@@ -101,7 +101,8 @@ function addEventListeners() {
         ['#notification_icon', createNotificationList],
         ['#create_report_button', sendCreateReportRequest],
         ['#reject_all_reports', sendRejectAllReportsRequest],
-        ['#ban_user_btn', sendBanUserRequest]
+        ['#ban_user_btn', sendBanUserRequest],
+        ['#unban_user_btn', sendUnbanUserRequest]
     ];
 
 
@@ -173,13 +174,21 @@ function commentPopupsController() {
 function sendBanUserRequest(event) {
     const elem = document.querySelector('#ban_time_select')
     userID = elem.dataset.userid
-    value = elem.value
+    time_selected = elem.value
 
-    console.log(userID, value)
+    console.log(userID, time_selected)
 
     let res = confirm('Are you sure you want to ban this user?');
-    if (res) // TODO: CHECK WHERE WOULD BE MORE LOGICAL TO SEND REQUEST
-        sendAjaxRequest('put', `/api/user/ban/${userID}`, { userID: userID, value: value }, () => { });
+    if (res)
+        sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
+}
+
+function sendUnbanUserRequest(event) {
+    userID = document.querySelector('#unban_user_btn').dataset.userid
+
+    let res = confirm('Are you sure you want to unban this user?');
+    if (res)
+        sendAjaxRequest('put', `/api/user/ban/${userID}/8`, {}, () => { });
 }
 
 function commentRepliesController() {

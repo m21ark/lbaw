@@ -10,25 +10,30 @@
             <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
 
             <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
-                <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
-                    <h5>Reject all reports</h5>
-                </a>
 
-                <div>
-                    <a id="ban_user_btn" href="#!" class="mt-1 btn btn-danger">
-                        <!-- 7dias, 30dias, 3meses, 1ano, permanente -->
-                        <h5>Ban User</h5>
+                @if ($user->ban_date === null)
+                    <a id="reject_all_reports" href="#!" class="btn btn-warning" data-userid="{{ $user->id }}">
+                        <h5>Reject all reports</h5>
                     </a>
-                    <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">
-                        <option selected value="1">7 days</option>
-                        <option value="2">15 days</option>
-                        <option value="3">30 days</option>
-                        <option value="4">3 months</option>
-                        <option value="5">6 months</option>
-                        <option value="6">1 year</option>
-                        <option value="7">Permanent</option>
-                    </select>
-                </div>
+                    <div>
+                        <a id="ban_user_btn" href="#!" class="mt-1 btn btn-danger">
+                            <h5>Ban User</h5>
+                        </a>
+                        <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">
+                            <option selected value="1">7 days</option>
+                            <option value="2">15 days</option>
+                            <option value="3">30 days</option>
+                            <option value="4">3 months</option>
+                            <option value="5">6 months</option>
+                            <option value="6">1 year</option>
+                            <option value="7">Permanent</option>
+                        </select>
+                    </div>
+                @else
+                    <a id="unban_user_btn" href="#!" class="mt-1 btn btn-warning" data-userid="{{ $user->id }}">
+                        <h5>Unban User</h5>
+                    </a>
+                @endif
             </div>
 
             <h3>Bio</h3>
@@ -76,6 +81,11 @@
 
     <div class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Reports</h3>
+
+        @if (count($reports) === 0)
+            <p class="text-center">No pending reports to view</p>
+        @endif
+
         @foreach ($reports as $report)
             <div class="card p-3 mb-4">
                 <h5 class="mb-4">Report description:</h5>

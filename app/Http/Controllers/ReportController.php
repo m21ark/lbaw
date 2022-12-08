@@ -80,6 +80,11 @@ class ReportController extends Controller
 
     public function rejectAll(Int $userID)
     {
+        $this->updateAllPendent($userID, 'Rejected');
+    }
+
+    public function updateAllPendent($userID, $decision)
+    {
 
         // TODO POLICY
 
@@ -90,7 +95,7 @@ class ReportController extends Controller
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->where('user.id', $userID);
 
-
+        // TODO : VERIFICAR SE É NECESSARIO COM RICARDO POR CAUSA DOS TRIGGERS
         $reportsComments = Report::select('user_report.*')
             ->where('id_comment', '<>', NULL)
             ->where('user_report.decision', 'Pendent')
@@ -101,13 +106,47 @@ class ReportController extends Controller
         $reports = $reportsPost->union($reportsComments)->get();
 
         foreach ($reports as $report) {
-            $report->decision = 'Rejected';
+            $report->decision = $decision;
             $report->decision_date = date('Y-m-d H:i:s');
             $report->id_admin = Auth::user()->id;
             $report->save();
         }
+    }
 
-        return $reports;
+    public function banUser(Int $userID, String $time_option)
+    {
+        // TODO POLICY
+
+        $user = User::find($userID);
+        switch ($time_option) {
+            case '1':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+7 days'));
+                break;
+            case '2':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+15 days'));
+                break;
+            case '3':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+1 month'));
+                break;
+            case '4':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+3 months'));
+                break;
+            case '5':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+6 months'));
+                break;
+            case '6':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+1 year'));
+                break;
+            case '7':
+                $user->ban_date = date('Y-m-d H:i:s', strtotime('+100 year'));
+                break;
+            case '8':
+                $user->ban_date = null;
+                break;
+        }
+
+        $user->save();
+        $this->updateAllPendent($userID, 'Accepted');
     }
 
     public function edit(Request $request)
