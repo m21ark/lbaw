@@ -13,12 +13,12 @@ class MessagesController extends Controller
 
     public function create($id, Request $request)
     {
-        if (!Auth::check() )
+        if (!Auth::check())
             return response()->json(['failure' => 403]);
 
         if ($request->text === null)
             return response()->json(['Text cannot be null' => 400]);
-        
+
         // TODO POLICY ... tem de se verificar se são amigos ... se bem que isto já está implementado na bd
 
         $sms = new Message();
@@ -27,9 +27,13 @@ class MessagesController extends Controller
         $sms->id_receiver = intval($id);
 
         $sms->save();
-        
-        event(new NewNotification(intval($id), 'message', Auth::user(), 
-            $sms));
+
+        event(new NewNotification(
+            intval($id),
+            'message',
+            Auth::user(),
+            $sms
+        ));
 
         return response()->json(['Successfully created' => 201]);
     }
@@ -44,14 +48,14 @@ class MessagesController extends Controller
         $user = Auth::user();
 
         $messages = $user->messages()
-        ->filter(function ($item) use ($sender_username){
-            return $item->sender->username === $sender_username
-            || $item->receiver->username === $sender_username;
-        });
+            ->filter(function ($item) use ($sender_username) {
+                return $item->sender->username === $sender_username
+                    || $item->receiver->username === $sender_username;
+            });
 
         $sender = User::where('username', '=', $sender_username)->first();
 
-        
+
 
         return view('pages.messages', ['user' => $user, 'messages' => $messages, 'sender' => $sender]);
     }

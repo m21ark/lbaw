@@ -15,9 +15,19 @@ class Report extends Model
     {
         return $this->belongsTo('App\Models\Post', 'id_post');
     }
-    
+
     public function comment()
     {
         return $this->belongsTo('App\Models\Comment', 'id_comment');
+    }
+
+    public function reporter()
+    {
+        return $this->belongsTo('App\Models\User', 'id_reporter');
+    }
+
+    public function avaliator()
+    {
+        return $this->belongsTo('App\Models\User', 'id_admin');
     }
 }

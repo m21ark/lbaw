@@ -27,9 +27,12 @@ class CommentController extends Controller
             $comment->text = $text;
             $comment->save();
 
-            event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
-            , $comment));
-
+            event(new NewNotification(
+                intval($comment->post->owner->id),
+                'Comment',
+                Auth::user(),
+                $comment
+            ));
         } else if (sizeof($matches[0]) === 1) {
 
             // TODO adicionar notificação de erro
@@ -51,16 +54,24 @@ class CommentController extends Controller
                 $comment->id_commenter = Auth::user()->id;
                 $comment->text = $text;
                 $comment->save();
-                
-                event(new NewNotification(intval($comment->post->owner->id), 'Comment', Auth::user()
-                 , $comment));
-                
+
+                event(new NewNotification(
+                    intval($comment->post->owner->id),
+                    'Comment',
+                    Auth::user(),
+                    $comment
+                ));
+
                 $comment->id_parent = $aux->id;
                 $comment->save();
-                
+
                 $parent_comment = Comment::find($comment->id_parent);
-                event(new NewNotification(intval($parent_comment->id_commenter), 'Comment', Auth::user()
-                 , $comment));
+                event(new NewNotification(
+                    intval($parent_comment->id_commenter),
+                    'Comment',
+                    Auth::user(),
+                    $comment
+                ));
             }
         }
     }

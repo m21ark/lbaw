@@ -32,7 +32,8 @@
                                     @endisset
                                 @else
                                     <a class="dropdown-item" href="#!">Report Post</a>
-                                    <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send Message</a>
+                                    <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send
+                                        Message</a>
                                 @endif
                             @endauth
                         </div>

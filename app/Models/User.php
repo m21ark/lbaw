@@ -49,18 +49,17 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Owner', 'id_user');
     }
-    
+
     public function interests()
     {
         return $this->hasMany('App\Models\TopicsInterestUser', 'id_user');
     }
 
-
-    public function isAdmin() 
+    public function isAdmin()
     {
         return $this->hasOne('App\Models\Admin', 'id_user');
     }
-    
+
     public function reportsMade()
     {
         return $this->hasMany('App\Models\Report', 'id_reporter');
@@ -84,11 +83,11 @@ class User extends Authenticatable
     public function getContactedUsers()
     {
         $messages = $this->messages()->sortByDesc('id');
-        
+
         return $messages->unique(function ($item) {
             $max = $item['id_receiver'] > $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
             $min = $item['id_receiver'] <= $item['id_sender'] ? $item['id_receiver'] : $item['id_sender'];
-            return $max.$min;
+            return $max . $min;
         });
     }
 
@@ -107,7 +106,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\FriendsRequest', 'id_user_sender');
     }
 
-    public function friends() 
+    public function friends()
     {
         return $this->friendsRequests->concat($this->sendingRequests)->where('acceptance_status', 'Accepted');
     }
@@ -117,14 +116,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comment', 'id_commenter');
     }
 
-    public function like_in_comments() 
+    public function like_in_comments()
     {
         return $this->hasMany('App\Models\CommentLike', 'id_user');
     }
 
-    public function like_in_post() 
+    public function like_in_post()
     {
         return $this->hasMany('App\Models\Like', 'id_user');
     }
-
 }

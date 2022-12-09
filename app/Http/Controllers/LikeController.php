@@ -30,9 +30,12 @@ class LikeController extends Controller
             $like->save();
 
             // QUE RAIO ???? TODO: DESCOBRIR QUE MAGIA ESTA AQUI
-            event(new NewNotification(intval($like->post->owner->id), 'Like', Auth::user()
-            , $like->toArray()));
-
+            event(new NewNotification(
+                intval($like->post->owner->id),
+                'Like',
+                Auth::user(),
+                $like->toArray()
+            ));
         } else {
 
             DB::table('like_post')

@@ -39,6 +39,3 @@
 
 
 
-@section('rightbar')
-    @include('partials.sidebar.guest_sidebar')
-@endsection
