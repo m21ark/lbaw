@@ -43,8 +43,4 @@
     </div>
 @endsection
 
-@auth
-    @section('rightbar')
-        @include('partials.sidebar.home_sidebar')
-    @endsection
-@endauth
+
