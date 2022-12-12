@@ -110,7 +110,8 @@ function addEventListeners() {
         ['.friends_request_accept', sendFriendRequestResponse(true)],
         ['.friends_request_reject', sendFriendRequestResponse(false)],
         ['.send_request', sendRequest],
-        ['.cancel_request', deleteFriendship]
+        ['.cancel_request', deleteFriendship],
+        ['.cancel_friend', deleteFriendFromFriendPage],
     ];
 
 
@@ -1381,3 +1382,14 @@ function deleteFriendship() {
             addedHandler(null).call(this);
         });
 }
+
+function deleteFriendFromFriendPage() {
+    let card = this.parentNode.parentNode.parentNode.parentNode
+    sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
+        if (this.status == 200) {
+            card.innerHTML=""
+        }
+        addedHandler(null).call(this);
+    });
+}
+

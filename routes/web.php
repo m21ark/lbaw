@@ -52,6 +52,8 @@ Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
+Route::get('user/friends/', 'FriendsRequestController@friends');
+
 
 // ======================================= APIS ========================================
 
