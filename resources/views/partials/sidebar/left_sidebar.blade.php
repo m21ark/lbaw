@@ -27,17 +27,21 @@
                 My Groups
             </a>
 
-            <a href="" class=" btn mb-3 enc" aria-current="page" id="notification_icon">
-                <i class="fa-solid fa-bell fa-2x"></i>
-                <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+            <a href="" class="btn mb-3 enc" aria-current="page" id="notification_icon">
+                <span class="position-relative">
+                    <i class="fa-solid fa-bell fa-2x"></i>
+                    <span class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger" id="notf_nr" hidden>1</span>
+                </span>
                 Notifications
             </a>
 
             @include('partials.participating_groups')
 
             <a href={{ url('/messages/sender_username') }} class=" btn mb-3 enc">
-                <i class="fa-solid fa-envelope fa-2x"></i>
-                <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
+                <span class="position-relative">
+                    <i class="fa-solid fa-envelope fa-2x"></i>
+                    <span class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger" hidden>1</span>
+                </span>
                 Messages
             </a>
 

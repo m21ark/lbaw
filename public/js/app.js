@@ -30,14 +30,17 @@ if (user_header != null) {
         }
         else if (data.type == "Like") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "Comment") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
@@ -1197,11 +1200,21 @@ updateUserReportSearchOnInput()
 */
 var _notifications = []
 
+function updateNrNotfications(){
+    let nr = document.querySelector('#notf_nr');
+    nr.innerHTML = _notifications.length;
+    console.log(nr)
+    if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
+         document.querySelector('#notf_nr'). toggleAttribute('hidden');
+    
+}
+
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
         // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
+        updateNrNotfications();
     });
 }
 
@@ -1217,6 +1230,7 @@ function markAsSeen($id, e) {
                 let _x = _notifications.findIndex(x => x.id == $id);
                 _notifications.splice(_x, 1);
                 e.remove();
+                updateNrNotfications();
             }
         });
     }
@@ -1278,7 +1292,7 @@ function createNotificationList(event) {
     event.preventDefault();
 
     let notifications = document.querySelector('#notifications_container');
-
+    
     if (notifications.style.visibility == 'hidden' || notifications.style.visibility == '') {
         notifications.style.visibility = 'visible';
 
