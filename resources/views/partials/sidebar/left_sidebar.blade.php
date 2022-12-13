@@ -1,5 +1,6 @@
 <div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light"
     id="notifications_container">
+    <a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
@@ -11,7 +12,7 @@
 
         <a href="/home" class=" btn mb-3 d-flex align-items-center justify-content-around">
             <i class="fa-solid fa-house fa-2x"></i>
-            <span style="width: 8em;font-size:1.2em">Home</span>
+            <span style="width: 8em;font-size:1.2em" class="enc">Home</span>
         </a>
 
         @auth
@@ -19,14 +20,14 @@
             <a href={{ url('/user/friends/requests') }} class="btn mb-3 d-flex align-items-center justify-content-around"
                 aria-current="page">
                 <i class="fa-solid fa-user-group fa-2x"></i>
-                <span style="width: 8em;font-size:1.2em">Friends Requests</span>
+                <span style="width: 8em;font-size:1.2em" class="enc">Friends Requests</span>
 
             </a>
 
             <a href="" class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around"
                 aria-current="page">
                 <i class="fa-solid fa-people-group fa-2x"></i>
-                <span style="width: 8em;font-size:1.2em">My Groups</span>
+                <span style="width: 8em;font-size:1.2em" class="enc">My Groups</span>
 
             </a>
 
@@ -35,7 +36,7 @@
                 <i class="fa-solid fa-bell fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
 
-                <span style="width: 8em;font-size:1.2em">Notifications</span>
+                <span style="width: 8em;font-size:1.2em" class="enc">Notifications</span>
             </a>
 
             @include('partials.participating_groups')
@@ -45,7 +46,7 @@
                 <i class="fa-solid fa-envelope fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
 
-                <span style="width: 8em;font-size:1.2em">Messages</span>
+                <span style="width: 8em;font-size:1.2em" class="enc">Messages</span>
             </a>
 
         @endauth

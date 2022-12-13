@@ -144,6 +144,7 @@ function addEventListeners() {
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
+    assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
 
     // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
@@ -1229,6 +1230,10 @@ function markAsSeen($id, e) {
     }
 }
 
+function markAllAsSeen(e) {
+    console.log("E fazer isto ricardo? Não me apetece fazer mais uma api :). Deixo isso para ti JS-Boy")
+}
+
 // taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
 function timeSince(date) {
 
@@ -1298,6 +1303,9 @@ function createNotificationList(event) {
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
 
+        document.querySelector('#popup_btn_post span').style.display = 'none';
+        document.querySelector('#popup_btn_post').style.width = '100%';
+
         // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
         // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
@@ -1317,6 +1325,7 @@ function createNotificationList(event) {
             notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
         }
     } else {
+        document.querySelector('#popup_btn_post span').style.display = '';
         notifications.style.visibility = 'hidden';
         notifications.innerHTML = '';
 
