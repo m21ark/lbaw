@@ -30,14 +30,17 @@ if (user_header != null) {
         }
         else if (data.type == "Like") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "Comment") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
@@ -1205,11 +1208,23 @@ updateUserReportSearchOnInput()
 */
 var _notifications = []
 
+function updateNrNotfications() {
+    let nr = document.querySelector('#notf_nr');
+    if (nr === null)
+        return;
+    nr.innerHTML = _notifications.length;
+    console.log(nr)
+    if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
+        document.querySelector('#notf_nr').toggleAttribute('hidden');
+
+}
+
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
         // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
+        updateNrNotfications();
     });
 }
 
@@ -1225,6 +1240,7 @@ function markAsSeen($id, e) {
                 let _x = _notifications.findIndex(x => x.id == $id);
                 _notifications.splice(_x, 1);
                 e.remove();
+                updateNrNotfications();
             }
         });
     }
@@ -1297,7 +1313,7 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         console.log(side_bar_elms);
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i != 5 && i != 6)
+            if (i < 5)
                 e.removeChild(e.lastChild);
         })
         let bar = document.querySelector('#leftbar');
@@ -1332,8 +1348,7 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "" && i != 6) {
-                console.log("OLA")
+            if (side_bar_text[i] != "" && i < 6) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
             }
