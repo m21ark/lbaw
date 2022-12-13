@@ -7,8 +7,6 @@
 
     <!-- Temporary placement -->
     @include('partials.popup.make_report_popup')
-    <a href="#!" class="btn btn-outline-secondary" id="popup_btn_report_post_create">Report Post</a>
-
 
 @endsection
 
@@ -19,11 +17,12 @@
 
         @include('partials.popup.edit_comment_popup')
 
-        @include('partials.comment_section', ['comments' => $post->comments])
+        @if (sizeof($post->comments) > 0)
+            @include('partials.comment_section', ['comments' => $post->comments])
+        @else
+            <p>No comments yet</p>
+        @endif
     </div>
 
-    @isset($showComments)
-        <!-- TODO: Maybe not very smart to render for each post -->
-        @include('partials.popup.edit_post_popup', ['post' => $post])
-    @endisset
+    @include('partials.popup.edit_post_popup', ['post' => $post])
 @endsection

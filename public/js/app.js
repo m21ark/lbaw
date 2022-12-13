@@ -733,6 +733,14 @@ function createPost(post) {
 
     let images = '', bottom = '', like = '', dropdown = '';
 
+    imageControls = `
+     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>`
+
     if (post.hasLiked) {
         like = '<h3 data-liked="1">&#x2764;</h3>'
     } else {
@@ -744,7 +752,6 @@ function createPost(post) {
             dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
         } else {
             dropdown = `
-            <a class="dropdown-item" href="#">Report Post</a>
             <a class="dropdown-item" href="/messages/${post.owner}">Send Message</a>`
         }
 
@@ -788,12 +795,7 @@ function createPost(post) {
             <div class="carousel-inner">
                 ${imageDiv}
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            </a>
+            ${post.images.length > 1 ? imageControls : ''}
         </div>
 
         `
@@ -969,6 +971,11 @@ function updateSearch() {
         if (received == null) return;
 
         timeline.innerHTML = '';
+
+        if (received.length === 0) {
+            timeline.innerHTML = `<h3 class="text-center mt-5">No results found</h3>`
+        }
+
         received.forEach(function (searchHit) {
 
             if (type_search === 'posts') {
@@ -1387,7 +1394,7 @@ function deleteFriendFromFriendPage() {
     let card = this.parentNode.parentNode.parentNode.parentNode
     sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
         if (this.status == 200) {
-            card.innerHTML=""
+            card.innerHTML = ""
         }
         addedHandler(null).call(this);
     });

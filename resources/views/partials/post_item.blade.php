@@ -31,7 +31,10 @@
                                             Post</a>
                                     @endisset
                                 @else
-                                    <a class="dropdown-item" href="#!">Report Post</a>
+                                    @isset($showComments)
+                                        <a href="#!" class="dropdown-item" id="popup_btn_report_post_create">Report
+                                            Post </a>
+                                    @endisset
                                     <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send
                                         Message</a>
                                 @endif

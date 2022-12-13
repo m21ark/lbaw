@@ -145,7 +145,7 @@
     #post_comment_section {
         margin: -6em auto 7em auto;
         min-width: 40em;
-        grid-row: 3;
+        grid-row: 4;
     }
 
 
@@ -260,6 +260,7 @@
 
 .message_body {
     margin: 1em;
+    min-height: 15em;
 }
 
 
@@ -283,17 +284,17 @@
 }
 
 .text_rcv {
-    margin-left: 12em;
-    background-color: lightblue;
-    font-family: var(--text_font);
-}
-
-.text_sender {
     margin-right: 12em;
     background-color: var(--bg_block);
     color: white;
     font-family: var(--text_font);
     background-color: lightcoral;
+}
+
+.text_sender {
+    margin-left: 12em;
+    background-color: lightblue;
+    font-family: var(--text_font);
 }
 
 
@@ -380,7 +381,7 @@
     text-align: center;
 }
 
-#feed_filter .list-group-item p{
+#feed_filter .list-group-item p {
     padding: 0.0em
 }
 
