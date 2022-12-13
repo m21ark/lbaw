@@ -24,11 +24,10 @@
 
             </a>
 
-            <a href="" class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around"
-                aria-current="page">
+            <a href="{{ url('/my_groups') }}"
+                class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around" aria-current="page">
                 <i class="fa-solid fa-people-group fa-2x"></i>
                 <span style="width: 8em;font-size:1.2em" class="enc">My Groups</span>
-
             </a>
 
 
@@ -43,9 +42,6 @@
                 <span style="width: 8em;font-size:1.2em" class="enc">Notifications</span>
             </a>
 
-            @include('partials.participating_groups')
-
-
             <a href={{ url('/messages/sender_username') }}
                 class="btn mb-3 d-flex align-items-center justify-content-around">
                 <span class="position-relative">
@@ -57,9 +53,7 @@
                 <span style="width: 8em;font-size:1.2em" class="enc">Messages</span>
             </a>
 
-        @endauth
 
-        @auth
             <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
                 <span style="font-size:1.7em" class="me-4">Post</span>
                 <i class="fa-regular fa-square-plus fa-2x"></i>
@@ -94,18 +88,61 @@
 
     <ul class="d-flex nav nav-pills mb-auto align-items-center justify-content-around">
 
-        <a href="/home" class=" btn btn-outline-primary">Home </a>
 
         @auth
-            <a href="" class=" btn btn-outline-primary drop_my_group" aria-current="page">My Groups</a>
-            @include('partials.participating_groups')
 
-            <a href="#" id="popup_btn_post" class=" btn btn-primary">Post</a>
+            <a href="/home" class=" btn d-flex align-items-center justify-content-around">
+                <i class="fa-solid fa-house fa-2x"></i>
+            </a>
 
-            <a href={{ url('/messages/sender_username') }} class=" btn btn-outline-primary">Messages</a>
+            <a href={{ url('/user/friends/requests') }} class="btn  d-flex align-items-center justify-content-around"
+                aria-current="page">
+                <i class="fa-solid fa-user-group fa-2x"></i>
+
+
+            </a>
+
+            <a href="{{ url('/my_groups') }}" class=" btn drop_my_group d-flex align-items-center justify-content-around"
+                aria-current="page">
+                <i class="fa-solid fa-people-group fa-2x"></i>
+            </a>
+
+
+            <a href="" class="btn  d-flex align-items-center justify-content-around" aria-current="page"
+                id="notification_icon">
+                <span class="position-relative">
+                    <i class="fa-solid fa-bell fa-2x"></i>
+                    <span
+                        class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger"
+                        id="notf_nr" hidden>1</span>
+                </span>
+
+            </a>
+
+            <a href={{ url('/messages/sender_username') }} class="btn d-flex align-items-center justify-content-around">
+                <span class="position-relative">
+                    <i class="fa-solid fa-envelope fa-2x"></i>
+                    <span
+                        class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger"
+                        hidden>1</span>
+                </span>
+            </a>
+
+            <a class="text-primary btn drop_my_group d-flex align-items-center justify-content-around" aria-current="page"
+                id="popup_btn_post">
+                <span class="position-relative">
+                    <i class="fa-regular fa-square-plus fa-2x"></i>
+                </span>
+            </a>
+
+
+
+
+
 
             @if (Auth::user()->isAdmin)
-                <a href="/admin" class="btn btn-outline-primary">Admin Console</a>
+                <a href="/admin" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Console</a>
+                <a href="/admin/statistics" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Stats</a>
             @endif
         @endauth
 

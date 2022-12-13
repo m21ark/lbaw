@@ -44,6 +44,10 @@ Route::get('404', function () {
     return view('pages.404');
 })->name('not_found');
 
+Route::get('my_groups', function () {
+    return view('pages.my_groups');
+});
+
 // ======================= DYNAMIC PAGES =======================
 
 Route::get('post/{id}', 'PostController@show')->name('post');
