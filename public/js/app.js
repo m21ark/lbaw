@@ -1202,6 +1202,8 @@ var _notifications = []
 
 function updateNrNotfications(){
     let nr = document.querySelector('#notf_nr');
+    if (nr === null)
+        return;
     nr.innerHTML = _notifications.length;
     console.log(nr)
     if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
