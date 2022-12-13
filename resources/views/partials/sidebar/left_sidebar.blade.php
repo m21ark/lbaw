@@ -7,38 +7,45 @@
         <span class="fs-4">Home</span>
     </a>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auwidth: 8emto">
 
-        <a href="/home" class=" btn mb-3 enc">
+        <a href="/home" class=" btn mb-3 d-flex align-items-center justify-content-around">
             <i class="fa-solid fa-house fa-2x"></i>
-            Home
+            <span style="width: 8em;font-size:1.2em">Home</span>
         </a>
 
         @auth
-            <!--TODO: A SEMANTICA DO HTML ESTA MAL .... ul > li --->
 
-            <a href={{ url('/user/friends/requests') }} class=" btn mb-3 enc" aria-current="page">
+            <a href={{ url('/user/friends/requests') }} class="btn mb-3 d-flex align-items-center justify-content-around"
+                aria-current="page">
                 <i class="fa-solid fa-user-group fa-2x"></i>
-                Friends Requests
+                <span style="width: 8em;font-size:1.2em">Friends Requests</span>
+
             </a>
 
-            <a href="" class=" btn mb-3 drop_my_group enc" aria-current="page">
+            <a href="" class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around"
+                aria-current="page">
                 <i class="fa-solid fa-people-group fa-2x"></i>
-                My Groups
+                <span style="width: 8em;font-size:1.2em">My Groups</span>
+
             </a>
 
-            <a href="" class=" btn mb-3 enc" aria-current="page" id="notification_icon">
+            <a href="" class=" btn mb-3 d-flex align-items-center justify-content-around" aria-current="page"
+                id="notification_icon">
                 <i class="fa-solid fa-bell fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
-                Notifications
+
+                <span style="width: 8em;font-size:1.2em">Notifications</span>
             </a>
 
             @include('partials.participating_groups')
 
-            <a href={{ url('/messages/sender_username') }} class=" btn mb-3 enc">
+            <a href={{ url('/messages/sender_username') }}
+                class=" btn mb-3 d-flex align-items-center justify-content-around">
                 <i class="fa-solid fa-envelope fa-2x"></i>
                 <span class="badge rounded-pill badge-notification bg-danger" hidden>1</span>
-                Messages
+
+                <span style="width: 8em;font-size:1.2em">Messages</span>
             </a>
 
         @endauth
