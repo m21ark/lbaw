@@ -42,7 +42,7 @@
 
 
     <main>
-        <nav aria-label="breadcrumb mb-5">
+        <nav aria-label="breadcrumb mb-5" id="breadcrumbs">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href={{ url('/home') }}>Home</a></li>
                 <?php $segments = ''; ?>
