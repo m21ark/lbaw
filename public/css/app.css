@@ -374,9 +374,14 @@
     max-width: 40em;
 }
 
-#feed_filter * {
+#search_filter *, #feed_filter * {
     width: 25%;
+    height: 2.6em;
     text-align: center;
+}
+
+#feed_filter .list-group-item p{
+    padding: 0.0em
 }
 
 #search_filter * {
