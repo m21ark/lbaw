@@ -1,46 +1,49 @@
 @extends('layouts.app')
 
-@include('partials.participating_groups')
-
 @section('content')
-    <div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">
-        @foreach ($requests as $requester)
-            @if ($requester->acceptance_status == 'Pendent')
-                <div class="card mt-4 me-3" style="width: 15em;height:29em" id="friend_request_{{ $requester->sender->id }}">
-                    <img height="50%" src="/{{ $requester->sender->photo }}" class="card-img-top" alt="user_avatar">
-                    <div class="card-body">
-                        <h5 class="card-title friend_request_sender">
-                            <a href="/profile/{{ $requester->sender->username }}"> {{ $requester->sender->username }}</a>
-                        </h5>
-                        <p class="card-text">{{ substr($requester->sender->bio, 0, 100) . '...' }}</p>
-                        <span data-sender="{{ $requester->sender->id }}">
-                            <input type="button" class="btn btn-primary btn-lg friends_request_accept" value="Accept"
-                                id="acceptReq_{{ $requester->sender->id }}">
-                            <input type="button"
-                                class="btn btn-default btn-lg btn-outline-secondary friends_request_reject" value="Reject"
-                                id="rejectReq_{{ $requester->sender->id }}">
-                        </span>
-                    </div>
+    <div class="justify-content-center align-items-center">
+
+        <div>
+            @if (Auth::user()->groupsOwner->count() > 0)
+                <div class="mt-3 mb-4 container">
+                    <h2>Owner Groups ({{ Auth::user()->groupsOwner->count() }})</h2>
+                    <hr>
+                    <ul class="list-unstyled list-group list-group-flush">
+                        @foreach (Auth::user()->groupsOwner as $x)
+                            <?php $group = $x->group; ?>
+                            <div class="card mt-4 me-3" style="width: 15em;height:22em">
+                                <img height="70%" src="{{ asset($x->group->photo) }}" class="card-img-top" alt="user_avatar">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
+                                    <a href="/group/{{ $x->group->name }}" class="btn btn-primary w-100">Open Group</a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </ul>
                 </div>
-            @elseif ($requester->acceptance_status == "Accepted")
-                <?php $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender ?>
-                <div class="card mt-4 me-3 " style="width: 15em;height:29em" id="friend_request_{{ $friend->id }}">
-                    <img height="50%" src="/{{ $friend->photo }}" class="card-img-top" alt="user_avatar">
-                    <div class="card-body">
-                        <h5 class="card-title friend_request_sender">
-                            <a href="/profile/{{ $friend->username }}"> {{ $friend->username }}</a>
-                        </h5>
-                        <p class="card-text">{{ substr($friend->bio, 0, 100) . '...' }}</p>
-                        <span data-sender="{{ $requester->sender->id }}">
-                            <input type="button" class="btn btn-primary btn-lg cancel_friend" value="Cancel Friendship"
-                                data-id="{{ $friend->id }}">
-                        </span>
+            @endif
+        </div>
+
+        <div>
+            @if (Auth::user()->groupsMember->count() > 0)
+                <div class="mt-5 mb-4 container">
+                    <h2>Member Groups ({{ Auth::user()->groupsMember->count() }})</h2>
+                    <hr>
+                    <div class="d-flex flex-wrap">
+                        @foreach (Auth::user()->groupsMember as $x)
+                            <div class="card mt-4 me-3" style="width: 15em;height:22em">
+                                <img height="70%" src="{{ asset($x->group->photo) }}" class="card-img-top"
+                                    alt="user_avatar">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
+                                    <a href="/group/{{ $x->group->name }}" class="btn btn-primary w-100">Open Group</a>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             @endif
+        </div>
 
-        @endforeach
     </div>
 @endsection
-
-
