@@ -29,9 +29,14 @@
 
 
 <div id="timeline">
-    @foreach ($user->posts as $post)
-        @include('partials.post_item', ['post' => $post])
-    @endforeach
+    @if ($friends || $user->visibility || $user->id === Auth::user()->id)
+        @foreach ($user->posts as $post)
+            @include('partials.post_item', ['post' => $post])
+        @endforeach
+    @else
+        <h2><i class="fa-solid fa-lock fa-4x"></i> This account is private<h2>
+        <img src="/NotFriends.jpg" class="img-fluid" alt="You are not friends. Please make a friends request">
+    @endif
 </div>
 
 <!-- Edit Profile Popup -->

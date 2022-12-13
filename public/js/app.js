@@ -1301,7 +1301,7 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         console.log(side_bar_elms);
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i != 5 && i != 6)
+            if (i < 5)
                 e.removeChild(e.lastChild);
         })
         let bar = document.querySelector('#leftbar');
@@ -1332,8 +1332,7 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "" && i != 6) {
-                console.log("OLA")
+            if (side_bar_text[i] != "" && i < 6) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
             }
