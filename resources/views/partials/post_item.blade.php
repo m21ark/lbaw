@@ -100,6 +100,7 @@
                 </div>
 
                 @isset($showComments)
+                    @auth
                     <div class="card_footer form-control d-flex align-items-center ">
                         <input type="text" name="comment_post" data-uid={{ Auth::user()->id }}
                             data-pid={{ $post->id }} id="comment_post_input" class="me-2 form-control mt-3 mb-2"
@@ -112,6 +113,7 @@
                             </svg>
                         </a>
                     </div>
+                    @endauth
                 @endisset
 
             </div>

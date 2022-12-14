@@ -455,9 +455,12 @@ function sendDeleteProfileRequest() {
 
     let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
     if (res === username) {
-        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { });
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log );
+        console.log('Account deleted!');
     } else {
         alert('Invalid input! Account not deleted!');
+        console.log('Account deletedeeee!');
+
     }
 }
 
@@ -1207,7 +1210,7 @@ function updateNrNotfications() {
         return;
     nr.innerHTML = _notifications.length;
     console.log(nr)
-    if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
+    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0)) 
         document.querySelector('#notf_nr').toggleAttribute('hidden');
 
 }
@@ -1317,7 +1320,10 @@ function createNotificationList(event) {
         document.querySelector('#popup_btn_post span').style.display = 'none';
         document.querySelector('#popup_btn_post').style.width = '100%';
 
-        // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
+        let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
+
+        notifications.appendChild(clear_all);
+        // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO  --DONE
         // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
             let notf = createElementFromHTML(`

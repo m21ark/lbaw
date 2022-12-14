@@ -31,9 +31,16 @@
                 @endif
 
 
-                <div class="mt-3">
+                <div class="mt-4">
                     <p><span class="bold">Don't have an account?</span> <a class="form_button"
                             href="{{ route('register') }}">Register</a></p>
+
+                </div>
+
+
+                <div class="mt-2">
+                    <p><span class="bold">Forgot your password?</span> <a class="form_button"
+                            href="{{ route('password.request') }}">Recover</a></p>
 
                 </div>
             </form>

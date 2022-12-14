@@ -1,5 +1,24 @@
 <?php
 
+// ======================= PASSWORD RECOVERY =======================
+
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+
+Route::get('/forgot-password-sent', function () {
+    return view('auth.forgot-password-sent');
+})->middleware('guest')->name('forgot-password-sent');
+
+
+Route::get('/password/reset/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
+Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');
+
 // ======================= AUTHENTICATION =======================
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
