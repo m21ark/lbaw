@@ -84,6 +84,16 @@ class ProfileController extends Controller
         $user->username = "deleted_User" . $user->id;
         $user->email = "deleted_email" . $user->id . "@d.com";
 
+        $user->photo = 'user/user.jpg';
+
+        $user->visibility = false;
+
+        $user->bio = "This user has been deleted";
+
+        foreach ($user->posts as $post) {
+            $post->delete();
+        }
+        
         $user->save();
 
         Auth::logout();
