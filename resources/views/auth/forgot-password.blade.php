@@ -4,7 +4,7 @@
     <div class=" p-5 mw-10 d-flex align-items-center justify-content-around">
 
         <body class="text-center">
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ url('/reset_password_without_token') }}">
                 {{ csrf_field() }}
 
                 <h1 class="h3 mb-4 mt-5 font-weight-normal">Forgot your password?</h1>

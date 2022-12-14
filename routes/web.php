@@ -19,49 +19,13 @@ Route::get('/forgot-password', function () {
 })->middleware('guest')->name('password.request');
 
 
-// sendAjaxRequest('post', `/forgot-password`, {email:'marco@gmail.com'}, () => { });
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
-
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with(['status' => __($status)])
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
-
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+Route::get('/forgot-password-sent', function () {
+    return view('auth.forgot-password-sent');
+})->middleware('guest')->name('forgot-password-sent');
 
 
-// sendAjaxRequest('post', `/reset-password`, {token:'ola', email:'marco@gmail.com', password:'batata_frita'}, () => { });
-Route::post('/reset-password', function (Request $request) {
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ]);
-
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user, $password) {
-            $user->forceFill([
-                'password' => Hash::make($password)
-            ])->setRememberToken(Str::random(60));
-
-            $user->save();
-
-            event(new PasswordReset($user));
-        }
-    );
-
-    return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('status', __($status))
-        : back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.update');
+Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
+Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');
 
 // ======================= AUTHENTICATION =======================
 
