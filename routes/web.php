@@ -1,18 +1,6 @@
 <?php
 
-// ======================= EMAIL SENDING =======================
-
-use App\Http\Controllers\MailController;
-
-Route::get('/send-email/{user_id}',  'MailController@sendEmail');
-
 // ======================= PASSWORD RECOVERY =======================
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
@@ -23,6 +11,10 @@ Route::get('/forgot-password-sent', function () {
     return view('auth.forgot-password-sent');
 })->middleware('guest')->name('forgot-password-sent');
 
+
+Route::get('/password/reset/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
 
 Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
 Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');

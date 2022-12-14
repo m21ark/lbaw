@@ -3,25 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Mailtrap;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail as Mail;
 
 
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Validator;
 
 class PasswordRecoverController extends Controller
 {
     // sendEmail method.
     public function sendRecoverEmail($username, $email, $token)
     {
+
+        $token_link = config('app.url') . '/password/reset/' . $token;
+
+
         $mailData = [
             'name' => $username,
             'email' => $email,
-            'token' => $token
+            'token_link' => $token_link
         ];
 
         Mail::to($mailData['email'])->send(new Mailtrap($mailData));
@@ -53,9 +58,32 @@ class PasswordRecoverController extends Controller
         return redirect()->route('forgot-password-sent');
     }
 
-
-    public function resetPassword()
+    public function resetPassword(Request $request)
     {
-        return null;
+        // TODO: Validate password
+
+        $password = $request->password;
+
+        // Validate the token
+        $tokenData = DB::table('password_resets')->where('token', $request->token)->first();
+
+        // Redirect the user back to the password reset request form if the token is invalid
+        if ($tokenData === null) return view('auth.reset-password', ['token' => 'invalid_token']);
+
+        $user = User::where('email', $tokenData->email)->first();
+        if ($user === null) return redirect()->route('home');
+
+        //Hash and update the new password
+        $user->password = Hash::make($password);
+
+        $user->update(); //or $user->save();
+
+        //login the user immediately they change password successfully
+        Auth::login($user);
+
+        //Delete the token
+        DB::table('password_resets')->where('email', $user->email)->delete();
+
+        return redirect()->route('home');
     }
 }
