@@ -2,9 +2,9 @@
 
 // ======================= EMAIL SENDING =======================
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\MailController;
 
-Route::get('/send-email', [TestController::class, 'sendEmail']);
+Route::get('/send-email/{user_id}',  'MailController@sendEmail');
 
 
 // ======================= AUTHENTICATION =======================

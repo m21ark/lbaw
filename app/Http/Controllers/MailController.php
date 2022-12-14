@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
-// Added to support email sending.
-
 use App\Mail\Mailtrap;
 use Illuminate\Support\Facades\Mail as Mail;
 
-class TestController extends Controller
+
+use App\Models\User;
+
+
+class MailController extends Controller
 {
     // sendEmail method.
-    public function sendEmail()
+    public function sendEmail($user_id)
     {
+        $user = User::find($user_id);
 
         $mailData = [
-            'name' => 'Marco André',
-            'email' => 'up202004891@g.uporto.pt',
+            'name' => $user->username,
+            'email' => $user->email,
         ];
 
         Mail::to($mailData['email'])->send(new Mailtrap($mailData));
