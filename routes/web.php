@@ -1,5 +1,12 @@
 <?php
 
+// ======================= EMAIL SENDING =======================
+
+use App\Http\Controllers\TestController;
+
+Route::get('/send-email', [TestController::class, 'sendEmail']);
+
+
 // ======================= AUTHENTICATION =======================
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
