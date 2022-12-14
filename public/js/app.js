@@ -1,5 +1,5 @@
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 
 var pusher = new Pusher('c827040c068ce8231c02', {
     cluster: 'eu'
@@ -30,14 +30,17 @@ if (user_header != null) {
         }
         else if (data.type == "Like") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "Comment") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
+            updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
     });
@@ -110,7 +113,8 @@ function addEventListeners() {
         ['.friends_request_accept', sendFriendRequestResponse(true)],
         ['.friends_request_reject', sendFriendRequestResponse(false)],
         ['.send_request', sendRequest],
-        ['.cancel_request', deleteFriendship]
+        ['.cancel_request', deleteFriendship],
+        ['.cancel_friend', deleteFriendFromFriendPage],
     ];
 
 
@@ -143,6 +147,7 @@ function addEventListeners() {
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
+    assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
 
     // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
@@ -150,14 +155,7 @@ function addEventListeners() {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
 
-    let d_group_sidebar = document.querySelector('.drop_my_group');
-    if (d_group_sidebar)
-        d_group_sidebar.addEventListener('click', function (event) {
-            event.preventDefault();
-            let drop = document.querySelector('.drop_groups');
-            console.log(drop)
-            drop.style.display = drop.style.display === 'none' ? '' : 'none';
-        })
+
 }
 
 function sendRejectAllReportsRequest(event) {
@@ -732,6 +730,14 @@ function createPost(post) {
 
     let images = '', bottom = '', like = '', dropdown = '';
 
+    imageControls = `
+     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>`
+
     if (post.hasLiked) {
         like = '<h3 data-liked="1">&#x2764;</h3>'
     } else {
@@ -743,7 +749,6 @@ function createPost(post) {
             dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
         } else {
             dropdown = `
-            <a class="dropdown-item" href="#">Report Post</a>
             <a class="dropdown-item" href="/messages/${post.owner}">Send Message</a>`
         }
 
@@ -787,12 +792,7 @@ function createPost(post) {
             <div class="carousel-inner">
                 ${imageDiv}
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            </a>
+            ${post.images.length > 1 ? imageControls : ''}
         </div>
 
         `
@@ -968,6 +968,11 @@ function updateSearch() {
         if (received == null) return;
 
         timeline.innerHTML = '';
+
+        if (received.length === 0) {
+            timeline.innerHTML = `<h3 class="text-center mt-5">No results found</h3>`
+        }
+
         received.forEach(function (searchHit) {
 
             if (type_search === 'posts') {
@@ -1196,11 +1201,23 @@ updateUserReportSearchOnInput()
 */
 var _notifications = []
 
+function updateNrNotfications() {
+    let nr = document.querySelector('#notf_nr');
+    if (nr === null)
+        return;
+    nr.innerHTML = _notifications.length;
+    console.log(nr)
+    if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
+        document.querySelector('#notf_nr').toggleAttribute('hidden');
+
+}
+
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
         // console.log(this.responseText)
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
+        updateNrNotfications();
     });
 }
 
@@ -1216,9 +1233,14 @@ function markAsSeen($id, e) {
                 let _x = _notifications.findIndex(x => x.id == $id);
                 _notifications.splice(_x, 1);
                 e.remove();
+                updateNrNotfications();
             }
         });
     }
+}
+
+function markAllAsSeen(e) {
+    console.log("E fazer isto ricardo? Não me apetece fazer mais uma api :). Deixo isso para ti JS-Boy")
 }
 
 // taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
@@ -1284,11 +1306,16 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         console.log(side_bar_elms);
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i != 5 && i != 6)
+            if (i < 5) {
                 e.removeChild(e.lastChild);
+                e.style.display = 'none';
+            }
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
+
+        document.querySelector('#popup_btn_post span').style.display = 'none';
+        document.querySelector('#popup_btn_post').style.width = '100%';
 
         // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO VISTAS
         // tb meter um numero limitado
@@ -1309,16 +1336,17 @@ function createNotificationList(event) {
             notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
         }
     } else {
+        document.querySelector('#popup_btn_post span').style.display = '';
         notifications.style.visibility = 'hidden';
         notifications.innerHTML = '';
 
         let side_bar_elms = document.querySelectorAll('.enc');
         let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "" && i != 6) {
-                console.log("OLA")
+            if (side_bar_text[i] != "" && i < 6) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
+                e.style.display = '';
             }
         })
         let bar = document.querySelector('#leftbar');
@@ -1381,3 +1409,14 @@ function deleteFriendship() {
             addedHandler(null).call(this);
         });
 }
+
+function deleteFriendFromFriendPage() {
+    let card = this.parentNode.parentNode.parentNode.parentNode
+    sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
+        if (this.status == 200) {
+            card.innerHTML = ""
+        }
+        addedHandler(null).call(this);
+    });
+}
+

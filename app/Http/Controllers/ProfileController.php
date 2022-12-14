@@ -79,7 +79,14 @@ class ProfileController extends Controller
         // aqui julgo que é a cena de n poder deixar grupos sem outros owners
         $user = User::where('username', $username)->first();
 
-        $user->delete();
+        // TODO ::: POLICY
+
+        $user->username = "deleted_User" . $user->id;
+        $user->email = "deleted_email" . $user->id . "@d.com";
+
+        $user->save();
+
+        Auth::logout();
 
         return redirect()->route('home');
     }

@@ -15,7 +15,15 @@ class FriendsRequestController extends Controller
         if (!Auth::check())
             return redirect()->route('home');
 
-        return view('pages.friends_requests', ['user' => Auth::user()]);
+        return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->friendsRequests]);
+    }
+
+    public function friends()
+    {
+        if (!Auth::check())
+            return redirect()->route('home');
+
+        return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->friends()]);
     }
 
     public function send($id_rcv, Request $request)

@@ -10,8 +10,4 @@
     @endsection
 @endif
 
-@if (Auth::check())
-    @section('rightbar')
-        @include('partials.sidebar.home_sidebar')
-    @endsection
-@endif
+
