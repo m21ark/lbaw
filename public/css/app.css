@@ -70,7 +70,7 @@
 @media (max-width: 80em) {
 
     body {
-        width: 90%;
+        width: 100%;
         box-shadow: 2px 2px 5px lightgray;
         display: grid;
         grid-template-rows: auto auto auto auto;
@@ -79,10 +79,6 @@
             "rightbar"
             "content"
             "leftbar";
-    }
-
-    body {
-        width: 100%;
     }
 
     #rightbar {
