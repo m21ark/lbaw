@@ -455,9 +455,12 @@ function sendDeleteProfileRequest() {
 
     let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
     if (res === username) {
-        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { });
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log );
+        console.log('Account deleted!');
     } else {
         alert('Invalid input! Account not deleted!');
+        console.log('Account deletedeeee!');
+
     }
 }
 
@@ -1207,7 +1210,7 @@ function updateNrNotfications() {
         return;
     nr.innerHTML = _notifications.length;
     console.log(nr)
-    if ((nr.hidden && _notifications.length > 0) || (_notifications.length == 0))
+    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0)) 
         document.querySelector('#notf_nr').toggleAttribute('hidden');
 
 }
