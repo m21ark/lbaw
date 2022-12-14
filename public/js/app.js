@@ -1306,8 +1306,10 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
         console.log(side_bar_elms);
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i < 5)
+            if (i < 5) {
                 e.removeChild(e.lastChild);
+                e.style.display = 'none';
+            }
         })
         let bar = document.querySelector('#leftbar');
         bar.style.width = "100px";
@@ -1344,6 +1346,7 @@ function createNotificationList(event) {
             if (side_bar_text[i] != "" && i < 6) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
+                e.style.display = '';
             }
         })
         let bar = document.querySelector('#leftbar');
