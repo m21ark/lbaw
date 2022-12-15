@@ -117,6 +117,8 @@ function addEventListeners() {
         ['.send_request', sendRequest],
         ['.cancel_request', deleteFriendship],
         ['.cancel_friend', deleteFriendFromFriendPage],
+        ['.send_g_request', sendGRequest],
+        ['.cancel_g_request', deleteGRequest],
     ];
 
 
@@ -1448,7 +1450,7 @@ function createNotificationList(event) {
     }
 }
 
-// ==================================== FRIENDS REQUESTS ============================================
+// ==================================== FRIENDS/GROUPS REQUESTS ============================================
 
 
 function sendRequestResponse(isAFriendReq, accept) {
@@ -1473,7 +1475,6 @@ function sendRequestResponse(isAFriendReq, accept) {
 
 
 function sendRequest() {
-    //send request
     let parent = this;
     let child = this.firstChild;
     sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
@@ -1489,6 +1490,27 @@ function sendRequest() {
         }
         addedHandler(null).call(this);
     });
+}
+
+function sendGRequest() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-door-open');
+            child.classList.remove('send_g_request');
+            child.classList.add('fa-clock-rotate-left');
+            parent.removeEventListener('click', sendGRequest);
+            parent.addEventListener('click', deleteGRequest);
+            parent.classList.add('cancel_g_request');
+            parent.classList.remove('send_g_request');
+        }
+        addedHandler(null).call(this);
+    });
+}
+
+function deleteGRequest() {
+    
 }
 
 function deleteFriendship() {
