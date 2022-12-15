@@ -317,6 +317,7 @@ function sendCreateGroupRequest(event) {
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
+    let tags = document.querySelector('#popup_show_group_create #group_create_tags').value
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -325,7 +326,7 @@ function sendCreateGroupRequest(event) {
 
     let res = confirm('Are you sure you want to create this group?');
     if (res) {
-        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('#popup_show_group_create'));
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility, tags: tags }, addedHandler('#popup_show_group_create'));
         // TODO: Fazer redirect para grupo criado
     }
 
@@ -1408,9 +1409,9 @@ function createNotificationList(event) {
         document.querySelector('#popup_btn_post').style.width = '100%';
 
         let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
-        
+
         notifications.appendChild(clear_all);
-        
+
         assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
         // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO  --DONE
         // tb meter um numero limitado
