@@ -50,37 +50,32 @@ class GroupJoinRequestController extends Controller
         return view('pages.group_requests', ['requests' => $group->groupJoinRequests]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\GroupJoinRequest  $groupJoinRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GroupJoinRequest $groupJoinRequest)
+    public function accept($id_sender, $group_name, Request $request)
     {
-        //
+        return $this->update_request($id_sender, $group_name, "Accepted", $group_name, $request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GroupJoinRequest  $groupJoinRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GroupJoinRequest $groupJoinRequest)
+    public function reject($id_sender, $group_name, Request $request)
     {
-        //
+        return $this->update_request($id_sender, $group_name, "Rejected", $request);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\GroupJoinRequest  $groupJoinRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GroupJoinRequest $groupJoinRequest)
+    public function update_request($id_sender, $group_name, $new_state, Request $request)
     {
-        //
+        validator($request->route()->parameters(), [
+            'id_sender' => 'required|exists:user,id',
+            'group_name' => 'required|exists:group,name',
+        ])->validate();
+
+        if (!Auth::check())
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        // TODO :ADD policy
+        $group = Group::where('name', $group_name)->first();
+        $frequest = GroupJoinRequest::where('id_user', '=', $id_sender)
+            ->where('id_group', '=', $group->name)
+            ->update(['acceptance_status' => $new_state]);
+
+        return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
 }

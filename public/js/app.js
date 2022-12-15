@@ -110,8 +110,10 @@ function addEventListeners() {
         ['#reject_all_reports', sendRejectAllReportsRequest],
         ['#ban_user_btn', sendBanUserRequest],
         ['#unban_user_btn', sendUnbanUserRequest],
-        ['.friends_request_accept', sendFriendRequestResponse(true)],
-        ['.friends_request_reject', sendFriendRequestResponse(false)],
+        ['.friends_request_accept', sendRequestResponse(true, true)],
+        ['.friends_request_reject', sendRequestResponse(true, false)],
+        ['.groups_request_accept', sendRequestResponse(false, true)],
+        ['.groups_request_reject', sendRequestResponse(false, false)],
         ['.send_request', sendRequest],
         ['.cancel_request', deleteFriendship],
         ['.cancel_friend', deleteFriendFromFriendPage],
@@ -1449,14 +1451,18 @@ function createNotificationList(event) {
 // ==================================== FRIENDS REQUESTS ============================================
 
 
-function sendFriendRequestResponse(accept) {
+function sendRequestResponse(isAFriendReq, accept) {
     return function () {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
-        console.log(response);
-        sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
+
+        let gname = window.location.pathname.split('/')[2];;
+
+        let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname +'/request/' + id + "/" + response ;
+        let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
+        sendAjaxRequest('put', reqURI , {}, function () {
             if (this.status == 200) {
-                let friend_request = document.querySelector("#friend_request_" + id);
+                let friend_request = document.querySelector(queryReqs);
                 friend_request.remove();
             }
             addedHandler(null).call(this);
