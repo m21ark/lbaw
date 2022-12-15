@@ -10,10 +10,10 @@
             </div>
 
 
-            <label for="post_text" class="sr-only">Description</label>
+            <label for="post_text" class="">Description</label>
             <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text" style="resize: none;">{{ $post->text }}</textarea>
 
-            <label for="edit_post_photos" class="sr-only">Photos</label>
+            <label for="edit_post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="edit_post_photos" name="photos" multiple>
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_post_button" type="submit">Save

@@ -8,18 +8,18 @@
                 <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
             </div>
 
-            <label for="group_name" class="sr-only">Group Name</label>
+            <label for="group_name" class="">Group Name</label>
             <input type="text" id="group_name" value="{{ $group->name }}" class="form-control mb-3"
                 placeholder="Group Name">
 
-            <label for="group_description" class="sr-only">Description</label>
+            <label for="group_description" class="">Description</label>
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
 
-            <label for="group_photo" class="sr-only">Profile Picture</label>
+            <label for="group_photo" class="">Profile Picture</label>
             <input type="file" class="form-control" id="group_photo" name="photo">
 
-            <label for="group_visibility" class="sr-only">Group Public Visibility</label>
+            <label for="group_visibility" class="">Group Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" @if ($group->visibility) checked @endif>
 

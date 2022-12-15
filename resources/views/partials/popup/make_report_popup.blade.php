@@ -9,7 +9,7 @@
                 <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
             </div>
 
-            <label for="report_description" class="sr-only">Motive</label>
+            <label for="report_description" class="">Motive</label>
             <textarea rows="8" id="report_description" class="form-control mb-3" placeholder="Indicate your motive for this report"
                 style="resize: none;"></textarea>
 

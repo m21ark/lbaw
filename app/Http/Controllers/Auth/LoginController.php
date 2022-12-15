@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -45,5 +47,45 @@ class LoginController extends Controller
     public function home()
     {
         return redirect('login');
+    }
+
+    /**
+     * Redirect the user to the Google authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Obtain the user information from Google.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderCallback()
+    {
+
+        try {
+            $user = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect('/login');
+        }
+
+        $existingUser = User::where('email', $user->email)->first();
+
+        if ($existingUser !== null) {
+            auth()->login($existingUser);
+        } else {
+            $newUser = new User;
+            $newUser->username = strtok($user->email, '@');
+            $newUser->email = $user->email;
+            $newUser->password = 'password';
+            $newUser->birthdate = '2000-01-01'; //TODO Ver melhor
+            $newUser->save();
+            auth()->login($newUser);
+        }
+        return redirect()->to('/home');
     }
 }

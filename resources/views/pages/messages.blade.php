@@ -4,7 +4,7 @@
     <div id="message_frame" class="card">
         @if ($sender != null)
             <div class="message_head card-header text-bg-primary">
-                <a href="/profile/{{ $sender->username }}"><img src="/{{ $sender->photo }}" alt="" width="60"></a>
+                <a href="/profile/{{ $sender->username }}"><img id="sms_photo" src="/{{ $sender->photo }}" alt="" width="60"></a>
                 <a href="/profile/{{ $sender->username }}" id='sms_rcv'
                     data-id={{ $sender->id }}">{{ $sender->username }}</a>
                 <a href="#">&vellip;</a>

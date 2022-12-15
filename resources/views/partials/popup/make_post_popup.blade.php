@@ -16,12 +16,11 @@
             </div>
 
 
-            <label for="inputText" class="sr-only">Text</label>
-            <textarea rows="8" id="inputText" class="form-control mb-3" placeholder="Content"
-                name="text" required autofocus style="resize: none;"
-                @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
+            <label for="inputText" class="">Text</label>
+            <textarea rows="8" id="inputText" class="form-control mb-3" placeholder="Content" name="text" required
+                autofocus style="resize: none;" @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
-            <label for="post_photos" class="sr-only">Photos</label>
+            <label for="post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="post_photos" name="photos" multiple>
 
             <button

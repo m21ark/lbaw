@@ -19,6 +19,11 @@ Route::get('/password/reset/{token}', function ($token) {
 Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
 Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');
 
+// ======================= Google Login =======================
+
+Route::get('/google_redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
+
 // ======================= AUTHENTICATION =======================
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

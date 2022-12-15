@@ -6,7 +6,7 @@
             <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
         </div>
 
-        <label for="comment_text" class="sr-only">Text</label>
+        <label for="comment_text" class="">Text</label>
         <textarea rows="8" id="comment_text_edit" class="form-control mb-3" placeholder="Comment Text"
             style="resize: none;">TEXT TO ADD</textarea>
 
