@@ -17,9 +17,17 @@
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
 
+            <?php
+            $topics = [];
+            for ($i = 0; $i < sizeof($group->topics); $i++) {
+                array_push($topics, $group->topics[$i]->topic->topic);
+            }
+            $topics = implode(' ', $topics);
+            ?>
+
             <label for="group_edit_tags" class="">Topics</label>
             <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
-                name="tags">
+                name="tags" value="{{ $topics }}">
 
             <label for="group_photo" class="">Profile Picture</label>
             <input type="file" class="form-control" id="group_photo" name="photo">

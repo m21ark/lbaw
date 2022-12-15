@@ -26,7 +26,30 @@
         <div class="card-body">
             <h3>Bio</h3>
             <p class="card-text">{{ $group->description }}</p>
+
+            <p class="card-text"><b>Visibility: </b><span class="card-text">
+                    @if ($group->visibility)
+                        Public
+                    @else
+                        Private
+                    @endif
+                </span>
+            </p>
         </div>
+
+
+        <div class="card-footer">
+            <h3>Topics</h3>
+            <div class="d-flex justify-content-evenly">
+                @foreach ($group->topics as $group_topic)
+                    <a class="btn btn-primary" href={{ url('/search/' . $group_topic->topic->topic) }}>
+                        {{ $group_topic->topic->topic }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
+
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
