@@ -26,7 +26,30 @@
         <div class="card-body">
             <h3>Bio</h3>
             <p class="card-text">{{ $group->description }}</p>
+
+            <p class="card-text"><b>Visibility: </b><span class="card-text">
+                    @if ($group->visibility)
+                        Public
+                    @else
+                        Private
+                    @endif
+                </span>
+            </p>
         </div>
+
+
+        <div class="card-footer">
+            <h3>Topics</h3>
+            <div class="d-flex justify-content-evenly">
+                @foreach ($group->topics as $group_topic)
+                    <a class="btn btn-primary" href={{ url('/search/' . $group_topic->topic->topic) }}>
+                        {{ $group_topic->topic->topic }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
+
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
@@ -84,57 +107,15 @@
             @endif
         @endforeach
 
+        @auth
+            @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+                <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}"
+                    data-idUser="{{ Auth::user()->id }}">Leave
+                    Group</button>
+            @endif
+
+        @endauth
 
     </div>
-
-    <h3 class="mb-4">Groups for you</h3>
-    <div class="list-group align-items-center d-flex mb-4 ">
-
-        <div class="list-group-item">
-            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
-                height="50 class="rounded-circle">
-            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-outline-primary">Join</a>
-        </div>
-
-        <div class="list-group-item">
-            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
-                height="50" class="rounded-circle">
-            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-outline-primary">Join</a>
-        </div>
-
-        <div class="list-group-item">
-            <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
-                height="50 class="rounded-circle">
-            <a class="me-3" href={{ url('/profile/username') }}>Group</a>
-            <a href="#" class="btn btn-outline-primary">Join</a>
-        </div>
-
-    </div>
-
-
-    <h3>Actions</h3>
-
-    @auth
-
-        <!-- Temporary placement -->
-        <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
-
-
-    @endauth
-
-    @auth
-        @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
-            <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}"
-                data-idUser="{{ Auth::user()->id }}">Leave
-                Group</button>
-        @endif
-
-    @endauth
-
-
-
-
 
 </nav>

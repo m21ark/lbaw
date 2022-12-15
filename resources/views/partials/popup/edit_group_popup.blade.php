@@ -1,6 +1,7 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_group_edit">
-        <form style="width:100%;" method='post' action={{ route('editGroup', $group->name) }} enctype="multipart/form-data">
+        <form style="width:100%;" method='post' action={{ route('editGroup', $group->name) }}
+            enctype="multipart/form-data">
 
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
@@ -15,6 +16,18 @@
             <label for="group_description" class="">Description</label>
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
+
+            <?php
+            $topics = [];
+            for ($i = 0; $i < sizeof($group->topics); $i++) {
+                array_push($topics, $group->topics[$i]->topic->topic);
+            }
+            $topics = implode(' ', $topics);
+            ?>
+
+            <label for="group_edit_tags" class="">Topics</label>
+            <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                name="tags" value="{{ $topics }}">
 
             <label for="group_photo" class="">Profile Picture</label>
             <input type="file" class="form-control" id="group_photo" name="photo">

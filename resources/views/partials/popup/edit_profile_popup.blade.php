@@ -1,9 +1,10 @@
 @if (Auth::check())
     <div class="pop_up" hidden id="popup_show_profile_edit">
-        <form style="width:100%;" method='post' action={{ route('editProfile', $user->username) }} enctype="multipart/form-data">
+        <form style="width:100%;" method='post' action={{ route('editProfile', $user->username) }}
+            enctype="multipart/form-data">
 
             <!-- Start popup body -->
-            {{csrf_field()}}
+            {{ csrf_field() }}
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Edit Profile</h3>
                 <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
@@ -23,6 +24,17 @@
             <label for="user_bio" class="">Bio</label>
             <textarea rows="8" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
 
+            <?php
+            $topics = [];
+            for ($i = 0; $i < sizeof($user->interests); $i++) {
+                array_push($topics, $user->interests[$i]->topic->topic);
+            }
+            $topics = implode(' ', $topics);
+            ?>
+
+            <label for="profile_edit_tags" class="">Topics of Interest</label>
+            <input type="text" id="profile_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                name="tags" value="{{ $topics }}">
 
             <label for="profile_pic" class="">Profile Picture</label>
             <input type="file" class="form-control" id="profile_pic" name="photo" />
@@ -31,7 +43,6 @@
             <input class="form-check-input" id="profile_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
 
-            <!-- TODO: EDIT ALSO USER INTERESTS -->
             <!-- TODO: Falta se quer mudar de passe(cuidado com a hash)-->
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save
