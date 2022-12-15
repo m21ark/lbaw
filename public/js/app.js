@@ -11,7 +11,6 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        //console.log(JSON.stringify(data));
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
@@ -147,7 +146,6 @@ function addEventListeners() {
 
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
-    assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
 
     // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
@@ -192,8 +190,6 @@ function sendBanUserRequest(event) {
     const elem = document.querySelector('#ban_time_select')
     userID = elem.dataset.userid
     time_selected = elem.value
-
-    console.log(userID, time_selected)
 
     let res = confirm('Are you sure you want to ban this user?');
     if (res)
@@ -321,6 +317,7 @@ function sendCreateGroupRequest(event) {
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
+    let tags = document.querySelector('#popup_show_group_create #group_create_tags').value
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -329,7 +326,7 @@ function sendCreateGroupRequest(event) {
 
     let res = confirm('Are you sure you want to create this group?');
     if (res) {
-        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility }, addedHandler('#popup_show_group_create'));
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility, tags: tags }, addedHandler('#popup_show_group_create'));
         // TODO: Fazer redirect para grupo criado
     }
 
@@ -344,6 +341,7 @@ function sendEditGroupRequest(event) {
     let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
+    let tags = document.querySelector('#popup_show_group_edit #group_edit_tags').value
     let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
@@ -357,6 +355,7 @@ function sendEditGroupRequest(event) {
     formData.append('visibility', visibility);
     formData.append('id_group', id_group);
     formData.append('photo', pho);
+    formData.append('tags', tags);
 
     let res = confirm('Are you sure you want to edit this group?');
     if (res)
@@ -420,12 +419,11 @@ function sendEditProfileRequest(event) {
     let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
     let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
     let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
+    let tags = document.querySelector('#popup_show_profile_edit #profile_edit_tags').value
 
     let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
-
-    // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -440,6 +438,7 @@ function sendEditProfileRequest(event) {
     formData.append('visibility', visibility);
     formData.append('oldName', oldName);
     formData.append('photo', pho);
+    formData.append('tags', tags);
 
 
     let res = confirm('Are you sure you want to edit your profile?');
@@ -454,14 +453,11 @@ function sendDeleteProfileRequest() {
     let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
 
     let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
-    if (res === username) {
+    if (res === username)
         sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
-        console.log('Account deleted!');
-    } else {
+    else
         alert('Invalid input! Account not deleted!');
-        console.log('Account deletedeeee!');
 
-    }
 }
 
 
@@ -588,40 +584,48 @@ function sendCreateReportCommentRequest(event) {
 
 function sendCreatePostRequest(isProfile) {
     return function (event) {
+
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let tags = document.querySelector('#post_create_tags');
             let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
 
             let formData = new FormData();
+
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
+
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
-            //console.log(formData)
 
-            if (res && textarea.value != null)
+
+
+            if (res && textarea != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
+
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
-
+            let tags = document.querySelector('#post_create_tags');
             let res = confirm('Are you sure you want to group post this?');
             let photos = document.querySelector('#popup_show_group_post #post_photos').files;
 
             let formData = new FormData();
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
             formData.append('group_name', textarea.dataset.group);
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
 
-            //console.log(formData)
-
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
 
         event.preventDefault();
@@ -634,17 +638,19 @@ function sendEditPostRequest(event) {
     let res = confirm('Are you sure you want to edit this post?');
 
     let textarea = document.querySelector('#popup_show_post_edit textarea');
+    let tags = document.querySelector('#post_edit_tags');
     let photos = document.querySelector('#popup_show_post_edit #edit_post_photos').files;
     let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
 
     let formData = new FormData();
     formData.append('text', textarea.value);
+    formData.append('tags', tags.value);
     for (var x = 0; x < photos.length; x++) {
         formData.append("photos[]", photos[x]);
     }
 
-    //console.log(formData)
+
     if (res && textarea.value != null)
         sendFormData('post', '/api/post/' + id, formData, addedHandler('#popup_show_post_edit'));
 
@@ -679,7 +685,7 @@ function sendMessage(event) {
 function sms_html(art, isSender, message, time) {
     if (isSender) {
         let photo = document.querySelector("#log_in_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
         <div class="d-flex flex-row justify-content-end my_sms">
             <div>
@@ -690,13 +696,11 @@ function sms_html(art, isSender, message, time) {
               alt="your photo" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
-    } 
-    else
-    {
-        console.log('No sender')
+    }
+    else {
 
         let photo = document.querySelector("#sms_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img class="rounded-circle" src="${photo}"
@@ -735,13 +739,12 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').appendChild(art.firstChild);
             document.querySelector('.message_body').appendChild(art.lastChild);
             var text = document.createTextNode('');
-            document.querySelector('.message_body').append(text);   
+            document.querySelector('.message_body').append(text);
             return;
         }
-        else
-        {
+        else {
             let last_messanger = document.querySelector('.message_body').lastChild.previousElementSibling
-            if ((isSender && last_messanger.classList.contains('justify-content-end') ))
+            if ((isSender && last_messanger.classList.contains('justify-content-end')))
             // IT was our last message or the other person last message
             {
                 let last_time_anchor = last_messanger.lastElementChild.previousElementSibling.lastElementChild
@@ -751,7 +754,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
             }
-            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))){
+            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))) {
                 let last_time_anchor = last_messanger.lastElementChild.lastElementChild
                 last_time_anchor.textContent = time_formated;
                 let new_sms = createElementFromHTML(`
@@ -759,8 +762,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.insertBefore(new_sms, last_time_anchor);
             }
-            else
-            {
+            else {
                 sms_html(art, isSender, message, time_formated);
             }
         }
@@ -802,6 +804,10 @@ function updateFeed(feed) {
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
+
+        if (received.length === 0) {
+            timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+        }
 
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
@@ -846,6 +852,7 @@ updateFeedOnOrder();
 
 
 function createPost(post) {
+
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
@@ -1328,7 +1335,7 @@ function updateNrNotfications() {
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-        // console.log(this.responseText)
+
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
         updateNrNotfications();
@@ -1354,7 +1361,16 @@ function markAsSeen($id, e) {
 }
 
 function markAllAsSeen(e) {
-    console.log("E fazer isto ricardo? Não me apetece fazer mais uma api :). Deixo isso para ti JS-Boy")
+    e.preventDefault();
+    console.log("ola")
+    sendAjaxRequest('put', "/api/user/notifications/seen", {}, function () {
+        if (this.status == 200) {
+            _notifications = [];
+            let nots = document.querySelectorAll('#notifications_container>div')
+            nots.forEach((e) => e.remove());
+            updateNrNotfications();
+        }
+    });
 }
 
 // taken from https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
@@ -1418,7 +1434,7 @@ function createNotificationList(event) {
         notifications.style.visibility = 'visible';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        console.log(side_bar_elms);
+
         [].forEach.call(side_bar_elms, function (e, i) {
             if (i < 5) {
                 e.removeChild(e.lastChild);
@@ -1434,6 +1450,8 @@ function createNotificationList(event) {
         let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
 
         notifications.appendChild(clear_all);
+
+        assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
         // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO  --DONE
         // tb meter um numero limitado
         for (let i = 0; i < _notifications.length; i++) {
@@ -1478,7 +1496,7 @@ function sendFriendRequestResponse(accept) {
     return function () {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
-        console.log(response);
+
         sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
             if (this.status == 200) {
                 let friend_request = document.querySelector("#friend_request_" + id);

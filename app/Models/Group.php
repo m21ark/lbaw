@@ -33,4 +33,9 @@ class Group extends Model
     {
         return $this->hasMany('App\Models\GroupJoinRequest', 'id_group');
     }
+
+    public function topics()
+    {
+        return $this->hasMany('App\Models\GroupTopic', 'id_group');
+    }
 }

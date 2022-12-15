@@ -4,6 +4,10 @@
     <div class="justify-content-center align-items-center">
 
         <div>
+            @auth
+                <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
+                @include('partials.popup.make_group_popup')
+            @endauth
             @if (Auth::user()->groupsOwner->count() > 0)
                 <div class="mt-3 mb-4 container">
                     <h2>Owner Groups ({{ Auth::user()->groupsOwner->count() }})</h2>

@@ -16,6 +16,10 @@
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 style="resize: none;"></textarea>
 
+            <label for="group_create_tags" class="">Topics</label>
+            <input type="text" id="group_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                name="tags">
+
             <label for="group_visibility" class=" me-3">Group Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" checked>

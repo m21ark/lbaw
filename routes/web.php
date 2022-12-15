@@ -88,7 +88,10 @@ Route::get('user/friends/', 'FriendsRequestController@friends');
 
 // ======================= FEED POSTS =======================
 
+
 Route::get('api/post/feed/{type_feed}/order/{type_order}', 'PostController@feed');
+Route::get('api/post/topics/{post_id}', 'PostController@post_topics');
+
 
 // ======================= SEARCH ITEMS =======================
 
@@ -151,6 +154,8 @@ Route::delete('api/comment/{id_comment}', 'CommentController@delete');
 
 Route::get('api/user/notifications', 'NotificationController@get');
 Route::put('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+Route::put('api/user/notifications/seen', 'NotificationController@markAllAsSeen');
+
 
 // ======================= FRIENDS REQUEST ========================
 
