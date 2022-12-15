@@ -38,7 +38,7 @@
                 <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
                     id="feed_radio_order_likes" onclick="" value="likes" checked>
                 <label class="list-group-item rounded-3" for="feed_radio_order_likes">
-                    Order by Likes
+                    Order by Popularity
                 </label>
 
                 <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"

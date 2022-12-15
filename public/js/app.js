@@ -789,6 +789,8 @@ function updateFeed(feed) {
         orders.forEach(function (order) {
             if (order.checked) type_order = order.value
         })
+    } else {
+        type_order = 'likes'
     }
 
     if (!document.querySelector('#timeline')) {
@@ -834,7 +836,6 @@ function updateFeedOnOrder() {
             })
 
             updateFeed(checked_filter)
-            console.log(checked_filter)
         })
     })
 
@@ -1319,7 +1320,7 @@ function updateNrNotfications() {
     if (nr === null)
         return;
     nr.innerHTML = _notifications.length;
-    console.log(nr)
+    //console.log(nr)
     if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0))
         document.querySelector('#notf_nr').toggleAttribute('hidden');
 

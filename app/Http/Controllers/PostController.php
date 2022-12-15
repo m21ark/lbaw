@@ -59,11 +59,25 @@ class PostController extends Controller
             $posts = $this->feed_viral();
         }
 
+        
 
-        // TODO: pass the current log in user to js in order to know if the post is theirs or not
+        
+        if ($request->route('type_order') === "likes") {
+            $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
+                ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
+                ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
+                ->orderBy('ranking', 'desc');
 
+        } else if ($request->route('type_order') === "date") {
+            $posts = $posts->orderBy('post_date', 'desc');
+        }
+        
+            
         $posts = $posts->limit(20)->get();
 
+
+        // TODO: pass the current log in user to js in order to know if the post is theirs or not
+        
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->hasLiked = false;
@@ -82,7 +96,7 @@ class PostController extends Controller
                 $post->hasLiked = true;
             }
         }
-
+        
         return json_encode($posts);
     }
 
@@ -197,7 +211,7 @@ class PostController extends Controller
                 ->from('group_join_request')
                 ->where('id_user', $id)
                 ->where('acceptance_status', 'Accepted');
-        })
+            })
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
@@ -207,21 +221,12 @@ class PostController extends Controller
 
     private function feed_viral()
     {
-
-        $posts_filtered = Post::join('user', 'user.id', '=', 'post.id_poster')
-            ->join('like_post', 'like_post.id_post', '=', 'post.id')
+        $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->where('visibility', true)
-            ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo', DB::raw('count(like_post.id_user) as likes_count'))
-            ->withCount('comments')
-            ->groupBy('post.id', 'user.id');
+            ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
+            ->withCount('likes', 'comments');
 
-        $posts = DB::table(DB::raw("({$posts_filtered->toSql()}) as sub"))
-            ->mergeBindings($posts_filtered->getQuery()) // you need to get underlying Query Builder
-            ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
-            ->orderBy('ranking', 'desc');
-
-
-
+        
         //->join('image', 'image.id_post', '=', 'post.id')
         //, string_agg (path, ',') image,
         // string_agg(path, ',') as images
@@ -235,6 +240,16 @@ class PostController extends Controller
             return response()->json(['Please login' => 401]);
         }
 
+        $posts_groups = $this->feed_groups();
+
+        $posts_friends = $this->feed_friends();
+
+        $posts = $this->feed_viral()
+            ->union($posts_groups)
+            ->union($posts_friends)
+            ->distinct();
+
+        /*
         $posts_filtered_groups = $this->feed_groups();
         $posts_groups = DB::table(DB::raw("({$posts_filtered_groups->toSql()}) as sub"))
             ->mergeBindings($posts_filtered_groups->getQuery()) // you need to get underlying Query Builder
@@ -250,7 +265,7 @@ class PostController extends Controller
             ->union($posts_friends)
             ->distinct()
             ->orderBy('ranking', 'desc');
-
+        */
         return $posts;
     }
 }
