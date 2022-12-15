@@ -13,9 +13,17 @@
             <label for="post_text" class="">Description</label>
             <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text" style="resize: none;">{{ $post->text }}</textarea>
 
+            <?php
+            $topics = [];
+            for ($i = 0; $i < sizeof($post->topics); $i++) {
+                array_push($topics, $post->topics[$i]->topic->topic);
+            }
+            $topics = implode(' ', $topics);
+            ?>
+
             <label for="post_edit_tags" class="">Hashtags</label>
             <input type="text" id="post_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
-                name="tags">
+                name="tags" value="{{ $topics }}">
 
             <label for="edit_post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="edit_post_photos" name="photos" multiple>
