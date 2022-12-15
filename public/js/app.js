@@ -790,7 +790,7 @@ function updateFeed(feed) {
             if (order.checked) type_order = order.value
         })
     } else {
-        type_order = 'likes'
+        type_order = 'popularity'
     }
 
     if (!document.querySelector('#timeline')) {

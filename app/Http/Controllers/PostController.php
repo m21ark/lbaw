@@ -62,7 +62,7 @@ class PostController extends Controller
         
 
         
-        if ($request->route('type_order') === "likes") {
+        if ($request->route('type_order') === "popularity") {
             $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
                 ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
                 ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
@@ -70,6 +70,9 @@ class PostController extends Controller
 
         } else if ($request->route('type_order') === "date") {
             $posts = $posts->orderBy('post_date', 'desc');
+        
+        } else if ($request->route('type_order') === "likes") {
+            $posts = $posts->orderBy('likes_count', 'desc');
         }
         
             
