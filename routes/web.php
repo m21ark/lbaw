@@ -81,7 +81,7 @@ Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/', 'FriendsRequestController@friends');
-
+Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
 
 // ======================================= APIS ========================================
 
@@ -160,6 +160,10 @@ Route::put('api/user/friend/request/{id_sender}/accept', 'FriendsRequestControll
 Route::put('api/user/friend/request/{id_sender}/reject', 'FriendsRequestController@reject');
 Route::post('api/user/friend/request/{id_rcv}/send', 'FriendsRequestController@send');
 Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
+
+// ======================= GROUPS REQUEST =========================
+
+
 
 
 // ======================= Reports ==========================
