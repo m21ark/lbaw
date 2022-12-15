@@ -14,10 +14,10 @@
                         <a href='/group/{{$group->name}}/requests' style="color: black;"><i class="fa-solid fa-file-signature"></i></a>
                     @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
                         <span class="cancel_g_request"><i class="fa-solid fa-clock-rotate-left"
-                           data-id="{{ $user->id }}"></i></span>
+                           data-id="{{ $group->id }}"></i></span>
                     @elseif (!$in_group)
                         <span class="send_g_request"><i class="fa-solid fa-door-open"
-                            data-id="{{ $user->id }}"></i></span>
+                            data-id="{{ $group->id }}"></i></span>
                     @endif
                 @endauth
             </h3>

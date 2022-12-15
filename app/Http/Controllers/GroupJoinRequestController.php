@@ -11,28 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class GroupJoinRequestController extends Controller
 {
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -78,5 +56,43 @@ class GroupJoinRequestController extends Controller
             ->update(['acceptance_status' => $new_state]);
         
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
+    }
+
+    public function send($id, Request $resquest) 
+    {
+        if (!Auth::check())
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        // TODO : E PRECISO OUTRA POLICIE ? no caso de se já ter enviado um pedido
+
+        // PK ??? 
+        //validator($request->route()->parameters(), [
+        //    'id' => 'required|exists:group,id',
+        //])->validate();
+
+        $frequest = new GroupJoinRequest();
+        $frequest->id_user = Auth::user()->id;
+        $frequest->id_group = $id;
+        $frequest->save();
+
+        return response()->json(['The request was sent' => 200]);
+    }
+
+    public function delete($id, Request $request)
+    {
+        if (!Auth::check())
+            return response()->json(['You need to authenticate to use this endpoint' => 403]);
+
+        validator($request->route()->parameters(), [
+            'id' => 'required|exists:group,id',
+        ])->validate();
+
+        // TODO :ADD policy
+        
+        GroupJoinRequest::where('id_user', '=', Auth::user()->id)
+            ->where('id_group', '=', $id)
+            ->delete();
+            
+        return response()->json(['The request was deleted with success' => 200]);
     }
 }

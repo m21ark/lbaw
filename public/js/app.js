@@ -1495,7 +1495,7 @@ function sendRequest() {
 function sendGRequest() {
     let parent = this;
     let child = this.firstChild;
-    sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
+    sendAjaxRequest('post', "/api/group/request/" + child.dataset.id + "/send", {}, function (e) {
         if (this.status == 200) {
             child.classList.remove('fa-door-open');
             child.classList.remove('send_g_request');
@@ -1510,7 +1510,7 @@ function sendGRequest() {
 }
 
 function deleteGRequest() {
-    
+
 }
 
 function deleteFriendship() {
