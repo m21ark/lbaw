@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GroupJoinRequest;
+
 use App\Models\Group;
+use App\Models\GroupJoinRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,12 +51,12 @@ class GroupJoinRequestController extends Controller
         return view('pages.group_requests', ['requests' => $group->groupJoinRequests]);
     }
 
-    public function accept($id_sender, $group_name, Request $request)
+    public function accept( $group_name, $id_sender, Request $request)
     {
-        return $this->update_request($id_sender, $group_name, "Accepted", $group_name, $request);
+        return $this->update_request($id_sender, $group_name, "Accepted", $request);
     }
 
-    public function reject($id_sender, $group_name, Request $request)
+    public function reject($group_name,$id_sender,  Request $request)
     {
         return $this->update_request($id_sender, $group_name, "Rejected", $request);
     }
@@ -73,9 +74,9 @@ class GroupJoinRequestController extends Controller
         // TODO :ADD policy
         $group = Group::where('name', $group_name)->first();
         $frequest = GroupJoinRequest::where('id_user', '=', $id_sender)
-            ->where('id_group', '=', $group->name)
+            ->where('id_group', '=', $group->id)
             ->update(['acceptance_status' => $new_state]);
-
+        
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
 }

@@ -1459,6 +1459,7 @@ function sendRequestResponse(isAFriendReq, accept) {
         let gname = window.location.pathname.split('/')[2];;
 
         let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname +'/request/' + id + "/" + response ;
+        console.log(reqURI);
         let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
         sendAjaxRequest('put', reqURI , {}, function () {
             if (this.status == 200) {
