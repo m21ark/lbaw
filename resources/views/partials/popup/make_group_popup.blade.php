@@ -9,14 +9,14 @@
             </div>
 
 
-            <label for="group_name" class="sr-only">Group Name</label>
+            <label for="group_name" class="">Group Name</label>
             <input type="text" id="group_name" class="form-control mb-3" placeholder="Group Name">
 
-            <label for="group_description" class="sr-only">Description</label>
+            <label for="group_description" class="">Description</label>
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 style="resize: none;"></textarea>
 
-            <label for="group_visibility" class="sr-only me-3">Group Public Visibility</label>
+            <label for="group_visibility" class=" me-3">Group Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" checked>
 
