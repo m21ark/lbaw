@@ -14,10 +14,10 @@
                 @endif
 
                 <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
-                <label for="inputEmail" class="sr-only">Email address</label>
+                <label for="inputEmail" class="">Email address</label>
                 <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
                     placeholder="Email" name="email" required autofocus autofocus="">
-                <label for="inputPassword" class="sr-only">Password</label>
+                <label for="inputPassword" class="">Password</label>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
                     required>
 
