@@ -229,11 +229,6 @@ class PostController extends Controller
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
 
-        
-        //->join('image', 'image.id_post', '=', 'post.id')
-        //, string_agg (path, ',') image,
-        // string_agg(path, ',') as images
-
         return $posts;
     }
 
@@ -252,23 +247,7 @@ class PostController extends Controller
             ->union($posts_friends)
             ->distinct();
 
-        /*
-        $posts_filtered_groups = $this->feed_groups();
-        $posts_groups = DB::table(DB::raw("({$posts_filtered_groups->toSql()}) as sub"))
-            ->mergeBindings($posts_filtered_groups->getQuery()) // you need to get underlying Query Builder
-            ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking');
-
-        $posts_filtered_friends = $this->feed_friends();
-        $posts_friends = DB::table(DB::raw("({$posts_filtered_friends->toSql()}) as sub"))
-            ->mergeBindings($posts_filtered_friends->getQuery()) // you need to get underlying Query Builder
-            ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking');
-
-        $posts = $this->feed_viral()
-            ->union($posts_groups)
-            ->union($posts_friends)
-            ->distinct()
-            ->orderBy('ranking', 'desc');
-        */
+        
         return $posts;
     }
 }
