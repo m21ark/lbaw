@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Controllers\PostController;
+use App\Models\Topic;
+use App\Models\TopicsInterestUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -65,6 +67,7 @@ class ProfileController extends Controller
             }
         }
         $user->save();
+        $this->edit_topics($request, $user);
 
         DB::commit();
 
@@ -93,11 +96,36 @@ class ProfileController extends Controller
         foreach ($user->posts as $post) {
             $post->delete();
         }
-        
+
         $user->save();
 
         Auth::logout();
 
         return redirect()->route('home');
+    }
+
+    private function edit_topics(Request $request, User $user)
+    {
+        $user->interests()->delete();
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $user_topic = new TopicsInterestUser();
+                $user_topic->id_user = $user->id;
+                $user_topic->id_topic = $topic_->id;
+                $user_topic->save();
+            }
+        }
     }
 }

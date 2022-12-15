@@ -3,7 +3,7 @@
 
     <div id="user_info">
 
-        <div class="card border-secondary mb-4">
+        <div class="card border-secondary mb-4" style="min-width: 18em">
             <h3 class="p-2 me-5">About me
                 @auth
                     @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)

@@ -419,6 +419,7 @@ function sendEditProfileRequest(event) {
     let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
     let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
     let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
+    let tags = document.querySelector('#popup_show_profile_edit #profile_edit_tags').value
 
     let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
@@ -437,6 +438,7 @@ function sendEditProfileRequest(event) {
     formData.append('visibility', visibility);
     formData.append('oldName', oldName);
     formData.append('photo', pho);
+    formData.append('tags', tags);
 
 
     let res = confirm('Are you sure you want to edit your profile?');
