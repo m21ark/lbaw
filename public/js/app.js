@@ -455,7 +455,7 @@ function sendDeleteProfileRequest() {
 
     let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
     if (res === username) {
-        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log );
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
         console.log('Account deleted!');
     } else {
         alert('Invalid input! Account not deleted!');
@@ -676,24 +676,94 @@ function sendMessage(event) {
     document.querySelector('#sms_input').value = ''
 }
 
+function sms_html(art, isSender, message, time) {
+    if (isSender) {
+        let photo = document.querySelector("#log_in_photo").src;
+        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let div = createElementFromHTML(`
+        <div class="d-flex flex-row justify-content-end my_sms">
+            <div>
+                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
+                ${time_anchor}
+            </div>
+            <img src="${photo}"
+              alt="avatar 1" style="width: 45px; height: 100%;">
+        </div>`);
+        art.appendChild(div);
+    } 
+    else
+    {
+        console.log('No sender')
+
+        let photo = document.querySelector("#sms_photo").src;
+        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let div = createElementFromHTML(`
+            <div class="d-flex flex-row justify-content-start rcv_sms">
+                <img src="${photo}"
+                  alt="avatar 1" style="width: 45px; height: 100%;">
+                <div>
+                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
+                    ${time_anchor}
+                </div>
+            </div>`);
+        art.appendChild(div);
+    }
+}
+
 function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVEZ VER ISSO DPS
     return function () {
-        const art = document.createElement("article");
+        const art = document.createElement("div");
 
-        art.classList.add('message_txt');
-        art.classList.add(isSender ? 'text_sender' : 'text_rcv');
+        let date = new Date().toISOString().replace(',', '').replaceAll('/', '-');
 
-        date = new Date().toLocaleString().replace(',', '').replaceAll('/', '-');
+        let date_formated = date.substring(0, 10);
+        let time_formated = date.substring(11, 19);
 
-        var p1 = document.createElement('p');
-        p1.innerHTML = date;
+        let date_division = document.querySelector('[data-date="' + date_formated + '"]'); // != null ? => se não acrescenta divider
 
-        var p2 = document.createElement('p');
-        p2.innerHTML = message;
 
-        art.appendChild(p1);
-        art.appendChild(p2);
-        document.querySelector('.message_body').append(art);
+        if (date_division == null) {
+            let div = createElementFromHTML(`
+            <div class="divider d-flex align-items-center mb-4">
+                <p class="text-center mx-3 mb-0" data-date="${date_formated}" style="color: #a2aab7;">${date_formated}</p>
+            </div>`);
+
+            art.appendChild(div);
+
+            sms_html(art, isSender, message, time_formated);
+        }
+        else
+        {
+            let last_messanger = document.querySelector('.message_body').lastChild.previousElementSibling
+            if ((isSender && last_messanger.classList.contains('justify-content-end') ))
+            // IT was our last message or the other person last message
+            {
+                let last_time_anchor = last_messanger.lastElementChild.previousElementSibling.lastElementChild
+                last_time_anchor.textContent = time_formated;
+                let new_sms = createElementFromHTML(`
+                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
+                `);
+                last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
+            }
+            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))){
+                let last_time_anchor = last_messanger.lastElementChild.lastElementChild
+                last_time_anchor.textContent = time_formated;
+                let new_sms = createElementFromHTML(`
+                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
+                `);
+                last_messanger.lastElementChild.insertBefore(new_sms, last_time_anchor);
+            }
+            else
+            {
+                sms_html(art, isSender, message, time_formated);
+            }
+        }
+
+        if (art.firstElementChild !== null) {
+            document.querySelector('.message_body').append(art.firstElementChild);
+            var text = document.createTextNode('');
+            document.querySelector('.message_body').append(text);
+        }
     }
 }
 
@@ -1210,7 +1280,7 @@ function updateNrNotfications() {
         return;
     nr.innerHTML = _notifications.length;
     console.log(nr)
-    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0)) 
+    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0))
         document.querySelector('#notf_nr').toggleAttribute('hidden');
 
 }
