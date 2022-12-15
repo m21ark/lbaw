@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\GroupJoinRequest;
+use App\Models\GroupTopic;
 use App\Models\Owner;
+use App\Models\Topic;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -58,11 +60,33 @@ class GroupController extends Controller
         $owner = $this->addGroupOwner($ownerId, $group->id);
 
         $group->owners()->save($owner);
-
+        $this->add_topics($request, $group);
 
         return $group;
     }
 
+    private function add_topics(Request $request, Group $group)
+    {
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $group_topic = new GroupTopic();
+                $group_topic->id_group = $group->id;
+                $group_topic->id_topic = $topic_->id;
+                $group_topic->save();
+            }
+        }
+    }
 
     public function delete($name)
     {   // TODO : ESTA POLICY DPS DE TRATAR DO TRIGGER
@@ -97,11 +121,37 @@ class GroupController extends Controller
                 DB::rollBack();
             }
         }
+        $this->edit_topics($request, $group);
         DB::commit();
 
         $group->save();
 
         return $group;
+    }
+
+    private function edit_topics(Request $request, Group $group)
+    {
+        $group->topics()->delete();
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $group_topic = new GroupTopic();
+                $group_topic->id_group = $group->id;
+                $group_topic->id_topic = $topic_->id;
+                $group_topic->save();
+            }
+        }
     }
 
 

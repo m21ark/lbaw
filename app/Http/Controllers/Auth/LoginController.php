@@ -81,7 +81,7 @@ class LoginController extends Controller
             $newUser = new User;
             $newUser->username = strtok($user->email, '@');
             $newUser->email = $user->email;
-            $newUser->password = 'password';
+            $newUser->password = bcrypt('password');
             $newUser->birthdate = '2000-01-01'; //TODO Ver melhor
             $newUser->save();
             auth()->login($newUser);

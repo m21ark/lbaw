@@ -20,6 +20,10 @@
             <textarea rows="8" id="inputText" class="form-control mb-3" placeholder="Content" name="text" required
                 autofocus style="resize: none;" @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
+            <label for="post_create_tags" class="">Hashtags</label>
+            <input type="text" id="post_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                name="tags">
+
             <label for="post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="post_photos" name="photos" multiple>
 
