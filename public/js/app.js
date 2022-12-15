@@ -686,7 +686,7 @@ function sms_html(art, isSender, message, time) {
                 <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                 ${time_anchor}
             </div>
-            <img src="${photo}"
+            <img class="rounded-circle" src="${photo}"
               alt="your photo" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
@@ -699,7 +699,7 @@ function sms_html(art, isSender, message, time) {
         let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
-                <img src="${photo}"
+                <img class="rounded-circle" src="${photo}"
                   alt="sender photo" style="width: 45px; height: 100%;">
                 <div>
                     <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
@@ -724,7 +724,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
 
         if (date_division == null) {
             let div = createElementFromHTML(`
-            <div class="divider d-flex align-items-center mb-4">
+            <div class="divider align-items-center mb-4">
                 <p class="text-center mx-3 mb-0" data-date="${date_formated}" style="color: #a2aab7;">${date_formated}</p>
             </div>`);
 

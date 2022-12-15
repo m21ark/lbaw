@@ -27,7 +27,7 @@
         @foreach ($separateBySender as $messages)
             <div class="d-flex flex-row {{$messages[0]->id_sender === Auth::user()->id ? 'justify-content-end my_sms' : 'justify-content-start rcv_sms' }}">
                 @if ($messages[0]->id_sender !== Auth::user()->id)
-                    <img src="/{{$messages[0]->sender->photo}}"
+                    <img class="rounded-circle" src="/{{$messages[0]->sender->photo}}"
                       alt="sender photo" style="width: 45px; height: 100%;">
                 @endif
                 <div>
@@ -37,7 +37,7 @@
                     <p class="small ms-3 mb-3 rounded-3 text-muted">{{Str::substr($message->date, 10, 9)}}</p>
                 </div>
                 @if ($message->id_sender === Auth::user()->id)
-                    <img src="/{{$message->sender->photo}}"
+                    <img class="rounded-circle" src="/{{$message->sender->photo}}"
                       alt="my photo" style="width: 45px; height: 100%;">
                 @endif
             </div>
