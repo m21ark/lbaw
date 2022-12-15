@@ -1510,7 +1510,21 @@ function sendGRequest() {
 }
 
 function deleteGRequest() {
-
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('delete', "/api/group/request/" + child.dataset.id, {},
+    function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-clock-rotate-left');
+            child.classList.add('fa-door-open');
+            child.classList.add('send_g_request');
+            parent.removeEventListener('click', deleteGRequest);
+            parent.addEventListener('click', sendGRequest);
+            parent.classList.remove('cancel_g_request');
+            parent.classList.add('send_g_request');
+        }
+        addedHandler(null).call(this);
+    });
 }
 
 function deleteFriendship() {

@@ -166,7 +166,7 @@ Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
 Route::put('api/group/{group_name}/request/{id_sender}/accept', 'GroupJoinRequestController@accept');
 Route::put('api/group/{group_name}/request/{id_sender}/reject', 'GroupJoinRequestController@reject');
 Route::post('api/group/request/{id}/send', 'GroupJoinRequestController@send'); // POR FAZER
-Route::delete('api/group/{id}', 'GroupJoinRequestController@delete'); // POR FAZER
+Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete'); // POR FAZER
 
 
 // ======================= Reports ==========================
