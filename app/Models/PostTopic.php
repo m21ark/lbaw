@@ -10,12 +10,7 @@ class PostTopic extends Model
     use HasFactory;
     public $timestamps  = false;
     protected $table = 'post_topic';
-
-    /*
-    select "topic".*, "post".* from post_topic
-    join "post" on id_post = "post".id
-    join "topic" on id_topic = "topic".id;
-    */
+    public $incrementing = false; // IMPORTANT: ADD THIS TO ASSOCIATIONS WITHOUT id
 
     public function post()
     {

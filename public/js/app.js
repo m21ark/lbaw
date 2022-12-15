@@ -588,40 +588,48 @@ function sendCreateReportCommentRequest(event) {
 
 function sendCreatePostRequest(isProfile) {
     return function (event) {
+
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let tags = document.querySelector('#post_create_tags');
             let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
 
             let formData = new FormData();
+
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
+
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
-            //console.log(formData)
 
-            if (res && textarea.value != null)
+            console.log(formData)
+
+            if (res && textarea != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
+
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
-
+            let tags = document.querySelector('#post_create_tags');
             let res = confirm('Are you sure you want to group post this?');
             let photos = document.querySelector('#popup_show_group_post #post_photos').files;
 
             let formData = new FormData();
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
             formData.append('group_name', textarea.dataset.group);
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
 
-            //console.log(formData)
-
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
 
         event.preventDefault();

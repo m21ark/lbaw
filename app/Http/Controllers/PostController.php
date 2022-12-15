@@ -106,8 +106,32 @@ class PostController extends Controller
         $post->save();
 
         $this->upload_img($request, $post);
+        $this->add_topics($request, $post);
 
         DB::commit();
+    }
+
+    private function add_topics(Request $request, Post $post)
+    {
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $post_topic = new PostTopic();
+                $post_topic->id_post = $post->id;
+                $post_topic->id_topic = $topic_->id;
+                $post_topic->save();
+            }
+        }
     }
 
     public function upload_img(Request $request, Post $post)
