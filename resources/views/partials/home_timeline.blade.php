@@ -1,7 +1,7 @@
 @auth
     <div class="d-flex">
 
-        <div class="list-group list-group-checkable form-check d-flex p-1 flex justify-content-between align-items-center flex-fill text-bg-light"
+        <div class="list-group list-group-checkable form-check d-flex p-1 flex justify-content-between align-items-center flex-sm-fill text-bg-light"
             id="feed_filter">
 
             <input class="list-group-item-check pe-none" onclick="updateFeed('for_you')" type="radio" name="feed_filter"
@@ -31,11 +31,22 @@
             
         </div>
 
-        <div class="orderFilter dropdown">
+        <div class="orderFilter dropdown" style="width:8em" >
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
             <div class="dropdown_menu" style="z-index: 200000" hidden>
-                <a class="dropdown-item"  href="#">Order by Likes</a>
-                <a class="dropdown-item"  href="#">Order by Date</a>
+                
+                <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
+                    id="feed_radio_order_likes" onclick="" value="likes" checked>
+                <label class="list-group-item rounded-3" for="feed_radio_order_likes">
+                    Order by Likes
+                </label>
+
+                <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
+                    id="feed_radio_order_date" onclick="" value="date">
+                <label class="list-group-item rounded-3" for="feed_radio_order_date">
+                    Order by Date
+                </label>
+                
             </div>
         </div>
     

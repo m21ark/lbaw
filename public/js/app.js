@@ -784,11 +784,20 @@ function updateFeed(feed) {
     let pathname = window.location.pathname
     if (pathname !== '/home') return;
 
+    let type_order, orders = document.querySelectorAll('.feed-order')
+    if (orders) {
+        orders.forEach(function (order) {
+            if (order.checked) type_order = order.value
+        })
+    }
+
+    console.log(type_order)
+
     if (!document.querySelector('#timeline')) {
         return;
     }
 
-    sendAjaxRequest('get', '/api/post/feed/' + feed, {}, function () {
+    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
@@ -802,6 +811,15 @@ function updateFeed(feed) {
 
     setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
 }
+
+function updateFeedOnLoad() {
+    let feed_filters = document.querySelector('#feed_radio_viral')
+    if (feed_filters)
+        feed_filters.checked = true
+    updateFeed('viral')
+}
+updateFeedOnLoad();
+
 
 function createPost(post) {
     let new_post = document.createElement('article');
@@ -942,13 +960,6 @@ function createPost(post) {
     return new_post;
 }
 
-function updateFeedOnLoad() {
-    let feed_filters = document.querySelector('#feed_radio_viral')
-    if (feed_filters)
-        feed_filters.checked = true
-    updateFeed('viral')
-}
-updateFeedOnLoad();
 
 
 

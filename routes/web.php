@@ -88,7 +88,7 @@ Route::get('user/friends/', 'FriendsRequestController@friends');
 
 // ======================= FEED POSTS =======================
 
-Route::get('api/post/feed/{type_feed}', 'PostController@feed');
+Route::get('api/post/feed/{type_feed}/order/{type_order}', 'PostController@feed');
 
 // ======================= SEARCH ITEMS =======================
 

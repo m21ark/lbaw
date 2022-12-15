@@ -216,7 +216,7 @@ ul.nav a:hover{
     border: 1px solid lightgray;
 }
 
-.post_item .dropdown_menu *:hover, .orderFilter .dropdown_menu *:hover {
+.post_item .dropdown_menu *:hover {
     background-color: #006EF5;
     color: white;
 }
