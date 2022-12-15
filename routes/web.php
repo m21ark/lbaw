@@ -151,6 +151,8 @@ Route::delete('api/comment/{id_comment}', 'CommentController@delete');
 
 Route::get('api/user/notifications', 'NotificationController@get');
 Route::put('api/user/notification/{id}/seen', 'NotificationController@markAsSeen');
+Route::put('api/user/notifications/seen', 'NotificationController@markAllAsSeen');
+
 
 // ======================= FRIENDS REQUEST ========================
 
