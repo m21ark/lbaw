@@ -40,6 +40,11 @@ class Post extends Model
         return $this->hasMany('App\Models\Image', 'id_post');
     }
 
+    public function topics()
+    {
+        return $this->hasMany('App\Models\PostTopic', 'id_post');
+    }
+
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
 }

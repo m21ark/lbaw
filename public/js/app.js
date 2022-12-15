@@ -679,7 +679,7 @@ function sendMessage(event) {
 function sms_html(art, isSender, message, time) {
     if (isSender) {
         let photo = document.querySelector("#log_in_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
         <div class="d-flex flex-row justify-content-end my_sms">
             <div>
@@ -690,13 +690,12 @@ function sms_html(art, isSender, message, time) {
               alt="your photo" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
-    } 
-    else
-    {
+    }
+    else {
         console.log('No sender')
 
         let photo = document.querySelector("#sms_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img class="rounded-circle" src="${photo}"
@@ -735,13 +734,12 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').appendChild(art.firstChild);
             document.querySelector('.message_body').appendChild(art.lastChild);
             var text = document.createTextNode('');
-            document.querySelector('.message_body').append(text);   
+            document.querySelector('.message_body').append(text);
             return;
         }
-        else
-        {
+        else {
             let last_messanger = document.querySelector('.message_body').lastChild.previousElementSibling
-            if ((isSender && last_messanger.classList.contains('justify-content-end') ))
+            if ((isSender && last_messanger.classList.contains('justify-content-end')))
             // IT was our last message or the other person last message
             {
                 let last_time_anchor = last_messanger.lastElementChild.previousElementSibling.lastElementChild
@@ -751,7 +749,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
             }
-            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))){
+            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))) {
                 let last_time_anchor = last_messanger.lastElementChild.lastElementChild
                 last_time_anchor.textContent = time_formated;
                 let new_sms = createElementFromHTML(`
@@ -759,8 +757,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.insertBefore(new_sms, last_time_anchor);
             }
-            else
-            {
+            else {
                 sms_html(art, isSender, message, time_formated);
             }
         }
@@ -793,6 +790,10 @@ function updateFeed(feed) {
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
+
+        if (received.length === 0) {
+            timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+        }
 
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
