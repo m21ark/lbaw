@@ -54,7 +54,7 @@
 
                     <p class="text-justify p-2">{{ $post->text }}
                         @foreach ($post->topics as $post_topic)
-                            <a class="btn btn-primary me-2">#{{ $post_topic->topic->topic }}</a>
+                            <a href="/search/{{ $post_topic->topic->topic }}" class="btn btn-primary me-2">#{{ $post_topic->topic->topic }}</a>
                         @endforeach
                     </p>
 
