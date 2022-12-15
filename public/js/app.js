@@ -791,8 +791,6 @@ function updateFeed(feed) {
         })
     }
 
-    console.log(type_order)
-
     if (!document.querySelector('#timeline')) {
         return;
     }
@@ -818,7 +816,32 @@ function updateFeedOnLoad() {
         feed_filters.checked = true
     updateFeed('viral')
 }
+
+function updateFeedOnOrder() {
+
+    let orders = document.querySelectorAll('.feed-order')
+
+    if (!orders) return;
+
+    orders.forEach(function (order) {
+        order.addEventListener('click', function () {
+            let filters = document.querySelectorAll('#feed_filter input')
+            if (!filters) return;
+
+            let checked_filter;
+            filters.forEach(function (filter) {
+                if (filter.checked) checked_filter = filter.value;
+            })
+
+            updateFeed(checked_filter)
+            console.log(checked_filter)
+        })
+    })
+
+}
+
 updateFeedOnLoad();
+updateFeedOnOrder();
 
 
 function createPost(post) {
