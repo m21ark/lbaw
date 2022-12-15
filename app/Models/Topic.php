@@ -10,9 +10,5 @@ class Topic extends Model
     use HasFactory;
     public $timestamps  = false;
     protected $table = 'topic';
-
-    public function post()
-    {
-        return $this->belongsTo('App\Models\TopicsInterestUser', 'id_topic');
-    }
+    
 }

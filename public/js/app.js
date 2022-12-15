@@ -11,7 +11,6 @@ if (user_header != null) {
     var channel = pusher.subscribe('App.User.' + id);
     channel.bind('my-event', function (data) {
 
-        //console.log(JSON.stringify(data));
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post,
@@ -191,8 +190,6 @@ function sendBanUserRequest(event) {
     const elem = document.querySelector('#ban_time_select')
     userID = elem.dataset.userid
     time_selected = elem.value
-
-    console.log(userID, time_selected)
 
     let res = confirm('Are you sure you want to ban this user?');
     if (res)
@@ -424,8 +421,6 @@ function sendEditProfileRequest(event) {
     let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
     let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
 
-    // console.log(username, email, bdate, bio, visibility, oldName, idUser, pho);
-
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
         return;
@@ -453,14 +448,11 @@ function sendDeleteProfileRequest() {
     let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
 
     let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
-    if (res === username) {
+    if (res === username)
         sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
-        console.log('Account deleted!');
-    } else {
+    else
         alert('Invalid input! Account not deleted!');
-        console.log('Account deletedeeee!');
 
-    }
 }
 
 
@@ -587,40 +579,48 @@ function sendCreateReportCommentRequest(event) {
 
 function sendCreatePostRequest(isProfile) {
     return function (event) {
+
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
+            let tags = document.querySelector('#post_create_tags');
             let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
 
             let formData = new FormData();
+
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
+
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
-            //console.log(formData)
 
-            if (res && textarea.value != null)
+
+
+            if (res && textarea != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
+
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
-
+            let tags = document.querySelector('#post_create_tags');
             let res = confirm('Are you sure you want to group post this?');
             let photos = document.querySelector('#popup_show_group_post #post_photos').files;
 
             let formData = new FormData();
             formData.append('text', textarea.value);
+            formData.append('tags', tags.value);
             formData.append('group_name', textarea.dataset.group);
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
 
-            //console.log(formData)
-
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
-            textarea.value = '';
+            textarea.value = ''
+            tags.value = ''
         }
 
         event.preventDefault();
@@ -633,17 +633,19 @@ function sendEditPostRequest(event) {
     let res = confirm('Are you sure you want to edit this post?');
 
     let textarea = document.querySelector('#popup_show_post_edit textarea');
+    let tags = document.querySelector('#post_edit_tags');
     let photos = document.querySelector('#popup_show_post_edit #edit_post_photos').files;
     let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
 
     let formData = new FormData();
     formData.append('text', textarea.value);
+    formData.append('tags', tags.value);
     for (var x = 0; x < photos.length; x++) {
         formData.append("photos[]", photos[x]);
     }
 
-    //console.log(formData)
+
     if (res && textarea.value != null)
         sendFormData('post', '/api/post/' + id, formData, addedHandler('#popup_show_post_edit'));
 
@@ -678,7 +680,7 @@ function sendMessage(event) {
 function sms_html(art, isSender, message, time) {
     if (isSender) {
         let photo = document.querySelector("#log_in_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
         <div class="d-flex flex-row justify-content-end my_sms">
             <div>
@@ -689,13 +691,11 @@ function sms_html(art, isSender, message, time) {
               alt="your photo" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
-    } 
-    else
-    {
-        console.log('No sender')
+    }
+    else {
 
         let photo = document.querySelector("#sms_photo").src;
-        let time_anchor = time !== null? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
+        let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img class="rounded-circle" src="${photo}"
@@ -734,13 +734,12 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').appendChild(art.firstChild);
             document.querySelector('.message_body').appendChild(art.lastChild);
             var text = document.createTextNode('');
-            document.querySelector('.message_body').append(text);   
+            document.querySelector('.message_body').append(text);
             return;
         }
-        else
-        {
+        else {
             let last_messanger = document.querySelector('.message_body').lastChild.previousElementSibling
-            if ((isSender && last_messanger.classList.contains('justify-content-end') ))
+            if ((isSender && last_messanger.classList.contains('justify-content-end')))
             // IT was our last message or the other person last message
             {
                 let last_time_anchor = last_messanger.lastElementChild.previousElementSibling.lastElementChild
@@ -750,7 +749,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
             }
-            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))){
+            else if ((!isSender && last_messanger.classList.contains('justify-content-start'))) {
                 let last_time_anchor = last_messanger.lastElementChild.lastElementChild
                 last_time_anchor.textContent = time_formated;
                 let new_sms = createElementFromHTML(`
@@ -758,8 +757,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 `);
                 last_messanger.lastElementChild.insertBefore(new_sms, last_time_anchor);
             }
-            else
-            {
+            else {
                 sms_html(art, isSender, message, time_formated);
             }
         }
@@ -793,6 +791,10 @@ function updateFeed(feed) {
         let timeline = document.querySelector('#timeline');
         timeline.innerHTML = '';
 
+        if (received.length === 0) {
+            timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+        }
+
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
@@ -803,6 +805,7 @@ function updateFeed(feed) {
 }
 
 function createPost(post) {
+
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
@@ -1284,7 +1287,7 @@ function updateNrNotfications() {
     if (nr === null)
         return;
     nr.innerHTML = _notifications.length;
-    console.log(nr)
+
     if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0))
         document.querySelector('#notf_nr').toggleAttribute('hidden');
 
@@ -1292,7 +1295,7 @@ function updateNrNotfications() {
 
 function getNotifications() {
     sendAjaxRequest('get', "/api/user/notifications", {}, function () {
-        // console.log(this.responseText)
+
         let received = JSON.parse(this.responseText);
         _notifications = _notifications.concat(received);
         updateNrNotfications();
@@ -1391,7 +1394,7 @@ function createNotificationList(event) {
         notifications.style.visibility = 'visible';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        console.log(side_bar_elms);
+
         [].forEach.call(side_bar_elms, function (e, i) {
             if (i < 5) {
                 e.removeChild(e.lastChild);
@@ -1453,7 +1456,7 @@ function sendFriendRequestResponse(accept) {
     return function () {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
-        console.log(response);
+
         sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
             if (this.status == 200) {
                 let friend_request = document.querySelector("#friend_request_" + id);

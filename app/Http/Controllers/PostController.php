@@ -9,6 +9,8 @@ use App\Models\Group;
 use App\Models\Image;
 use App\Models\User;
 use App\Models\Like;
+use App\Models\PostTopic;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -104,8 +106,32 @@ class PostController extends Controller
         $post->save();
 
         $this->upload_img($request, $post);
+        $this->add_topics($request, $post);
 
         DB::commit();
+    }
+
+    private function add_topics(Request $request, Post $post)
+    {
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $post_topic = new PostTopic();
+                $post_topic->id_post = $post->id;
+                $post_topic->id_topic = $topic_->id;
+                $post_topic->save();
+            }
+        }
     }
 
     public function upload_img(Request $request, Post $post)
@@ -152,8 +178,34 @@ class PostController extends Controller
         $post->save();
 
         $this->upload_img($request, $post);
+        $this->edit_topics($request, $post);
 
         DB::commit();
+    }
+
+    private function edit_topics(Request $request, Post $post)
+    {
+        $post->topics()->delete();
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $post_topic = new PostTopic();
+                $post_topic->id_post = $post->id;
+                $post_topic->id_topic = $topic_->id;
+                $post_topic->save();
+            }
+        }
     }
 
     private function feed_friends()
@@ -252,5 +304,16 @@ class PostController extends Controller
             ->orderBy('ranking', 'desc');
 
         return $posts;
+    }
+
+    public function post_topics($post_id)
+    {
+        // TODO: POLICY
+
+        $topics = PostTopic::where('id_post', $post_id)
+            ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
+            ->select('topic.topic')
+            ->get();
+        return $topics;
     }
 }
