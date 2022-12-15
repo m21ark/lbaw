@@ -9,9 +9,9 @@
                 <!-- Should oly be visible to group owners -->
 
                 @auth
-
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
                         <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                        <a href='/group/{{$group->name}}/requests' style="color: black;"><i class="fa-solid fa-file-signature"></i></a>
                     @endif
                 @endauth
             </h3>
@@ -92,7 +92,7 @@
 
         <div class="list-group-item">
             <img class="me-3" src="{{ asset('group/group_default.jpg') }}" alt="group_photo" width="50"
-                height="50 class="rounded-circle">
+                height="50" class="rounded-circle">
             <a class="me-3" href={{ url('/profile/username') }}>Group</a>
             <a href="#" class="btn btn-outline-primary">Join</a>
         </div>
