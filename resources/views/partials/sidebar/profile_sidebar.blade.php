@@ -9,18 +9,20 @@
                     @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
                         <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
                     @endif
-                    <a hred="#!" class="btn btn-primary">
-                        @if (!$friends && in_array(Auth::user()->id, $user->friendsRequests->pluck('id_user_sender')->toArray()))
-                            <span class="cancel_request"><i class="fa-solid fa-user-clock"
-                                    data-id="{{ $user->id }}"></i></span>
-                        @elseif (!$friends && $user->id != Auth::user()->id)
-                            <span class="send_request"><i class="fa-solid fa-user-plus"
-                                    data-id="{{ $user->id }}"></i></span>
-                        @elseif ($user->id && $user->id != Auth::user()->id)
-                            <span class="cancel_request"><i class="fa-solid fa-user-check"
-                                    data-id="{{ $user->id }}"></i></span>
-                        @endif
-                    </a>
+                    @if (Auth::user()->username !== $user->username)
+                        <a hred="#!" class="btn btn-primary">
+                            @if (!$friends && in_array(Auth::user()->id, $user->friendsRequests->pluck('id_user_sender')->toArray()))
+                                <span class="cancel_request"><i class="fa-solid fa-user-clock"
+                                        data-id="{{ $user->id }}"></i></span>
+                            @elseif (!$friends && $user->id != Auth::user()->id)
+                                <span class="send_request"><i class="fa-solid fa-user-plus"
+                                        data-id="{{ $user->id }}"></i></span>
+                            @elseif ($user->id && $user->id != Auth::user()->id)
+                                <span class="cancel_request"><i class="fa-solid fa-user-check"
+                                        data-id="{{ $user->id }}"></i></span>
+                            @endif
+                        </a>
+                    @endif
                 @endauth
             </h3>
 
