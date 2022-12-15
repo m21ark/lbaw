@@ -9,6 +9,8 @@ use App\Models\Group;
 use App\Models\Image;
 use App\Models\User;
 use App\Models\Like;
+use App\Models\PostTopic;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -252,5 +254,16 @@ class PostController extends Controller
             ->orderBy('ranking', 'desc');
 
         return $posts;
+    }
+
+    public function post_topics($post_id)
+    {
+        // TODO: POLICY
+
+        $topics = PostTopic::where('id_post', $post_id)
+            ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
+            ->select('topic.topic')
+            ->get();
+        return $topics;
     }
 }

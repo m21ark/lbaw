@@ -805,6 +805,9 @@ function updateFeed(feed) {
 }
 
 function createPost(post) {
+
+    console.log(post)
+
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
