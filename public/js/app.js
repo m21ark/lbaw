@@ -687,7 +687,7 @@ function sms_html(art, isSender, message, time) {
                 ${time_anchor}
             </div>
             <img src="${photo}"
-              alt="avatar 1" style="width: 45px; height: 100%;">
+              alt="your photo" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
     } 
@@ -700,7 +700,7 @@ function sms_html(art, isSender, message, time) {
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img src="${photo}"
-                  alt="avatar 1" style="width: 45px; height: 100%;">
+                  alt="sender photo" style="width: 45px; height: 100%;">
                 <div>
                     <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                     ${time_anchor}
@@ -731,6 +731,12 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             art.appendChild(div);
 
             sms_html(art, isSender, message, time_formated);
+
+            document.querySelector('.message_body').appendChild(art.firstChild);
+            document.querySelector('.message_body').appendChild(art.lastChild);
+            var text = document.createTextNode('');
+            document.querySelector('.message_body').append(text);   
+            return;
         }
         else
         {

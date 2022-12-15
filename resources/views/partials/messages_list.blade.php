@@ -8,7 +8,7 @@
         ?>
 
     @foreach ($messageGroupDay as $date=>$messageInDay)
-        <div class="divider d-flex align-items-center mb-4">
+        <div class="divider align-items-center mb-4">
             <p class="text-center mx-3 mb-0" data-date="{{$date}}" style="color: #a2aab7;">{{$date}}</p>
         </div>
 
@@ -28,7 +28,7 @@
             <div class="d-flex flex-row {{$messages[0]->id_sender === Auth::user()->id ? 'justify-content-end my_sms' : 'justify-content-start rcv_sms' }}">
                 @if ($messages[0]->id_sender !== Auth::user()->id)
                     <img src="/{{$messages[0]->sender->photo}}"
-                      alt="avatar 1" style="width: 45px; height: 100%;">
+                      alt="sender photo" style="width: 45px; height: 100%;">
                 @endif
                 <div>
                     @foreach ($messages as $message)
@@ -38,7 +38,7 @@
                 </div>
                 @if ($message->id_sender === Auth::user()->id)
                     <img src="/{{$message->sender->photo}}"
-                      alt="avatar 1" style="width: 45px; height: 100%;">
+                      alt="my photo" style="width: 45px; height: 100%;">
                 @endif
             </div>
         @endforeach
