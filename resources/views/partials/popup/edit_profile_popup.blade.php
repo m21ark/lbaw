@@ -23,6 +23,9 @@
             <label for="user_bio" class="">Bio</label>
             <textarea rows="8" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
 
+            <label for="profile_edit_tags" class="">Topics of Interest</label>
+            <input type="text" id="profile_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                name="tags">
 
             <label for="profile_pic" class="">Profile Picture</label>
             <input type="file" class="form-control" id="profile_pic" name="photo" />
