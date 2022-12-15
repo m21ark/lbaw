@@ -121,11 +121,37 @@ class GroupController extends Controller
                 DB::rollBack();
             }
         }
+        $this->edit_topics($request, $group);
         DB::commit();
 
         $group->save();
 
         return $group;
+    }
+
+    private function edit_topics(Request $request, Group $group)
+    {
+        $group->topics()->delete();
+        if ($request->input('tags') != null) {
+
+            $topics = explode(' ', $request->input('tags'));
+
+            foreach ($topics as $topic) {
+
+                $topic_ = Topic::where('topic', $topic)->first();
+
+                if ($topic_ === null) {
+                    $topic_ = new Topic();
+                    $topic_->topic = $topic;
+                    $topic_->save();
+                }
+
+                $group_topic = new GroupTopic();
+                $group_topic->id_group = $group->id;
+                $group_topic->id_topic = $topic_->id;
+                $group_topic->save();
+            }
+        }
     }
 
 

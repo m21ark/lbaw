@@ -341,6 +341,7 @@ function sendEditGroupRequest(event) {
     let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
+    let tags = document.querySelector('#popup_show_group_edit #group_edit_tags').value
     let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
@@ -354,6 +355,7 @@ function sendEditGroupRequest(event) {
     formData.append('visibility', visibility);
     formData.append('id_group', id_group);
     formData.append('photo', pho);
+    formData.append('tags', tags);
 
     let res = confirm('Are you sure you want to edit this group?');
     if (res)
