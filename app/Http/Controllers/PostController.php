@@ -78,7 +78,7 @@ class PostController extends Controller
         }
         
             
-        $posts = $posts->limit(20)->get();
+        $posts = $posts->limit(5)->get();
 
 
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
