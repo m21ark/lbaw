@@ -89,8 +89,10 @@ Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
 
 // ======================= FEED POSTS =======================
 
-Route::get('api/post/feed/{type_feed}', 'PostController@feed');
+
+Route::get('api/post/feed/{type_feed}/order/{type_order}', 'PostController@feed');
 Route::get('api/post/topics/{post_id}', 'PostController@post_topics');
+
 
 // ======================= SEARCH ITEMS =======================
 
