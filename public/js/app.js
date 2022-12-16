@@ -792,13 +792,12 @@ function updateFeed(feed) {
     let pathname = window.location.pathname
     if (pathname !== '/home') return;
 
-    let type_order, orders = document.querySelectorAll('.feed-order')
+    let type_order = 'popularity';
+    let orders = document.querySelectorAll('.feed-order');
     if (orders) {
         orders.forEach(function (order) {
             if (order.checked) type_order = order.value
         })
-    } else {
-        type_order = 'popularity'
     }
 
     if (!document.querySelector('#timeline')) {
@@ -880,12 +879,13 @@ function updateFeedOnScroll() {
     window.onscroll = function(ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
             let filters = document.querySelectorAll('#feed_filter input')
-            if (!filters) return;
 
-            let checked_filter;
-            filters.forEach(function (filter) {
-                if (filter.checked) checked_filter = filter.value;
-            })
+            let checked_filter = 'viral';
+            if (filters) {
+                filters.forEach(function (filter) {
+                    if (filter.checked) checked_filter = filter.value;
+                })
+            }
 
             updateFeed(checked_filter)
         }
