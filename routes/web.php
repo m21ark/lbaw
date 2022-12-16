@@ -78,7 +78,7 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
-Route::get('messages/', 'MessagesController@show')->name('messages');
+Route::get('messages/', 'MessagesController@show');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/', 'FriendsRequestController@friends');
