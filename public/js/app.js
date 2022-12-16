@@ -1060,7 +1060,7 @@ function updateSearchOnInputAndClick() {
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    query_string = pathname.replaceAll('%20', ' ').match(/(?<=\/search\/)[#\*?!.@_\w ]+/)[0]
+    query_string = pathname.replaceAll('%20', ' ').split('/')[2]
 
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
