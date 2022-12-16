@@ -781,6 +781,8 @@ addEventListeners();
 
 // =================================== Home ==========================================
 
+let offset = 0;
+
 function updateFeed(feed) {
 
     let pathname = window.location.pathname
@@ -799,7 +801,7 @@ function updateFeed(feed) {
         return;
     }
 
-    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order, {}, function () {
+    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
@@ -812,7 +814,8 @@ function updateFeed(feed) {
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
-
+        
+        offset += 5
     })
 
     setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
@@ -842,14 +845,40 @@ function updateFeedOnOrder() {
             })
 
             updateFeed(checked_filter)
+            offset = 0
         })
     })
 
 }
 
+function updateFeedOnClick() {
+
+    let filters = document.querySelectorAll('.feed-filter')
+
+    if (!filters) return;
+
+    filters.forEach(function (filter) {
+        filter.addEventListener('click', function () {
+            updateFeed(filter.value)
+            offset = 0
+        })
+    })
+
+}
+
+function updateFeedOnScroll() {
+
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+            console.log("Heyyy")
+        }
+    };
+}
+
 updateFeedOnLoad();
 updateFeedOnOrder();
-
+updateFeedOnScroll();
+updateFeedOnClick();
 
 function createPost(post) {
 
