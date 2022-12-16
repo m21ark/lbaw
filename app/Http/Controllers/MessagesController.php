@@ -39,7 +39,7 @@ class MessagesController extends Controller
     }
 
 
-    public function show($sender_username)
+    public function show($sender_username = null)
     {
 
         if (!Auth::check())
@@ -55,7 +55,7 @@ class MessagesController extends Controller
 
         $sender = User::where('username', '=', $sender_username)->first();
 
-
+        
 
         return view('pages.messages', ['user' => $user, 'messages' => $messages, 'sender' => $sender]);
     }

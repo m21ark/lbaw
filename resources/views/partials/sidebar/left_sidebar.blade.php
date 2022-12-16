@@ -41,7 +41,7 @@
                 <span style="width: 8em;font-size:1.2em" class="enc">Notifications</span>
             </a>
 
-            <a href={{ url('/messages/sender_username') }}
+            <a href={{ url('/messages/') }}
                 class="btn mb-3 d-flex align-items-center justify-content-around">
                 <span class="position-relative">
                     <i class="fa-solid fa-envelope fa-2x"></i>

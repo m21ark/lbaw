@@ -109,11 +109,15 @@ function addEventListeners() {
         ['#reject_all_reports', sendRejectAllReportsRequest],
         ['#ban_user_btn', sendBanUserRequest],
         ['#unban_user_btn', sendUnbanUserRequest],
-        ['.friends_request_accept', sendFriendRequestResponse(true)],
-        ['.friends_request_reject', sendFriendRequestResponse(false)],
+        ['.friends_request_accept', sendRequestResponse(true, true)],
+        ['.friends_request_reject', sendRequestResponse(true, false)],
+        ['.groups_request_accept', sendRequestResponse(false, true)],
+        ['.groups_request_reject', sendRequestResponse(false, false)],
         ['.send_request', sendRequest],
         ['.cancel_request', deleteFriendship],
         ['.cancel_friend', deleteFriendFromFriendPage],
+        ['.send_g_request', sendGRequest],
+        ['.cancel_g_request', deleteGRequest],
     ];
 
 
@@ -1454,17 +1458,22 @@ function createNotificationList(event) {
     }
 }
 
-// ==================================== FRIENDS REQUESTS ============================================
+// ==================================== FRIENDS/GROUPS REQUESTS ============================================
 
 
-function sendFriendRequestResponse(accept) {
+function sendRequestResponse(isAFriendReq, accept) {
     return function () {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
+        
+        let gname = window.location.pathname.split('/')[2];;
 
-        sendAjaxRequest('put', "/api/user/friend/request/" + id + "/" + response, {}, function () {
+        let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname +'/request/' + id + "/" + response ;
+        console.log(reqURI);
+        let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
+        sendAjaxRequest('put', reqURI , {}, function () {
             if (this.status == 200) {
-                let friend_request = document.querySelector("#friend_request_" + id);
+                let friend_request = document.querySelector(queryReqs);
                 friend_request.remove();
             }
             addedHandler(null).call(this);
@@ -1474,7 +1483,6 @@ function sendFriendRequestResponse(accept) {
 
 
 function sendRequest() {
-    //send request
     let parent = this;
     let child = this.firstChild;
     sendAjaxRequest('post', "/api/user/friend/request/" + child.dataset.id + "/send", {}, function (e) {
@@ -1487,6 +1495,41 @@ function sendRequest() {
             parent.addEventListener('click', deleteFriendship);
             parent.classList.add('cancel_request');
             parent.classList.remove('send_request');
+        }
+        addedHandler(null).call(this);
+    });
+}
+
+function sendGRequest() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('post', "/api/group/request/" + child.dataset.id + "/send", {}, function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-door-open');
+            child.classList.remove('send_g_request');
+            child.classList.add('fa-clock-rotate-left');
+            parent.removeEventListener('click', sendGRequest);
+            parent.addEventListener('click', deleteGRequest);
+            parent.classList.add('cancel_g_request');
+            parent.classList.remove('send_g_request');
+        }
+        addedHandler(null).call(this);
+    });
+}
+
+function deleteGRequest() {
+    let parent = this;
+    let child = this.firstChild;
+    sendAjaxRequest('delete', "/api/group/request/" + child.dataset.id, {},
+    function (e) {
+        if (this.status == 200) {
+            child.classList.remove('fa-clock-rotate-left');
+            child.classList.add('fa-door-open');
+            child.classList.add('send_g_request');
+            parent.removeEventListener('click', deleteGRequest);
+            parent.addEventListener('click', sendGRequest);
+            parent.classList.remove('cancel_g_request');
+            parent.classList.add('send_g_request');
         }
         addedHandler(null).call(this);
     });

@@ -78,10 +78,11 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
+Route::get('messages/', 'MessagesController@show')->name('messages');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/', 'FriendsRequestController@friends');
-
+Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
 
 // ======================================= APIS ========================================
 
@@ -161,6 +162,13 @@ Route::put('api/user/friend/request/{id_sender}/accept', 'FriendsRequestControll
 Route::put('api/user/friend/request/{id_sender}/reject', 'FriendsRequestController@reject');
 Route::post('api/user/friend/request/{id_rcv}/send', 'FriendsRequestController@send');
 Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
+
+// ======================= GROUPS REQUEST =========================
+
+Route::put('api/group/{group_name}/request/{id_sender}/accept', 'GroupJoinRequestController@accept');
+Route::put('api/group/{group_name}/request/{id_sender}/reject', 'GroupJoinRequestController@reject');
+Route::post('api/group/request/{id}/send', 'GroupJoinRequestController@send'); // POR FAZER
+Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete'); // POR FAZER
 
 
 // ======================= Reports ==========================
