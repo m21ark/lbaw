@@ -785,6 +785,8 @@ addEventListeners();
 
 // =================================== Home ==========================================
 
+let offset = 0;
+
 function updateFeed(feed) {
 
     let pathname = window.location.pathname
@@ -803,11 +805,14 @@ function updateFeed(feed) {
         return;
     }
 
-    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order, {}, function () {
+    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
-        timeline.innerHTML = '';
+
+        if (offset === 0) {
+            timeline.innerHTML = '';
+        }
 
         if (received.length === 0) {
             timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
@@ -817,6 +822,7 @@ function updateFeed(feed) {
             timeline.appendChild(createPost(post))
         })
 
+        offset += 5
     })
 
     setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
@@ -824,8 +830,10 @@ function updateFeed(feed) {
 
 function updateFeedOnLoad() {
     let feed_filters = document.querySelector('#feed_radio_viral')
-    if (feed_filters)
+    if (feed_filters) {
         feed_filters.checked = true
+    }
+    offset = 0
     updateFeed('viral')
 }
 
@@ -845,15 +853,49 @@ function updateFeedOnOrder() {
                 if (filter.checked) checked_filter = filter.value;
             })
 
+            offset = 0
             updateFeed(checked_filter)
         })
     })
 
 }
 
+function updateFeedOnClick() {
+
+    let filters = document.querySelectorAll('.feed-filter')
+
+    if (!filters) return;
+
+    filters.forEach(function (filter) {
+        filter.addEventListener('click', function () {
+            offset = 0
+            updateFeed(filter.value)
+        })
+    })
+
+}
+
+function updateFeedOnScroll() {
+
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+            let filters = document.querySelectorAll('#feed_filter input')
+            if (!filters) return;
+
+            let checked_filter;
+            filters.forEach(function (filter) {
+                if (filter.checked) checked_filter = filter.value;
+            })
+
+            updateFeed(checked_filter)
+        }
+    };
+}
+
 updateFeedOnLoad();
 updateFeedOnOrder();
-
+updateFeedOnScroll();
+updateFeedOnClick();
 
 function createPost(post) {
 
