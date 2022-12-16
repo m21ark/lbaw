@@ -206,15 +206,15 @@ ul.nav a:hover{
     margin: auto;
 }
 
-.post_item .dropdown {
+.post_item .dropdown, .orderFilter.dropdown {
     margin: auto;
 }
 
-.post_item .dropdown_menu {
+.post_item .dropdown_menu, .orderFilter .dropdown_menu {
     position: absolute;
 }
 
-.post_item .dropdown_menu * {
+.post_item .dropdown_menu *, .orderFilter .dropdown_menu * {
     padding: 0.5em;
     background-color: white;
     border: 1px solid lightgray;
