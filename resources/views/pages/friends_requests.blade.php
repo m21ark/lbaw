@@ -22,7 +22,7 @@
                         </span>
                     </div>
                 </div>
-            @elseif ($requester->acceptance_status == "Accepted")
+            @elseif ($requester->acceptance_status == "Accepted" && !$isrequests )
                 <?php $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender ?>
                 <div class="card mt-4 me-3 " style="width: 15em;height:29em" id="friend_request_{{ $friend->id }}">
                     <img height="50%" src="/{{ $friend->photo }}" class="card-img-top" alt="user_avatar">

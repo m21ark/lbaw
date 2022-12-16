@@ -18,7 +18,6 @@ class Group extends Model
         return $this->hasMany('App\Models\Owner', 'id_group');
     }
 
-
     public function members()
     {
         return $this->hasMany('App\Models\GroupJoinRequest', 'id_group')->where('acceptance_status', 'Accepted');
