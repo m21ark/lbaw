@@ -47,6 +47,7 @@ class PostController extends Controller
     public function feed(Request $request)
     {
         $posts = [];
+        $offset = $request->route('offset');
 
         if ($request->route('type_feed') === "for_you") {
             //$this->authorize('feed', $posts);
@@ -60,9 +61,6 @@ class PostController extends Controller
         } else if ($request->route('type_feed') === "viral") {
             $posts = $this->feed_viral();
         }
-
-        
-
         
         if ($request->route('type_order') === "popularity") {
             $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
@@ -78,7 +76,7 @@ class PostController extends Controller
         }
         
             
-        $posts = $posts->limit(5)->get();
+        $posts = $posts->skip($offset)->limit(5)->get();
 
 
         // TODO: pass the current log in user to js in order to know if the post is theirs or not

@@ -849,8 +849,8 @@ function updateFeedOnOrder() {
                 if (filter.checked) checked_filter = filter.value;
             })
 
-            updateFeed(checked_filter)
             offset = 0
+            updateFeed(checked_filter)
         })
     })
 
@@ -864,8 +864,8 @@ function updateFeedOnClick() {
 
     filters.forEach(function (filter) {
         filter.addEventListener('click', function () {
-            updateFeed(filter.value)
             offset = 0
+            updateFeed(filter.value)
         })
     })
 
