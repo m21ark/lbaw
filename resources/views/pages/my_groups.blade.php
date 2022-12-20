@@ -10,9 +10,9 @@
             @endauth
             @if (Auth::user()->groupsOwner->count() > 0)
                 <div class="mt-3 mb-4 container">
-                    <h2>Owner Groups ({{ Auth::user()->groupsOwner->count() }})</h2>
+                    <h2>Groups Owned ({{ Auth::user()->groupsOwner->count() }})</h2>
                     <hr>
-                    <ul class="list-unstyled list-group list-group-flush">
+                    <div class="d-flex flex-wrap">
                         @foreach (Auth::user()->groupsOwner as $x)
                             <?php $group = $x->group; ?>
                             <div class="card mt-4 me-3" style="width: 15em;height:22em">
@@ -23,7 +23,7 @@
                                 </div>
                             </div>
                         @endforeach
-                    </ul>
+                    </div>
                 </div>
             @endif
         </div>
@@ -31,7 +31,7 @@
         <div>
             @if (Auth::user()->groupsMember->count() > 0)
                 <div class="mt-5 mb-4 container">
-                    <h2>Member Groups ({{ Auth::user()->groupsMember->count() }})</h2>
+                    <h2>Groups Member ({{ Auth::user()->groupsMember->count() }})</h2>
                     <hr>
                     <div class="d-flex flex-wrap">
                         @foreach (Auth::user()->groupsMember as $x)
