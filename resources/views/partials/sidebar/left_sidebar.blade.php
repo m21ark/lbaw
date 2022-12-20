@@ -2,14 +2,10 @@
     id="notifications_container" style="max-height: 45em">
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
 
-        <span class="fs-4">Home</span>
-    </a>
-    <hr>
     <ul class="nav nav-pills flex-column mb-auwidth: 8emto">
 
-        <a href="/home" class=" btn mb-3 d-flex align-items-center justify-content-around">
+        <a href="/home" class=" btn mb-3 mt-4 d-flex align-items-center justify-content-around">
             <i class="fa-solid fa-house fa-2x"></i>
             <span style="width: 8em;font-size:1.2em" class="enc">Home</span>
         </a>
@@ -41,8 +37,7 @@
                 <span style="width: 8em;font-size:1.2em" class="enc">Notifications</span>
             </a>
 
-            <a href={{ url('/messages/') }}
-                class="btn mb-3 d-flex align-items-center justify-content-around">
+            <a href={{ url('/messages/') }} class="btn mb-3 d-flex align-items-center justify-content-around">
                 <span class="position-relative">
                     <i class="fa-solid fa-envelope fa-2x"></i>
                     <span
@@ -67,14 +62,14 @@
 
 
         @guest
-            <hr class="mt-4">
+            <hr class="mt-1">
 
             <h3>Your not logged in!</h3>
-            <p>Create an account to access most features</p>
+            <p class="mb-3">Create an account to access most features</p>
 
-            <a href={{ url('/about') }} class=" btn btn-outline-primary mb-3">About</a>
-            <a href={{ url('/contacts') }} class=" btn btn-outline-primary mb-3">Contacts </a>
-            <a href={{ url('/features') }} class=" btn btn-outline-primary mb-3">Features</a>
+            <a href={{ url('/about') }} class="btn btn-outline-primary mb-3 white_span_a"><span>About</span></a>
+            <a href={{ url('/contacts') }} class=" btn btn-outline-primary mb-3 white_span_a"><span>Contacts</span> </a>
+            <a href={{ url('/features') }} class=" btn btn-outline-primary mb-3 white_span_a"><span>Features</span></a>
         @endguest
 
 
@@ -147,9 +142,16 @@
 
 
         @guest
-            <a href={{ url('/about') }} class=" btn btn-outline-primary">About</a>
-            <a href={{ url('/contacts') }} class=" btn btn-outline-primary">Contacts </a>
-            <a href={{ url('/features') }} class=" btn btn-outline-primary">Features</a>
+            <a href="/home" class=" btn d-flex align-items-center justify-content-around">
+                <i class="fa-solid fa-house fa-2x"></i>
+            </a>
+
+            <a href={{ url('/about') }} class=" btn btn-outline-primary white_span_a"
+                style="width:20%"><span>About</span></a>
+            <a href={{ url('/contacts') }} class=" btn btn-outline-primary white_span_a"
+                style="width:20%"><span>Contacts</span> </a>
+            <a href={{ url('/features') }} class=" btn btn-outline-primary white_span_a"
+                style="width:20%"><span>Features</span></a>
         @endguest
 
 
