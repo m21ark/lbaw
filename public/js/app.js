@@ -1191,7 +1191,7 @@ function createGroupCard(group) {
         bio_short = bio_short.substring(0, 100) + '...'
 
     new_card.innerHTML = `
-    <div class="card mt-4 me-3" style="width: 15em;height:25em">
+    <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
         <img height="60%" src="/${group.photo}" class="card-img-top" alt="user_avatar">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
