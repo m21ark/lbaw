@@ -1422,7 +1422,7 @@ function markAsSeen($id, e) {
 
 function markAllAsSeen(e) {
     e.preventDefault();
-    console.log("ola")
+    createNotificationList(null)
     sendAjaxRequest('put', "/api/user/notifications/seen", {}, function () {
         if (this.status == 200) {
             _notifications = [];
@@ -1486,7 +1486,9 @@ function createCustomMessageBody(notf) {
 }
 
 function createNotificationList(event) {
-    event.preventDefault();
+
+    if (event !== null)
+        event.preventDefault();
 
     let notifications = document.querySelector('#notifications_container');
 
@@ -1507,13 +1509,18 @@ function createNotificationList(event) {
         document.querySelector('#popup_btn_post span').style.display = 'none';
         document.querySelector('#popup_btn_post').style.width = '100%';
 
-        let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
-
-        notifications.appendChild(clear_all);
-
-        assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
         // ISTO DEVIA SER MUDADO PARA SO MOSTRAR AS NOTIFICAÇÕES QUE NÃO ESTÃO VISTAS E DPS PODEMOS MARCAR COMO  --DONE
         // tb meter um numero limitado
+        if (_notifications.length == 0) {
+            notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
+            notifications.appendChild(createElementFromHTML('<button onClick="createNotificationList(null)" class="btn btn-secondary mt-5 text-center w-100">Close Window</button>'));
+        } else {
+
+            let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
+            notifications.appendChild(clear_all);
+            assignFunctionClick('#markAllAsSeen_notifications', markAllAsSeen)
+        }
+
         for (let i = 0; i < _notifications.length; i++) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">

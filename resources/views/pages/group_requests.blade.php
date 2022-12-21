@@ -13,12 +13,15 @@
                             <a href="/profile/{{ $requester->user->username }}"> {{ $requester->user->username }}</a>
                         </h5>
                         <p class="card-text">{{ substr($requester->user->bio, 0, 100) . '...' }}</p>
+
+                    </div>
+
+                    <div class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
                         <span data-sender="{{ $requester->user->id }}">
                             <input type="button" class="btn btn-primary btn-lg groups_request_accept" value="Accept"
                                 id="acceptReq_{{ $requester->user->id }}">
-                            <input type="button"
-                                class="btn btn-default btn-lg btn-outline-secondary groups_request_reject" value="Reject"
-                                id="rejectReq_{{ $requester->user->id }}">
+                            <input type="button" class="btn btn-default btn-lg btn-outline-secondary groups_request_reject"
+                                value="Reject" id="rejectReq_{{ $requester->user->id }}">
                         </span>
                     </div>
                 </div>
@@ -26,5 +29,3 @@
         @endforeach
     </div>
 @endsection
-
-

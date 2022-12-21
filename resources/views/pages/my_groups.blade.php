@@ -16,9 +16,14 @@
                         @foreach (Auth::user()->groupsOwner as $x)
                             <?php $group = $x->group; ?>
                             <div class="card mt-4 me-3" style="width: 15em;height:22em">
-                                <img height="70%" src="{{ asset($x->group->photo) }}" class="card-img-top" alt="user_avatar">
+                                <img height="60%" src="{{ asset($x->group->photo) }}" class="card-img-top" alt="user_avatar">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
+
+                                </div>
+
+                                <div
+                                    class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
                                     <a href="/group/{{ $x->group->name }}" class="btn btn-primary w-100">Open Group</a>
                                 </div>
                             </div>
@@ -35,11 +40,16 @@
                     <hr>
                     <div class="d-flex flex-wrap">
                         @foreach (Auth::user()->groupsMember as $x)
-                            <div class="card mt-4 me-3" style="width: 15em;height:22em">
-                                <img height="70%" src="{{ asset($x->group->photo) }}" class="card-img-top"
+                            <div class="card mt-4 me-3" style="width: 15em;height:25em">
+                                <img height="60%" src="{{ asset($x->group->photo) }}" class="card-img-top"
                                     alt="user_avatar">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
+
+                                </div>
+
+                                <div
+                                    class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
                                     <a href="/group/{{ $x->group->name }}" class="btn btn-primary w-100">Open Group</a>
                                 </div>
                             </div>
