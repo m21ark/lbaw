@@ -47,7 +47,6 @@
                 <span style="width: 8em;font-size:1.2em" class="enc">Messages</span>
             </a>
 
-
             <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
                 <span style="font-size:1.7em" class="me-4">Post</span>
                 <i class="fa-regular fa-square-plus fa-2x"></i>
@@ -59,7 +58,6 @@
                 <a href="/admin/statistics" class=" btn btn-outline-primary mt-3 mb-3 enc">Admin Stats</a>
             @endif
         @endauth
-
 
         @guest
             <hr class="mt-1">
@@ -102,8 +100,8 @@
             </a>
 
 
-            <a href="" class="btn  d-flex align-items-center justify-content-around" aria-current="page"
-                id="notification_icon">
+            <a href="{{ url('/notifications') }}" class="btn  d-flex align-items-center justify-content-around"
+                aria-current="page" >
                 <span class="position-relative">
                     <i class="fa-solid fa-bell fa-2x"></i>
                     <span

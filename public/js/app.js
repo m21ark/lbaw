@@ -1421,7 +1421,8 @@ function markAsSeen($id, e) {
 }
 
 function markAllAsSeen(e) {
-    e.preventDefault();
+    if (e !== null)
+        e.preventDefault();
     createNotificationList(null)
     sendAjaxRequest('put', "/api/user/notifications/seen", {}, function () {
         if (this.status == 200) {
@@ -1661,3 +1662,57 @@ function deleteFriendFromFriendPage() {
     });
 }
 
+
+
+
+function fillNotificationPage() {
+    if (window.location.pathname == "/notifications") {
+
+
+        let notifications = document.querySelector('#notifications_list_container');
+
+
+        if (_notifications.length == 0) {
+            notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
+        } else {
+
+            let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications2" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
+            notifications.appendChild(clear_all);
+            assignFunctionClick('#markAllAsSeen_notifications2', (e) => {
+                markAllAsSeen(e);
+
+                let notifications_items = document.querySelectorAll('#notifications_list_container .toast');
+
+                notifications_items.forEach(e => {
+                    e.remove();
+                });
+
+                let aux = document.querySelector('#markAllAsSeen_notifications2');
+                aux.remove();
+                notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
+
+            })
+        }
+
+        for (let i = 0; i < _notifications.length; i++) {
+            let notf = createElementFromHTML(`
+            <div class="toast show mb-3" style="width:100%;height:8em;">
+                <div class="toast-header">
+                  <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+                  <strong class="me-auto">${_notifications[i].sender.username}</strong>
+                  <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                  ${createCustomMessageBody(_notifications[i])}.
+                </div>
+            </div>`);
+            notifications.appendChild(notf);
+            notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
+        }
+    }
+}
+
+setTimeout(() => {
+    fillNotificationPage();
+}, 1000);

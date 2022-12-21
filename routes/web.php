@@ -72,6 +72,10 @@ Route::get('my_groups', function () {
     return view('pages.my_groups');
 });
 
+Route::get('notifications', function () {
+    return view('pages.notifications');
+});
+
 // ======================= DYNAMIC PAGES =======================
 
 Route::get('post/{id}', 'PostController@show')->name('post');
