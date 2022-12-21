@@ -33,26 +33,31 @@
 
         </div>
 
-        <div class="ms-4 orderFilter dropdown" style="width:8em">
+        <div class="ms-4 orderFilter dropdown" style="width:7em;">
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
-            <div class="dropdown_menu" style="z-index: 200000" hidden>
+            <div class="dropdown_menu feed_order_dropdown_btn" style="z-index: 5;position: absolute;" hidden>
+
+                <label class="list-group-item" for="order_by_label">
+                    Order by:
+                </label>
+                <p class="list-group-item-check pe-none feed-order" id="order_by_label"></p>
 
                 <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
                     id="feed_radio_order_popularity" onclick="" value="popularity" checked>
-                <label class="list-group-item rounded-3" for="feed_radio_order_popularity">
-                    Order by Popularity
+                <label class="list-group-item rounded-1" for="feed_radio_order_popularity">
+                    Popularity
                 </label>
 
                 <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
                     id="feed_radio_order_date" onclick="" value="date">
-                <label class="list-group-item rounded-3" for="feed_radio_order_date">
-                    Order by Date
+                <label class="list-group-item rounded-1" for="feed_radio_order_date">
+                    Date
                 </label>
 
                 <input class="list-group-item-check pe-none feed-order" type="radio" name="feed_order"
                     id="feed_radio_order_likes" onclick="" value="likes" checked>
-                <label class="list-group-item rounded-3" for="feed_radio_order_likes">
-                    Order by Likes
+                <label class="list-group-item rounded-1" for="feed_radio_order_likes">
+                    Like Count
                 </label>
 
             </div>

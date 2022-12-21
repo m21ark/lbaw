@@ -796,6 +796,7 @@ function updateFeed(feed) {
     let orders = document.querySelectorAll('.feed-order');
     if (orders) {
         orders.forEach(function (order) {
+            document.querySelector('.feed_order_dropdown_btn').setAttribute('hidden', 'hidden')
             if (order.checked) type_order = order.value
         })
     }
@@ -876,7 +877,7 @@ function updateFeedOnClick() {
 
 function updateFeedOnScroll() {
 
-    window.onscroll = function(ev) {
+    window.onscroll = function (ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
             let filters = document.querySelectorAll('#feed_filter input')
 
@@ -1174,8 +1175,12 @@ function createUserCard(user) {
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
-            <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Profile</a>
+
         </div>
+
+        <div class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
+        <a href="/profile/${user.username}" class="btn btn-primary w-100">Visit Profile</a>
+    </div>
     </div>
     `
     return new_card;
@@ -1196,6 +1201,10 @@ function createGroupCard(group) {
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
+
+        </div>
+
+        <div class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
             <a href="/group/${group.name}" class="btn btn-primary w-100">Visit Group</a>
         </div>
     </div>
@@ -1370,12 +1379,17 @@ var _notifications = []
 
 function updateNrNotfications() {
     let nr = document.querySelector('#notf_nr');
-    if (nr === null)
+    let nr2 = document.querySelector('#notf_nr2');
+    if (nr === null || nr2 === null)
         return;
     nr.innerHTML = _notifications.length;
-    //console.log(nr)
-    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0))
+    nr2.innerHTML = _notifications.length;
+
+    if ((nr.hidden && _notifications.length > 0) || (!nr.hidden && _notifications.length === 0)) {
         document.querySelector('#notf_nr').toggleAttribute('hidden');
+        document.querySelector('#notf_nr2').toggleAttribute('hidden');
+    }
+
 
 }
 
@@ -1542,13 +1556,13 @@ function sendRequestResponse(isAFriendReq, accept) {
     return function () {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
-        
+
         let gname = window.location.pathname.split('/')[2];;
 
-        let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname +'/request/' + id + "/" + response ;
+        let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname + '/request/' + id + "/" + response;
         console.log(reqURI);
         let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
-        sendAjaxRequest('put', reqURI , {}, function () {
+        sendAjaxRequest('put', reqURI, {}, function () {
             if (this.status == 200) {
                 let friend_request = document.querySelector(queryReqs);
                 friend_request.remove();
@@ -1598,18 +1612,18 @@ function deleteGRequest() {
     let parent = this;
     let child = this.firstChild;
     sendAjaxRequest('delete', "/api/group/request/" + child.dataset.id, {},
-    function (e) {
-        if (this.status == 200) {
-            child.classList.remove('fa-clock-rotate-left');
-            child.classList.add('fa-door-open');
-            child.classList.add('send_g_request');
-            parent.removeEventListener('click', deleteGRequest);
-            parent.addEventListener('click', sendGRequest);
-            parent.classList.remove('cancel_g_request');
-            parent.classList.add('send_g_request');
-        }
-        addedHandler(null).call(this);
-    });
+        function (e) {
+            if (this.status == 200) {
+                child.classList.remove('fa-clock-rotate-left');
+                child.classList.add('fa-door-open');
+                child.classList.add('send_g_request');
+                parent.removeEventListener('click', deleteGRequest);
+                parent.addEventListener('click', sendGRequest);
+                parent.classList.remove('cancel_g_request');
+                parent.classList.add('send_g_request');
+            }
+            addedHandler(null).call(this);
+        });
 }
 
 function deleteFriendship() {
@@ -1631,10 +1645,10 @@ function deleteFriendship() {
 }
 
 function deleteFriendFromFriendPage() {
-    let card = this.parentNode.parentNode.parentNode.parentNode
+    let card = this.parentNode.parentNode.parentNode
     sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
         if (this.status == 200) {
-            card.innerHTML = ""
+            card.style = "display: none";
         }
         addedHandler(null).call(this);
     });
