@@ -138,8 +138,6 @@ function addEventListeners() {
 
 
     // LIKES ACTIONS
-    assignFunctionClickAll('.like_btn_post', sendLikePostRequest)
-    assignFunctionClickAll('.like_btn_comment', sendLikeCommentRequest)
     assignFunctionClickAll('.kick_member_button', sendKickpMemberRequest)
     assignFunctionClickAll('.reveal_comment_replies', toggleReplySectionShow)
     assignFunctionClickAll('.popup_btn_report_comment_create', sendCreateReportCommentRequest)
@@ -471,6 +469,7 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
+    console.log(event)
     let e = event.currentTarget
     toggleLikeHTML(e)
     let id_user = e.dataset.uid
@@ -479,6 +478,7 @@ function sendLikePostRequest(event) {
 }
 
 function sendLikeCommentRequest(event) {
+    console.log(event)
     let e = event.currentTarget
     toggleLikeHTML(e)
     let id_user = e.dataset.uid
@@ -825,7 +825,7 @@ function updateFeed(feed) {
         offset += 5
     })
 
-    setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
+
 }
 
 function updateFeedOnLoad() {
@@ -1664,36 +1664,35 @@ function deleteFriendFromFriendPage() {
 
 
 function fillNotificationPage() {
-    if (window.location.pathname == "/notifications") {
 
 
-        let notifications = document.querySelector('#notifications_list_container');
+    let notifications = document.querySelector('#notifications_list_container');
 
 
-        if (_notifications.length == 0) {
+    if (_notifications.length == 0) {
+        notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
+    } else {
+
+        let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications2" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
+        notifications.appendChild(clear_all);
+        assignFunctionClick('#markAllAsSeen_notifications2', (e) => {
+            markAllAsSeen(e);
+
+            let notifications_items = document.querySelectorAll('#notifications_list_container .toast');
+
+            notifications_items.forEach(e => {
+                e.remove();
+            });
+
+            let aux = document.querySelector('#markAllAsSeen_notifications2');
+            aux.remove();
             notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
-        } else {
 
-            let clear_all = createElementFromHTML('<a href="#!" id="markAllAsSeen_notifications2" class="btn btn-outline-secondary mt-3 mb-3 w-100">Clear all</a>')
-            notifications.appendChild(clear_all);
-            assignFunctionClick('#markAllAsSeen_notifications2', (e) => {
-                markAllAsSeen(e);
+        })
+    }
 
-                let notifications_items = document.querySelectorAll('#notifications_list_container .toast');
-
-                notifications_items.forEach(e => {
-                    e.remove();
-                });
-
-                let aux = document.querySelector('#markAllAsSeen_notifications2');
-                aux.remove();
-                notifications.appendChild(createElementFromHTML('<h4 class="mt-5 text-center">No pending notifications</h4>'))
-
-            })
-        }
-
-        for (let i = 0; i < _notifications.length; i++) {
-            let notf = createElementFromHTML(`
+    for (let i = 0; i < _notifications.length; i++) {
+        let notf = createElementFromHTML(`
             <div class="toast show mb-3" style="width:100%;height:8em;">
                 <div class="toast-header">
                   <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
@@ -1705,12 +1704,14 @@ function fillNotificationPage() {
                   ${createCustomMessageBody(_notifications[i])}.
                 </div>
             </div>`);
-            notifications.appendChild(notf);
-            notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
-        }
+        notifications.appendChild(notf);
+        notf.querySelector('.btn-close').addEventListener('click', markAsSeen(_notifications[i].id, notf));
     }
 }
 
-setTimeout(() => {
-    fillNotificationPage();
-}, 1000);
+
+if (window.location.pathname == "/notifications") {
+    setTimeout(() => {
+        fillNotificationPage();
+    }, 1000);
+}

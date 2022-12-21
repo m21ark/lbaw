@@ -11,8 +11,8 @@
         @auth
             @if ($comment->poster->id !== Auth::user()->id)
                 <a href="#" class="text-decoration-none comment_reply_btn ms-4" data-id="{{ $comment->id }}"
-                    data-username="{{ $comment->poster->username }}"><svg xmlns="http://www.w3.org/2000/svg"
-                        width="30" height="30" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                    data-username="{{ $comment->poster->username }}"><svg xmlns="http://www.w3.org/2000/svg" width="30"
+                        height="30" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
                         <path
                             d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
                     </svg></a>
@@ -33,7 +33,7 @@
     <div class="pt-3 card-footer d-flex justify-content-center ">
         <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $comment->likes->count() }}</p>
         @auth
-            <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
+            <a class="text-decoration-none " data-uid={{ Auth::user()->id }} onclick="sendLikePostRequest(event)"
                 data-id={{ $comment->id }} href="#!">
 
                 <?php
@@ -52,15 +52,14 @@
                 @endif
             </a>
         @else
-            <a class="like_btn_comment text-decoration-none">
+            <a class="text-decoration-none" onclick="sendLikePostRequest(event)">
                 <h2 class="me-1"><strong>&#9825;</strong></h2>
             </a>
         @endauth
 
         @if (sizeof($comment->replies) > 0)
             <a class="ms-4 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}"
-                href="#!"><span class="me-3"
-                    style="font-size: 1.3em">{{ sizeof($comment->replies) }}</span><svg
+                href="#!"><span class="me-3" style="font-size: 1.3em">{{ sizeof($comment->replies) }}</span><svg
                     xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
                     class="bi bi-menu-up" viewBox="0 0 16 16">
                     <path
@@ -102,8 +101,8 @@
                         <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $reply->likes->count() }}</p>
                         @auth
 
-                            <a class="like_btn_comment text-decoration-none " data-uid={{ Auth::user()->id }}
-                                data-id={{ $reply->id }} href="#!">
+                            <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
+                                onclick="sendLikePostRequest(event)" data-id={{ $reply->id }} href="#!">
 
                                 <?php
                                 $userLiked = false;
@@ -121,7 +120,7 @@
                                 @endif
                             </a>
                         @else
-                            <a class="like_btn_comment text-decoration-none">
+                            <a class="text-decoration-none" onclick="sendLikePostRequest(event)">
                                 <h2 class="me-1"><strong>&#9825;</strong></h2>
                             </a>
                         @endauth

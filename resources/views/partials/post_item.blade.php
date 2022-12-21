@@ -69,7 +69,7 @@
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
 
-                                <a href="#!" class="like_btn_post text-decoration-none"
+                                <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)"
                                     data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
 
                                     <?php
@@ -91,7 +91,7 @@
                         @else
                             <div class="d-flex">
                                 <p class="me-3">{{ sizeof($post->likes) }}</p>
-                                <a href="#!" class="like_btn_post text-decoration-none">
+                                <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)">
                                     <h2><strong>&#9825;</strong></h2>
                                 </a>
                             </div>
