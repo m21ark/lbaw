@@ -469,7 +469,6 @@ function sendDeleteProfileRequest() {
 
 
 function sendLikePostRequest(event) {
-    console.log(event)
     let e = event.currentTarget
     toggleLikeHTML(e)
     let id_user = e.dataset.uid
@@ -478,7 +477,6 @@ function sendLikePostRequest(event) {
 }
 
 function sendLikeCommentRequest(event) {
-    console.log(event)
     let e = event.currentTarget
     toggleLikeHTML(e)
     let id_user = e.dataset.uid
@@ -487,17 +485,17 @@ function sendLikeCommentRequest(event) {
 }
 
 function toggleLikeHTML(event) {
-    let like_icon = event.firstElementChild
-    hasLiked = like_icon.dataset.liked === '1'
 
-    event.previousElementSibling.innerHTML = parseInt(event.previousElementSibling.innerHTML) + (hasLiked ? -1 : 1);
-    like_icon.setAttribute('data-liked', (hasLiked ? '0' : '1'));
-    like_icon.innerHTML = hasLiked ? '&#9825;' : '&#x2764;'
+    let like_a = event
+    let hasLiked = like_a.dataset.liked === '1'
+    let like_icon = like_a.lastElementChild.firstElementChild
 
-    if (hasLiked)
-        like_icon.style.fontSize = '1.3em'
-    else
-        like_icon.style.fontSize = '1.2em'
+    // console.log(like_a, like_icon, hasLiked)
+
+    like_a.firstElementChild.innerHTML = parseInt(like_a.firstElementChild.innerHTML) + (hasLiked ? -1 : 1);
+    like_a.setAttribute('data-liked', (hasLiked ? '0' : '1'));
+    like_icon.innerHTML = !hasLiked ? '<i class="fa-solid fa-heart text-danger"></i>' : ' <i class="fa-regular fa-heart text-primary"></i>'
+
 }
 
 

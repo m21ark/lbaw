@@ -37,29 +37,39 @@
     </div>
 
     <div class="pt-3 card-footer d-flex justify-content-center ">
-        <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $comment->likes->count() }}</p>
-        @auth
-            <a class="text-decoration-none " data-uid={{ Auth::user()->id }} onclick="sendLikeCommentRequest(event)"
-                data-id={{ $comment->id }} href="#!">
 
-                <?php
-                $userLiked = false;
-                foreach ($comment->likes as $like) {
-                    if (Auth::user()->id == $like->id_user) {
-                        $userLiked = true;
-                    }
+        @auth
+
+            <?php
+            $userLiked = false;
+            foreach ($comment->likes as $like) {
+                if (Auth::user()->id == $like->id_user) {
+                    $userLiked = true;
                 }
-                ?>
+            }
+            ?>
+
+            <a class="text-decoration-none " data-uid={{ Auth::user()->id }} onclick="sendLikeCommentRequest(event)"
+                data-id={{ $comment->id }} data-liked="{{ $userLiked }}" href="#!">
+
+                <span class="me-3 text-dark" style="font-size:1.5em;">{{ $comment->likes->count() }}</span>
+
 
                 @if ($userLiked)
-                    <h3 class="me-1 p-1" data-liked='1' style="font-size:1.2em;">&#x2764;</h3>
+                    <span style="font-size: 1.7em">
+                        <i class="fa-solid fa-heart text-danger"></i>
+                    </span>
                 @else
-                    <h3 class="me-1  p-1" data-liked='0' style="font-size:1.5em;">&#9825;</h3>
+                    <span style="font-size: 1.7em">
+                        <i class="fa-regular fa-heart"></i>
+                    </span>
                 @endif
             </a>
         @else
-            <a class="text-decoration-none" onclick="sendLikeCommentRequest(event)">
-                <h2 class="me-1"><strong>&#9825;</strong></h2>
+            <a class="text-decoration-none">
+                <span style="font-size: 1.7em">
+                    <i class="fa-regular fa-heart"></i>
+                </span>
             </a>
         @endauth
 
@@ -67,9 +77,14 @@
 
         @if (sizeof($comment->replies) > 0)
             <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!">
-                <span class="me-3" style="font-size: 1.4em">{{ sizeof($comment->replies) }}
-                    <span style="font-size: 1.1em"> <i class="ms-3 fa-regular fa-comment-dots"></i></span>
+
+                <span class="mt-1 me-3 text-dark" style="font-size:1.5em">{{ sizeof($comment->replies) }}</span>
+
+                <span class="me-3" style="font-size: 1.7em">
+                    <i class="ms-3 fa-regular fa-comment-dots"></i>
                 </span>
+
+
             </a>
         @endif
 
@@ -112,29 +127,39 @@
                     </div>
 
                     <div class="pt-3 card-footer d-flex justify-content-center ">
-                        <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $reply->likes->count() }}</p>
-                        @auth
-                            <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
-                                onclick="sendLikeCommentRequest(event)" data-id={{ $reply->id }} href="#!">
 
-                                <?php
-                                $userLiked = false;
-                                foreach ($comment->likes as $like) {
-                                    if (Auth::user()->id == $like->id_user) {
-                                        $userLiked = true;
-                                    }
+                        @auth
+
+                            <?php
+                            $userLiked = false;
+                            foreach ($reply->likes as $like) {
+                                if (Auth::user()->id == $like->id_user) {
+                                    $userLiked = true;
                                 }
-                                ?>
+                            }
+                            ?>
+
+                            <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
+                                onclick="sendLikeCommentRequest(event)" data-id={{ $reply->id }}
+                                data-liked="{{ $userLiked }}" href="#!">
+
+                                <span class="me-3 text-dark" style="font-size:1.5em;">{{ $reply->likes->count() }}</span>
 
                                 @if ($userLiked)
-                                    <h3 class="me-1 p-1" data-liked='1' style="font-size:1.2em;">&#x2764;</h3>
+                                    <span style="font-size: 1.7em">
+                                        <i class="fa-solid fa-heart text-danger"></i>
+                                    </span>
                                 @else
-                                    <h3 class="me-1  p-1" data-liked='0' style="font-size:1.5em;">&#9825;</h3>
+                                    <span style="font-size: 1.7em">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </span>
                                 @endif
                             </a>
                         @else
-                            <a class="text-decoration-none" onclick="sendLikeCommentRequest(event)">
-                                <h2 class="me-1"><strong>&#9825;</strong></h2>
+                            <a class="text-decoration-none">
+                                <span style="font-size: 1.7em">
+                                    <i class="fa-regular fa-heart"></i>
+                                </span>
                             </a>
                         @endauth
 
