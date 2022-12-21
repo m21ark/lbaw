@@ -1,8 +1,8 @@
 <div class="message_body overflow-auto">
 
-    <?php 
+    <?php
         $messageGroupDay = [];
-        foreach($messages as $message) { 
+        foreach($messages as $message) {
             $messageGroupDay[Str::substr($message->date, 0, 10)][] = $message;
         }
         ?>
@@ -12,11 +12,11 @@
             <p class="text-center mx-3 mb-0" data-date="{{$date}}" style="color: #a2aab7;">{{$date}}</p>
         </div>
 
-        <?php 
+        <?php
             $separateBySender = [];
             $separateBySender[0][0] = $messageInDay[0];
             $j = 0;
-            for ($i=1; $i < count($messageInDay); $i++) { 
+            for ($i=1; $i < count($messageInDay); $i++) {
                 if ($messageInDay[$i]->id_sender !== $messageInDay[$i-1]->id_sender) {
                     $j++;
                 }

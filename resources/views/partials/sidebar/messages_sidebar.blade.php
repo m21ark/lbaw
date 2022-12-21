@@ -10,7 +10,8 @@
                 <?php $name = $message->id_sender === Auth::user()->id ? $message->receiver->username : $message->sender->username; ?>
                 <a href="/messages/{{ $name }}" class="list-group-item list-group-item-action d-flex gap-3 py-3"
                     aria-current="true">
-                    <img src="/{{ $message->id_sender === Auth::user()->id ? $message->receiver->photo : $message->sender->photo }}"
+                    <img class="rounded-circle"
+                        src="/{{ $message->id_sender === Auth::user()->id ? $message->receiver->photo : $message->sender->photo }}"
                         alt="user_avatar" width="50" height="50">
                     <div class="d-flex gap-2 w-100 justify-content-between">
                         <div>
