@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2 class="mt-4 mb-4">Admin Console</h2>
+    <h2 class="mt-4 mb-4">Admin Console<a href="/admin/statistics" class="ms-3 btn btn-outline-primary mt-3 mb-3 enc"><i
+                class="fa-solid fa-bar-chart me-2"></i>Statistics</a></h2>
 
     <div class="position-absolute d-flex" style="right:3%">
         <h4 class="me-3">Pendent Reports</h4>

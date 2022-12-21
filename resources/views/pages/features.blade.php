@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="list-group">
-        <div class="container px-4 py-5" id="hanging-icons">
+        <div class="container px-2 py-3" id="hanging-icons">
             <h2 class="pb-2 border-bottom">Main Features</h2>
-            <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="row g-2 py-3 mx-2 my-2">
 
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start m-2  border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Group</h4>
                         <hr>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Message</h4>
                         <hr>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Friends</h4>
                         <hr>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Posts</h4>
                         <hr>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Search</h4>
                         <hr>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Login/Logout</h4>
                         <hr>
@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Owners</h4>
                         <hr>
@@ -81,7 +81,7 @@
                 </div>
 
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Private/Public Profiles or Groups</h4>
                         <hr>
@@ -92,7 +92,7 @@
 
                     </div>
                 </div>
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Register</h4>
                         <hr>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
 
-                <div class="col d-flex align-items-start m-3 border border-secondary p-3">
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
                     <div>
                         <h4 class="fs-2">Likes/comments</h4>
                         <hr>
@@ -119,7 +119,7 @@
             </div>
         </div>
 
-        <a href="{{ route('login') }}" class="w-100 btn btn-primary">Join Nexus network</a>
+        <a href="{{ route('login') }}" class="w-100 btn btn-primary mb-5">Join Nexus network</a>
 
 
     </div>
