@@ -235,7 +235,7 @@ function assignFunctionClickAll(querySelector, func) {
     let aux = document.querySelectorAll(querySelector);
     if (aux)
         if (aux.length > 0)
-            aux.forEach(e => e.addEventListener('click', (e) => func(e), { once: true }));
+            aux.forEach(e => e.addEventListener('click', (e) => func(e)));
 }
 
 function togglePostDropDown(parent) {
