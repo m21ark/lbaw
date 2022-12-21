@@ -33,7 +33,7 @@
     <div class="pt-3 card-footer d-flex justify-content-center ">
         <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $comment->likes->count() }}</p>
         @auth
-            <a class="text-decoration-none " data-uid={{ Auth::user()->id }} onclick="sendLikePostRequest(event)"
+            <a class="text-decoration-none " data-uid={{ Auth::user()->id }} onclick="sendLikeCommentRequest(event)"
                 data-id={{ $comment->id }} href="#!">
 
                 <?php
@@ -52,7 +52,7 @@
                 @endif
             </a>
         @else
-            <a class="text-decoration-none" onclick="sendLikePostRequest(event)">
+            <a class="text-decoration-none" onclick="sendLikeCommentRequest(event)">
                 <h2 class="me-1"><strong>&#9825;</strong></h2>
             </a>
         @endauth
@@ -102,7 +102,7 @@
                         @auth
 
                             <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
-                                onclick="sendLikePostRequest(event)" data-id={{ $reply->id }} href="#!">
+                                onclick="sendLikeCommentRequest(event)" data-id={{ $reply->id }} href="#!">
 
                                 <?php
                                 $userLiked = false;
@@ -120,7 +120,7 @@
                                 @endif
                             </a>
                         @else
-                            <a class="text-decoration-none" onclick="sendLikePostRequest(event)">
+                            <a class="text-decoration-none" onclick="sendLikeCommentRequest(event)">
                                 <h2 class="me-1"><strong>&#9825;</strong></h2>
                             </a>
                         @endauth
