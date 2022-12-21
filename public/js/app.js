@@ -237,7 +237,7 @@ function assignFunctionClickAll(querySelector, func) {
     let aux = document.querySelectorAll(querySelector);
     if (aux)
         if (aux.length > 0)
-            aux.forEach(e => e.addEventListener('click', (e) => func(e)));
+            aux.forEach(e => e.addEventListener('click', (e) => func(e), { once: true }));
 }
 
 function togglePostDropDown(parent) {
@@ -931,10 +931,8 @@ function createPost(post) {
         <div class="d-flex">
             <p class="me-3">${post.likes_count}</p>
 
-            <a href="#!" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
-
+            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
                ${like}
-
             </a>
         </div>
         `
@@ -944,7 +942,7 @@ function createPost(post) {
         bottom = `
         <div class="d-flex">
             <p class="me-3">${post.likes_count}</p>
-            <a href="#!" class="like_btn_post text-decoration-none">
+            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none">
                 <h2><strong>&#9825;</strong></h2>
             </a>
         </div>
@@ -1157,7 +1155,7 @@ function updateSearch() {
 
     })
 
-    setTimeout(() => assignFunctionClickAll('.like_btn_post', sendLikePostRequest), 1000);
+
 }
 
 
