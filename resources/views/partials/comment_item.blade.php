@@ -1,27 +1,33 @@
-<div class="card mb-4">
-    <a href="#!" class="btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">Report</a>
-    <div class="card-header d-flex justify-content-center">
+<div class="card mb-4 comment_item">
+    <div class="card-header d-flex justify-content-evenly align-items-center">
         @auth
             @if (Auth::user()->id == $comment->id_commenter)
                 <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
-                    class="text-decoration-none popup_btn_comment_edit me-4">🖉</a>
+                    class="pt-1 text-decoration-none popup_btn_comment_edit ">
+                    <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                </a>
+            @else
+                <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">
+                    <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                </a>
             @endif
         @endauth
+
         <small>{{ $comment->post_date }}</small>
         @auth
             @if ($comment->poster->id !== Auth::user()->id)
-                <a href="#" class="text-decoration-none comment_reply_btn ms-4" data-id="{{ $comment->id }}"
-                    data-username="{{ $comment->poster->username }}"><svg xmlns="http://www.w3.org/2000/svg" width="30"
-                        height="30" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z" />
-                    </svg></a>
+                <a href="#" class="pt-2 text-decoration-none comment_reply_btn" data-id="{{ $comment->id }}"
+                    data-username="{{ $comment->poster->username }}">
+                    <h3><i class="fa-solid fa-reply"></i></h3>
+                </a>
+                </a>
             @endif
         @endauth
     </div>
-    <div class="card-header d-flex justify-content-around align-items-center">
+
+    <div class="card-header d-flex justify-content-center align-items-center">
         <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}" alt=""
-            width="50" class="rounded-circle">
+            width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
             href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
     </div>
@@ -57,37 +63,46 @@
             </a>
         @endauth
 
+        <span class="me-5"></span>
+
         @if (sizeof($comment->replies) > 0)
-            <a class="ms-4 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}"
-                href="#!"><span class="me-3" style="font-size: 1.3em">{{ sizeof($comment->replies) }}</span><svg
-                    xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                    class="bi bi-menu-up" viewBox="0 0 16 16">
-                    <path
-                        d="M7.646 15.854a.5.5 0 0 0 .708 0L10.207 14H14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3.793l1.853 1.854zM1 9V6h14v3H1zm14 1v2a1 1 0 0 1-1 1h-3.793a1 1 0 0 0-.707.293l-1.5 1.5-1.5-1.5A1 1 0 0 0 5.793 13H2a1 1 0 0 1-1-1v-2h14zm0-5H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2zM2 11.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 0-1h-8a.5.5 0 0 0-.5.5zm0-4a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11a.5.5 0 0 0-.5.5zm0-4a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 0-1h-6a.5.5 0 0 0-.5.5z" />
-                </svg></a>
+            <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!">
+                <span class="me-3" style="font-size: 1.4em">{{ sizeof($comment->replies) }}
+                    <span style="font-size: 1.1em"> <i class="ms-3 fa-regular fa-comment-dots"></i></span>
+                </span>
+            </a>
         @endif
 
     </div>
 
     @if (sizeof($comment->replies) > 0)
         <div class="comment_reply_section" id="comment_reply_section_{{ $comment->id }}" hidden>
-            <h4 class="mt-4">Replies</h4>
+            <h4 class="mt-4 mb-2">Replies</h4>
             @foreach ($comment->replies as $reply)
                 <div class="card mb-4 comment_reply">
 
-                    <div class="card-header d-flex justify-content-center">
+                    <div class="card-header d-flex justify-content-evenly align-items-center">
                         @auth
                             @if (Auth::user()->id == $reply->id_commenter)
                                 <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
-                                    class="text-decoration-none popup_btn_comment_edit me-4">🖉</a>
+                                    class="pt-1 text-decoration-none popup_btn_comment_edit ">
+                                    <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                                </a>
+                            @else
+                                <a href="#!" class="pt-2 btn popup_btn_report_comment_create"
+                                    data-id="{{ $reply->id }}">
+                                    <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                                </a>
                             @endif
                         @endauth
+
                         <small>{{ $reply->post_date }}</small>
 
                     </div>
-                    <div class="card-header d-flex justify-content-around align-items-center">
+
+                    <div class="card-header d-flex justify-content-center align-items-center">
                         <img href="/profile/{{ $reply->poster->username }}" src="/{{ $reply->poster->photo }}"
-                            alt="" width="50" class="rounded-circle">
+                            alt="" width="50" class="rounded-circle me-5">
                         <a class="text-decoration-none"
                             href="/profile/{{ $reply->poster->username }}">{{ $reply->poster->username }}</a>
                     </div>
@@ -97,16 +112,14 @@
                     </div>
 
                     <div class="pt-3 card-footer d-flex justify-content-center ">
-
                         <p class="like_count mt-1 me-3" style="font-size:1.3em;">{{ $reply->likes->count() }}</p>
                         @auth
-
                             <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
                                 onclick="sendLikeCommentRequest(event)" data-id={{ $reply->id }} href="#!">
 
                                 <?php
                                 $userLiked = false;
-                                foreach ($reply->likes as $like) {
+                                foreach ($comment->likes as $like) {
                                     if (Auth::user()->id == $like->id_user) {
                                         $userLiked = true;
                                     }
@@ -124,7 +137,9 @@
                                 <h2 class="me-1"><strong>&#9825;</strong></h2>
                             </a>
                         @endauth
+
                     </div>
+
 
 
                 </div>

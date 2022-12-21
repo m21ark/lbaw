@@ -13,8 +13,6 @@
 
                     <small class="me-5">{{ $post->post_date }}</small>
 
-
-
                     <div class="dropdown">
                         <button class="btn dropdownPostButton" type="button">&vellip;</button>
                         <div class="dropdown_menu" style="z-index: 200000" hidden>
@@ -45,72 +43,72 @@
                 </div>
 
 
-                @if (!$post->images->isEmpty())
-                    @include('partials.post_carousel_image')
-                @endif
+                <a href="/post/{{ $post->id }}" class="text-decoration-none" style="color: black">
+                    @if (!$post->images->isEmpty())
+                        @include('partials.post_carousel_image')
+                    @endif
 
-
-                <div>
-
-                    <p class="text-justify p-2" style="margin-bottom:0em ">{{ $post->text }}</p>
 
                     <div>
-                        @foreach ($post->topics as $post_topic)
-                            <a href="/search/{{ $post_topic->topic->topic }}"
-                                class="btn btn-primary me-2 mb-3 ms-2">#{{ $post_topic->topic->topic }}</a>
-                        @endforeach
-                    </div>
+                        <p class="text-justify p-2" style="margin-bottom:0em ">{{ $post->text }}</p>
 
-
-
-                    <div class="card-footer d-flex justify-content-evenly">
-
-                        @if (Auth::check())
-                            <div class="d-flex">
-                                <p class="me-3">{{ sizeof($post->likes) }}</p>
-
-                                <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)"
-                                    data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
-
-                                    <?php
-                                    $userLiked = false;
-                                    foreach ($post->likes as $like) {
-                                        if (Auth::user()->id == $like->id_user) {
-                                            $userLiked = true;
-                                        }
-                                    }
-                                    ?>
-                                    @if ($userLiked)
-                                        <h3 data-liked='1' style="font-size:1.3em;">&#x2764;</h3>
-                                    @else
-                                        <h3 data-liked='0' style="font-size:1.3em;">&#9825;</h3>
-                                    @endif
-
-                                </a>
-                            </div>
-                        @else
-                            <div class="d-flex">
-                                <p class="me-3">{{ sizeof($post->likes) }}</p>
-                                <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)">
-                                    <h2><strong>&#9825;</strong></h2>
-                                </a>
-                            </div>
-                        @endif
-
-                        <div class="d-flex">
-                            <p class="me-3">{{ sizeof($post->comments) }}</p>
-                            <a href="/post/{{ $post->id }}" class="text-decoration-none"><span
-                                    class="commenticon">&#128172;</span></a>
+                        <div>
+                            @foreach ($post->topics as $post_topic)
+                                <a href="/search/{{ $post_topic->topic->topic }}"
+                                    class="btn btn-primary me-2 mb-3 ms-2">#{{ $post_topic->topic->topic }}</a>
+                            @endforeach
                         </div>
-
-
                     </div>
+
+                </a>
+
+                <div class="card-footer d-flex justify-content-evenly">
+
+                    @if (Auth::check())
+                        <div class="d-flex">
+                            <p class="me-3">{{ sizeof($post->likes) }}</p>
+
+                            <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)"
+                                data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
+
+                                <?php
+                                $userLiked = false;
+                                foreach ($post->likes as $like) {
+                                    if (Auth::user()->id == $like->id_user) {
+                                        $userLiked = true;
+                                    }
+                                }
+                                ?>
+                                @if ($userLiked)
+                                    <h3 data-liked='1' style="font-size:1.3em;">&#x2764;</h3>
+                                @else
+                                    <h3 data-liked='0' style="font-size:1.3em;">&#9825;</h3>
+                                @endif
+
+                            </a>
+                        </div>
+                    @else
+                        <div class="d-flex">
+                            <p class="me-3">{{ sizeof($post->likes) }}</p>
+                            <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)">
+                                <h2><strong>&#9825;</strong></h2>
+                            </a>
+                        </div>
+                    @endif
+
+                    <div class="d-flex">
+                        <p class="me-3">{{ sizeof($post->comments) }}</p>
+                        <a href="/post/{{ $post->id }}" class="text-decoration-none"><span
+                                class="commenticon">&#128172;</span></a>
+                    </div>
+
 
                 </div>
 
+
                 @isset($showComments)
                     @auth
-                        <div class="card_footer form-control d-flex align-items-center ">
+                        <div class="card_footer form-control d-flex align-items-center">
                             <input type="text" name="comment_post" data-uid={{ Auth::user()->id }}
                                 data-pid={{ $post->id }} id="comment_post_input" class="me-2 form-control mt-3 mb-2"
                                 placeholder="Make a comment">
