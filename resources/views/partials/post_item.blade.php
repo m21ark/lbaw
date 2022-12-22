@@ -108,12 +108,14 @@
                         </a>
                     @else
                         <a class="text-decoration-none">
+                            <span class="me-3 text-dark" style="font-size:1.2em;">{{ $post->likes->count() }}</span>
                             <span style="font-size: 1.3em">
                                 <i class="fa-regular fa-heart"></i>
                             </span>
                         </a>
 
                         <a class="text-decoration-none">
+                            <span class="mt-1 me-3 text-dark" style="font-size:1.2em">{{ sizeof($post->comments) }}</span>
                             <span style="font-size: 1.3em">
                                 <i class="ms-3 fa-regular fa-comment-dots"></i>
                             </span>

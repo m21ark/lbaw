@@ -67,6 +67,7 @@
             </a>
         @else
             <a class="text-decoration-none">
+                <span class="me-3 text-dark" style="font-size:1.5em;">{{ $comment->likes->count() }}</span>
                 <span style="font-size: 1.7em">
                     <i class="fa-regular fa-heart"></i>
                 </span>
