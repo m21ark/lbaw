@@ -191,6 +191,17 @@ ul.nav a:hover {
     max-width: 20em;
 }
 
+
+.dropdown_menu>label.list-group-item:hover {
+    background-color: #006EF5;
+    color: white;
+    cursor: pointer;
+}
+
+.dropdown_menu>label.list-group-item.no_hover:hover {
+    cursor: default;
+}
+
 /*  ====================== POSTS ===================== */
 
 .post_item img {
