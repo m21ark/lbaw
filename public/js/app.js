@@ -386,9 +386,8 @@ function sendKickpMemberRequest(event) {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { location.reload();});
 
-    location.reload();
 }
 
 

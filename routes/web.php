@@ -118,13 +118,11 @@ Route::delete('api/profile/{username}', 'ProfileController@delete');
 // ======================= OWNER CRUD =======================
 
 Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@addGroupOwner'); // talvez n seja post
-Route::delete('api/group/{id_group}/owner/{id_user}', 'GroupController@removeGroupOwner');
 
 
 // ======================= MEMBER CRUD =======================
 
 Route::get('api/group/{id_group}/member/{id_user}', 'GroupController@getGroupMembers');
-Route::post('api/group/member', 'GroupController@addGroupMember');
 Route::delete('api/group/{id_group}/member/{id_user}', 'GroupController@removeGroupMember');
 
 

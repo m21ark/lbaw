@@ -48,7 +48,6 @@ class GroupController extends Controller
         // No need for policy ... the user just only has to have a authenticated account
         // e se já houve um com o nome .. 
 
-
         $group = new Group();
 
         $group->name = $request->input('name');
@@ -96,7 +95,7 @@ class GroupController extends Controller
     public function delete($name)
     {  
         $group = Group::where('name', $name)->first();
-        $this->authorize('delete', $group); // POLICY
+        $this->authorize('delete', $group); // POLICY....WORKING
         $group->delete(); 
 
         return response()->json(['The group was deleted with success' => 200]);
@@ -109,7 +108,7 @@ class GroupController extends Controller
         $id_group = $request->input('id_group');
         $group = Group::find($id_group);
 
-        $this->authorize('update', $group);
+        $this->authorize('update', $group); // POLICY....WORKING
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
@@ -168,7 +167,7 @@ class GroupController extends Controller
         if ($user === null)
             return redirect()->route('home');
 
-        
+        $this->authorize('view', $user); // USER policy ...WORKING
 
         return view('pages.group_list', ['user' => $user]);
     }
@@ -178,12 +177,11 @@ class GroupController extends Controller
     public function addGroupOwner($idUser, $idGroup)
     {
         /*
-            N DEVE ESTAR AQUI
+            This is not an api endpoint. It's called in another function that grantes the correct policy
+            Hence this does not need a Policy
         */
 
         $owner = new Owner();
-
-        //$this->authorize('create', $owner); // TODO
 
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;
@@ -191,48 +189,12 @@ class GroupController extends Controller
         return $owner;
     }
 
-
-    public function removeGroupOwner($id)
-    {
-        /*
-            N DEVE ESTAR AQUI e talvez nem faça sentido
-        */
-
-        $owner = Owner::find($id);
-        //$this->authorize('delete', $owner); // TODO
-        $owner->delete();
-
-        return $owner;
-    }
-
-
-    public function addGroupMember($idUser, $idGroup)
-    {
-        /*
-            N DEVE ESTAR AQUI
-        */
-
-        $request = new GroupJoinRequest();
-
-        //$this->authorize('create', $request);
-
-        $request->id_user = $idUser; // TODO
-        $request->id_group = $idGroup;
-        $request->acceptance_status = 'Pending';
-
-        $request->save();
-
-        return $request;
-    }
-
-
     public function removeGroupMember($idGroup, $idUser)
     {
-        /*
-            N DEVE ESTAR AQUI
-        */
 
-        // TODO Policy
+        $group = Group::find($idGroup);
+
+        $this->authorize('delete', $group); // POLICY
 
         DB::table('group_join_request')
             ->where('id_group', $idGroup)->where('id_user', $idUser)
