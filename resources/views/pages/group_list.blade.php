@@ -6,7 +6,7 @@
         @if (Auth::user()->username === $user->username)
             <h1 class="mt-4">My Group List</h1>
         @else
-            <h1 class="mt-4">{{ $user->username }}'s Group List</h1>
+            <h1 class="mt-4"><a href="/profile/{{ $user->username }}">{{ $user->username }}</a> 's Group List </h1>
         @endif
 
         @if ($user->groupsOwner->count() + $user->groupsMember->count() === 0)

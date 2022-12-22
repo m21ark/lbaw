@@ -1,6 +1,6 @@
 <div id="timeline">
 
-    <h1>Posts</h1>
+    <h1>Posts ({{ $statistics['post_num'] }})</h1>
 
     @if ($friends || $user->visibility || (Auth::check() && $user->id === Auth::user()->id))
         @if ($user->posts->isEmpty())

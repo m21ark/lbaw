@@ -4,7 +4,7 @@
 
 @section('content')
     @if (Auth::user()->username !== $user->username)
-        <h1 class="mt-3">{{ $user->username }}'s Friends</h1>
+        <h1 class="mt-4"><a href="/profile/{{ $user->username }}">{{ $user->username }}</a> 's Friends </h1>
     @else
         <h1 class="mt-3">My Friends</h1>
     @endif
