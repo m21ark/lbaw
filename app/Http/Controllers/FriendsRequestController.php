@@ -6,6 +6,7 @@ use App\Models\FriendsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\NewNotification;
+use App\Models\User;
 
 class FriendsRequestController extends Controller
 {
@@ -18,12 +19,17 @@ class FriendsRequestController extends Controller
         return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->pendentFriendsRequests, 'isrequests' => true]);
     }
 
-    public function friends()
+    public function friends($username)
     {
         if (!Auth::check())
             return redirect()->route('home');
 
-        return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->friends(), 'isrequests' => false]);
+        $user = User::where('username', '=', $username)->firstOrFail();
+
+        if ($user === null)
+            return redirect()->route('home');
+
+        return view('pages.friends_requests', ['user' => $user, 'requests' => $user->friends(), 'isrequests' => false]);
     }
 
     public function send($id_rcv, Request $request)
