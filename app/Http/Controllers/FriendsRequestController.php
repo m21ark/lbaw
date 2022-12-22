@@ -104,7 +104,8 @@ class FriendsRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        $this->authorize('create'); 
+        $sender = User::find($id);
+        $this->authorize('delete', $sender); 
 
         FriendsRequest::where('id_user_sender', '=', Auth::user()->id)
             ->where('id_user_receiver', '=', $id)

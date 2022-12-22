@@ -63,9 +63,9 @@ class FriendsRequestPolicy
      * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user)
+    public function delete(User $user, User $model)
     {
-        return true;
+        return PostController::areFriends($user, $model);
     }
 
     /**
