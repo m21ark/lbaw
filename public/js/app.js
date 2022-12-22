@@ -129,9 +129,9 @@ function addEventListeners() {
     }
     );
 
-    assignFunctionClick('#report_toggle', () => {
-        document.querySelector('#pendent_report_list').toggleAttribute('hidden')
-        document.querySelector('#past_report_list').toggleAttribute('hidden')
+    assignFunctionClick('#list_toggle_btn', () => {
+        document.querySelector('#toggle_list_A').toggleAttribute('hidden')
+        document.querySelector('#toggle_list_B').toggleAttribute('hidden')
     })
 
     assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
@@ -1749,14 +1749,14 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
 }
 
 
-function checkGroupResponsive() {
+function checkResponsiveUI() {
     let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
 
-    let page_a = document.getElementById("pendent_report_list")
-    let page_b = document.getElementById("past_report_list")
-    let btn = document.getElementById("report_toggle_div")
+    let page_a = document.getElementById("toggle_list_A")
+    let page_b = document.getElementById("toggle_list_B")
+    let btn = document.getElementById("list_toggle_btn_div")
     let title = document.querySelector("h1")
-    let toggle = document.getElementById("report_toggle")
+    let toggle = document.getElementById("list_toggle_btn")
 
     if (width <= 80) {
 
@@ -1780,6 +1780,7 @@ function checkGroupResponsive() {
     }
 }
 
-if (window.location.pathname.substring(0, 7) == "/group/") {
-    setInterval(() => { checkGroupResponsive() }, 500);
+let curr_path = window.location.pathname
+if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
+    setInterval(() => { checkResponsiveUI() }, 500);
 }

@@ -277,7 +277,7 @@ ul.nav a:hover {
 	margin-top:22px;
 }
 
-#report_toggle_div, #report_toggle_div *:hover {
+#list_toggle_btn_div, #list_toggle_btn_div *:hover {
     cursor: pointer;
     color: white;
 }

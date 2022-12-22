@@ -7,13 +7,13 @@
     <div class="position-absolute d-flex" style="right:3%">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
-            <input type="checkbox" id="report_toggle">
+            <input type="checkbox" id="list_toggle_btn">
             <span class="slider round"></span>
         </label>
         <h4 class="ms-3">Past Reports</h4>
     </div>
 
-    <div id="pendent_report_list">
+    <div id="toggle_list_A">
         <div class="list-group d-flex mb-5 flex-wrap">
             <h3 class="mt-2">Pendent Reports</h3>
             <div class="d-flex align-items-center">
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div hidden id="past_report_list">
+    <div hidden id="toggle_list_B">
         <div class="list-group d-flex mb-5 flex-wrap">
             <h3 class="mt-2">Past Reports</h3>
             <div class="d-flex align-items-center">
