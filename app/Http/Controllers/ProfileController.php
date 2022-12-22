@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Controllers\PostController;
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\Topic;
 use App\Models\TopicsInterestUser;
 use Illuminate\Http\Request;
@@ -136,8 +138,17 @@ class ProfileController extends Controller
         if ($user == null)
             return redirect()->route('home');
 
-        $likes = $user->like_in_post;
-        return view('pages.like_list', ['user' => $user, 'likes' => $likes]);
+        $posts = Post::join('like_post', 'like_post.id_post', '=', 'post.id')
+            ->where('like_post.id_user', $user->id)
+            ->select('post.*')
+            ->get();
+
+        $comments = Comment::join('like_comment', 'like_comment.id_comment', '=', 'comment.id')
+            ->where('like_comment.id_user', $user->id)
+            ->select('comment.*')
+            ->get();
+
+        return view('pages.like_list', ['user' => $user, 'posts' => $posts, 'comments' => $comments]);
     }
 
     public function listComments($username)
