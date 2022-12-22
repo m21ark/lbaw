@@ -1721,7 +1721,7 @@ if (window.location.pathname == "/notifications") {
 
 
 if (window.location.pathname.substring(0,10) == "/messages/") {
-    
+
     const input = document.getElementById("sms_input");
 
     let scrollBody = document.querySelector("#message_body")
@@ -1731,6 +1731,19 @@ if (window.location.pathname.substring(0,10) == "/messages/") {
         if (event.key === "Enter") {
             event.preventDefault();
             document.getElementById("sms_send_btn").click();
+        }
+    });
+}
+
+
+if (window.location.pathname.substring(0,6) == "/post/") {
+
+    const input = document.getElementById("comment_post_input");
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("comment_post_send").click();
         }
     });
 }
