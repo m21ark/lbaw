@@ -32,7 +32,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $group)
     {
-        return GroupController::userInGroup($user, $group);
+        return GroupController::userInGroup($user, $group); // only if group is not public ...
     }
 
     /**
@@ -41,9 +41,9 @@ class GroupPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(?User $user)
+    public function create(User $user)
     {
-        return optional($user)->id !== null;
+        return true;
     }
 
     /**
@@ -67,7 +67,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group)
     {
-        //
+        return true;
     }
 
     /**

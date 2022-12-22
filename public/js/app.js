@@ -365,11 +365,12 @@ function sendEditGroupRequest(event) {
 
 }
 
-function sendDeleteGroupRequest() {
+function sendDeleteGroupRequest(e) {
+    e.preventDefault();
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
-        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => {window.location = '/home'});
     }
 }
 

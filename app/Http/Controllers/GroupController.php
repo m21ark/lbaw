@@ -25,13 +25,13 @@ class GroupController extends Controller
         }
 
         if (!$group->visibility) {
-            $this->authorize('view', $group);
+            $this->authorize('view', $group); // POLICY
         }
         return view('pages.group', ['group' => $group, 'in_group' => $this->userInGroup(Auth::user(), $group), 'user' => Auth::user()]);
     }
 
     public static function userInGroup(User $user1, Group $group)
-    {
+    {   // METODO STATIC N PRECISA DE POLICY
         return DB::table('group_join_request')
             ->where('id_user', $user1->id)
             ->where('id_group', $group->id)->where('acceptance_status', 'Accepted')->exists()
@@ -44,6 +44,9 @@ class GroupController extends Controller
         if ($request->user() === null) {
             return response()->json(['failure' => 401]);
         }
+
+        // No need for policy ... the user just has to have a authenticated account
+        // e se já houve um com o nome
 
         $group = new Group();
 
@@ -62,11 +65,12 @@ class GroupController extends Controller
         $group->owners()->save($owner);
         $this->add_topics($request, $group);
 
-        return $group;
+        return $group; // TODO : N é isto
     }
 
     private function add_topics(Request $request, Group $group)
-    {
+    {   
+        // THIS IS A FUNCTION AND DOES NOT NEEDS POLICY HERE... but in the callee function
         if ($request->input('tags') != null) {
 
             $topics = explode(' ', $request->input('tags'));
@@ -89,13 +93,12 @@ class GroupController extends Controller
     }
 
     public function delete($name)
-    {   // TODO : ESTA POLICY DPS DE TRATAR DO TRIGGER
-
+    {  
         $group = Group::where('name', $name)->first();
-        //$this->authorize('delete', $group); // TODO
-        // $group->delete(); NAO DA POR CAUSA DOS TRIGGERS :(
+        //$this->authorize('delete', $group); // POLICY
+        $group->delete(); 
 
-        return $group;
+        return response()->json(['The group was deleted with success' => 200]);
     }
 
     public function edit(Request $request)
