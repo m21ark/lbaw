@@ -62,45 +62,63 @@
 
                 </a>
 
-                <div class="card-footer d-flex justify-content-evenly">
 
-                    @if (Auth::check())
-                        <div class="d-flex">
-                            <p class="me-3">{{ sizeof($post->likes) }}</p>
 
-                            <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)"
-                                data-uid={{ Auth::user()->id }} data-id={{ $post->id }}>
+                <div class="card-footer d-flex justify-content-evenly pb-3">
 
-                                <?php
-                                $userLiked = false;
-                                foreach ($post->likes as $like) {
-                                    if (Auth::user()->id == $like->id_user) {
-                                        $userLiked = true;
-                                    }
-                                }
-                                ?>
-                                @if ($userLiked)
-                                    <h3 data-liked='1' style="font-size:1.3em;">&#x2764;</h3>
-                                @else
-                                    <h3 data-liked='0' style="font-size:1.3em;">&#9825;</h3>
-                                @endif
+                    @auth
 
-                            </a>
-                        </div>
+                        <?php
+                        $userLiked = false;
+                        foreach ($post->likes as $like) {
+                            if (Auth::user()->id == $like->id_user) {
+                                $userLiked = true;
+                            }
+                        }
+                        ?>
+
+                        <a class="text-decoration-none " data-uid={{ Auth::user()->id }}
+                            onclick="sendLikePostRequest(event)" data-id={{ $post->id }}
+                            data-liked="{{ $userLiked }}" href="#!">
+
+                            <span class="me-3 text-dark" style="font-size:1.2em;">{{ $post->likes->count() }}</span>
+
+
+                            @if ($userLiked)
+                                <span style="font-size: 1.3em">
+                                    <i class="fa-solid fa-heart text-danger"></i>
+                                </span>
+                            @else
+                                <span style="font-size: 1.3em">
+                                    <i class="fa-regular fa-heart"></i>
+                                </span>
+                            @endif
+                        </a>
+
+
+                        <a class="ms-5 text-decoration-none" href="/post/{{ $post->id }}">
+
+                            <span class="mt-1 me-3 text-dark" style="font-size:1.2em">{{ sizeof($post->comments) }}</span>
+
+                            <span class="me-3" style="font-size: 1.3em">
+                                <i class="ms-3 fa-regular fa-comment-dots"></i>
+                            </span>
+
+
+                        </a>
                     @else
-                        <div class="d-flex">
-                            <p class="me-3">{{ sizeof($post->likes) }}</p>
-                            <a href="#!" class="text-decoration-none" onclick="sendLikePostRequest(event)">
-                                <h2><strong>&#9825;</strong></h2>
-                            </a>
-                        </div>
-                    @endif
+                        <a class="text-decoration-none">
+                            <span style="font-size: 1.3em">
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
+                        </a>
 
-                    <div class="d-flex">
-                        <p class="me-3">{{ sizeof($post->comments) }}</p>
-                        <a href="/post/{{ $post->id }}" class="text-decoration-none"><span
-                                class="commenticon">&#128172;</span></a>
-                    </div>
+                        <a class="text-decoration-none">
+                            <span style="font-size: 1.3em">
+                                <i class="ms-3 fa-regular fa-comment-dots"></i>
+                            </span>
+                        @endauth
+
 
 
                 </div>
