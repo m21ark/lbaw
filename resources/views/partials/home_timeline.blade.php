@@ -1,5 +1,5 @@
 @auth
-    <div class="d-flex text-bg-light" style="max-width:50em;margin:auto">
+    <div class="d-flex text-bg-light w-100" style="max-width:55em;margin:auto">
 
         <div style="width: 2em"></div>
 
@@ -8,7 +8,7 @@
 
             <input class="list-group-item-check pe-none feed-filter" type="radio" name="feed_filter" id="feed_radio_foryou"
                 value="for_you">
-            <label class="list-group-item rounded-3" for="feed_radio_foryou">
+            <label class="list-group-item rounded-3" for="feed_radio_foryou" style="min-width:6em;">
                 For you
             </label>
 

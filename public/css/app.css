@@ -204,8 +204,8 @@ ul.nav a:hover {
     margin: 0 auto;
 }
 
-.comment_item{
-    max-width: 40em;
+.comment_item {
+    max-width: 35em;
     margin: auto;
 }
 
@@ -234,12 +234,12 @@ ul.nav a:hover {
 
 
 .post_item .card-footer {
-    font-size: 1.4em;
-    padding-top: 1em;
+    font-size: 1.3em;
 }
 
 .post_card {
-    max-width: 40em;
+    max-width: 55em;
+    min-width: 50em;
     margin: auto;
 }
 
