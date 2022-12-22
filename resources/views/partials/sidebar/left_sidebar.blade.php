@@ -19,7 +19,7 @@
 
             </a>
 
-            <a href="{{ url('/my_groups') }}"
+            <a href="/group_list/{{ Auth::user()->username }}"
                 class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around" aria-current="page">
                 <i class="fa-solid fa-people-group fa-2x"></i>
                 <span style="width: 8em;font-size:1.2em" class="enc">My Groups</span>
@@ -116,7 +116,7 @@
                 <p style="padding: 0;margin:0;">Friend Requests</p>
             </a>
 
-            <a href="{{ url('/my_groups') }}" class="btn">
+            <a href="/group_list/{{ Auth::user()->username }}" class="btn">
                 <i class="fa-solid fa-people-group fa-2x"></i>
                 <p style="padding: 0;margin:0;">My Groups</p>
             </a>

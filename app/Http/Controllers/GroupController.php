@@ -154,6 +154,16 @@ class GroupController extends Controller
         }
     }
 
+    public function listGroups($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        if ($user === null)
+            return redirect()->route('home');
+
+        return view('pages.group_list', ['user' => $user]);
+    }
+
 
 
     public function addGroupOwner($idUser, $idGroup)

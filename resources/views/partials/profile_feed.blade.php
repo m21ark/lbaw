@@ -1,35 +1,4 @@
-<div class="list-group list-group-checkable form-check d-flex p-1 flex justify-content-between text-bg-light"
-    id="feed_filter">
-
-    <input class="list-group-item-check pe-none" onclick="updateFeed('Posts')" type="radio" name="feed_filter"
-        id="feed_radio_posts" value="" checked="">
-    <label class="list-group-item rounded-3 " for="feed_radio_posts">
-        Posts
-    </label>
-
-    <input class="list-group-item-check pe-none" onclick="updateFeed('Comments')" type="radio" name="feed_filter"
-        id="feed_radio_comments" value="">
-    <label class="list-group-item rounded-3 " for="feed_radio_comments">
-        Comments
-    </label>
-
-    <input class="list-group-item-check pe-none" onclick="updateFeed('Groups')" type="radio" name="feed_filter"
-        id="feed_radio_groups" value="">
-    <label class="list-group-item rounded-3 " for="feed_radio_groups">
-        Groups
-    </label>
-
-    <input class="list-group-item-check pe-none" onclick="updateFeed('Likes')" type="radio" name="feed_filter"
-        id="feed_radio_likes" value="">
-    <label class="list-group-item rounded-3 " for="feed_radio_likes">
-        Likes
-    </label>
-
-</div>
-
-
 <div id="timeline">
-
 
     @if ($friends || $user->visibility || (Auth::check() && $user->id === Auth::user()->id))
         @if ($user->posts->isEmpty())

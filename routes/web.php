@@ -2,6 +2,8 @@
 
 // ======================= PASSWORD RECOVERY =======================
 
+use App\Http\Controllers\GroupController;
+
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
@@ -68,9 +70,7 @@ Route::get('404', function () {
     return view('pages.404');
 })->name('not_found');
 
-Route::get('my_groups', function () {
-    return view('pages.my_groups');
-});
+Route::get('group_list/{username}', "GroupController@listGroups");
 
 Route::get('notifications', function () {
     return view('pages.notifications');

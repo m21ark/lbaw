@@ -87,7 +87,8 @@
                         <path fill-rule="evenodd"
                             d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l3.235 1.94a2.76 2.76 0 0 0-.233 1.027L1 5.384v5.721l3.453-2.124c.146.277.329.556.55.835l-3.97 2.443A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741l-3.968-2.442c.22-.28.403-.56.55-.836L15 11.105V5.383l-3.002 1.801a2.76 2.76 0 0 0-.233-1.026L15 4.217V4a1 1 0 0 0-1-1H2Zm6 2.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
                     </svg>
-                    <a class="text-dark text-decoration-none p-3">{{ $statistics['friends_num'] }}
+                    <a href="/user/friends/{{ $user->username }}"
+                        class=" text-decoration-none p-3">{{ $statistics['friends_num'] }}
                         Friends</a>
                 </div>
 
@@ -97,7 +98,7 @@
                         <path
                             d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                     </svg>
-                    <a class="text-dark text-decoration-none p-3">{{ $statistics['group_num'] }} Groups</a>
+                    <a href="/group_list/{{ $user->username }}" class="text-decoration-none p-3">{{ $statistics['group_num'] }} Groups</a>
                 </div>
 
                 <div class="d-flex list-group-item w-100">
@@ -118,16 +119,6 @@
                     </svg>
                     <a class="text-decoration-none p-3 text-dark">{{ $statistics['comment_num'] }} Comments</a>
                 </div>
-
-
-
-                <a href="/user/friends/{{ $user->username }}" class="btn btn-outline-secondary mt-3 w-100">
-                    @if (Auth::user()->username === $user->username)
-                        Manage Friendships
-                    @else
-                        See Friends
-                    @endif
-                </a>
 
             </div>
         </div>
