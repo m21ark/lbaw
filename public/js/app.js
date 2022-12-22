@@ -825,7 +825,7 @@ function updateFeed(feed) {
             timeline.appendChild(createPost(post))
         })
 
-        offset += 5
+        offset += 10
     })
 
 
@@ -881,7 +881,7 @@ function updateFeedOnClick() {
 function updateFeedOnScroll() {
 
     window.onscroll = function (ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
             let filters = document.querySelectorAll('#feed_filter input')
 
             let checked_filter = 'viral';
@@ -906,7 +906,7 @@ function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
-    let images = '', bottom = '', like = '', dropdown = '';
+    let images = '', bottom = '', like = '', dropdown = '', topics='';
 
     imageControls = `
      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
@@ -975,6 +975,19 @@ function createPost(post) {
     }
 
 
+    if (post.topics.length > 0) {
+        topics = '<div>';
+
+        post.topics.forEach(topicItem => {
+            topics += `
+                <a href="/search/#${topicItem.topic}"
+                class="btn btn-primary me-2 mb-3 ms-2">#${topicItem.topic}</a>
+            `
+        });
+
+        topics += '</div>'
+    }
+
 
     new_post.innerHTML = `
 
@@ -1009,10 +1022,13 @@ function createPost(post) {
 
                     ${images}
 
+                    
+
 
                     <div>
                         <p class="text-justify p-3">${post.text}</p>
 
+                        ${topics}
 
                         <div class="card-footer d-flex justify-content-evenly">
 
