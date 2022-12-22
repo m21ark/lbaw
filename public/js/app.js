@@ -507,15 +507,15 @@ function sendCreateCommentRequest() {
     let id_post = document.querySelector('#comment_post_input').dataset.pid
     let id_user = document.querySelector('#comment_post_input').dataset.uid
 
-    if (text === '') {
-        alert('Invalid input');
+    if (text.trim() === '') {
         return;
     }
 
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
         sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
-        //location.reload();
+        document.querySelector('#comment_post_input').value = ''
+        // TODO falta adicionar comentario e a notificao de action success
     }
 
 }
@@ -524,7 +524,7 @@ function sendEditCommentRequest() {
     let id_comment = document.querySelector('#edit_comment_button').dataset.id
     let text = document.querySelector('#comment_text_edit').value
 
-    if (text === '') {
+    if (text.trim() === '') {
         alert('Invalid input');
         return;
     }
@@ -678,6 +678,9 @@ function sendDeletePostRequest() {
 function sendMessage(event) {
     event.preventDefault();
     let text = document.querySelector('#sms_input').value;
+    if (text.trim() === '')
+        return;
+
     let receiver = document.querySelector('#sms_rcv');
 
     sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, { text: text }, uploadSms(true, text))

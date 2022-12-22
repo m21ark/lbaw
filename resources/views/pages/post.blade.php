@@ -5,9 +5,7 @@
         @include('partials.post_item', ['post' => $post, 'showComments' => true])
     </div>
 
-    <!-- Temporary placement -->
     @include('partials.popup.make_report_popup')
-
 @endsection
 
 @section('rightbar')
