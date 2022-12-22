@@ -121,6 +121,7 @@ class SearchController extends Controller
 
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
             $post->hasLiked = false;
             $post->isOwner = false;
             $post->auth = 0;
