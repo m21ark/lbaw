@@ -5,7 +5,9 @@
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Create your Group</h3>
-                <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
+                <a href="#" class="close_popup_btn" style="font-size: 2.5em">
+                    <i class="fa-solid fa-rectangle-xmark text-danger"></i>
+                </a>
             </div>
 
 

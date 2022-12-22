@@ -12,7 +12,9 @@
                     <h3 class="h3 mb-3 font-weight-normal">Make a group post</h3>
                 @endif
 
-                <a href="#" class="btn btn-danger close_popup_btn"><strong>X</strong></a>
+                <a href="#" class="close_popup_btn" style="font-size: 2.5em">
+                    <i class="fa-solid fa-rectangle-xmark text-danger"></i>
+                </a>
             </div>
 
 
