@@ -41,9 +41,9 @@ class GroupPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user, Request $request)
     {
-        return true;
+        return Group::where('name','=', $request->input('name'))->firstOrFail() === null; // IT has only to be authenticated ... and can't have a group with the same name
     }
 
     /**
@@ -67,7 +67,7 @@ class GroupPolicy
      */
     public function delete(User $user, Group $group)
     {
-        return true;
+        return in_array($user->id, $group->owners->pluck('id_user')->toArray());
     }
 
     /**

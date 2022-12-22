@@ -31,7 +31,7 @@ class ProfileController extends Controller
             'comment_num' => $user->comments->count(),
             'like_comment_num' => $user->like_in_comments->count(),
             'like_post_num' => $user->like_in_post->count(),
-            'group_num' => $user->groupsMember->count(),
+            'group_num' => $user->groupsMember->count() + $user->groupsOwner->count(),
             'friends_num' => $user->friends()->count(),
         ];
 
