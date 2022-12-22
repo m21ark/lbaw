@@ -2,11 +2,16 @@
 
 namespace App\Policies;
 
-use App\Models\Admin;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\GroupController;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
-class AdminPolicy
+
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -25,12 +30,12 @@ class AdminPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Admin $admin)
+    public function view(User $user, Comment $comment)
     {
-        return null !== $admin;
+        //
     }
 
     /**
@@ -39,43 +44,44 @@ class AdminPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user, Post $post)
     {
-        //
+        $contr = new PostController();
+        return $contr->authorize('view', $post);
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Admin $admin)
+    public function update(User $user, Comment $comment)
     {
-        return null !== $admin;
+        return $user->id == $comment->id_commenter;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Admin $admin)
+    public function delete(User $user, Comment $comment)
     {
-        //
+        return $user->id == $comment->id_commenter;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Admin $admin)
+    public function restore(User $user, Comment $comment)
     {
         //
     }
@@ -84,10 +90,10 @@ class AdminPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Admin  $admin
+     * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Admin $admin)
+    public function forceDelete(User $user, Comment $comment)
     {
         //
     }

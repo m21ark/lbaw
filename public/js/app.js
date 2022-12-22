@@ -955,9 +955,9 @@ function createPost(post) {
     if (post.images.length !== 0) {
         let imageDiv = '';
 
-        post.images.forEach(function (image) {
+        post.images.forEach(function (image, i) {
             imageDiv += `
-                <div class="carousel-item active">
+                <div class="carousel-item ${i == 0 ? 'active': ''}">
                     <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
                 </div>
             `
