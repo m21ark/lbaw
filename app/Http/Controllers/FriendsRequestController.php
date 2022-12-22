@@ -15,6 +15,8 @@ class FriendsRequestController extends Controller
     {
         if (!Auth::check())
             return redirect()->route('home');
+        
+        // NO need to call policy here because the view is only for the user
 
         return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->pendentFriendsRequests, 'isrequests' => true]);
     }
@@ -29,6 +31,9 @@ class FriendsRequestController extends Controller
         if ($user === null)
             return redirect()->route('home');
 
+        // CHECK authserviceproviders to understand from where this policy comes
+        $this->authorize('view', $user);
+
         return view('pages.friends_requests', ['user' => $user, 'requests' => $user->friends(), 'isrequests' => false]);
     }
 
@@ -37,7 +42,7 @@ class FriendsRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO : E PRECISO OUTRA POLICIE ? no caso de se já ter enviado um pedido
+        // N é preciso Policy uma vez que basta estar com session
 
         validator($request->route()->parameters(), [
             'id_rcv' => 'required|exists:user,id',
@@ -60,11 +65,13 @@ class FriendsRequestController extends Controller
 
     public function accept($id_sender, Request $request)
     {
+        // Policy bellow
         return $this->update_request($id_sender, "Accepted", $request);
     }
 
     public function reject($id_sender, Request $request)
-    {
+    {   
+        // Policy bellow
         return $this->update_request($id_sender, "Rejected", $request);
     }
 
@@ -77,11 +84,13 @@ class FriendsRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO :ADD policy
         $frequest = FriendsRequest::where('id_user_sender', '=', $id_sender)
-            ->where('id_user_receiver', '=', Auth::user()->id)
-            ->update(['acceptance_status' => $new_state]);
+            ->where('id_user_receiver', '=', Auth::user()->id);
 
+        // POLICY
+        $this->authorize('update', $frequest->firstOrFail()); // WORKING
+
+        $frequest->update(['acceptance_status' => $new_state]);
 
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
@@ -95,7 +104,8 @@ class FriendsRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO :ADD policy
+        $this->authorize('create'); 
+
         FriendsRequest::where('id_user_sender', '=', Auth::user()->id)
             ->where('id_user_receiver', '=', $id)
             ->delete();

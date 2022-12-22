@@ -20,6 +20,8 @@ class AuthServiceProvider extends ServiceProvider
       Admin::class => AdminPolicy::class,
       Notification::class => NotificationPolicy::class,
       Comment::class => CommentPolicy::class,
+      CommentLike::class => CommentPolicy::class,
+      FriendsRequest::class => FriendsRequestPolicy::class,
     ];
 
     /**

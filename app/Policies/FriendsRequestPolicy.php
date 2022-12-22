@@ -2,16 +2,11 @@
 
 namespace App\Policies;
 
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\GroupController;
-use App\Models\Comment;
-use App\Models\Post;
+use App\Models\FriendsRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
 
-
-class CommentPolicy
+class FriendsRequestPolicy
 {
     use HandlesAuthorization;
 
@@ -30,13 +25,12 @@ class CommentPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Comment $comment)
+    public function view(User $user, User $model)
     {
-        $contr = new PostController();
-        return $contr->authorize('view', $comment->post);
+        return  $model->id == $user->id || $model->visibility || PostController::areFriends($user, $model);
     }
 
     /**
@@ -45,44 +39,43 @@ class CommentPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user, Post $post)
+    public function create(User $user)
     {
-        $contr = new PostController();
-        return $contr->authorize('view', $post);
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Comment $comment)
+    public function update(User $user, FriendsRequest $friendsRequest)
     {
-        return $user->id == $comment->id_commenter;
+        return $friendsRequest->acceptance_status !== 'Rejected'; // THIS WILL succeed if object exist ... hence we can update it 
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Comment $comment)
+    public function delete(User $user)
     {
-        return $user->id == $comment->id_commenter;
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Comment $comment)
+    public function restore(User $user, FriendsRequest $friendsRequest)
     {
         //
     }
@@ -91,10 +84,10 @@ class CommentPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\FriendsRequest  $friendsRequest
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Comment $comment)
+    public function forceDelete(User $user, FriendsRequest $friendsRequest)
     {
         //
     }

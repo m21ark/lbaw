@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentLike;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Events\NewNotification;
@@ -13,11 +14,13 @@ class CommentLikeController extends Controller
 {
     public function toggle(Request $request)
     {
-        // TODO : N POSSO FAZER ESTA ENQUANTO O COMMENT LIKE N FUNCIONAR
-        //$this->authorize('create', Auth::user());
 
         $user = $request->input('id_user');
         $comment = $request->input('id_comment');
+        
+        $commentModel = Comment::find($comment);
+        // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
+        $this->authorize('view', $commentModel);
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)
