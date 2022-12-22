@@ -1720,7 +1720,7 @@ if (window.location.pathname == "/notifications") {
 }
 
 
-if (window.location.pathname.substring(0,10) == "/messages/") {
+if (window.location.pathname.substring(0, 10) == "/messages/") {
 
     const input = document.getElementById("sms_input");
 
@@ -1736,7 +1736,7 @@ if (window.location.pathname.substring(0,10) == "/messages/") {
 }
 
 
-if (window.location.pathname.substring(0,6) == "/post/") {
+if (window.location.pathname.substring(0, 6) == "/post/") {
 
     const input = document.getElementById("comment_post_input");
 
@@ -1746,4 +1746,40 @@ if (window.location.pathname.substring(0,6) == "/post/") {
             document.getElementById("comment_post_send").click();
         }
     });
+}
+
+
+function checkGroupResponsive() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    let page_a = document.getElementById("pendent_report_list")
+    let page_b = document.getElementById("past_report_list")
+    let btn = document.getElementById("report_toggle_div")
+    let title = document.querySelector("h1")
+    let toggle = document.getElementById("report_toggle")
+
+    if (width <= 80) {
+
+        page_a.hidden = ""
+        btn.style.visibility = "visible"
+
+        if (!toggle.checked) {
+            title.hidden = ""
+            page_b.hidden = "hidden"
+        }
+        else {
+            title.hidden = "hidden"
+            page_a.hidden = "hidden"
+        }
+
+    } else {
+        page_b.hidden = ""
+        page_a.hidden = ""
+        title.hidden = ""
+        btn.style.visibility = "hidden"
+    }
+}
+
+if (window.location.pathname.substring(0, 7) == "/group/") {
+    setInterval(() => { checkGroupResponsive() }, 500);
 }
