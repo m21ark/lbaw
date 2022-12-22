@@ -1,4 +1,4 @@
-<div class="message_body overflow-auto">
+<div class="message_body overflow-auto" id="message_body">
 
     <?php
     $messageGroupDay = [];

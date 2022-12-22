@@ -685,6 +685,8 @@ function sendMessage(event) {
 
     sendAjaxRequest('post', "/api/message/" + receiver.dataset.id, { text: text }, uploadSms(true, text))
     document.querySelector('#sms_input').value = ''
+    let scrollBody = document.querySelector("#message_body")
+    scrollBody.scrollTop = scrollBody.scrollHeight
 }
 
 function sms_html(art, isSender, message, time) {
@@ -1715,4 +1717,20 @@ if (window.location.pathname == "/notifications") {
     setTimeout(() => {
         fillNotificationPage();
     }, 1000);
+}
+
+
+if (window.location.pathname.substring(0,10) == "/messages/") {
+    
+    const input = document.getElementById("sms_input");
+
+    let scrollBody = document.querySelector("#message_body")
+    scrollBody.scrollTop = scrollBody.scrollHeight
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("sms_send_btn").click();
+        }
+    });
 }
