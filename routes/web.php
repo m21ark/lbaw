@@ -70,11 +70,13 @@ Route::get('404', function () {
     return view('pages.404');
 })->name('not_found');
 
-Route::get('group_list/{username}', "GroupController@listGroups");
-
 Route::get('notifications', function () {
     return view('pages.notifications');
 });
+
+Route::get('group_list/{username}', "GroupController@listGroups");
+Route::get('like_list/{username}', "ProfileController@listLikes");
+Route::get('comment_list/{username}', "ProfileController@listComments");
 
 // ======================= DYNAMIC PAGES =======================
 

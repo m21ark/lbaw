@@ -1,5 +1,7 @@
 <div id="timeline">
 
+    <h1>Posts</h1>
+
     @if ($friends || $user->visibility || (Auth::check() && $user->id === Auth::user()->id))
         @if ($user->posts->isEmpty())
             <h2 class="text-center mt-5">No posts yet</h2>

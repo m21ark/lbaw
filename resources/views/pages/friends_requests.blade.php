@@ -6,7 +6,7 @@
     @if (Auth::user()->username !== $user->username)
         <h1 class="mt-3">{{ $user->username }}'s Friends</h1>
     @else
-        <h1 class="mt-3">Your Friends</h1>
+        <h1 class="mt-3">My Friends</h1>
     @endif
 
     <div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">

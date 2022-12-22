@@ -128,4 +128,25 @@ class ProfileController extends Controller
             }
         }
     }
+
+
+    public function listLikes($username)
+    {
+        $user = User::where('username', $username)->first();
+        if ($user == null)
+            return redirect()->route('home');
+
+        $likes = $user->like_in_post;
+        return view('pages.like_list', ['user' => $user, 'likes' => $likes]);
+    }
+
+    public function listComments($username)
+    {
+        $user = User::where('username', $username)->first();
+        if ($user == null)
+            return redirect()->route('home');
+
+        $comments = $user->comments;
+        return view('pages.comment_list', ['user' => $user, 'comments' => $comments]);
+    }
 }

@@ -14,15 +14,21 @@
         @endauth
 
         <small>{{ $comment->post_date }}</small>
-        @auth
-            @if ($comment->poster->id !== Auth::user()->id)
-                <a href="#" class="pt-2 text-decoration-none comment_reply_btn" data-id="{{ $comment->id }}"
-                    data-username="{{ $comment->poster->username }}">
-                    <h3><i class="fa-solid fa-reply"></i></h3>
-                </a>
-                </a>
-            @endif
-        @endauth
+
+        @isset($showPostLink)
+            <a href="/post/{{ $comment->post->id }}">See Post</a>
+        @else
+            @auth
+                @if ($comment->poster->id !== Auth::user()->id)
+                    <a href="#" class="pt-2 text-decoration-none comment_reply_btn" data-id="{{ $comment->id }}"
+                        data-username="{{ $comment->poster->username }}">
+                        <h3><i class="fa-solid fa-reply"></i></h3>
+                    </a>
+                    </a>
+                @endif
+            @endauth
+        @endisset
+
     </div>
 
     <div class="card-header d-flex justify-content-center align-items-center">
@@ -113,6 +119,7 @@
                         @endauth
 
                         <small>{{ $reply->post_date }}</small>
+
 
                     </div>
 
