@@ -21,6 +21,7 @@ class ProfileController extends Controller
     {
         $user = User::where('username', $username)->first();
 
+        // EVERY ONE CAN SEE THE PAGE ... only some can see the post
         if ($user == null) {
             //No user with that name so we return to the home page
             return redirect()->route('home');
@@ -35,7 +36,7 @@ class ProfileController extends Controller
             'friends_num' => $user->friends()->count(),
         ];
 
-        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : null;
+        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : false;
         return view('pages.profile', ['user' => $user, 'statistics' => $statistics, 'friends' => $friends]);
     }
 
@@ -47,6 +48,8 @@ class ProfileController extends Controller
         if ($user == null) {
             return redirect()->route('home');
         }
+
+        // NO NEED FOR POLICY
 
         DB::beginTransaction();
         $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
@@ -107,7 +110,7 @@ class ProfileController extends Controller
     }
 
     private function edit_topics(Request $request, User $user)
-    {
+    {   // NO NEED FOR POLICY
         $user->interests()->delete();
         if ($request->input('tags') != null) {
 
