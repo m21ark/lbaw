@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentLike;
+use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,12 +23,14 @@ class CommentLikeController extends Controller
 
         // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
         // The user must be able to see it to comment it ... TODO ... alterar
-        $request->user()->can('view', $commentModel);
+        
+        if (!$request->user()->can('view', $commentModel) )
+            return response()->json(["You are not allowed to like this resourse" => 301]);
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)
             ->first();
-
+        
         if ($like === null) {
             $like = new CommentLike();
             $like->id_user = $user;

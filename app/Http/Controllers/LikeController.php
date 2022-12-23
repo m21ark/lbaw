@@ -21,7 +21,8 @@ class LikeController extends Controller
             ->where('id_post', $post)
             ->first();
 
-        $request->user()->can('view', Post::find($post)); // POLICY  TODO ... alterar
+        if (!$request->user()->can('view', Post::find($post))) // POLICY  TODO ... alterar
+            return response()->json(["You are not allowed to like this resourse" => 301]);
 
         if ($like == null) {
 
