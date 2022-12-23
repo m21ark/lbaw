@@ -77,6 +77,74 @@ class SearchController extends Controller
     private function searchPosts($query_string)
     { // this also includes de tsvectors of comments
 
+        $decide = false;
+
+        if ($decide) {
+            $posts = $this->searchPostsFTS($query_string);
+        } else {
+            $posts = $this->searchPostsTopic($query_string);
+            foreach ($posts as $post) {$post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);}
+        }
+
+        
+
+        foreach ($posts as $post) {
+            $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->hasLiked = false;
+            $post->isOwner = false;
+            $post->auth = 0;
+
+            if (!Auth::check()) continue;
+            $post->auth = Auth::user()->id;
+
+            if ($post->owner === Auth::user()->username) {
+                $post->isOwner = true;
+            }
+
+            $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
+            //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
+            //$out->writeln("|" . $like . "|");
+
+            if (sizeof($like) > 0) {
+                $post->hasLiked = true;
+            }
+        }
+
+        return $posts;
+    }
+
+
+    private function searchPostsTopic($query_string) {
+        $posts = [];
+
+        $topics = ['WorldCup', '2022', 'arts'];
+
+        if (Auth::check()) {
+            $posts = app('App\Http\Controllers\PostController')->feed_for_you()->limit(20)->get();
+        } else {
+            $posts = app('App\Http\Controllers\PostController')->feed_viral()->limit(20)->get();
+        }
+
+        $posts_filtered = [];
+
+        foreach ($posts as $post) {
+            $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
+
+            foreach ($topics as $topic) {
+                /*
+                if (in_array($topic, $post->topics)) {
+                    $posts_filtered[] = $post;
+                    break;
+                }
+                */
+            }
+        }
+
+        return $posts_filtered;
+    }
+
+    private function searchPostsFTS($query_string) {
+
         $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
             ->groupBy('id_post');
 
@@ -118,29 +186,6 @@ class SearchController extends Controller
             ->orderBy('ranking', 'desc')
             ->limit(20)
             ->get();
-
-        foreach ($posts as $post) {
-            $post->images = Image::select('path')->where('id_post', $post->id)->get();
-            $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
-            $post->hasLiked = false;
-            $post->isOwner = false;
-            $post->auth = 0;
-
-            if (!Auth::check()) continue;
-            $post->auth = Auth::user()->id;
-
-            if ($post->owner === Auth::user()->username) {
-                $post->isOwner = true;
-            }
-
-            $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-            $out->writeln("|" . $like . "|");
-
-            if (sizeof($like) > 0) {
-                $post->hasLiked = true;
-            }
-        }
 
         return $posts;
     }

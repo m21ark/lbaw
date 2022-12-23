@@ -224,7 +224,7 @@ class PostController extends Controller
         }
     }
 
-    private function feed_friends()
+    public function feed_friends()
     {
 
         if (!Auth::check()) {
@@ -253,7 +253,7 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_groups()
+    public function feed_groups()
     {
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]);
@@ -273,7 +273,7 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_viral()
+    public function feed_viral()
     {
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->where('visibility', true)
@@ -283,7 +283,7 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_for_you()
+    public function feed_for_you()
     {
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]);
