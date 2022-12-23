@@ -19,8 +19,10 @@ class CommentLikeController extends Controller
         $comment = $request->input('id_comment');
         
         $commentModel = Comment::find($comment);
+
         // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
-        $this->authorize('view', $commentModel);
+        // The user must be able to see it to comment it
+        $request->user()->can('view', $commentModel);
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)
@@ -44,6 +46,6 @@ class CommentLikeController extends Controller
                 ->delete();
         }
 
-        return $like;
+        return response()->json(["The comment was liked with success" => 200]);
     }
 }

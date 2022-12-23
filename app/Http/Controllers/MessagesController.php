@@ -19,7 +19,11 @@ class MessagesController extends Controller
         if ($request->text === null)
             return response()->json(['Text cannot be null' => 400]);
 
-        // TODO POLICY ... tem de se verificar se são amigos ... se bem que isto já está implementado na bd
+        $receiver = User::find($id);
+
+        if ($receiver->visibility !== true) {
+            $this->authorize('delete', $receiver); // POLICY ... This means they are friends
+        }
 
         $sms = new Message();
         $sms->text = $request->text;
@@ -47,11 +51,17 @@ class MessagesController extends Controller
 
         $user = Auth::user();
 
+        $receiver = User::where('username', '=', $sender_username)->firstOrFail();
+
         $messages = $user->messages()
             ->filter(function ($item) use ($sender_username) {
                 return $item->sender->username === $sender_username
                     || $item->receiver->username === $sender_username;
             });
+
+        if ($receiver->visibility !== true && count($messages) == 0) {
+                $this->authorize('delete', $receiver); // POLICY ... This means they are friends (see BR)
+        }
 
         $sender = User::where('username', '=', $sender_username)->first();
 
