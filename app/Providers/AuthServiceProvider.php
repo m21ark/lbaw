@@ -22,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
       Comment::class => CommentPolicy::class,
       CommentLike::class => CommentPolicy::class,
       FriendsRequest::class => FriendsRequestPolicy::class,
+      GroupJoinRequest::class => GroupJoinRequestPolicy::class,
     ];
 
     /**
