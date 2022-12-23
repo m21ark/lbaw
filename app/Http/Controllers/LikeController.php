@@ -21,7 +21,7 @@ class LikeController extends Controller
             ->where('id_post', $post)
             ->first();
 
-        $request->user()->can('view', Post::find($post)); // POLICY
+        $request->user()->can('view', Post::find($post)); // POLICY  TODO ... alterar
 
         if ($like == null) {
 

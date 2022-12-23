@@ -21,7 +21,7 @@ class CommentLikeController extends Controller
         $commentModel = Comment::find($comment);
 
         // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
-        // The user must be able to see it to comment it
+        // The user must be able to see it to comment it ... TODO ... alterar
         $request->user()->can('view', $commentModel);
 
         $like = CommentLike::where('id_user', $user)
