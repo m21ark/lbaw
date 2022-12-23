@@ -556,7 +556,8 @@ function popupControllReportPost() {
     document.querySelector('#create_report_button').dataset.comment = 0
 }
 
-function sendCreateReportRequest() {
+function sendCreateReportRequest(e) {
+    e.preventDefault();
     let id_post = document.querySelector('#create_report_button').dataset.post
     let id_comment = document.querySelector('#create_report_button').dataset.comment
     let description = document.querySelector('#report_description').value

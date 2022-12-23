@@ -2,13 +2,22 @@
 
 namespace App\Policies;
 
-use App\Http\Controllers\PostController;
+use App\Models\Report;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
-class UserPolicy
+class ReportPolicy
 {
     use HandlesAuthorization;
+
+
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin !== null) {
+            return true;
+        }
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -18,19 +27,19 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isAdmin() !== null;
+       return true; // before grantes that only admins can do this
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model)
+    public function view(User $user, Report $report)
     {
-        return  $model->id == $user->id || $model->visibility || PostController::areFriends($user, $model);
+        //
     }
 
     /**
@@ -41,44 +50,41 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return Auth::check(); // it has to be auth to make a report
     }
 
-    
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
+    public function updateAny(User $user)
     {
-        return $user->id == $model->id;
+        return true; // We already now its an admin .... before method
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    
-    public function delete(User $user, User $model)
+    public function delete(User $user)
     {
-        // DELETE A FRIEND FROM FRIENDS LIST
-        return PostController::areFriends($user, $model);
+        return true; // ITS A ADMIN
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user, Report $report)
     {
         //
     }
@@ -87,11 +93,11 @@ class UserPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
+     * @param  \App\Models\Report  $report
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, User $model)
+    public function forceDelete(User $user, Report $report)
     {
-        return $user->id == $model->id;
+        //
     }
 }

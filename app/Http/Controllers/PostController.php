@@ -304,14 +304,4 @@ class PostController extends Controller
         return $posts;
     }
 
-    public function post_topics($post_id)
-    {
-        // TODO: POLICY ... PRECISO DE SABER ONDE ISTO é USADO .... N ESTA A SER USADO EM LADO NENHUM
-
-        $topics = PostTopic::where('id_post', $post_id)
-            ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
-            ->select('topic.topic')
-            ->get();
-        return $topics;
-    }
 }

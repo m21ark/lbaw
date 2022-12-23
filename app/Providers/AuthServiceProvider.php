@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Report;
 use App\Policies\CommentPolicy;
+use App\Policies\ReportPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -24,6 +26,8 @@ class AuthServiceProvider extends ServiceProvider
       FriendsRequest::class => FriendsRequestPolicy::class,
       GroupJoinRequest::class => GroupJoinRequestPolicy::class,
       Like::class => PostPolicy::class,
+      ProfileController::class => UserPolicy::class,
+      Report::class => ReportPolicy::class,
     ];
 
     /**

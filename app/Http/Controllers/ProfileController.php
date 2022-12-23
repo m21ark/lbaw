@@ -21,7 +21,7 @@ class ProfileController extends Controller
     {
         $user = User::where('username', $username)->first();
 
-        // EVERY ONE CAN SEE THE PAGE ... only some can see the post
+        // EVERYONE CAN SEE THE PAGE ... only some can see the post
         if ($user == null) {
             //No user with that name so we return to the home page
             return redirect()->route('home');
@@ -49,7 +49,7 @@ class ProfileController extends Controller
             return redirect()->route('home');
         }
 
-        // NO NEED FOR POLICY
+        // NO NEED FOR POLICY ... only the stated above
 
         DB::beginTransaction();
         $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
@@ -87,7 +87,7 @@ class ProfileController extends Controller
         // aqui julgo que é a cena de n poder deixar grupos sem outros owners
         $user = User::where('username', $username)->first();
 
-        // TODO ::: POLICY
+        $this->authorize('forceDelete', $user); // Policy ... Working
 
         $user->username = "deleted_User" . $user->id;
         $user->email = "deleted_email" . $user->id . "@d.com";
@@ -141,6 +141,8 @@ class ProfileController extends Controller
         if ($user == null)
             return redirect()->route('home');
 
+        $this->authorize('view', $user); // Policy ... Working
+
         $posts = Post::join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('like_post.id_user', $user->id)
             ->select('post.*')
@@ -159,6 +161,9 @@ class ProfileController extends Controller
         $user = User::where('username', $username)->first();
         if ($user == null)
             return redirect()->route('home');
+
+        $this->authorize('view', $user); // Policy ... Working
+        
 
         $comments = $user->comments;
         return view('pages.comment_list', ['user' => $user, 'comments' => $comments]);
