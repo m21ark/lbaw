@@ -43,8 +43,7 @@ class PasswordRecoverController extends Controller
         // THIS IS A GUEST endpoint ... no need for POLICY 
 
         if ($user === null) {
-            // TODO: Ricardo faz a mesma magia q fizeste no login
-            return redirect()->back()->with('error', 'Not valid email');
+            return redirect()->back()->with('error', 'Not a valid email');
         }
 
         //Create Password Reset Token
@@ -63,6 +62,8 @@ class PasswordRecoverController extends Controller
     public function resetPassword(Request $request)
     {
         // TODO: Validate password
+
+        // THIS IS A GUEST endpoint ... no need for POLICY 
 
         $password = $request->password;
 

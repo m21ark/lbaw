@@ -20,7 +20,7 @@ class PostController extends Controller
 {
 
     public static function areFriends(User $user1, User $user2)
-    {
+    {   // THIS IS A FUNCTION ... IT DOES NOT NEED A POLICY
         return DB::table('friend_request')
             ->where('id_user_sender', $user1->id)
             ->where('id_user_receiver', $user2->id)->where('acceptance_status', 'Accepted')->exists() ||
@@ -32,12 +32,13 @@ class PostController extends Controller
     public function show($id)
     {
         // TODO: use id to get post from database
-        $post   = Post::withCount('likes', 'comments')->find($id);
+        // TODO ... PROVAVELMENTE ESTA QUERY ESTÁ A TORNAR O RETRIVAL DOS POSTS MAIS LENTO ... mudar
+        $post = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
             return view('pages.404');
 
-        // policy, nr_comments_post
+        // POLICY
         if (!$post->owner->visibility) {
             $this->authorize('view', $post);
         }
