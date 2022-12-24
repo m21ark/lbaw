@@ -191,6 +191,7 @@ if (user_header != null) {
                 } else {
                     document.getElementById("selfview").src = stream;
                 }
+                console.log("DKDK")
                 toggleEndCallButton();
                 caller.addStream(stream);
                 localUserMedia = stream;
@@ -205,6 +206,8 @@ if (user_header != null) {
                 });
             })
             .catch(error => {
+                console.log("DKDK")
+
                 console.log("an error occured", error);
             });
     }
