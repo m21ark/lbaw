@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+
+
+
 @section('content')
     <div id="message_frame" class="card">
         @if ($sender != null)
@@ -32,7 +35,7 @@
             <button id="endCall" style="display: none;" onclick="endCurrentCall()">End Call </button>
             <div id="list">
                 <ul id="users">
-    
+
                 </ul>
             </div>
         </div>
@@ -40,6 +43,9 @@
     </div>
 @endsection
 
+
 @section('rightbar')
-    @include('partials.sidebar.messages_sidebar')
+    <div id="toggle_list_B">
+        @include('partials.sidebar.messages_sidebar')
+    </div>
 @endsection

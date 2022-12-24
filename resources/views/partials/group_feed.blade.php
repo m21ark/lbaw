@@ -1,3 +1,5 @@
+<h2 class="mt-4">Posts ({{ $group->posts->count() }})</h2>
+
 <div id="timeline">
 
     @if ($group->posts->isEmpty())
