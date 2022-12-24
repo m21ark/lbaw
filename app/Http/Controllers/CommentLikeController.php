@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentLike;
+use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Events\NewNotification;
@@ -13,16 +15,22 @@ class CommentLikeController extends Controller
 {
     public function toggle(Request $request)
     {
-        // TODO : N POSSO FAZER ESTA ENQUANTO O COMMENT LIKE N FUNCIONAR
-        //$this->authorize('create', Auth::user());
 
         $user = $request->input('id_user');
         $comment = $request->input('id_comment');
+        
+        $commentModel = Comment::find($comment);
+
+        // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
+        // The user must be able to see it to comment it ... TODO ... alterar
+        
+        if (!$request->user()->can('view', $commentModel) )
+            return response()->json(["You are not allowed to like this resourse" => 301]);
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)
             ->first();
-
+        
         if ($like === null) {
             $like = new CommentLike();
             $like->id_user = $user;
@@ -41,6 +49,6 @@ class CommentLikeController extends Controller
                 ->delete();
         }
 
-        return $like;
+        return response()->json(["The comment was liked with success" => 200]);
     }
 }

@@ -365,11 +365,12 @@ function sendEditGroupRequest(event) {
 
 }
 
-function sendDeleteGroupRequest() {
+function sendDeleteGroupRequest(e) {
+    e.preventDefault();
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
-        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => {window.location = '/home'});
     }
 }
 
@@ -385,9 +386,8 @@ function sendKickpMemberRequest(event) {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { location.reload();});
 
-    location.reload();
 }
 
 
@@ -556,7 +556,8 @@ function popupControllReportPost() {
     document.querySelector('#create_report_button').dataset.comment = 0
 }
 
-function sendCreateReportRequest() {
+function sendCreateReportRequest(e) {
+    e.preventDefault();
     let id_post = document.querySelector('#create_report_button').dataset.post
     let id_comment = document.querySelector('#create_report_button').dataset.comment
     let description = document.querySelector('#report_description').value
@@ -955,9 +956,9 @@ function createPost(post) {
     if (post.images.length !== 0) {
         let imageDiv = '';
 
-        post.images.forEach(function (image) {
+        post.images.forEach(function (image, i) {
             imageDiv += `
-                <div class="carousel-item active">
+                <div class="carousel-item ${i == 0 ? 'active': ''}">
                     <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
                 </div>
             `
