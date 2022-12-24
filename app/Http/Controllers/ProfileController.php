@@ -163,7 +163,7 @@ class ProfileController extends Controller
             return redirect()->route('home');
 
         $this->authorize('view', $user); // Policy ... Working
-        
+
 
         $comments = $user->comments;
         return view('pages.comment_list', ['user' => $user, 'comments' => $comments]);

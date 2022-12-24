@@ -8,7 +8,7 @@
         @if ($sender != null)
             <div class="message_head card-header text-bg-primary">
                 <a class="white_span_a" href="/profile/{{ $sender->username }}" id='sms_rcv' data-id="{{ $sender->id }}">
-                    <img id="sms_photo" src="/{{ $sender->photo }}" alt="" width="50" class="me-4 rounded-circle">
+                    <img id="sms_photo" src="/{{ $sender->photo }}" alt="Contact Profile Image" width="50" class="me-4 rounded-circle">
                     <span>{{ $sender->username }}</span>
                 </a>
                 <a id="#videoCall">
@@ -25,7 +25,7 @@
                 </a>
             </div>
         @else
-            <img src="/Illustration 18.png" width="50%">
+            <img src="/Illustration 18.png" alt="No Conversation Selected Art" width="50%">
         @endif
 
         <div id="app">

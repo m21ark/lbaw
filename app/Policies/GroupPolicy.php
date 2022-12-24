@@ -21,9 +21,8 @@ class GroupPolicy
 
     public function create(User $user, Request $request)
     {
-        return Group::where('name','=', $request->input('name'))->firstOrFail() === null; // IT has only to be authenticated ... and can't have a group with the same name
+        return Group::where('name', '=', $request->input('name'))->firstOrFail() === null; // IT has only to be authenticated ... and can't have a group with the same name
     }
-
 
     public function update(User $user, Group $group)
     {
@@ -34,5 +33,4 @@ class GroupPolicy
     {
         return in_array($user->id, $group->owners->pluck('id_user')->toArray());
     }
-
 }

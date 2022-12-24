@@ -7,7 +7,7 @@
         @foreach ($requests as $requester)
             @if ($requester->acceptance_status == 'Pendent')
                 <div class="card mt-4 me-3" style="width: 15em;height:29em" id="group_request_{{ $requester->user->id }}">
-                    <img height="50%" src="/{{ $requester->user->photo }}" class="card-img-top" alt="user_avatar">
+                    <img height="50%" src="/{{ $requester->user->photo }}" class="card-img-top" alt="Requester Profile Image">
                     <div class="card-body">
                         <h5 class="card-title group_request_sender">
                             <a href="/profile/{{ $requester->user->username }}"> {{ $requester->user->username }}</a>

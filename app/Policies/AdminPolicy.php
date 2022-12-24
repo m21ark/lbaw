@@ -10,7 +10,6 @@ class AdminPolicy
 {
     use HandlesAuthorization;
 
-
     public function before(User $user, $ability)
     {
         if ($user->isAdmin !== null) {
@@ -32,5 +31,4 @@ class AdminPolicy
     {
         return null !== $admin;
     }
-
 }

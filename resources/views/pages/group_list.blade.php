@@ -31,8 +31,8 @@
                         @foreach ($user->groupsOwner as $x)
                             <?php $group = $x->group; ?>
                             <div class="card mt-4 me-3" style="width: 15em;height:22em">
-                                <img height="60%" src="{{ asset($x->group->photo) }}" class="card-img-top"
-                                    alt="user_avatar">
+                                <img height="60%" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
+                                    class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
 
@@ -57,8 +57,8 @@
                     <div class="d-flex flex-wrap">
                         @foreach ($user->groupsMember as $x)
                             <div class="card mt-4 me-3" style="width: 15em;height:25em">
-                                <img height="60%" src="{{ asset($x->group->photo) }}" class="card-img-top"
-                                    alt="user_avatar">
+                                <img height="60%" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
+                                    class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
 

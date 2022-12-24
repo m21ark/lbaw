@@ -53,9 +53,9 @@ class PostController extends Controller
 
         // We just need to check if the user can access for_you, friends, groups
         // In other words, the user has only to be authenticated, else 401 error is returned
-        // Authorization inside fee_for_you ,friends and viral functions 
+        // Authorization inside fee_for_you ,friends and viral functions
 
-        if ($request->route('type_feed') === "for_you") { 
+        if ($request->route('type_feed') === "for_you") {
             $posts = $this->feed_for_you();
         } else if ($request->route('type_feed') === "friends") {
             $posts = $this->feed_friends();
@@ -70,20 +70,18 @@ class PostController extends Controller
                 ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
                 ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
                 ->orderBy('ranking', 'desc');
-
         } else if ($request->route('type_order') === "date") {
             $posts = $posts->orderBy('post_date', 'desc');
-        
         } else if ($request->route('type_order') === "likes") {
             $posts = $posts->orderBy('likes_count', 'desc');
         }
-        
-        // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar 
+
+        // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
         $posts = $posts->skip($offset)->limit(5)->get();
 
 
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
-        
+
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->hasLiked = false;
@@ -102,7 +100,7 @@ class PostController extends Controller
                 $post->hasLiked = true;
             }
         }
-        
+
         return json_encode($posts);
     }
 
@@ -115,7 +113,7 @@ class PostController extends Controller
         if ($request->input('group_name') != null) {
             $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }
-    
+
         $this->authorize('create', $post); // POLICY
 
         $post->text = $request->input('text');
@@ -227,7 +225,7 @@ class PostController extends Controller
     }
 
     private function feed_friends()
-    { 
+    {
 
         if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
@@ -256,7 +254,7 @@ class PostController extends Controller
     }
 
     private function feed_groups()
-    { 
+    {
         if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
         }
@@ -267,7 +265,7 @@ class PostController extends Controller
                 ->from('group_join_request')
                 ->where('id_user', $id)
                 ->where('acceptance_status', 'Accepted');
-            })
+        })
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
@@ -286,7 +284,7 @@ class PostController extends Controller
     }
 
     private function feed_for_you()
-    {  
+    {
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]); // Authorization
         }
@@ -300,8 +298,7 @@ class PostController extends Controller
             ->union($posts_friends)
             ->distinct();
 
-        
+
         return $posts;
     }
-
 }

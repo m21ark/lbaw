@@ -41,12 +41,12 @@ class GroupController extends Controller
 
     public function create(Request $request)
     {
-        if ($request->user() === null && Group::where('name','=', $request->input('name'))->firstOrFail() !== null) {
+        if ($request->user() === null && Group::where('name', '=', $request->input('name'))->firstOrFail() !== null) {
             return response()->json(['failure' => 401]);
         }
 
         // No need for policy ... the user just only has to have a authenticated account
-        // e se já houve um com o nome .. 
+        // e se já houve um com o nome ..
 
         $group = new Group();
 
@@ -69,7 +69,7 @@ class GroupController extends Controller
     }
 
     private function add_topics(Request $request, Group $group)
-    {   
+    {
         // THIS IS A FUNCTION AND DOES NOT NEED POLICY HERE... but in the callee function
         if ($request->input('tags') != null) {
 
@@ -93,10 +93,10 @@ class GroupController extends Controller
     }
 
     public function delete($name)
-    {  
+    {
         $group = Group::where('name', $name)->first();
         $this->authorize('delete', $group); // POLICY....WORKING
-        $group->delete(); 
+        $group->delete();
 
         return response()->json(['The group was deleted with success' => 200]);
     }

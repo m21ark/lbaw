@@ -10,7 +10,6 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-
     public function viewAny(User $user)
     {
         return $user->isAdmin() !== null;
@@ -20,7 +19,6 @@ class UserPolicy
     {
         return  $model->id == $user->id || $model->visibility || PostController::areFriends($user, $model);
     }
-
 
     public function create(User $user)
     {

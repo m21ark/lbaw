@@ -8,7 +8,7 @@
         <div class="mt-4 p-4 card text-bg-light" style="width:50%;max-width:35em">
             <h3 id="username"><a class="text-decoration-none" href="/profile/{{ $user->username }}">{{ $user->username }}</a>
             </h3>
-            <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="250">
+            <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="Reported User Profile Image" width="250">
 
             <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
 

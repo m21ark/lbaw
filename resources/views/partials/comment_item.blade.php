@@ -32,7 +32,7 @@
     </div>
 
     <div class="card-header d-flex justify-content-center align-items-center">
-        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}" alt=""
+        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}" alt="Commenter Profile Image"
             width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
             href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
@@ -125,7 +125,7 @@
 
                     <div class="card-header d-flex justify-content-center align-items-center">
                         <img href="/profile/{{ $reply->poster->username }}" src="/{{ $reply->poster->photo }}"
-                            alt="" width="50" class="rounded-circle me-5">
+                            alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
                         <a class="text-decoration-none"
                             href="/profile/{{ $reply->poster->username }}">{{ $reply->poster->username }}</a>
                     </div>

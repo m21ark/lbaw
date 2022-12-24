@@ -10,10 +10,8 @@ class NotificationPolicy
 {
     use HandlesAuthorization;
 
-
     public function update(User $user, Notification $notification)
     {
         return $user->id == $notification->id_user;
     }
-
 }

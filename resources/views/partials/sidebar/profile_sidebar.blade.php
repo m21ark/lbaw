@@ -27,7 +27,7 @@
             </h3>
 
             <div class="m-auto">
-                <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="" width="150">
+                <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="Profile Image" width="150">
                 <h3 id="username" class="">{{ $user->username }}</h3>
             </div>
 

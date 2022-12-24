@@ -24,7 +24,7 @@
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="" width="150"
+            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="Group Profile Image" width="150"
                 height="150">
         </div>
 
@@ -80,7 +80,7 @@
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
-                <img src="{{ asset($owner->user->photo) }}" alt="user_avatar" width="50" class="rounded-circle">
+                <img src="{{ asset($owner->user->photo) }}" alt="Post Owner Profile Image" width="50" class="rounded-circle">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 
@@ -97,7 +97,7 @@
         @foreach ($group->members as $member)
             @if (!in_array($member->id_user, $group->owners->pluck('id_user')->toArray()))
                 <div class="list-group-item max_width_rightbar">
-                    <img src="{{ asset($member->user->photo) }}" alt="user_avatar" width="50"
+                    <img src="{{ asset($member->user->photo) }}" alt="Group Member Profile Image" width="50"
                         class="rounded-circle">
                     <a
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>

@@ -18,19 +18,19 @@ class CommentLikeController extends Controller
 
         $user = $request->input('id_user');
         $comment = $request->input('id_comment');
-        
+
         $commentModel = Comment::find($comment);
 
         // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
         // The user must be able to see it to comment it ... TODO ... alterar
-        
-        if (!$request->user()->can('view', $commentModel) )
+
+        if (!$request->user()->can('view', $commentModel))
             return response()->json(["You are not allowed to like this resourse" => 301]);
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)
             ->first();
-        
+
         if ($like === null) {
             $like = new CommentLike();
             $like->id_user = $user;

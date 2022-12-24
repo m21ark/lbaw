@@ -83,8 +83,7 @@ class ReportController extends Controller
 
         if ($request->id_comment > 0) {
             $report->id_comment = $request->id_comment;
-        }
-        else {
+        } else {
             $report->id_post = $request->id_post;
         }
 

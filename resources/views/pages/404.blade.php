@@ -9,7 +9,7 @@
             We're sorry for any inconvenience.</p>
         </p>
 
-        <img src="/../not_found.jpg" alt="sad_cat" width="400" class="d-block">
+        <img src="/../not_found.jpg" alt="Sad Cat" width="400" class="d-block">
 
         <a href={{ url('/home') }} class="mt-4 btn btn-outline-secondary">Go back to home</a>
     </div>
