@@ -150,6 +150,11 @@ if (user_header != null) {
                         "stun:stun2.l.google.com:19302",
                     ]
                 },
+                {
+                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                    credential: 'webrtc',
+                    username: 'webrtc'
+                }
             ],
             iceCandidatePoolSize: 10,
         };

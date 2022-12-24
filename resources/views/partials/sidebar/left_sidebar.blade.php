@@ -132,7 +132,7 @@
                 <p style="padding: 0;margin:0;">Notifications</p>
             </a>
 
-            <a href={{ url('/messages/sender_username') }} class="btn">
+            <a href={{ url('/messages') }} class="btn">
                 <span class="position-relative">
                     <i class="fa-solid fa-envelope fa-2x"></i>
                     <span
