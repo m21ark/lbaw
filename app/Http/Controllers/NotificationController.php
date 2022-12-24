@@ -13,7 +13,9 @@ class NotificationController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO : perguntar ao stor o pk
+        
+        //No need for POLICY as We just want to check if the user is logged in ... middleware
+
         $user = [];
         foreach (Auth::user()->notifications as $not) {
             $user[] = $not->sender;
@@ -49,9 +51,7 @@ class NotificationController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-
-        //TODO : N é necessário policy, mas fala-se com o stor sobre se é preciso ter em todos
-        // ATE PK O CHECK n pode ser feito na policy se n me engano
+        //No need for POLICY as We just want to check if the user is logged in ... middleware
 
         foreach (Auth::user()->notifications as $not) {
             $not->seen = True;
