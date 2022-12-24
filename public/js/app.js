@@ -50,10 +50,7 @@ if (user_header != null) {
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
 
-        if (data.room == room) {
-            console.log("candidate received");
-            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-        }
+      
     });
 
 
@@ -135,6 +132,7 @@ if (user_header != null) {
     }
 
     function GetRTCSessionDescription() {
+        console.log("GetRTCSessionDescription called");
         window.RTCSessionDescription =
             window.RTCSessionDescription ||
             window.webkitRTCSessionDescription ||
@@ -155,9 +153,11 @@ if (user_header != null) {
         caller.onaddstream = function (evt) {
             console.log("onaddstream called");
             if (window.URL) {
-                document.getElementById("remoteview").src = window.URL.createObjectURL(
-                    evt.stream
-                );
+                document.getElementById("remoteview").srcObject = evt.stream;
+
+                //document.getElementById("remoteview").src = window.URL.createObjectURL(
+                //    evt.stream
+                //);
             } else {
                 document.getElementById("remoteview").src = evt.stream;
             }
@@ -166,12 +166,20 @@ if (user_header != null) {
 
     function onIceCandidate(peer, evt) {
         if (evt.candidate) {
-            channel.trigger("my-event", {
+            channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
                 "room": room
             });
         }
     }
+
+    channel.bind("client-candidate", function(msg) {
+        if(msg.room==room){
+            console.log("candidate received");
+            console.log(msg.candidate)
+            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+        }
+    });
 
     function getCam() {
         //Get local audio/video feed and show it in selfview video element
@@ -184,14 +192,18 @@ if (user_header != null) {
     function callUser(user) {
         getCam()
             .then(stream => {
+                console.log(stream)
+
                 if (window.URL) {
-                    document.getElementById("selfview").src = window.URL.createObjectURL(
-                        stream
-                    );
+                    document.getElementById("selfview").srcObject = stream;
+
+                    //document.getElementById("selfview").src = window.URL.createObjectURL(
+                       // stream
+                    //);
                 } else {
                     document.getElementById("selfview").src = stream;
                 }
-                console.log("DKDK")
+                console.log("DKeeeDK")
                 toggleEndCallButton();
                 caller.addStream(stream);
                 localUserMedia = stream;
@@ -231,7 +243,8 @@ if (user_header != null) {
                     localUserMedia = stream;
                     toggleEndCallButton();
                     if (window.URL) {
-                        document.getElementById("selfview").src = window.URL.createObjectURL(stream);
+                        document.getElementById("selfview").srcObject = stream;
+                        //document.getElementById("selfview").src = window.URL.createObjectURL(stream);
                     } else {
                         document.getElementById("selfview").src = stream;
                     }
