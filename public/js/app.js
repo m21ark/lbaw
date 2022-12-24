@@ -141,8 +141,21 @@ if (user_header != null) {
         return window.RTCSessionDescription;
     }
     function prepareCaller() {
+
+        const servers = {
+            iceServers: [
+                {
+                    urls: [
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+                    ]
+                },
+            ],
+            iceCandidatePoolSize: 10,
+        };
+
         //Initializing a peer connection
-        caller = new window.RTCPeerConnection();
+        caller = new window.RTCPeerConnection(servers);
         //Listen for ICE Candidates and send them to remote peers
         caller.onicecandidate = function (evt) {
             if (!evt.candidate) return;
