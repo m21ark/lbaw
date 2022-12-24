@@ -61,14 +61,14 @@ class PusherController extends Controller
 
         $presenceData = array('user_id' => Auth::user()->id);
 
-        $pusher = new Pusher(1515597, 'c827040c068ce8231c02', 'b1c2a48a3bbfb2df4f10');
+        $pusher = new Pusher('c827040c068ce8231c02', 'b1c2a48a3bbfb2df4f10', '1515597');
      
         $out->writeln("Hello from Tereeeeeminal");
 
         $auth = $pusher->authorizePresenceChannel($channel, $socketId, Auth::user()->id, $presenceData);
         $out->writeln("Hello from Tereeeeeminal");
 
-        return response()->json($auth);
+        return $auth;
         //return response()->json(['auth' => "DLDKKK", 'suc' => 200, 'channel_data' => 'dDdddd']);
 
     }
