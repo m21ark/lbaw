@@ -3,6 +3,12 @@
 // ======================= PASSWORD RECOVERY =======================
 
 use App\Http\Controllers\GroupController;
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Pusher\Pusher;
+use Symfony\Component\Console\Input\Input;
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
@@ -89,6 +95,8 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');
 Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
+Route::post('/broadcast/auth', 'PusherController@pusherAuth')->middleware('auth');
+
 
 // ======================================= APIS ========================================
 
