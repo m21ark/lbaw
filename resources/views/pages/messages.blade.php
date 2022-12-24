@@ -8,6 +8,9 @@
                     <img id="sms_photo" src="/{{ $sender->photo }}" alt="" width="50" class="me-4 rounded-circle">
                     <span>{{ $sender->username }}</span>
                 </a>
+                <a id="#videoCall">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
             </div>
 
             @include('partials.messages_list')
@@ -21,6 +24,18 @@
         @else
             <img src="/Illustration 18.png" width="50%">
         @endif
+
+        <div id="app">
+            <span id="myid"> </span>
+            <video id="selfview"></video>
+            <video id="remoteview"></video>
+            <button id="endCall" style="display: none;" onclick="endCurrentCall()">End Call </button>
+            <div id="list">
+                <ul id="users">
+    
+                </ul>
+            </div>
+        </div>
 
     </div>
 @endsection
