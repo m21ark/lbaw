@@ -3,7 +3,8 @@ Pusher.logToConsole = true;
 
 var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
     cluster: 'eu',
-    authEndpoint: '/pusher/auth',
+    authEndpoint: '/broadcast/auth',
+    encrypted: true,
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -81,6 +82,7 @@ if (user_header != null) {
     
     channel.bind("pusher:member_added", member => {
       users.push(member.id);
+      console.log("lelle")
       render();
     });
     

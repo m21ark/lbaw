@@ -95,7 +95,7 @@ Route::get('messages/{sender_username}', 'MessagesController@show')->name('messa
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');
 Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
-Route::post('/pusher/auth', [PusherController::class, 'pusherAuth'])->middleware('auth');
+Route::post('/broadcast/auth', 'PusherController@pusherAuth')->middleware('auth');
 
 
 // ======================================= APIS ========================================
