@@ -67,7 +67,6 @@ if (user_header != null) {
       //set the member count
       usersOnline = members.count;
       id = channel.members.me.id;
-      document.getElementById("myid").innerHTML = ` My caller id is : ` + id;
       members.each(member => {
         if (member.id != channel.members.me.id) {
           users.push(member.id);
@@ -79,7 +78,6 @@ if (user_header != null) {
     
     channel.bind("pusher:member_added", member => {
       users.push(member.id);
-      console.log("lelle")
       render();
     });
     
@@ -94,16 +92,16 @@ if (user_header != null) {
     });
     
     function render() {
-      var list = "";
-      users.forEach(function(user) {
-        list +=
-          `<li>` +
-          user +
-          ` <input type="button" style="float:right;"  value="Call" onclick="callUser('` +
-          user +
-          `')" id="makeCall" /></li>`;
-      });
-      document.getElementById("users").innerHTML = list;
+      // var list = "";
+      // users.forEach(function(user) {
+      //   list +=
+      //     `<li>` +
+      //     user +
+      //     ` <input type="button" style="float:right;"  value="Call" onclick="callUser('` +
+      //     user +
+      //     `')" id="makeCall" /></li>`;
+      // });
+      // document.getElementById("users").innerHTML = list;
     }
 
     //To iron over browser implementation anomalies like prefixes
@@ -172,10 +170,6 @@ if (user_header != null) {
             console.log("onaddstream called");
             if (window.URL) {
                 document.getElementById("remoteview").srcObject = evt.stream;
-
-                //document.getElementById("remoteview").src = window.URL.createObjectURL(
-                //    evt.stream
-                //);
             } else {
                 document.getElementById("remoteview").src = evt.stream;
             }
@@ -210,18 +204,6 @@ if (user_header != null) {
     function callUser(user) {
         getCam()
             .then(stream => {
-                console.log(stream)
-
-                if (window.URL) {
-                    document.getElementById("selfview").srcObject = stream;
-
-                    //document.getElementById("selfview").src = window.URL.createObjectURL(
-                       // stream
-                    //);
-                } else {
-                    document.getElementById("selfview").src = stream;
-                }
-                console.log("DKeeeDK")
                 toggleEndCallButton();
                 caller.addStream(stream);
                 localUserMedia = stream;
@@ -234,10 +216,19 @@ if (user_header != null) {
                     });
                     room = user;
                 });
+                var audioTrack = stream.getAudioTracks();
+
+                if (audioTrack.length > 0) {
+                    stream.removeTrack(audioTrack[0]);
+                }
+
+                if (window.URL) {
+                    document.getElementById("selfview").srcObject = stream;
+                } else {
+                    document.getElementById("selfview").src = stream;
+                }
             })
             .catch(error => {
-                console.log("DKDK")
-
                 console.log("an error occured", error);
             });
     }
@@ -260,12 +251,7 @@ if (user_header != null) {
                 .then(stream => {
                     localUserMedia = stream;
                     toggleEndCallButton();
-                    if (window.URL) {
-                        document.getElementById("selfview").srcObject = stream;
-                        //document.getElementById("selfview").src = window.URL.createObjectURL(stream);
-                    } else {
-                        document.getElementById("selfview").src = stream;
-                    }
+
                     caller.addStream(stream);
                     var sessionDesc = new RTCSessionDescription(msg.sdp);
                     caller.setRemoteDescription(sessionDesc);
@@ -276,7 +262,18 @@ if (user_header != null) {
                             "room": room
                         });
                     });
+                    
+                    var audioTrack = stream.getAudioTracks();
 
+                    if (audioTrack.length > 0) {
+                        stream.removeTrack(audioTrack[0]);
+                    }
+                
+                    if (window.URL) {
+                        document.getElementById("selfview").srcObject = stream;
+                    } else {
+                        document.getElementById("selfview").src = stream;
+                    }
                 })
                 .catch(error => {
                     console.log('an error occured', error);
