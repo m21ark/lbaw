@@ -73,8 +73,8 @@
     </div>
 
 
-    <button id="popup_btn_group_post" onclick="document.querySelector('#list_toggle_btn').click();"
-        class='btn btn-primary w-100 mb-3 mt-2'>Post on group</button>
+    <button id="popup_btn_group_post" onclick="groupPostResponsiveUI()" class='btn btn-primary w-100 mb-3 mt-2'>Post on
+        group</button>
 
 
     <h3 class="mb-4">Members</h3>

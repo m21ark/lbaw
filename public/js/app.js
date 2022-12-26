@@ -1982,6 +1982,13 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
     });
 }
 
+function groupPostResponsiveUI() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    if (width <= 80)
+        document.querySelector('#list_toggle_btn').click()
+}
+
 
 function checkResponsiveUI() {
     let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
