@@ -4,7 +4,7 @@
             <div class="carousel-item <?php if ($i == 0) {
                 echo 'active';
             } ?>">
-                <img class="d-block" src="/{{ $post->images[$i]->path }}" alt="First Slide">
+                <img class="d-block" src="/{{ $post->images[$i]->path }}" alt="Post Content Image">
             </div>
         @endfor
     </div>

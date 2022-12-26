@@ -2,14 +2,6 @@
 
 // ======================= PASSWORD RECOVERY =======================
 
-use App\Http\Controllers\GroupController;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Pusher\Pusher;
-use Symfony\Component\Console\Input\Input;
-
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
@@ -181,7 +173,7 @@ Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
 Route::put('api/group/{group_name}/request/{id_sender}/accept', 'GroupJoinRequestController@accept');
 Route::put('api/group/{group_name}/request/{id_sender}/reject', 'GroupJoinRequestController@reject');
 Route::post('api/group/request/{id}/send', 'GroupJoinRequestController@send');
-Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete'); 
+Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete');
 
 
 // ======================= Reports ==========================

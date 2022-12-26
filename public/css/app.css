@@ -143,7 +143,7 @@
 
     #post_comment_section {
         margin: -6em auto 7em auto;
-        min-width: 40em;
+        min-width: 35em;
         grid-row: 4;
     }
 
@@ -156,6 +156,10 @@
 }
 
 /*  ====================== AJUSTES =====================*/
+
+p {
+    line-height: 1.4;
+}
 
 .card {
     border: none;
@@ -216,7 +220,7 @@ ul.nav a:hover {
 }
 
 .comment_item {
-    max-width: 35em;
+    max-width: 33em;
     margin: auto;
 }
 
@@ -261,20 +265,20 @@ ul.nav a:hover {
 
 /*  ====================== FLOAT BTN ===================== */
 
-.float{
-	position:absolute;
-	width:60px;
-	height:60px;
-	top:90px;
-	right:30px;
-	background-color:#006EF5;
-	color:#FFF;
-	border-radius:10px;
-	text-align:center;
+.float {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 90px;
+    right: 30px;
+    background-color: #006EF5;
+    color: #FFF;
+    border-radius: 10px;
+    text-align: center;
 }
 
-.my-float{
-	margin-top:22px;
+.my-float {
+    margin-top: 22px;
 }
 
 #list_toggle_btn_div, #list_toggle_btn_div *:hover {
@@ -285,6 +289,9 @@ ul.nav a:hover {
 
 /*  ====================== MESSAGES ===================== */
 
+#video_call_span:hover {
+    cursor: pointer;
+}
 
 #sms_input {
     width: 80%;
@@ -320,6 +327,21 @@ ul.nav a:hover {
 .message_body {
     margin: 1em;
     min-height: 15em;
+}
+
+#video_call {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    display: none;
+    padding: 2em;
+}
+
+#endCall:hover {
+    cursor: pointer;
 }
 
 
@@ -432,8 +454,8 @@ ul.nav a:hover {
     border-radius: 1em;
     background-color: #a4c6f0;
     box-shadow: 2px 2px 5px grey;
-    position: absolute;
-    top: 20em;
+    position: fixed;
+    top: 16em;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -444,10 +466,13 @@ ul.nav a:hover {
 
 
 
+
+
 .comment_reply_section {
     margin: 0 auto;
     width: 90%;
 }
+
 
 
 /* ====================== switch ===================== */

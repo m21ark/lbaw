@@ -1,33 +1,39 @@
 @extends('layouts.app')
 
-@section('content')
-    <div class=" p-5 mw-10 d-flex align-items-center justify-content-around">
+@section('page_title', 'Reset Password')
 
-        <body class="text-center">
+@section('content')
+    <div class=" p-5 d-flex align-items-center justify-content-around">
+
+        <body>
 
             @if ($token === 'invalid_token')
                 <div>
-                    <h3>Sorry, that token is no longer valid! Please ask for new password recovery email.</h3>
-
+                    <h3>Sorry, that token is no longer valid! Please ask for a new password recovery email.</h3>
                     <a href="/forgot-password" class="btn btn-primary mt-4 me-5">Ask for new email</a>
                     <a href="/login" class="btn btn-primary mt-4">Go back to login </a>
-
                 </div>
             @else
-                <form method="POST" action="{{ url('/reset_password_with_token') }}">
+                <form method="POST" action="{{ url('/reset_password_with_token') }}"
+                    style="width:90%;min-width:20em;max-width: 40em">
                     {{ csrf_field() }}
 
-                    <h1 class="h3 mb-3 font-weight-normal">New Password</h1>
+                    <h1 class="h3 mb-3 font-weight-normal">Password Recovery Page</h1>
 
-                    <p>Please provide a new password</p>
+                    <fieldset>
+                        <legend>Recovery Form</legend>
 
-                    <p>Password</p>
-                    <input type="password" id="inputPassword" class="form-control mb-4" placeholder="Password"
-                        name="password" required>
+                        <p>Please provide a new password</p>
 
-                    <p>Confirm Password</p>
-                    <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Confirm Password"
-                        name="password_confirmation" required>
+                        <p>Password <small>(Required)</small></p>
+                        <input type="password" id="inputPassword" class="form-control mb-4" placeholder="Password"
+                            name="password" required>
+
+                        <p>Confirm Password <small>(Required)</small></p>
+                        <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Confirm Password"
+                            name="password_confirmation" required>
+
+                    </fieldset>
 
                     <input hidden name="token" value="{{ $token }}">
 

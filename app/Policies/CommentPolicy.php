@@ -32,10 +32,8 @@ class CommentPolicy
         return $user->id == $comment->id_commenter;
     }
 
-
     public function delete(User $user, Comment $comment)
     {
         return $user->id == $comment->id_commenter;
     }
-
 }

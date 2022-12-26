@@ -13,13 +13,11 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
-    
     public function viewAny(User $user)
     {
         return True;
     }
 
-  
     public function view(User $user, Post $post)
     {
 
@@ -30,23 +28,18 @@ class PostPolicy
         return PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
     }
 
-   
     public function create(User $user, Post $post)
     {
         return Auth::check();
     }
 
-
-   
     public function update(User $user, Post $post)
     {
         return in_array(Auth::user()->id, $user->posts->pluck('id_poster')->toArray());
     }
 
-   
     public function delete(User $user, Post $post)
     {
         return $post->owner->id == $user->id;
     }
-
 }

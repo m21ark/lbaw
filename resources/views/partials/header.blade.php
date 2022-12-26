@@ -4,8 +4,7 @@
 
 
         <div class="text-start">
-            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="nexus_logo" width="120"></a>
-
+            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120"></a>
         </div>
 
         <div class="header_searchbar">
@@ -21,7 +20,7 @@
                         href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2" id="auth_id"
                             data-id={{ Auth::user()->id }}>{{ Auth::user()->username }}</strong>
-                        <img id="log_in_photo" src="{{ asset(Auth::user()->photo) }}" alt="logo" width="40"
+                        <img id="log_in_photo" src="{{ asset(Auth::user()->photo) }}" alt="User Avatar" width="40"
                             height="40" class="rounded-circle">
                     </a>
 

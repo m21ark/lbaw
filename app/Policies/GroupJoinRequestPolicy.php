@@ -11,7 +11,6 @@ class GroupJoinRequestPolicy
 {
     use HandlesAuthorization;
 
-
     public function create(User $user, Group $group)
     {
         return true;
@@ -26,5 +25,4 @@ class GroupJoinRequestPolicy
     {
         return $user->id == $groupJoinRequest->id_user;
     }
-
 }

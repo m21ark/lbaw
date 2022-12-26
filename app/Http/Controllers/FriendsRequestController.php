@@ -15,7 +15,7 @@ class FriendsRequestController extends Controller
     {
         if (!Auth::check())
             return redirect()->route('home');
-        
+
         // NO need to call policy here because the view is only for the user
 
         return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->pendentFriendsRequests, 'isrequests' => true]);
@@ -70,7 +70,7 @@ class FriendsRequestController extends Controller
     }
 
     public function reject($id_sender, Request $request)
-    {   
+    {
         // Policy bellow
         return $this->update_request($id_sender, "Rejected", $request);
     }

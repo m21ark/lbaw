@@ -13,7 +13,7 @@ class NotificationController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        
+
         //No need for POLICY as We just want to check if the user is logged in ... middleware
 
         $user = [];
@@ -60,5 +60,4 @@ class NotificationController extends Controller
 
         return response()->json(['The notifications were marked as seen' => 200]);
     }
-
 }

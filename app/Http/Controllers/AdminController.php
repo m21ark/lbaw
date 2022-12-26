@@ -30,7 +30,7 @@ class AdminController extends Controller
     {
 
         $this->authorize('view', Auth::user()->isAdmin); // WORKING
-        
+
         $statistics = [
             'posts_c' => Post::count(),
             'users_c' => User::count(),

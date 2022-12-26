@@ -51,7 +51,7 @@ class MessagesController extends Controller
 
         $user = Auth::user();
 
-        if ($sender_username !== null) 
+        if ($sender_username !== null)
             $receiver = User::where('username', '=', $sender_username)->firstOrFail();
 
         $messages = $user->messages()
@@ -61,7 +61,7 @@ class MessagesController extends Controller
             });
 
         if ($sender_username !== null && $receiver->visibility !== true && count($messages) == 0) {
-                $this->authorize('delete', $receiver); // POLICY ... This means they are friends (see BR)
+            $this->authorize('delete', $receiver); // POLICY ... This means they are friends (see BR)
         }
 
         $sender = User::where('username', '=', $sender_username)->first();
