@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Login')
+
 @section('content')
     <div class=" d-flex align-items-center justify-content-around">
 
@@ -12,16 +14,16 @@
 
                 @if (session('error'))
                     <div class="alert alert-danger">
-                        {{ session('error') }}
+                        <i class="fa-solid fa-circle-exclamation"></i>{{ session('error') }}
                     </div>
                 @endif
 
                 <fieldset>
                     <legend>Login Form</legend>
-                    <label for="inputEmail" class="">Email address</label>
+                    <label for="inputEmail" class="">Email Address*</label>
                     <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
                         placeholder="Email" name="email" required autofocus autofocus="">
-                    <label for="inputPassword" class="">Password</label>
+                    <label for="inputPassword" class="">Password*</label>
                     <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
                         required>
                 </fieldset>
@@ -30,8 +32,8 @@
 
                 <!-- TODO: Make better error message -->
                 @if ($errors->has('password'))
-                    <span class="error">
-                        {{ $errors->first('password') }}
+                    <span class="alert text-danger error">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('password') }}
                     </span>
                 @endif
 

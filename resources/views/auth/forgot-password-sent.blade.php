@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Email Sent')
+
 @section('content')
     <div class="p-5 mw-10 m-3">
 

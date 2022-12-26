@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Forgot Password')
+
 @section('content')
     <div class=" p-5 mw-10 d-flex align-items-center justify-content-around">
 
@@ -24,7 +26,7 @@
                 <fieldset>
                     <legend>Email Password Recovery Form</legend>
 
-                    <label for="inputEmail">Email address</label>
+                    <label for="inputEmail">Email Address*</label>
                     <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
 
                 </fieldset>

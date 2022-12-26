@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Reset Password')
+
 @section('content')
     <div class=" p-5 d-flex align-items-center justify-content-around">
 
@@ -22,11 +24,11 @@
 
                         <p>Please provide a new password</p>
 
-                        <p>Password</p>
+                        <p>Password*</p>
                         <input type="password" id="inputPassword" class="form-control mb-4" placeholder="Password"
                             name="password" required>
 
-                        <p>Confirm Password</p>
+                        <p>Confirm Password*</p>
                         <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Confirm Password"
                             name="password_confirmation" required>
 
