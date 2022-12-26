@@ -92,16 +92,7 @@ if (user_header != null) {
     });
     
     function render() {
-      // var list = "";
-      // users.forEach(function(user) {
-      //   list +=
-      //     `<li>` +
-      //     user +
-      //     ` <input type="button" style="float:right;"  value="Call" onclick="callUser('` +
-      //     user +
-      //     `')" id="makeCall" /></li>`;
-      // });
-      // document.getElementById("users").innerHTML = list;
+      
     }
 
     //To iron over browser implementation anomalies like prefixes
@@ -204,7 +195,7 @@ if (user_header != null) {
     function callUser(user) {
         getCam()
             .then(stream => {
-                toggleEndCallButton();
+                toggleVideoPopUp();
                 caller.addStream(stream);
                 localUserMedia = stream;
                 caller.createOffer().then(function (desc) {
@@ -212,7 +203,7 @@ if (user_header != null) {
                     channel.trigger("client-sdp", {
                         sdp: desc,
                         room: user,
-                        from: id
+                        from: document.querySelector(".me-2").textContent
                     });
                     room = user;
                 });
@@ -232,17 +223,17 @@ if (user_header != null) {
                 console.log("an error occured", error);
             });
     }
-    function toggleEndCallButton() {
-        if (document.getElementById("endCall").style.display == "block") {
-            document.getElementById("endCall").style.display = "none";
+    function toggleVideoPopUp() {
+        if (document.getElementById("video_call").style.display == "block") {
+            document.getElementById("video_call").style.display = "none";
         } else {
-            document.getElementById("endCall").style.display = "block";
+            document.getElementById("video_call").style.display = "block";
         }
     }
 
     channel.bind("client-sdp", function (msg) {
         if (msg.room == id) {
-            var answer = confirm("You have a call from: " + msg.from + "Would you like to answer?");
+            var answer = confirm("You have a call from: " + msg.from + ". Would you like to answer?");
             if (!answer) {
                 return channel.trigger("client-reject", { "room": msg.room, "rejected": id });
             }
@@ -250,7 +241,7 @@ if (user_header != null) {
             getCam()
                 .then(stream => {
                     localUserMedia = stream;
-                    toggleEndCallButton();
+                    toggleVideoPopUp();
 
                     caller.addStream(stream);
                     var sessionDesc = new RTCSessionDescription(msg.sdp);
@@ -302,7 +293,7 @@ if (user_header != null) {
             track.stop();
         }
         prepareCaller();
-        toggleEndCallButton();
+        toggleVideoPopUp();
     }
 }
 

@@ -33,15 +33,6 @@
 @endsection
 
 
-<div class="pop_up" id="app" style="width: 50%;">
-    <video id="remoteview" style="width: 100%;left-margin:1em;" controls autoplay></video>
-    <video id="selfview" class="position-absolute bottom-0 end-0" style="width: 30%;" controls autoplay></video>
-    <span id="endCall" class="position-absolute bottom-0 start-0 fa-2x" style="display: none;color:red;" onclick="endCall()">
-        <i class="fa-solid fa-phone-slash"></i>
-    </span>
-</div>
-
-
 @section('rightbar')
     <div id="toggle_list_B">
         @include('partials.sidebar.messages_sidebar')
