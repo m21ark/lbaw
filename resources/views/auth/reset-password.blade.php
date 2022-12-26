@@ -14,7 +14,8 @@
                     <a href="/login" class="btn btn-primary mt-4">Go back to login </a>
                 </div>
             @else
-                <form method="POST" action="{{ url('/reset_password_with_token') }}" style="width:90%;min-width:20em;max-width: 40em">
+                <form method="POST" action="{{ url('/reset_password_with_token') }}"
+                    style="width:90%;min-width:20em;max-width: 40em">
                     {{ csrf_field() }}
 
                     <h1 class="h3 mb-3 font-weight-normal">Password Recovery Page</h1>
@@ -24,11 +25,11 @@
 
                         <p>Please provide a new password</p>
 
-                        <p>Password*</p>
+                        <p>Password <small>(Required)</small></p>
                         <input type="password" id="inputPassword" class="form-control mb-4" placeholder="Password"
                             name="password" required>
 
-                        <p>Confirm Password*</p>
+                        <p>Confirm Password <small>(Required)</small></p>
                         <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Confirm Password"
                             name="password_confirmation" required>
 

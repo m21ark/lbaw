@@ -20,10 +20,10 @@
 
                 <fieldset>
                     <legend>Login Form</legend>
-                    <label for="inputEmail" class="">Email Address*</label>
+                    <label for="inputEmail" class="">Email Address <small>(Required)</small></label>
                     <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
                         placeholder="Email" name="email" required autofocus autofocus="">
-                    <label for="inputPassword" class="">Password*</label>
+                    <label for="inputPassword" class="">Password <small>(Required)</small></label>
                     <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
                         required>
                 </fieldset>

@@ -26,8 +26,9 @@
                 <fieldset>
                     <legend>Email Password Recovery Form</legend>
 
-                    <label for="inputEmail">Email Address*</label>
-                    <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email" required>
+                    <label for="inputEmail">Email Address <small>(Required)</small></label>
+                    <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email"
+                        required>
 
                 </fieldset>
 

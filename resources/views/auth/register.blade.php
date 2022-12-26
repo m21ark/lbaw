@@ -16,38 +16,38 @@
 
 
                     @if ($errors->has('username'))
-                        <label for="inputUsername" class=" mt-2">Username*</label>
+                        <label for="inputUsername" class=" mt-2">Username <small>(Required)</small></label>
                         <input type="text" id="inputUsername" value="{{ old('username') }}"
                             class="form-control mb-3 is-invalid" placeholder="Username" name="username" required autofocus>
                         <div class="text-danger">
                             <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('username') }}
                         </div>
                     @else
-                        <label for="inputUsername" class=" mt-2">Username*</label>
+                        <label for="inputUsername" class=" mt-2">Username <small>(Required)</small></label>
                         <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
                             placeholder="Username" name="username" required autofocus>
                     @endif
 
 
                     @if ($errors->has('email'))
-                        <label for="inputEmail" class=" mt-2">Email Address*</label>
+                        <label for="inputEmail" class=" mt-2">Email Address <small>(Required)</small></label>
                         <input type="email" id="inputEmail" class="form-control mb-3 is-invalid" placeholder="Email"
                             name="email" required>
                         <div class="text-danger">
                             <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('email') }}
                         </div>
                     @else
-                        <label for="inputEmail" class=" mt-2">Email Address*</label>
+                        <label for="inputEmail" class=" mt-2">Email Address <small>(Required)</small></label>
                         <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email"
                             required>
                     @endif
 
 
-                    <label for="inputDate" class=" mt-2">Birthdate*</label>
+                    <label for="inputDate" class=" mt-2">Birthdate <small>(Required)</small></label>
                     <input type="date" id="inputDate" class="form-control mb-3" name="birthdate" required>
 
 
-                    <label for="inputPassword" class=" mt-2">Password</label>
+                    <label for="inputPassword" class=" mt-2">Password <small>(Required)</small></label>
                     <input type="password" id="inputPassword" class="form-control mb-3" placeholder="Password"
                         name="password" required>
 
@@ -58,12 +58,12 @@
                     @endif
 
 
-                    <label for="inputRPassword" class=" mt-2">Confirm Password*</label>
+                    <label for="inputRPassword" class=" mt-2">Confirm Password <small>(Required)</small></label>
                     <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Password"
                         name="password_confirmation" required>
 
 
-                    <label for="inputBio" class=" mt-2">Bio*</label>
+                    <label for="inputBio" class=" mt-2">Bio <small>(Required)</small></label>
                     <input type="text" id="inputBio" class="form-control mb-3" placeholder="Bio" name="bio"
                         required>
 
