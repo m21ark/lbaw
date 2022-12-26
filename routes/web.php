@@ -102,7 +102,7 @@ Route::get('api/post/topics/{post_id}', 'PostController@post_topics');
 
 // ======================= SEARCH ITEMS =======================
 
-Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@search');
+Route::get('api/search/{query_string}/type/{type_search}/offset/{offset}', 'SearchController@search');
 
 // ======================= GROUP CRUD =======================
 

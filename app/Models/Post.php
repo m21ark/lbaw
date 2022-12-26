@@ -42,8 +42,9 @@ class Post extends Model
 
     public function topics()
     {
-        return $this->belongsToMany('App\Models\Topic', 'post_topic', 'id_post', 'id_topic');
+        return $this->hasMany('App\Models\PostTopic', 'id_post');
     }
+
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;

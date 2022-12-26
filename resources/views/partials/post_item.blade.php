@@ -54,7 +54,7 @@
 
                 <div>
                     @foreach ($post->topics as $post_topic)
-                        <a href="/search/{{ $post_topic->topic->topic }}"
+                        <a href="/search/%23{{ $post_topic->topic->topic }}"
                             class="btn btn-primary me-2 mb-3 ms-2">#{{ $post_topic->topic->topic }}</a>
                     @endforeach
                 </div>

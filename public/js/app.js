@@ -825,7 +825,7 @@ function updateFeed(feed) {
             timeline.appendChild(createPost(post))
         })
 
-        offset += 10
+        offset += received.length;
     })
 
 
@@ -980,7 +980,7 @@ function createPost(post) {
 
         post.topics.forEach(topicItem => {
             topics += `
-                <a href="/search/#${topicItem.topic}"
+                <a href="/search/%23${topicItem.topic}"
                 class="btn btn-primary me-2 mb-3 ms-2">#${topicItem.topic}</a>
             `
         });
@@ -1069,16 +1069,11 @@ function updateSearchOnInputAndClick() {
         return;
     }
 
-    let search_filters = document.querySelector('input#search_radio_user')
-
-    if (search_filters) {
-        search_filters.checked = true
-    }
-
+    offset = 0;
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    query_string = pathname.replaceAll('%20', ' ').split('/')[2]
+    query_string = pathname.replaceAll('%20', ' ').replaceAll('%23', '#').split('/')[2]
 
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
@@ -1088,10 +1083,13 @@ function updateSearchOnInputAndClick() {
     // Add event listeners when input changes
 
     if (searchBar) {
-        searchBar.addEventListener('input', function () {
+        searchBar.addEventListener('keypress', function (event) {
+
+            if (event.key !== "Enter") return;
+
             updateSearch()
 
-            let searchBarString = searchBar.value.trim()
+            let searchBarString = searchBar.value.trim().replaceAll('#', '%23')
 
             // Update the path on top
             if (searchBarString !== '') {
@@ -1113,8 +1111,7 @@ function updateSearchOnInputAndClick() {
             filter.addEventListener('click', updateSearch)
         })
     }
-
-    updateSearch();
+    
 }
 
 
@@ -1133,12 +1130,19 @@ function updateSearch() {
     const searchBar = document.querySelector('#search_bar')
     if (!searchBar) return;
 
-    query_string = searchBar.value
+    query_string = searchBar.value.replaceAll('#', '%23');
 
-    if (query_string === '')
+    if (query_string === '') {
         query_string = '*';
+    }
 
-    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
+    if (type_search !== selected_filter) {
+        offset = 0;
+        selected_filter = type_search;
+        document.querySelector('#timeline').innerHTML = '';
+    }
+
+    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search + '/offset/' + offset, {}, function () {
 
         let timeline = document.querySelector('#timeline');
 
@@ -1150,9 +1154,9 @@ function updateSearch() {
             // ignore for now
         }
 
-        if (received == null) return;
+        //console.log(received.length)
 
-        timeline.innerHTML = '';
+        if (received == null) return;
 
         if (received.length === 0) {
             timeline.innerHTML = `<h3 class="text-center mt-5">No results found</h3>`
@@ -1172,11 +1176,32 @@ function updateSearch() {
 
         })
 
-    })
+        offset += received.length;
 
+    })
 
 }
 
+let selected_filter;
+
+function updateSearchOnScroll() {
+
+    selected_filter = document.querySelector('#search_filter input[checked]').value;
+
+    console.log(selected_filter)
+
+    window.onscroll = function (ev) {
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
+
+            console.log(offset)
+
+            if (selected_filter === 'posts') {
+                updateSearch()
+            }
+        }
+    };
+}
 
 
 function createUserCard(user) {
@@ -1254,14 +1279,12 @@ function searchRedirect() {
 
     searchBar.addEventListener('keypress', function (event) {
 
-        //window.location.href = '/search/hey' + this.value
-
         if (event.key !== "Enter") return;
 
         this.value = this.value.trim()
 
         if (this.value !== '') {
-            window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
+            window.location.href = '/search/' + this.value.replaceAll(' ', '%20').replaceAll('#', '%23')
         } else {
             window.location.href = '/search/*';
         }
@@ -1271,9 +1294,8 @@ function searchRedirect() {
 }
 
 searchRedirect();
-
 updateSearchOnInputAndClick();
-
+updateSearchOnScroll();
 
 
 

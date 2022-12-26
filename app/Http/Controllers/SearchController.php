@@ -25,19 +25,24 @@ class SearchController extends Controller
     public function search(Request $request)
     {
 
-        $query_string = $request->route('query_string');
+        $query_string = trim($request->route('query_string'));
         $type_search = $request->route('type_search');
+        $offset = $request->route('offset');
 
-        if ($query_string === '*') $query_string = '';
+        if ($query_string === '*') $query_string = ' ';
 
         $searchItems = [];
+
+
+        $query_string = str_replace("%23", "#", $query_string);
+        $query_string = str_replace("%20", " ", $query_string);
 
         if ($type_search === "users") {
             $searchItems = $this->searchUsers($query_string);
         } else if ($type_search === "groups") {
             $searchItems = $this->searchGroups($query_string);
         } else if ($type_search === "posts") {
-            $searchItems = $this->searchPosts($query_string);
+            $searchItems = $this->searchPosts($query_string, $offset);
         } else if ($type_search === "topics") {
             $searchItems = $this->searchTopics($query_string);
         }
@@ -74,20 +79,17 @@ class SearchController extends Controller
     }
 
 
-    private function searchPosts($query_string)
+    private function searchPosts($query_string, $offset)
     { // this also includes de tsvectors of comments
 
-        $decide = false;
-
-        if ($decide) {
-            $posts = $this->searchPostsFTS($query_string);
-        } else {
-            $posts = $this->searchPostsTopic($query_string, 0);
+        if ($query_string[0] !== '#') {
+            $posts = $this->searchPostsFTS($query_string, $offset);
             foreach ($posts as $post) {$post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);}
+        } else {
+            $posts = $this->searchPostsTopic($query_string, $offset);
         }
 
         
-
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->hasLiked = false;
@@ -102,13 +104,12 @@ class SearchController extends Controller
             }
 
             $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            //$out = new \Symfony\Component\Console\Output\ConsoleOutput();
-            //$out->writeln("|" . $like . "|");
 
             if (sizeof($like) > 0) {
                 $post->hasLiked = true;
             }
         }
+        
 
         return $posts;
     }
@@ -117,7 +118,17 @@ class SearchController extends Controller
     private function searchPostsTopic($query_string, $offset) {
         $posts = [];
 
-        $topics_search = ['WorldCup', '2022', 'arts', 'Love', 'Yoga', 'Ego', 'Traveller'];
+        $topics_search = explode("#", $query_string);
+        
+        if ($topics_search[0] === "") {
+            array_shift($topics_search);
+        }
+        
+
+        for ($i = 0; $i < sizeof($topics_search); $i++) {
+            $topics_search[$i] = trim($topics_search[$i]);
+        }
+
 
         if (Auth::check()) {
             $posts = app('App\Http\Controllers\PostController')->feed_for_you()->get();
@@ -125,13 +136,13 @@ class SearchController extends Controller
             $posts = app('App\Http\Controllers\PostController')->feed_viral()->get();
         }
 
-        $limiter = 10;
+        $limiter = 20;
 
+        
         $posts_filtered = [];
 
         foreach ($posts as $post) {
             $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
-            
             
             foreach ($post->topics as $topic) {
                 
@@ -146,17 +157,18 @@ class SearchController extends Controller
                 
                 $posts_filtered[] = $post;
                 $limiter--;
+                break;
             }
 
             if ($limiter <= 0) {
                 break;
             }
         }
-
+        
         return $posts_filtered;
     }
 
-    private function searchPostsFTS($query_string) {
+    private function searchPostsFTS($query_string, $offset) {
 
         $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
             ->groupBy('id_post');
@@ -197,6 +209,7 @@ class SearchController extends Controller
             count(like_post.id_user) as likes_count,
             ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
+            ->skip($offset)
             ->limit(20)
             ->get();
 
