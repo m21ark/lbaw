@@ -1863,6 +1863,7 @@ function sendGRequest() {
     let child = this.firstChild;
     sendAjaxRequest('post', "/api/group/request/" + child.dataset.id + "/send", {}, function (e) {
         if (this.status == 200) {
+
             child.classList.remove('fa-door-open');
             child.classList.remove('send_g_request');
             child.classList.add('fa-clock-rotate-left');
@@ -1870,6 +1871,7 @@ function sendGRequest() {
             parent.addEventListener('click', deleteGRequest);
             parent.classList.add('cancel_g_request');
             parent.classList.remove('send_g_request');
+            parent.lastChild.innerHTML = 'Cancel Request'
         }
         addedHandler(null).call(this);
     });
@@ -1881,6 +1883,7 @@ function deleteGRequest() {
     sendAjaxRequest('delete', "/api/group/request/" + child.dataset.id, {},
         function (e) {
             if (this.status == 200) {
+
                 child.classList.remove('fa-clock-rotate-left');
                 child.classList.add('fa-door-open');
                 child.classList.add('send_g_request');
@@ -1888,6 +1891,7 @@ function deleteGRequest() {
                 parent.addEventListener('click', sendGRequest);
                 parent.classList.remove('cancel_g_request');
                 parent.classList.add('send_g_request');
+                parent.lastChild.innerHTML = 'Request to Join'
             }
             addedHandler(null).call(this);
         });
@@ -2022,6 +2026,9 @@ function checkResponsiveUI() {
     let btn = document.getElementById("list_toggle_btn_div")
     let title = document.querySelector("h1")
     let toggle = document.getElementById("list_toggle_btn")
+
+    if (page_a == null || page_b == null || btn == null || toggle == null)
+        return;
 
     if (width <= 80) {
 

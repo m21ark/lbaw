@@ -5,21 +5,19 @@
     <div class="card border-secondary mb-4">
 
         <div class="card-header">
-            <h3 class="p-2 ">{{ $group->name }}
-                <!-- Should oly be visible to group owners -->
+            <h3 class="p-2 ">{{ $group->name }}</h3>
 
-                @auth
-                    @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                    @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
-                        <span class="cancel_g_request"><i class="fa-solid fa-clock-rotate-left"
-                                data-id="{{ $group->id }}"></i></span>
-                    @elseif (!$in_group)
-                        <span class="send_g_request"><i class="fa-solid fa-door-open"
-                                data-id="{{ $group->id }}"></i></span>
-                    @endif
-                @endauth
-            </h3>
+            @auth
+                @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
+                    <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
+                    <a class=" cancel_g_request btn btn-primary"><i class="fa-solid fa-clock-rotate-left"
+                            data-id="{{ $group->id }}"></i> <span>Cancel Request</span></a>
+                @elseif (!$in_group)
+                    <a class=" send_g_request btn btn-primary"><i class="fa-solid fa-door-open"
+                            data-id="{{ $group->id }}"></i> <span>Request to Join</span></a>
+                @endif
+            @endauth
         </div>
 
         <div class="mt-3 m-auto ">
