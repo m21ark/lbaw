@@ -10,22 +10,24 @@
 
                 @auth
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" onclick="window.scrollTo(0, 0);" data-idGroup="{{ $group->name }}">Edit</a>
-                        <a href='/group/{{$group->name}}/requests' style="color: black;"><i class="fa-solid fa-file-signature"></i></a>
+                        <a class='btn btn-secondary' id="popup_btn_group_edit" onclick="window.scrollTo(0, 0);"
+                            data-idGroup="{{ $group->name }}">Edit</a>
+                        <a href='/group/{{ $group->name }}/requests' style="color: black;"><i
+                                class="fa-solid fa-file-signature"></i></a>
                     @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
                         <span class="cancel_g_request"><i class="fa-solid fa-clock-rotate-left"
-                           data-id="{{ $group->id }}"></i></span>
+                                data-id="{{ $group->id }}"></i></span>
                     @elseif (!$in_group)
                         <span class="send_g_request"><i class="fa-solid fa-door-open"
-                            data-id="{{ $group->id }}"></i></span>
+                                data-id="{{ $group->id }}"></i></span>
                     @endif
                 @endauth
             </h3>
         </div>
 
         <div class="mt-3 m-auto ">
-            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="Group Profile Image" width="150"
-                height="150">
+            <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="Group Profile Image"
+                width="150" height="150">
         </div>
 
 
@@ -72,7 +74,9 @@
     </div>
 
 
-    <button id="popup_btn_group_post" onclick="window.scrollTo(0, 0);" class='btn btn-primary w-100 mb-3 mt-2'>Post on group</button>
+    <button id="popup_btn_group_post"
+        onclick="window.scrollTo(0, 0); document.querySelector('#list_toggle_btn').click();"
+        class='btn btn-primary w-100 mb-3 mt-2'>Post on group</button>
 
 
     <h3 class="mb-4">Members</h3>
@@ -80,7 +84,8 @@
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
-                <img src="{{ asset($owner->user->photo) }}" alt="Post Owner Profile Image" width="50" class="rounded-circle">
+                <img src="{{ asset($owner->user->photo) }}" alt="Post Owner Profile Image" width="50"
+                    class="rounded-circle">
                 <a href={{ url('/profile', ['username' => $owner->user->username]) }}>
                     {{ $owner->user->username }}</a>
 

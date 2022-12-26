@@ -6,7 +6,11 @@
     @if (Auth::user()->username !== $user->username)
         <h1 class="mt-4"><a href="/profile/{{ $user->username }}">{{ $user->username }}</a> 's Friends </h1>
     @else
-        <h1 class="mt-3">My Friends</h1>
+        @if ($isrequests)
+            <h1 class="mt-3">My Friend Requests</h1>
+        @else
+            <h1 class="mt-3">My Friends</h1>
+        @endif
     @endif
 
     <div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">
@@ -19,8 +23,10 @@
 
         @foreach ($requests as $requester)
             @if ($requester->acceptance_status == 'Pendent')
-                <div class="card mt-4 me-3" style="width: 15em;height:29em" id="friend_request_{{ $requester->sender->id }}">
-                    <img height="50%" src="/{{ $requester->sender->photo }}" class="card-img-top" alt="User Profile Image">
+                <div class="card mt-4 me-3" style="width: 15em;height:29em"
+                    id="friend_request_{{ $requester->sender->id }}">
+                    <img height="50%" src="/{{ $requester->sender->photo }}" class="card-img-top"
+                        alt="User Profile Image">
                     <div class="card-body">
                         <h5 class="card-title friend_request_sender">
                             <a href="/profile/{{ $requester->sender->username }}"> {{ $requester->sender->username }}</a>
