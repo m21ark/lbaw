@@ -22,20 +22,21 @@ class GroupJoinRequestController extends Controller
         if (!Auth::check())
             return redirect()->route('home');
 
-        // TODO ::: VER POLICY... tem de ser group owner
-
         $group = Group::where('name', $group_name)->first();
+        $this->authorize('update', $group); // GROUP POLICY ... working
 
         return view('pages.group_requests', ['requests' => $group->groupJoinRequests]);
     }
 
     public function accept( $group_name, $id_sender, Request $request)
-    {
+    {   
+        // POLICY IS IN update_request FUNCTION
         return $this->update_request($id_sender, $group_name, "Accepted", $request);
     }
 
     public function reject($group_name,$id_sender,  Request $request)
     {
+        // POLICY IS IN update_request FUNCTION
         return $this->update_request($id_sender, $group_name, "Rejected", $request);
     }
 
@@ -49,11 +50,13 @@ class GroupJoinRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO :ADD policy
         $group = Group::where('name', $group_name)->first();
         $frequest = GroupJoinRequest::where('id_user', '=', $id_sender)
-            ->where('id_group', '=', $group->id)
-            ->update(['acceptance_status' => $new_state]);
+            ->where('id_group', '=', $group->id);
+
+        $this->authorize('update', $frequest->firstOrFail()); // POLICY ... working
+            
+        $frequest->update(['acceptance_status' => $new_state]);
         
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
@@ -63,12 +66,7 @@ class GroupJoinRequestController extends Controller
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        // TODO : E PRECISO OUTRA POLICIE ? no caso de se já ter enviado um pedido
-
-        // PK ??? 
-        //validator($request->route()->parameters(), [
-        //    'id' => 'required|exists:group,id',
-        //])->validate();
+        Auth::user()->can('create'); // POLICY ... WORKING
 
         $frequest = new GroupJoinRequest();
         $frequest->id_user = Auth::user()->id;
@@ -86,12 +84,13 @@ class GroupJoinRequestController extends Controller
         validator($request->route()->parameters(), [
             'id' => 'required|exists:group,id',
         ])->validate();
-
-        // TODO :ADD policy
         
-        GroupJoinRequest::where('id_user', '=', Auth::user()->id)
-            ->where('id_group', '=', $id)
-            ->delete();
+        $r = GroupJoinRequest::where('id_user', '=', Auth::user()->id)
+            ->where('id_group', '=', $id);
+          
+        $this->authorize('delete', $r->firstOrFail()); // POLICY ... WORKING
+            
+        $r->delete();
             
         return response()->json(['The request was deleted with success' => 200]);
     }

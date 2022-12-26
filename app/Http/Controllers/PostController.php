@@ -20,7 +20,7 @@ class PostController extends Controller
 {
 
     public static function areFriends(User $user1, User $user2)
-    {
+    {   // THIS IS A FUNCTION ... IT DOES NOT NEED A POLICY
         return DB::table('friend_request')
             ->where('id_user_sender', $user1->id)
             ->where('id_user_receiver', $user2->id)->where('acceptance_status', 'Accepted')->exists() ||
@@ -32,12 +32,12 @@ class PostController extends Controller
     public function show($id)
     {
         // TODO: use id to get post from database
-        $post   = Post::withCount('likes', 'comments')->find($id);
+        $post = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
             return view('pages.404');
 
-        // policy, nr_comments_post
+        // POLICY
         if (!$post->owner->visibility) {
             $this->authorize('view', $post);
         }
@@ -49,19 +49,22 @@ class PostController extends Controller
         $posts = [];
         $offset = $request->route('offset');
 
-        if ($request->route('type_feed') === "for_you") {
-            //$this->authorize('feed', $posts);
+        // TODO ... PROVAVELMENTE ESTAS QUERIES ESTÃO A TORNAR O RETRIVAL DOS POSTS MAIS LENTO ... mudar
+
+        // We just need to check if the user can access for_you, friends, groups
+        // In other words, the user has only to be authenticated, else 401 error is returned
+        // Authorization inside fee_for_you ,friends and viral functions 
+
+        if ($request->route('type_feed') === "for_you") { 
             $posts = $this->feed_for_you();
         } else if ($request->route('type_feed') === "friends") {
-            //$this->authorize('feed', $posts);
             $posts = $this->feed_friends();
         } else if ($request->route('type_feed') === "groups") {
-            //$this->authorize('feed', $posts);
             $posts = $this->feed_groups();
         } else if ($request->route('type_feed') === "viral") {
             $posts = $this->feed_viral();
         }
-        
+
         if ($request->route('type_order') === "popularity") {
             $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
                 ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
@@ -75,7 +78,7 @@ class PostController extends Controller
             $posts = $posts->orderBy('likes_count', 'desc');
         }
         
-            
+        // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar 
         $posts = $posts->skip($offset)->limit(5)->get();
 
 
@@ -112,8 +115,8 @@ class PostController extends Controller
         if ($request->input('group_name') != null) {
             $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
         }
-        //TODO
-        $this->authorize('create', $post);
+    
+        $this->authorize('create', $post); // POLICY
 
         $post->text = $request->input('text');
         $post->id_poster = Auth::user()->id;
@@ -127,7 +130,7 @@ class PostController extends Controller
     }
 
     private function add_topics(Request $request, Post $post)
-    {
+    {   // THIS IS A FUNCTION ... no need for POLICY
         if ($request->input('tags') != null) {
 
             $topics = explode(' ', $request->input('tags'));
@@ -150,7 +153,7 @@ class PostController extends Controller
     }
 
     public function upload_img(Request $request, Post $post)
-    {
+    { // THIS IS A FUNCTION ... no need for POLICY
         if ($request->hasFile('photos')) {
             $i = 0;
             foreach ($request->photos as $imagefile) {
@@ -172,7 +175,7 @@ class PostController extends Controller
     public function delete($id)
     {
         $post = Post::find($id);
-        $this->authorize('delete', $post);
+        $this->authorize('delete', $post); // POLICY
         DB::table('post')->where('id', $id)->delete();
         return $post;
     }
@@ -186,7 +189,7 @@ class PostController extends Controller
 
         $this->authorize('update', $post);
 
-        $post->text = $request->input('text');
+        $post->text = $request->input('text'); // POLICY
 
         File::delete($post->images->pluck('path')->toArray());
         $post->images()->delete();
@@ -199,7 +202,7 @@ class PostController extends Controller
     }
 
     private function edit_topics(Request $request, Post $post)
-    {
+    { // THIS IS A FUNCTION ... no need for POLICY
         $post->topics()->delete();
         if ($request->input('tags') != null) {
 
@@ -224,9 +227,9 @@ class PostController extends Controller
     }
 
     private function feed_friends()
-    {
+    { 
 
-        if (!Auth::check()) {
+        if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
         }
 
@@ -253,8 +256,8 @@ class PostController extends Controller
     }
 
     private function feed_groups()
-    {
-        if (!Auth::check()) {
+    { 
+        if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
         }
 
@@ -273,7 +276,7 @@ class PostController extends Controller
     }
 
     private function feed_viral()
-    {
+    { // THIS IS A FUNCTION ... no need for POLICY ... Its a guest functionality
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->where('visibility', true)
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
@@ -283,9 +286,9 @@ class PostController extends Controller
     }
 
     private function feed_for_you()
-    {
+    {  
         if (!Auth::check()) {
-            return response()->json(['Please login' => 401]);
+            return response()->json(['Please login' => 401]); // Authorization
         }
 
         $posts_groups = $this->feed_groups();
@@ -301,14 +304,4 @@ class PostController extends Controller
         return $posts;
     }
 
-    public function post_topics($post_id)
-    {
-        // TODO: POLICY
-
-        $topics = PostTopic::where('id_post', $post_id)
-            ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
-            ->select('topic.topic')
-            ->get();
-        return $topics;
-    }
 }

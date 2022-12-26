@@ -59,7 +59,7 @@
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
         @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
-
+        @include('partials.popup.video_call_popup')
         @include('partials.notification_stack')
     </main>
 

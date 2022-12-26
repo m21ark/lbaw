@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Like;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Events\NewNotification;
@@ -20,7 +21,8 @@ class LikeController extends Controller
             ->where('id_post', $post)
             ->first();
 
-        //$this->authorize('create', Auth::user()); TODO quando isto estiver a funcionar
+        if (!$request->user()->can('view', Post::find($post))) // POLICY  TODO ... alterar
+            return response()->json(["You are not allowed to like this resourse" => 301]);
 
         if ($like == null) {
 
@@ -29,7 +31,6 @@ class LikeController extends Controller
             $like->id_post = $post;
             $like->save();
 
-            // QUE RAIO ???? TODO: DESCOBRIR QUE MAGIA ESTA AQUI
             event(new NewNotification(
                 intval($like->post->owner->id),
                 'Like',
@@ -44,6 +45,6 @@ class LikeController extends Controller
                 ->delete();
         }
 
-        return $like;
+        return response()->json(["The comment was liked with success" => 200]);
     }
 }

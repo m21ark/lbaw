@@ -1,15 +1,22 @@
 // Enable pusher logging - don't include this in production
-// Pusher.logToConsole = true;
+Pusher.logToConsole = true;
 
-var pusher = new Pusher('c827040c068ce8231c02', {
-    cluster: 'eu'
+var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
+    cluster: 'eu',
+    authEndpoint: '/broadcast/auth',
+    encrypted: true,
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        }
+    }
 });
 
 let user_header = document.querySelector('#auth_id');
 if (user_header != null) {
     let id = user_header.dataset.id;
-    var channel = pusher.subscribe('App.User.' + id);
-    channel.bind('my-event', function (data) {
+    var channel1 = pusher.subscribe('App.User.' + id);
+    channel1.bind('my-event', function (data) {
 
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
@@ -42,7 +49,252 @@ if (user_header != null) {
             updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
+
+      
     });
+
+
+    var usersOnline,
+      users = [],
+      sessionDesc,
+      currentcaller,
+      room,
+      caller,
+      localUserMedia;
+    const channel = pusher.subscribe("presence-videocall");
+    
+    channel.bind("pusher:subscription_succeeded", members => {
+      //set the member count
+      usersOnline = members.count;
+      id = channel.members.me.id;
+      members.each(member => {
+        if (member.id != channel.members.me.id) {
+          users.push(member.id);
+        }
+      });
+    
+      render();
+    });
+    
+    channel.bind("pusher:member_added", member => {
+      users.push(member.id);
+      render();
+    });
+    
+    channel.bind("pusher:member_removed", member => {
+      // for remove member from list:
+      var index = users.indexOf(member.id);
+      users.splice(index, 1);
+      if (member.id == room) {
+        endCall();
+      }
+      render();
+    });
+    
+    function render() {
+      
+    }
+
+    //To iron over browser implementation anomalies like prefixes
+    GetRTCPeerConnection();
+    GetRTCSessionDescription();
+    GetRTCIceCandidate();
+    //prepare the caller to use peerconnection
+    prepareCaller();
+    function GetRTCIceCandidate() {
+        window.RTCIceCandidate =
+            window.RTCIceCandidate ||
+            window.webkitRTCIceCandidate ||
+            window.mozRTCIceCandidate ||
+            window.msRTCIceCandidate;
+
+        return window.RTCIceCandidate;
+    }
+
+    function GetRTCPeerConnection() {
+        window.RTCPeerConnection =
+            window.RTCPeerConnection ||
+            window.webkitRTCPeerConnection ||
+            window.mozRTCPeerConnection ||
+            window.msRTCPeerConnection;
+        return window.RTCPeerConnection;
+    }
+
+    function GetRTCSessionDescription() {
+        console.log("GetRTCSessionDescription called");
+        window.RTCSessionDescription =
+            window.RTCSessionDescription ||
+            window.webkitRTCSessionDescription ||
+            window.mozRTCSessionDescription ||
+            window.msRTCSessionDescription;
+        return window.RTCSessionDescription;
+    }
+    function prepareCaller() {
+
+        const servers = {
+            iceServers: [
+                {
+                    urls: [
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+                    ]
+                },
+                {
+                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                    credential: 'webrtc',
+                    username: 'webrtc'
+                }
+            ],
+            iceCandidatePoolSize: 10,
+        };
+
+        //Initializing a peer connection
+        caller = new window.RTCPeerConnection(servers);
+        //Listen for ICE Candidates and send them to remote peers
+        caller.onicecandidate = function (evt) {
+            if (!evt.candidate) return;
+            console.log("onicecandidate called");
+            onIceCandidate(caller, evt);
+        };
+        //onaddstream handler to receive remote feed and show in remoteview video element
+        caller.onaddstream = function (evt) {
+            console.log("onaddstream called");
+            if (window.URL) {
+                document.getElementById("remoteview").srcObject = evt.stream;
+            } else {
+                document.getElementById("remoteview").src = evt.stream;
+            }
+        };
+    }
+
+    function onIceCandidate(peer, evt) {
+        if (evt.candidate) {
+            channel.trigger("client-candidate", {
+                "candidate": evt.candidate,
+                "room": room
+            });
+        }
+    }
+
+    channel.bind("client-candidate", function(msg) {
+        if(msg.room==room){
+            console.log("candidate received");
+            console.log(msg.candidate)
+            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+        }
+    });
+
+    function getCam() {
+        //Get local audio/video feed and show it in selfview video element
+        return navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        });
+    }
+    //Create and send offer to remote peer on button click
+    function callUser(user) {
+        getCam()
+            .then(stream => {
+                toggleVideoPopUp();
+                caller.addStream(stream);
+                localUserMedia = stream;
+                caller.createOffer().then(function (desc) {
+                    caller.setLocalDescription(new RTCSessionDescription(desc));
+                    channel.trigger("client-sdp", {
+                        sdp: desc,
+                        room: user,
+                        from: document.querySelector(".me-2").textContent
+                    });
+                    room = user;
+                });
+                var audioTrack = stream.getAudioTracks();
+
+                if (audioTrack.length > 0) {
+                    stream.removeTrack(audioTrack[0]);
+                }
+
+                if (window.URL) {
+                    document.getElementById("selfview").srcObject = stream;
+                } else {
+                    document.getElementById("selfview").src = stream;
+                }
+            })
+            .catch(error => {
+                console.log("an error occured", error);
+            });
+    }
+    function toggleVideoPopUp() {
+        if (document.getElementById("video_call").style.display == "block") {
+            document.getElementById("video_call").style.display = "none";
+        } else {
+            document.getElementById("video_call").style.display = "block";
+        }
+    }
+
+    channel.bind("client-sdp", function (msg) {
+        if (msg.room == id) {
+            var answer = confirm("You have a call from: " + msg.from + ". Would you like to answer?");
+            if (!answer) {
+                return channel.trigger("client-reject", { "room": msg.room, "rejected": id });
+            }
+            room = msg.room;
+            getCam()
+                .then(stream => {
+                    localUserMedia = stream;
+                    toggleVideoPopUp();
+
+                    caller.addStream(stream);
+                    var sessionDesc = new RTCSessionDescription(msg.sdp);
+                    caller.setRemoteDescription(sessionDesc);
+                    caller.createAnswer().then(function (sdp) {
+                        caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        channel.trigger("client-answer", {
+                            "sdp": sdp,
+                            "room": room
+                        });
+                    });
+                    
+                    var audioTrack = stream.getAudioTracks();
+
+                    if (audioTrack.length > 0) {
+                        stream.removeTrack(audioTrack[0]);
+                    }
+                
+                    if (window.URL) {
+                        document.getElementById("selfview").srcObject = stream;
+                    } else {
+                        document.getElementById("selfview").src = stream;
+                    }
+                })
+                .catch(error => {
+                    console.log('an error occured', error);
+                })
+        }
+    });
+    channel.bind("client-answer", function (answer) {
+        if (answer.room == room) {
+            console.log("answer received");
+            caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+        }
+    });
+
+    channel.bind("client-reject", function (answer) {
+        if (answer.room == room) {
+            console.log("Call declined");
+            alert("call to " + answer.rejected + "was politely declined");
+            endCall();
+        }
+    });
+
+    function endCall() {
+        room = undefined;
+        caller.close();
+        for (let track of localUserMedia.getTracks()) {
+            track.stop();
+        }
+        prepareCaller();
+        toggleVideoPopUp();
+    }
 }
 
 function createElementFromHTML(htmlString) {
@@ -129,9 +381,9 @@ function addEventListeners() {
     }
     );
 
-    assignFunctionClick('#report_toggle', () => {
-        document.querySelector('#pendent_report_list').toggleAttribute('hidden')
-        document.querySelector('#past_report_list').toggleAttribute('hidden')
+    assignFunctionClick('#list_toggle_btn', () => {
+        document.querySelector('#toggle_list_A').toggleAttribute('hidden')
+        document.querySelector('#toggle_list_B').toggleAttribute('hidden')
     })
 
     assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
@@ -365,11 +617,12 @@ function sendEditGroupRequest(event) {
 
 }
 
-function sendDeleteGroupRequest() {
+function sendDeleteGroupRequest(e) {
+    e.preventDefault();
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
-        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { window.location = '/home' });
     }
 }
 
@@ -385,9 +638,8 @@ function sendKickpMemberRequest(event) {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { location.reload(); });
 
-    location.reload();
 }
 
 
@@ -556,7 +808,8 @@ function popupControllReportPost() {
     document.querySelector('#create_report_button').dataset.comment = 0
 }
 
-function sendCreateReportRequest() {
+function sendCreateReportRequest(e) {
+    e.preventDefault();
     let id_post = document.querySelector('#create_report_button').dataset.post
     let id_comment = document.querySelector('#create_report_button').dataset.comment
     let description = document.querySelector('#report_description').value
@@ -955,9 +1208,9 @@ function createPost(post) {
     if (post.images.length !== 0) {
         let imageDiv = '';
 
-        post.images.forEach(function (image) {
+        post.images.forEach(function (image, i) {
             imageDiv += `
-                <div class="carousel-item active">
+                <div class="carousel-item ${i == 0 ? 'active' : ''}">
                     <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
                 </div>
             `
@@ -1720,8 +1973,8 @@ if (window.location.pathname == "/notifications") {
 }
 
 
-if (window.location.pathname.substring(0,10) == "/messages/") {
-    
+if (window.location.pathname.substring(0, 10) == "/messages/") {
+
     const input = document.getElementById("sms_input");
 
     let scrollBody = document.querySelector("#message_body")
@@ -1733,4 +1986,54 @@ if (window.location.pathname.substring(0,10) == "/messages/") {
             document.getElementById("sms_send_btn").click();
         }
     });
+}
+
+
+if (window.location.pathname.substring(0, 6) == "/post/") {
+
+    const input = document.getElementById("comment_post_input");
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("comment_post_send").click();
+        }
+    });
+}
+
+
+function checkResponsiveUI() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    let page_a = document.getElementById("toggle_list_A")
+    let page_b = document.getElementById("toggle_list_B")
+    let btn = document.getElementById("list_toggle_btn_div")
+    let title = document.querySelector("h1")
+    let toggle = document.getElementById("list_toggle_btn")
+
+    if (width <= 80) {
+
+        page_a.hidden = ""
+        btn.style.visibility = "visible"
+
+        if (!toggle.checked) {
+            title.hidden = ""
+            page_b.hidden = "hidden"
+        }
+        else {
+            title.hidden = "hidden"
+            page_a.hidden = "hidden"
+        }
+
+    } else {
+        page_b.hidden = ""
+        page_a.hidden = ""
+        title.hidden = ""
+        btn.style.visibility = "hidden"
+    }
+}
+
+let curr_path = window.location.pathname
+if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
+    setInterval(() => { checkResponsiveUI() }, 500);
 }

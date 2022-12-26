@@ -259,6 +259,30 @@ ul.nav a:hover {
 }
 
 
+/*  ====================== FLOAT BTN ===================== */
+
+.float{
+	position:absolute;
+	width:60px;
+	height:60px;
+	top:90px;
+	right:30px;
+	background-color:#006EF5;
+	color:#FFF;
+	border-radius:10px;
+	text-align:center;
+}
+
+.my-float{
+	margin-top:22px;
+}
+
+#list_toggle_btn_div, #list_toggle_btn_div *:hover {
+    cursor: pointer;
+    color: white;
+}
+
+
 /*  ====================== MESSAGES ===================== */
 
 

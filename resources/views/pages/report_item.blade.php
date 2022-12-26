@@ -81,13 +81,13 @@
     <div class="mt-5 d-flex justify-content-center">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
-            <input type="checkbox" id="report_toggle">
+            <input type="checkbox" id="list_toggle_btn">
             <span class="slider round"></span>
         </label>
         <h4 class="ms-3">Past Reports</h4>
     </div>
 
-    <div id="pendent_report_list" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
+    <div id="toggle_list_A" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Pendent Reports ({{ sizeof($reports) }})
 
             @if (count($reports) !== 0)
@@ -128,7 +128,7 @@
     </div>
 
 
-    <div id="past_report_list" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
+    <div id="toggle_list_B" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
         <h3 class="mb-3">Past Reports ({{ sizeof($decided_reports) }})</h3>
 
         @if (count($decided_reports) === 0)

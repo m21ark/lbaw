@@ -1,12 +1,19 @@
 @extends('layouts.app')
 
+
+
+
 @section('content')
+
     <div id="message_frame" class="card">
         @if ($sender != null)
             <div class="message_head card-header text-bg-primary">
                 <a class="white_span_a" href="/profile/{{ $sender->username }}" id='sms_rcv' data-id="{{ $sender->id }}">
                     <img id="sms_photo" src="/{{ $sender->photo }}" alt="" width="50" class="me-4 rounded-circle">
                     <span>{{ $sender->username }}</span>
+                </a>
+                <a id="#videoCall" onclick="callUser({{$sender->id}})">
+                    <i class="fa-solid fa-phone"></i>
                 </a>
             </div>
 
@@ -25,6 +32,9 @@
     </div>
 @endsection
 
+
 @section('rightbar')
-    @include('partials.sidebar.messages_sidebar')
+    <div id="toggle_list_B">
+        @include('partials.sidebar.messages_sidebar')
+    </div>
 @endsection

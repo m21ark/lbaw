@@ -18,6 +18,9 @@ class SearchController extends Controller
     public function show($query)
     {
         // TODO: get query from database
+
+        // THIS IS A PUBLIC API
+
         return view('pages.search');
     }
 
@@ -47,8 +50,8 @@ class SearchController extends Controller
 
 
     private function searchUsers($query_string)
-    {
-
+    {   // this also includes de tsvectors of bio
+        // FUNCTION CALLED IN SEARCH
         $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->orWhere('username', 'LIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
@@ -61,8 +64,8 @@ class SearchController extends Controller
 
 
     private function searchGroups($query_string)
-    {
-
+    {   // this also includes de tsvectors of bio
+        // FUNCTION CALLED IN SEARCH
         $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->orWhere('name', 'LIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
@@ -75,7 +78,8 @@ class SearchController extends Controller
 
 
     private function searchPosts($query_string)
-    { // this also includes de tsvectors of comments
+    {   // this also includes de tsvectors of comments
+        // FUNCTION CALLED IN SEARCH
 
         $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
             ->groupBy('id_post');
@@ -86,7 +90,7 @@ class SearchController extends Controller
             ->whereRaw('(post.tsvectors || tsvector_comment) @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('user', 'user.id', '=', 'post.id_poster');
 
-        if (Auth::check()) {
+        if (Auth::check()) { // POLICIE ... Different results if logged n
             $posts = $posts
                 ->whereIn('id_poster', function ($query) {
                     $id = Auth::user()->id;
@@ -133,8 +137,6 @@ class SearchController extends Controller
             }
 
             $like = Like::where('id_post', $post->id)->where('id_user', Auth::user()->id)->get();
-            $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-            $out->writeln("|" . $like . "|");
 
             if (sizeof($like) > 0) {
                 $post->hasLiked = true;
@@ -147,6 +149,7 @@ class SearchController extends Controller
 
     private function searchTopics($query_string)
     {
+        // FUNCTION CALLED IN SEARCH
 
         $topics = Topic::where('topic', 'LIKE', '%' . $query_string . '%')
             ->limit(30)

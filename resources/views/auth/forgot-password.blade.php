@@ -7,6 +7,12 @@
             <form method="POST" action="{{ url('/reset_password_without_token') }}">
                 {{ csrf_field() }}
 
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <h1 class="h3 mb-4 mt-5 font-weight-normal">Forgot your password?</h1>
 
                 <p>If you don't remember your password, you can recover your account by providing the email associated with that account. If the email given is linked to an account, an email will be sent to reset the password.</p>

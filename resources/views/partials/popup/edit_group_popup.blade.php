@@ -2,7 +2,7 @@
     <div class="pop_up" hidden id="popup_show_group_edit">
         <form style="width:100%;" method='post' action={{ route('editGroup', $group->name) }}
             enctype="multipart/form-data">
-
+            {{ csrf_field() }}
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Edit Group</h3>
