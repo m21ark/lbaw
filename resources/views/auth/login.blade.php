@@ -5,6 +5,9 @@
 
         <body class="text-center">
             <form method="POST" action="{{ route('login') }}">
+
+                <h1 class="h3 mb-3 font-weight-normal">Login Page</h1>
+
                 {{ csrf_field() }}
 
                 @if (session('error'))
@@ -13,13 +16,15 @@
                     </div>
                 @endif
 
-                <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
-                <label for="inputEmail" class="">Email address</label>
-                <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
-                    placeholder="Email" name="email" required autofocus autofocus="">
-                <label for="inputPassword" class="">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
-                    required>
+                <fieldset>
+                    <legend>Login Form</legend>
+                    <label for="inputEmail" class="">Email address</label>
+                    <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
+                        placeholder="Email" name="email" required autofocus autofocus="">
+                    <label for="inputPassword" class="">Password</label>
+                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
+                        required>
+                </fieldset>
 
                 <button class="btn btn-lg btn-primary btn-block mt-4 w-100" type="submit">Login</button>
 

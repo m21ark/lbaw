@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'About Us')
+
 @section('content')
     <h2 class="mt-4 mb-4">About Us</h2>
     <div class="list-group mx-3">
@@ -32,6 +34,9 @@
                     University of Porto.</p>
             </article>
         </div>
+
+        <a class="mt-4 btn btn-outline-secondary" href="/contacts">Contacts</a>
+        <a class="mt-2 btn btn-outline-secondary" href="/features">Features</a>
 
     </div>
 @endsection

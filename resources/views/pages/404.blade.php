@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Not Found')
+
 @section('content')
     <h2 class="mt-4 mb-4">Not found</h2>
 

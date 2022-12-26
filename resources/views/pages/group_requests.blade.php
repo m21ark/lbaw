@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-
+@section('page_title', 'Group Requests')
 
 @section('content')
     <div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">

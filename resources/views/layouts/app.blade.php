@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('page_title')</title>
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
 
     <!-- Bootstrap -->

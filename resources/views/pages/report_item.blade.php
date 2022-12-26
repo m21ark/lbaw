@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Report')
+
 @section('content')
     <h2 class="mt-5">User Report</h2>
     <div class="d-flex justify-content-center">

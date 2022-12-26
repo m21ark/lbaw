@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class=" p-5 mw-10 d-flex align-items-center justify-content-around">
+    <div class="p-5 mw-10 m-3">
 
         <body class="text-center">
-
-            <p>An email was sent. Please check your inbox to procceed.</p>
-
+            <h1 class="mb-4">Email Sent</h1>
+            <p>An email was sent. Please check your inbox to procceed. This page can now be closed.</p>
         </body>
+
     </div>
 @endsection

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Contacts')
+
 @section('content')
     <h2 class="mt-4 mb-4">Contacts</h2>
     <p>Portuguese Customer Help <a href="#">+351 912345678</a></p>

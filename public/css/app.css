@@ -143,7 +143,7 @@
 
     #post_comment_section {
         margin: -6em auto 7em auto;
-        min-width: 40em;
+        min-width: 35em;
         grid-row: 4;
     }
 
@@ -216,7 +216,7 @@ ul.nav a:hover {
 }
 
 .comment_item {
-    max-width: 35em;
+    max-width: 33em;
     margin: auto;
 }
 

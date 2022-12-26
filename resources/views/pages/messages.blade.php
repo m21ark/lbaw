@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-
-
+@section('page_title', 'Messages')
 
 @section('content')
     <div id="message_frame" class="card">

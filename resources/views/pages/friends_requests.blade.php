@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-
+@section('page_title', $user->username . '`s Friends')
 
 @section('content')
     @if (Auth::user()->username !== $user->username)
