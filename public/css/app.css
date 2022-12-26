@@ -1,6 +1,5 @@
 /* Site layout */
 
-
 @media (min-width: 80em) {
     body {
         width: 100%;
@@ -14,13 +13,9 @@
             "footer  footer footer";
     }
 
-
-    /*  Header  */
-
     header {
         grid-area: header;
     }
-
 
     main {
         grid-area: content;
@@ -59,12 +54,7 @@
         margin-right: 1em;
     }
 
-    .message_body {
-        max-height: 27em;
-    }
-
 }
-
 
 
 @media (max-width: 80em) {
@@ -114,12 +104,10 @@
         box-shadow: 0px 3px 20px rgb(221, 221, 221);
     }
 
-
     #leftbar {
         display: none;
     }
 
-    /*  CHANGE THIS LATTER  */
     #notifications_container {
         grid-area: navbar;
         width: 0px;
@@ -135,8 +123,6 @@
         box-shadow: 0px -3px 20px rgb(221, 221, 221);
     }
 
-
-
     #footer {
         display: none;
     }
@@ -145,12 +131,6 @@
         margin: -6em auto 7em auto;
         min-width: 35em;
         grid-row: 4;
-    }
-
-
-    .message_body {
-        max-height: 27em;
-        /*VER ISTO MELHOR*/
     }
 
 }
@@ -169,7 +149,6 @@ p {
 ul.nav a:hover {
     color: #006EF5;
 }
-
 
 .profile_img {
     display: block;
@@ -195,7 +174,6 @@ ul.nav a:hover {
     max-width: 20em;
 }
 
-
 .dropdown_menu>label.list-group-item:hover {
     background-color: #006EF5;
     color: white;
@@ -210,7 +188,7 @@ ul.nav a:hover {
 
 .post_item img {
     max-width: 80%;
-    max-height: 25em;
+    max-height: 30em;
     margin: 0.5em auto;
     border-radius: 0.5em;
 }
@@ -247,7 +225,6 @@ ul.nav a:hover {
     color: white;
 }
 
-
 .post_item .card-footer {
     font-size: 1.3em;
 }
@@ -261,7 +238,6 @@ ul.nav a:hover {
 .white_span_a:hover span {
     color: white;
 }
-
 
 /*  ====================== FLOAT BTN ===================== */
 
@@ -286,8 +262,11 @@ ul.nav a:hover {
     color: white;
 }
 
-
 /*  ====================== MESSAGES ===================== */
+
+.message_body {
+    max-height: 32em;
+}
 
 #video_call_span:hover {
     cursor: pointer;
@@ -323,7 +302,6 @@ ul.nav a:hover {
     text-decoration-color: white;
 }
 
-
 .message_body {
     margin: 1em;
     min-height: 15em;
@@ -342,7 +320,6 @@ ul.nav a:hover {
 #endCall:hover {
     cursor: pointer;
 }
-
 
 /*  ====================== NAVBAR FILTER ===================== */
 
@@ -436,7 +413,6 @@ ul.nav a:hover {
     text-align: center;
 }
 
-
 #feed_filter .list-group-item {
     margin: 0.5em;
 }
@@ -444,7 +420,6 @@ ul.nav a:hover {
 #search_filter .list-group-item {
     margin: 0.5em;
 }
-
 
 /* ====================== Popups ===================== */
 
@@ -454,7 +429,7 @@ ul.nav a:hover {
     background-color: #a4c6f0;
     box-shadow: 2px 2px 5px grey;
     position: fixed;
-    top: 16em;
+    top: 6em;
     left: 0;
     right: 0;
     margin-left: auto;
@@ -463,21 +438,13 @@ ul.nav a:hover {
     z-index: 1
 }
 
-
-
-
-
 .comment_reply_section {
     margin: 0 auto;
     width: 90%;
 }
 
-
-
 /* ====================== switch ===================== */
 
-
-/* The switch - the box around the slider */
 .switch {
     position: relative;
     display: inline-block;
@@ -485,14 +452,12 @@ ul.nav a:hover {
     height: 34px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .slider {
     position: absolute;
     cursor: pointer;
@@ -531,7 +496,6 @@ input:checked+.slider:before {
     transform: translateX(46px);
 }
 
-/* Rounded sliders */
 .slider.round {
     border-radius: 34px;
 }

@@ -11,8 +11,6 @@
                 @auth
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
                         <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                        <a href='/group/{{ $group->name }}/requests' style="color: black;"><i
-                                class="fa-solid fa-file-signature"></i></a>
                     @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
                         <span class="cancel_g_request"><i class="fa-solid fa-clock-rotate-left"
                                 data-id="{{ $group->id }}"></i></span>
@@ -78,7 +76,12 @@
 
 
     <h3 class="mb-4">Members</h3>
-    <div class="list-group align-items-center d-flex mb-4 group_member_list">
+
+    <div class="list-group align-items-center d-flex mb-2 group_member_list">
+
+        <a href='/group/{{ $group->name }}/requests' class="btn btn-outline-secondary mb-3"><i
+                class="fa-solid fa-user-group"></i> Pendent Requests
+            ({{ count($group->groupJoinRequests->where('acceptance_status', 'Pendent')->toArray()) }})</a>
 
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
@@ -118,8 +121,8 @@
 
         @auth
             @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
-                <button class='btn btn-primary w-100 mb-3 mt-3' id="leave_group_button" data-idGroup="{{ $group->id }}"
-                    data-idUser="{{ Auth::user()->id }}">Leave
+                <button class='btn btn-outline-secondary w-100 mb-3 mt-3' id="leave_group_button"
+                    data-idGroup="{{ $group->id }}" data-idUser="{{ Auth::user()->id }}">Leave
                     Group</button>
             @endif
 

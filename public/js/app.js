@@ -711,11 +711,11 @@ function sendEditProfileRequest(event) {
 function sendDeleteProfileRequest() {
     let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
 
-    let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
+    let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username)
         sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
     else
-        alert('Invalid input! Account not deleted!');
+        alert('Account not deleted!');
 
 }
 

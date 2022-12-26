@@ -34,7 +34,8 @@
                 @endif
                 <div>
                     @foreach ($messages as $message)
-                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ $message->text }}
+                        <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f0f0f1;max-width: 25em">
+                            {{ $message->text }}
                         </p>
                     @endforeach
                     <p class="small ms-3 mb-3 rounded-3 text-muted">{{ Str::substr($message->date, 10, 9) }}</p>
