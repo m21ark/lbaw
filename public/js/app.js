@@ -95,6 +95,8 @@ if (user_header != null) {
       
     }
 
+    /////////////////////////////////////////////
+    // FROM PUSHER WEBRTC TUTORIAL
     //To iron over browser implementation anomalies like prefixes
     GetRTCPeerConnection();
     GetRTCSessionDescription();
@@ -129,6 +131,7 @@ if (user_header != null) {
             window.msRTCSessionDescription;
         return window.RTCSessionDescription;
     }
+    //////////////////////////////////////////////////
     function prepareCaller() {
 
         const servers = {
@@ -153,12 +156,10 @@ if (user_header != null) {
         //Listen for ICE Candidates and send them to remote peers
         caller.onicecandidate = function (evt) {
             if (!evt.candidate) return;
-            console.log("onicecandidate called");
             onIceCandidate(caller, evt);
         };
         //onaddstream handler to receive remote feed and show in remoteview video element
         caller.onaddstream = function (evt) {
-            console.log("onaddstream called");
             if (window.URL) {
                 document.getElementById("remoteview").srcObject = evt.stream;
             } else {
@@ -178,19 +179,17 @@ if (user_header != null) {
 
     channel.bind("client-candidate", function(msg) {
         if(msg.room==room){
-            console.log("candidate received");
-            console.log(msg.candidate)
             caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
         }
     });
 
     function getCam() {
-        //Get local audio/video feed and show it in selfview video element
         return navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
         });
     }
+    
     //Create and send offer to remote peer on button click
     function callUser(user) {
         getCam()
@@ -207,6 +206,8 @@ if (user_header != null) {
                     });
                     room = user;
                 });
+
+                // remove self audio 
                 var audioTrack = stream.getAudioTracks();
 
                 if (audioTrack.length > 0) {
@@ -231,6 +232,7 @@ if (user_header != null) {
         }
     }
 
+    // Incoming video call
     channel.bind("client-sdp", function (msg) {
         if (msg.room == id) {
             var answer = confirm("You have a call from: " + msg.from + ". Would you like to answer?");
@@ -273,7 +275,6 @@ if (user_header != null) {
     });
     channel.bind("client-answer", function (answer) {
         if (answer.room == room) {
-            console.log("answer received");
             caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
         }
     });
