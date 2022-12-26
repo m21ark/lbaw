@@ -789,6 +789,7 @@ addEventListeners();
 // =================================== Home ==========================================
 
 let offset = 0;
+let scroll_end;
 
 function updateFeed(feed) {
 
@@ -817,8 +818,9 @@ function updateFeed(feed) {
             timeline.innerHTML = '';
         }
 
-        if (received.length === 0) {
+        if (received.length === 0 && !scroll_end) {
             timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+            scroll_end = true;
         }
 
         received.forEach(function (post) {
@@ -837,6 +839,7 @@ function updateFeedOnLoad() {
         feed_filters.checked = true
     }
     offset = 0
+    scroll_end = false
     updateFeed('viral')
 }
 
@@ -857,6 +860,7 @@ function updateFeedOnOrder() {
             })
 
             offset = 0
+            scroll_end = false
             updateFeed(checked_filter)
         })
     })
@@ -872,6 +876,7 @@ function updateFeedOnClick() {
     filters.forEach(function (filter) {
         filter.addEventListener('click', function () {
             offset = 0
+            scroll_end = false
             updateFeed(filter.value)
         })
     })
@@ -1061,7 +1066,6 @@ function createPost(post) {
 //  ======================================= Search ======================================
 
 let selected_filter;
-let scroll_end;
 
 function updateSearchOnInputAndClick() {
 
@@ -1082,6 +1086,7 @@ function updateSearchOnInputAndClick() {
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
         updateSearch()
+        updateSearchOnScroll()
     }
 
     // Add event listeners when input changes
@@ -1196,8 +1201,6 @@ function updateSearchOnScroll() {
 
     selected_filter = document.querySelector('#search_filter input[checked]').value;
 
-    console.log(selected_filter)
-
     window.onscroll = function (ev) {
 
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
@@ -1301,7 +1304,7 @@ function searchRedirect() {
 
 searchRedirect();
 updateSearchOnInputAndClick();
-updateSearchOnScroll();
+
 
 
 
