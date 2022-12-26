@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+
 
 class PostController extends Controller
 {
@@ -29,8 +31,12 @@ class PostController extends Controller
             ->where('id_user_receiver', $user1->id)->where('acceptance_status', 'Accepted')->exists();
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
+        $request->validate([
+            'id' => 'integer|exists:post,id'
+        ]);
+
         // TODO: use id to get post from database
         $post = Post::withCount('likes', 'comments')->find($id);
 
@@ -46,6 +52,12 @@ class PostController extends Controller
 
     public function feed(Request $request)
     {
+
+        $request->validate([
+            'type_feed' => 'sometimes|string|required',
+            'type_order' => 'string'
+        ]);
+
         $posts = [];
         $offset = $request->route('offset');
 
@@ -107,6 +119,14 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
+
+        $request->validate([
+            'group_name' => 'sometimes|string',
+            'text' => 'string|min:0|max:1000',
+            'tags' => 'string',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000' // 50MB per image
+        ]);
+
         DB::beginTransaction();
         $post = new Post();
 
@@ -125,6 +145,8 @@ class PostController extends Controller
         $this->add_topics($request, $post);
 
         DB::commit();
+
+        return response()->json(['success' => 'Post created successfully.']);
     }
 
     private function add_topics(Request $request, Post $post)
@@ -170,8 +192,12 @@ class PostController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete($id, Request $request)
     {
+        $request->validate([
+            'id' => 'integer|exists:post,id'
+        ]);
+
         $post = Post::find($id);
         $this->authorize('delete', $post); // POLICY
         DB::table('post')->where('id', $id)->delete();
@@ -180,6 +206,14 @@ class PostController extends Controller
 
     public function edit(Request $request, $id)
     {
+
+        $request->validate([
+            'id' => 'integer|exists:post,id',
+            'group_name' => 'sometimes|string',
+            'text' => 'string|min:0|max:1000',
+            'tags' => 'string',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000' // 50MB per image
+        ]);
 
         DB::beginTransaction();
 
@@ -225,7 +259,7 @@ class PostController extends Controller
     }
 
     private function feed_friends()
-    {
+    { // NOT AN API
 
         if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
@@ -254,7 +288,7 @@ class PostController extends Controller
     }
 
     private function feed_groups()
-    {
+    { // NOT AN API
         if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
         }
@@ -284,7 +318,7 @@ class PostController extends Controller
     }
 
     private function feed_for_you()
-    {
+    {// NOT AN API
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]); // Authorization
         }

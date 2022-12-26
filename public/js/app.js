@@ -544,6 +544,9 @@ function addedHandler(class_name) {
             logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
+        // console.log(this.response)
+        // TODO : smth like this for every page
+        // alert.innerHTML = this.response !== null ?  JSON.parse(this.response).success : 'Action successful';
         alert.innerHTML = 'Action successful';
         if (this.status < 200 || this.status >= 300) {
             class_alert = 'alert-danger'

@@ -76,7 +76,7 @@ class ProfileController extends Controller
 
         DB::commit();
 
-        return redirect()->route('profile', $user->username);
+        return redirect()->route('profile', $user->username)->with('success', 'Profile updated successfully');
     }
 
 
