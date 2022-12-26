@@ -14,7 +14,12 @@ class CommentController extends Controller
 {
     public function create($id_post, Request $request)
     {
-        $text = $request->input('text');
+
+        $request->validate([
+            'text' => 'string|min:0|max:2000' // strip tags to sanitize inout // SEE BELLOW
+        ]);
+
+        $text = strip_tags($request->input('text'));
 
         $post = Post::find($id_post);
         $this->authorize('create', $post); // funciona
@@ -80,14 +85,23 @@ class CommentController extends Controller
 
     public function edit(Request $request)
     {
+        $request->validate([
+            'id_comment' => 'string|exists:comment,id',
+            'text' => 'string|min:0|max:2000' // strip tags to sanitize inout // SEE BELLOW
+        ]);
+
         $comment = Comment::find($request->input('id_comment'));
         $this->authorize('update', $comment);
-        $comment->text = $request->input('text');
+        $comment->text = strip_tags($request->input('text'));
         $comment->save();
     }
 
-    public function delete($id_comment)
+    public function delete(Request $request, $id_comment)
     {
+        $request->validate([
+            'id_comment' => 'string|exists:comment,id', // strip tags to sanitize inout // SEE BELLOW
+        ]);
+
         $comment = Comment::find($id_comment);
         $this->authorize('delete', $comment);
         $comment->delete();
