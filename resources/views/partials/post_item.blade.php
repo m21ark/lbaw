@@ -26,8 +26,7 @@
                     @auth
                         @if (Auth::user()->id == $post->owner->id)
                             @isset($showComments)
-                                <a class="dropdown-item" id="popup_btn_post_edit" onclick="window.scrollTo(0, 0);"
-                                    href="#">Edit
+                                <a class="dropdown-item" id="popup_btn_post_edit" href="#">Edit
                                     post</a>
                             @else
                                 <a class="dropdown-item" href="/post/{{ $post->id }}">See
@@ -35,8 +34,7 @@
                             @endisset
                         @else
                             @isset($showComments)
-                                <a href="#!" class="dropdown-item" id="popup_btn_report_post_create"
-                                    onclick="window.scrollTo(0, 0);">Report
+                                <a href="#!" class="dropdown-item" id="popup_btn_report_post_create">Report
                                     Post </a>
                             @endisset
                             <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send

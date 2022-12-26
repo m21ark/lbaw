@@ -6,12 +6,11 @@
             @auth
                 @if (Auth::user()->id == $comment->id_commenter)
                     <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
-                        class="pt-1 text-decoration-none popup_btn_comment_edit " onclick="window.scrollTo(0, 0);">
+                        class="pt-1 text-decoration-none popup_btn_comment_edit ">
                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
                     </a>
                 @else
-                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" onclick="window.scrollTo(0, 0);"
-                        data-id="{{ $comment->id }}">
+                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">
                         <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
                     </a>
                 @endif
@@ -115,13 +114,12 @@
                             @auth
                                 @if (Auth::user()->id == $reply->id_commenter)
                                     <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
-                                        class="pt-1 text-decoration-none popup_btn_comment_edit "
-                                        onclick="window.scrollTo(0, 0);">
+                                        class="pt-1 text-decoration-none popup_btn_comment_edit ">
                                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
                                     </a>
                                 @else
                                     <a href="#!" class="pt-2 btn popup_btn_report_comment_create"
-                                        onclick="window.scrollTo(0, 0);" data-id="{{ $reply->id }}">
+                                        data-id="{{ $reply->id }}">
                                         <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
                                     </a>
                                 @endif

@@ -436,8 +436,8 @@ ul.nav a:hover {
     border-radius: 1em;
     background-color: #a4c6f0;
     box-shadow: 2px 2px 5px grey;
-    position: absolute;
-    top: 20em;
+    position: fixed;
+    top: 16em;
     left: 0;
     right: 0;
     margin-left: auto;

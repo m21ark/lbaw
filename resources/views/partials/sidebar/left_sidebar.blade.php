@@ -56,9 +56,7 @@
             @endif
 
 
-            <button id="popup_btn_post" onclick="window.scrollTo(0, 0);"
-                class="mt-5 make_post_popup form_button btn btn-primary enc" onclick="window.scrollTo(0, 0);"
-                type="submit">
+            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
                 <span style="font-size:1.7em" class="me-4">Post</span>
                 <i class="fa-regular fa-square-plus fa-2x"></i>
 
@@ -153,7 +151,7 @@
                 </a>
             @endif
 
-            <a class="text-primary btn" aria-current="page" id="popup_btn_post" onclick="window.scrollTo(0, 0);">
+            <a class="text-primary btn" aria-current="page" id="popup_btn_post">
                 <span class="position-relative">
                     <i class="fa-regular fa-square-plus fa-2x"></i>
                 </span>
