@@ -1060,6 +1060,9 @@ function createPost(post) {
 
 //  ======================================= Search ======================================
 
+let selected_filter;
+let scroll_end;
+
 function updateSearchOnInputAndClick() {
 
     let pathname = window.location.pathname
@@ -1069,6 +1072,7 @@ function updateSearchOnInputAndClick() {
         return;
     }
 
+    scroll_end = false;
     offset = 0;
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
@@ -1139,6 +1143,7 @@ function updateSearch() {
     if (type_search !== selected_filter) {
         offset = 0;
         selected_filter = type_search;
+        scroll_end = false;
         document.querySelector('#timeline').innerHTML = '';
     }
 
@@ -1147,19 +1152,22 @@ function updateSearch() {
         let timeline = document.querySelector('#timeline');
 
         if (!timeline) return;
+
         let received;
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
             // ignore for now
+            console.log('Erro')
         }
 
-        //console.log(received.length)
+        console.log(received.length)
 
         if (received == null) return;
 
-        if (received.length === 0) {
-            timeline.innerHTML = `<h3 class="text-center mt-5">No results found</h3>`
+        if (received.length === 0 && scroll_end === false) {
+            timeline.innerHTML += `<h3 class="text-center mt-5">No results found</h3>`
+            scroll_end = true;
         }
 
         received.forEach(function (searchHit) {
@@ -1182,7 +1190,7 @@ function updateSearch() {
 
 }
 
-let selected_filter;
+
 
 function updateSearchOnScroll() {
 
@@ -1192,9 +1200,7 @@ function updateSearchOnScroll() {
 
     window.onscroll = function (ev) {
 
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
-
-            console.log(offset)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
 
             if (selected_filter === 'posts') {
                 updateSearch()
