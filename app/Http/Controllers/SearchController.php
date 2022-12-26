@@ -82,7 +82,7 @@ class SearchController extends Controller
         if ($decide) {
             $posts = $this->searchPostsFTS($query_string);
         } else {
-            $posts = $this->searchPostsTopic($query_string);
+            $posts = $this->searchPostsTopic($query_string, 0);
             foreach ($posts as $post) {$post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);}
         }
 
@@ -114,29 +114,42 @@ class SearchController extends Controller
     }
 
 
-    private function searchPostsTopic($query_string) {
+    private function searchPostsTopic($query_string, $offset) {
         $posts = [];
 
-        $topics = ['WorldCup', '2022', 'arts'];
+        $topics_search = ['WorldCup', '2022', 'arts', 'Love', 'Yoga', 'Ego', 'Traveller'];
 
         if (Auth::check()) {
-            $posts = app('App\Http\Controllers\PostController')->feed_for_you()->limit(20)->get();
+            $posts = app('App\Http\Controllers\PostController')->feed_for_you()->get();
         } else {
-            $posts = app('App\Http\Controllers\PostController')->feed_viral()->limit(20)->get();
+            $posts = app('App\Http\Controllers\PostController')->feed_viral()->get();
         }
+
+        $limiter = 10;
 
         $posts_filtered = [];
 
         foreach ($posts as $post) {
             $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
+            
+            
+            foreach ($post->topics as $topic) {
+                
+                if (!in_array($topic->topic, $topics_search)) {
+                    continue;
+                }
 
-            foreach ($topics as $topic) {
-                /*
-                if (in_array($topic, $post->topics)) {
-                    $posts_filtered[] = $post;
+                if ($offset > 0) {
+                    $offset--;
                     break;
                 }
-                */
+                
+                $posts_filtered[] = $post;
+                $limiter--;
+            }
+
+            if ($limiter <= 0) {
+                break;
             }
         }
 
