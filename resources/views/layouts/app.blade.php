@@ -30,7 +30,7 @@
 
 </head>
 
-<body class="m-auto">
+<body class="m-auto min-vh-100" style="min-height:50em">
 
     <!-- Header -->
     @include('partials.header')
