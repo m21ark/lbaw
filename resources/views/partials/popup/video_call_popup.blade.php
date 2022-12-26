@@ -1,8 +1,16 @@
-<div class="pop_up reveal-modal" id="video_call"
-    style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);width: 50%; display:none;">
-    <video id="remoteview" style="width: 100%;left-margin:1em;" controls autoplay></video>
-    <video id="selfview" class="position-absolute bottom-0 end-0" style="width: 30%;" controls autoplay muted></video>
-    <span id="endCall" class="position-absolute bottom-0 start-0 fa-2x text-danger" onclick="endCall()">
-        <i class="fa-solid fa-phone-slash"></i>
-    </span>
+<div class="pop_up reveal-modal" id="video_call">
+    <div class="d-flex justify-content-between mb-2">
+        <h3>Video Call</h3>
+        <h3 id="endCall" onclick="endCall()">
+            <span class="p-1 text-danger">
+                <i class="fa-solid fa-phone-slash"></i>
+            </span>End Call
+        </h3>
+    </div>
+
+    <div class="position-relative">
+        <video id="remoteview" style="width: 100%;" controls autoplay></video>
+        <video id="selfview" class="position-absolute bottom-0 end-0 mb-2" style="width: 30%;" controls autoplay
+            muted></video>
+    </div>
 </div>

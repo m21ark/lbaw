@@ -2052,3 +2052,4 @@ let curr_path = window.location.pathname
 if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
     setInterval(() => { checkResponsiveUI() }, 500);
 }
+

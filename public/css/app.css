@@ -329,6 +329,20 @@ ul.nav a:hover {
     min-height: 15em;
 }
 
+#video_call {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    right: 0;
+    width: 80%;
+    display: none;
+    padding: 2em;
+}
+
+#endCall:hover {
+    cursor: pointer;
+}
+
 
 /*  ====================== NAVBAR FILTER ===================== */
 
