@@ -92,7 +92,7 @@ if (user_header != null) {
     });
     
     function render() {
-      
+      // ONLINE STATUS OF USERS
     }
 
     /////////////////////////////////////////////
@@ -1741,6 +1741,8 @@ function createCustomMessageBody(notf) {
 
 }
 
+side_bar_text = [];
+
 function createNotificationList(event) {
 
     if (event !== null)
@@ -1754,7 +1756,9 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
 
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i < 5) {
+            if (e.textContent != "" && !e.textContent.includes("Post")) {
+                side_bar_text[i] = " " + e.textContent
+                console.log(side_bar_text)
                 e.removeChild(e.lastChild);
                 e.style.display = 'none';
             }
@@ -1799,9 +1803,9 @@ function createNotificationList(event) {
         notifications.innerHTML = '';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "" && i < 6) {
+            console.log(side_bar_text)
+            if (side_bar_text[i] != "" && side_bar_text[i] != undefined) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
                 e.style.display = '';
