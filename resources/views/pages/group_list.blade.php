@@ -20,7 +20,7 @@
 
             @auth
                 @if (Auth::user()->username === $user->username)
-                    <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
+                    <button class='btn btn-primary w-100 mb-3 mt-3' onclick="window.scrollTo(0, 0);" id="popup_btn_group_create">Create Group</button>
                     @include('partials.popup.make_group_popup')
                 @endif
             @endauth

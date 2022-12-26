@@ -1,7 +1,7 @@
 <div class="container mt-5 mb-5 post_item " id="post_main_page">
 
     @isset($showComments)
-       <h1 class="mb-4">Post</h1>
+        <h1 class="mb-4">Post</h1>
     @endisset
 
     <div class="card post_card p-0">
@@ -10,7 +10,8 @@
 
             <a href={{ url('/profile/' . $post->owner->username) }}
                 class="text-decoration-none d-flex flex-row align-items-center">
-                <img src="{{ asset($post->owner->photo) }}" width="60" alt="Post Owner Profile Image" class="rounded-circle me-3">
+                <img src="{{ asset($post->owner->photo) }}" width="60" alt="Post Owner Profile Image"
+                    class="rounded-circle me-3">
                 <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
             </a>
 
@@ -25,7 +26,8 @@
                     @auth
                         @if (Auth::user()->id == $post->owner->id)
                             @isset($showComments)
-                                <a class="dropdown-item" id="popup_btn_post_edit" href="#">Edit
+                                <a class="dropdown-item" id="popup_btn_post_edit" onclick="window.scrollTo(0, 0);"
+                                    href="#">Edit
                                     post</a>
                             @else
                                 <a class="dropdown-item" href="/post/{{ $post->id }}">See
@@ -33,7 +35,8 @@
                             @endisset
                         @else
                             @isset($showComments)
-                                <a href="#!" class="dropdown-item" id="popup_btn_report_post_create">Report
+                                <a href="#!" class="dropdown-item" id="popup_btn_report_post_create"
+                                    onclick="window.scrollTo(0, 0);">Report
                                     Post </a>
                             @endisset
                             <a class="dropdown-item" href="{{ url('/messages/' . $post->owner->username) }}">Send

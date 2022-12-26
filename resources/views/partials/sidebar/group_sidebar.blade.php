@@ -10,7 +10,7 @@
 
                 @auth
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                        <a class='btn btn-secondary' id="popup_btn_group_edit" onclick="window.scrollTo(0, 0);" data-idGroup="{{ $group->name }}">Edit</a>
                         <a href='/group/{{$group->name}}/requests' style="color: black;"><i class="fa-solid fa-file-signature"></i></a>
                     @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
                         <span class="cancel_g_request"><i class="fa-solid fa-clock-rotate-left"
@@ -72,7 +72,7 @@
     </div>
 
 
-    <button id="popup_btn_group_post" class='btn btn-primary w-100 mb-3 mt-2'>Post on group</button>
+    <button id="popup_btn_group_post" onclick="window.scrollTo(0, 0);" class='btn btn-primary w-100 mb-3 mt-2'>Post on group</button>
 
 
     <h3 class="mb-4">Members</h3>
