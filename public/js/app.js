@@ -805,14 +805,11 @@ function updateFeed(feed) {
         })
     }
 
-    if (!document.querySelector('#timeline')) {
-        return;
-    }
-
     sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
+        if(!timeline) return;
 
         if (offset === 0) {
             timeline.innerHTML = '';
@@ -834,6 +831,10 @@ function updateFeed(feed) {
 }
 
 function updateFeedOnLoad() {
+    let timeline = document.querySelector('#timeline')
+    if (!timeline) return;
+    timeline.innerHTML = createSpinner();
+
     let feed_filters = document.querySelector('#feed_radio_viral')
     if (feed_filters) {
         feed_filters.checked = true
@@ -851,6 +852,10 @@ function updateFeedOnOrder() {
 
     orders.forEach(function (order) {
         order.addEventListener('click', function () {
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = createSpinner();
+
             let filters = document.querySelectorAll('#feed_filter input')
             if (!filters) return;
 
@@ -875,6 +880,10 @@ function updateFeedOnClick() {
 
     filters.forEach(function (filter) {
         filter.addEventListener('click', function () {
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = createSpinner();
+
             offset = 0
             scroll_end = false
             updateFeed(filter.value)
@@ -1061,6 +1070,15 @@ function createPost(post) {
 }
 
 
+function createSpinner() {
+    return `
+    <div class="text-center">
+        <div class="spinner-border m-5" style="width: 5rem; height: 5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    `
+}
 
 
 //  ======================================= Search ======================================
@@ -1165,8 +1183,6 @@ function updateSearch() {
             // ignore for now
             console.log('Erro')
         }
-
-        console.log(received.length)
 
         if (received == null) return;
 
