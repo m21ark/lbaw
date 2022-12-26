@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', $group->name.'`s Group')
+
 @section('content')
     <h1 class="mt-3">Group Page</h1>
 

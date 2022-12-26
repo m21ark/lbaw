@@ -28,13 +28,13 @@ class GroupJoinRequestController extends Controller
         return view('pages.group_requests', ['requests' => $group->groupJoinRequests]);
     }
 
-    public function accept( $group_name, $id_sender, Request $request)
-    {   
+    public function accept($group_name, $id_sender, Request $request)
+    {
         // POLICY IS IN update_request FUNCTION
         return $this->update_request($id_sender, $group_name, "Accepted", $request);
     }
 
-    public function reject($group_name,$id_sender,  Request $request)
+    public function reject($group_name, $id_sender,  Request $request)
     {
         // POLICY IS IN update_request FUNCTION
         return $this->update_request($id_sender, $group_name, "Rejected", $request);
@@ -55,13 +55,13 @@ class GroupJoinRequestController extends Controller
             ->where('id_group', '=', $group->id);
 
         $this->authorize('update', $frequest->firstOrFail()); // POLICY ... working
-            
+
         $frequest->update(['acceptance_status' => $new_state]);
-        
+
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
 
-    public function send($id, Request $resquest) 
+    public function send($id, Request $resquest)
     {
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
@@ -84,14 +84,14 @@ class GroupJoinRequestController extends Controller
         validator($request->route()->parameters(), [
             'id' => 'required|exists:group,id',
         ])->validate();
-        
+
         $r = GroupJoinRequest::where('id_user', '=', Auth::user()->id)
             ->where('id_group', '=', $id);
-          
+
         $this->authorize('delete', $r->firstOrFail()); // POLICY ... WORKING
-            
+
         $r->delete();
-            
+
         return response()->json(['The request was deleted with success' => 200]);
     }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Features')
+
 @section('content')
     <div class="list-group">
         <div class="container px-2 py-3" id="hanging-icons">

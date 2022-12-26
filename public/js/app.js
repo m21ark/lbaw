@@ -50,49 +50,49 @@ if (user_header != null) {
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
 
-      
+
     });
 
 
     var usersOnline,
-      users = [],
-      sessionDesc,
-      currentcaller,
-      room,
-      caller,
-      localUserMedia;
+        users = [],
+        sessionDesc,
+        currentcaller,
+        room,
+        caller,
+        localUserMedia;
     const channel = pusher.subscribe("presence-videocall");
-    
+
     channel.bind("pusher:subscription_succeeded", members => {
-      //set the member count
-      usersOnline = members.count;
-      id = channel.members.me.id;
-      members.each(member => {
-        if (member.id != channel.members.me.id) {
-          users.push(member.id);
-        }
-      });
-    
-      render();
+        //set the member count
+        usersOnline = members.count;
+        id = channel.members.me.id;
+        members.each(member => {
+            if (member.id != channel.members.me.id) {
+                users.push(member.id);
+            }
+        });
+
+        render();
     });
-    
+
     channel.bind("pusher:member_added", member => {
-      users.push(member.id);
-      render();
+        users.push(member.id);
+        render();
     });
-    
+
     channel.bind("pusher:member_removed", member => {
-      // for remove member from list:
-      var index = users.indexOf(member.id);
-      users.splice(index, 1);
-      if (member.id == room) {
-        endCall();
-      }
-      render();
+        // for remove member from list:
+        var index = users.indexOf(member.id);
+        users.splice(index, 1);
+        if (member.id == room) {
+            endCall();
+        }
+        render();
     });
-    
+
     function render() {
-      
+        // WHY EMPTY FUNC?
     }
 
     //To iron over browser implementation anomalies like prefixes
@@ -176,8 +176,8 @@ if (user_header != null) {
         }
     }
 
-    channel.bind("client-candidate", function(msg) {
-        if(msg.room==room){
+    channel.bind("client-candidate", function (msg) {
+        if (msg.room == room) {
             console.log("candidate received");
             console.log(msg.candidate)
             caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
@@ -193,6 +193,11 @@ if (user_header != null) {
     }
     //Create and send offer to remote peer on button click
     function callUser(user) {
+
+        let res = confirm('Are you sure you want to make a video call?');
+        if (!res)
+            return;
+
         getCam()
             .then(stream => {
                 toggleVideoPopUp();
@@ -253,13 +258,13 @@ if (user_header != null) {
                             "room": room
                         });
                     });
-                    
+
                     var audioTrack = stream.getAudioTracks();
 
                     if (audioTrack.length > 0) {
                         stream.removeTrack(audioTrack[0]);
                     }
-                
+
                     if (window.URL) {
                         document.getElementById("selfview").srcObject = stream;
                     } else {
@@ -310,7 +315,7 @@ function addNotification(message_body, sender) {
     let notf = createElementFromHTML(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} photo" style="max-width: 100%; height: auto; width: 3em">
+          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} Profile Image" style="max-width: 100%; height: auto; width: 3em">
           <strong class="me-auto">${sender.username}</strong>
           <small class="text-muted">just now</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -953,7 +958,7 @@ function sms_html(art, isSender, message, time) {
                 ${time_anchor}
             </div>
             <img class="rounded-circle" src="${photo}"
-              alt="your photo" style="width: 45px; height: 100%;">
+              alt="Self Profile Image" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
     }
@@ -964,7 +969,7 @@ function sms_html(art, isSender, message, time) {
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img class="rounded-circle" src="${photo}"
-                  alt="sender photo" style="width: 45px; height: 100%;">
+                  alt="Message Sender Profile Image" style="width: 45px; height: 100%;">
                 <div>
                     <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                     ${time_anchor}
@@ -1211,7 +1216,7 @@ function createPost(post) {
         post.images.forEach(function (image, i) {
             imageDiv += `
                 <div class="carousel-item ${i == 0 ? 'active' : ''}">
-                    <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
+                    <img class="d-block w-100" src="/${image.path}" alt="Post Content Image">
                 </div>
             `
         })
@@ -1239,7 +1244,7 @@ function createPost(post) {
 
                         <a href='/profile/${post.owner}' .
                             class="text-decoration-none d-flex flex-row align-items-center">
-                            <img src="/${post.photo}" width="60" class="rounded-circle me-3">
+                            <img src="/${post.photo}" width="60" class="rounded-circle me-3" alt="Post Owner Profile Image">
                             <strong class="font-weight-bold">${post.owner}</strong>
                         </a>
 
@@ -1425,7 +1430,7 @@ function createUserCard(user) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
-        <img height="50%" src="/${user.photo}" class="card-img-top" alt="user_avatar">
+        <img height="50%" src="/${user.photo}" class="card-img-top" alt="User Profile Image">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
@@ -1451,7 +1456,7 @@ function createGroupCard(group) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
-        <img height="60%" src="/${group.photo}" class="card-img-top" alt="user_avatar">
+        <img height="60%" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
@@ -1575,7 +1580,7 @@ function createUserReportCardPending(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     new_card.innerHTML = `
-        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">View</a>
@@ -1610,7 +1615,7 @@ function createUserReportCardPast(user) {
     }
 
     new_card.innerHTML = `
-        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
@@ -1780,7 +1785,7 @@ function createNotificationList(event) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
             <div class="toast-header">
-              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User Profile Image" style="max-width: 100%; height: auto; width: 3em">
               <strong class="me-auto">${_notifications[i].sender.username}</strong>
               <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -1951,7 +1956,7 @@ function fillNotificationPage() {
         let notf = createElementFromHTML(`
             <div class="toast show mb-3" style="width:100%;height:8em;">
                 <div class="toast-header">
-                  <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+                  <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User Profile Image" style="max-width: 100%; height: auto; width: 3em">
                   <strong class="me-auto">${_notifications[i].sender.username}</strong>
                   <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
                   <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -2001,6 +2006,13 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
     });
 }
 
+function groupPostResponsiveUI() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    if (width <= 80)
+        document.querySelector('#list_toggle_btn').click()
+}
+
 
 function checkResponsiveUI() {
     let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
@@ -2017,18 +2029,21 @@ function checkResponsiveUI() {
         btn.style.visibility = "visible"
 
         if (!toggle.checked) {
-            title.hidden = ""
+            if (title)
+                title.hidden = ""
             page_b.hidden = "hidden"
         }
         else {
-            title.hidden = "hidden"
+            if (title)
+                title.hidden = "hidden"
             page_a.hidden = "hidden"
         }
 
     } else {
         page_b.hidden = ""
         page_a.hidden = ""
-        title.hidden = ""
+        if (title)
+            title.hidden = ""
         btn.style.visibility = "hidden"
     }
 }
@@ -2037,3 +2052,4 @@ let curr_path = window.location.pathname
 if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
     setInterval(() => { checkResponsiveUI() }, 500);
 }
+

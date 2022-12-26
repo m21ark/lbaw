@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Admin Console')
+
 @section('content')
     <h2 class="mt-4 mb-4">Admin Console<a href="/admin/statistics" class="ms-3 btn btn-outline-primary mt-3 mb-3 enc"><i
                 class="fa-solid fa-bar-chart me-2"></i>Statistics</a></h2>

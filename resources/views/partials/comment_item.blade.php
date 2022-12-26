@@ -1,17 +1,21 @@
 <div class="card mb-4 comment_item">
     <div class="card-header d-flex justify-content-evenly align-items-center">
-        @auth
-            @if (Auth::user()->id == $comment->id_commenter)
-                <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
-                    class="pt-1 text-decoration-none popup_btn_comment_edit ">
-                    <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
-                </a>
-            @else
-                <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">
-                    <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
-                </a>
-            @endif
-        @endauth
+        @isset($showPostLink)
+            <p></p>
+        @else
+            @auth
+                @if (Auth::user()->id == $comment->id_commenter)
+                    <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
+                        class="pt-1 text-decoration-none popup_btn_comment_edit ">
+                        <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                    </a>
+                @else
+                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">
+                        <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                    </a>
+                @endif
+            @endauth
+        @endisset
 
         <small>{{ $comment->post_date }}</small>
 
@@ -32,8 +36,8 @@
     </div>
 
     <div class="card-header d-flex justify-content-center align-items-center">
-        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}" alt=""
-            width="50" class="rounded-circle me-5">
+        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}"
+            alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
             href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
     </div>
@@ -104,19 +108,23 @@
                 <div class="card mb-4 comment_reply">
 
                     <div class="card-header d-flex justify-content-evenly align-items-center">
-                        @auth
-                            @if (Auth::user()->id == $reply->id_commenter)
-                                <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
-                                    class="pt-1 text-decoration-none popup_btn_comment_edit ">
-                                    <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
-                                </a>
-                            @else
-                                <a href="#!" class="pt-2 btn popup_btn_report_comment_create"
-                                    data-id="{{ $reply->id }}">
-                                    <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
-                                </a>
-                            @endif
-                        @endauth
+                        @isset($showPostLink)
+                            <p></p>
+                        @else
+                            @auth
+                                @if (Auth::user()->id == $reply->id_commenter)
+                                    <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
+                                        class="pt-1 text-decoration-none popup_btn_comment_edit ">
+                                        <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                                    </a>
+                                @else
+                                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create"
+                                        data-id="{{ $reply->id }}">
+                                        <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                                    </a>
+                                @endif
+                            @endauth
+                        @endisset
 
                         <small>{{ $reply->post_date }}</small>
 
@@ -125,7 +133,7 @@
 
                     <div class="card-header d-flex justify-content-center align-items-center">
                         <img href="/profile/{{ $reply->poster->username }}" src="/{{ $reply->poster->photo }}"
-                            alt="" width="50" class="rounded-circle me-5">
+                            alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
                         <a class="text-decoration-none"
                             href="/profile/{{ $reply->poster->username }}">{{ $reply->poster->username }}</a>
                     </div>
