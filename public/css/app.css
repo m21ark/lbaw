@@ -7,7 +7,7 @@
         box-shadow: 2px 2px 5px lightgray;
         display: grid;
         grid-template-columns: 1fr 4fr 1.5fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: 5em auto auto;
 
         grid-template-areas: "header  header header"
             "navbar  content rightbar"
@@ -289,6 +289,9 @@ ul.nav a:hover {
 
 /*  ====================== MESSAGES ===================== */
 
+#video_call_span:hover {
+    cursor: pointer;
+}
 
 #sms_input {
     width: 80%;
@@ -448,10 +451,13 @@ ul.nav a:hover {
 
 
 
+
+
 .comment_reply_section {
     margin: 0 auto;
     width: 90%;
 }
+
 
 
 /* ====================== switch ===================== */

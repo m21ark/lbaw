@@ -50,10 +50,7 @@ if (user_header != null) {
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
 
-        if (data.room == room) {
-            console.log("candidate received");
-            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-        }
+
     });
 
 
@@ -70,7 +67,6 @@ if (user_header != null) {
         //set the member count
         usersOnline = members.count;
         id = channel.members.me.id;
-        document.getElementById("myid").innerHTML = ` My caller id is : ` + id;
         members.each(member => {
             if (member.id != channel.members.me.id) {
                 users.push(member.id);
@@ -82,7 +78,6 @@ if (user_header != null) {
 
     channel.bind("pusher:member_added", member => {
         users.push(member.id);
-        console.log("lelle")
         render();
     });
 
@@ -97,16 +92,7 @@ if (user_header != null) {
     });
 
     function render() {
-        var list = "";
-        users.forEach(function (user) {
-            list +=
-                `<li>` +
-                user +
-                ` <input type="button" style="float:right;"  value="Call" onclick="callUser('` +
-                user +
-                `')" id="makeCall" /></li>`;
-        });
-        document.getElementById("users").innerHTML = list;
+        // WHY EMPTY FUNC?
     }
 
     //To iron over browser implementation anomalies like prefixes
@@ -135,6 +121,7 @@ if (user_header != null) {
     }
 
     function GetRTCSessionDescription() {
+        console.log("GetRTCSessionDescription called");
         window.RTCSessionDescription =
             window.RTCSessionDescription ||
             window.webkitRTCSessionDescription ||
@@ -143,8 +130,26 @@ if (user_header != null) {
         return window.RTCSessionDescription;
     }
     function prepareCaller() {
+
+        const servers = {
+            iceServers: [
+                {
+                    urls: [
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+                    ]
+                },
+                {
+                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                    credential: 'webrtc',
+                    username: 'webrtc'
+                }
+            ],
+            iceCandidatePoolSize: 10,
+        };
+
         //Initializing a peer connection
-        caller = new window.RTCPeerConnection();
+        caller = new window.RTCPeerConnection(servers);
         //Listen for ICE Candidates and send them to remote peers
         caller.onicecandidate = function (evt) {
             if (!evt.candidate) return;
@@ -155,9 +160,7 @@ if (user_header != null) {
         caller.onaddstream = function (evt) {
             console.log("onaddstream called");
             if (window.URL) {
-                document.getElementById("remoteview").src = window.URL.createObjectURL(
-                    evt.stream
-                );
+                document.getElementById("remoteview").srcObject = evt.stream;
             } else {
                 document.getElementById("remoteview").src = evt.stream;
             }
@@ -166,12 +169,20 @@ if (user_header != null) {
 
     function onIceCandidate(peer, evt) {
         if (evt.candidate) {
-            channel.trigger("my-event", {
+            channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
                 "room": room
             });
         }
     }
+
+    channel.bind("client-candidate", function (msg) {
+        if (msg.room == room) {
+            console.log("candidate received");
+            console.log(msg.candidate)
+            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+        }
+    });
 
     function getCam() {
         //Get local audio/video feed and show it in selfview video element
@@ -182,17 +193,14 @@ if (user_header != null) {
     }
     //Create and send offer to remote peer on button click
     function callUser(user) {
+
+        let res = confirm('Are you sure you want to make a video call?');
+        if (!res)
+            return;
+
         getCam()
             .then(stream => {
-                if (window.URL) {
-                    document.getElementById("selfview").src = window.URL.createObjectURL(
-                        stream
-                    );
-                } else {
-                    document.getElementById("selfview").src = stream;
-                }
-                console.log("DKDK")
-                toggleEndCallButton();
+                toggleVideoPopUp();
                 caller.addStream(stream);
                 localUserMedia = stream;
                 caller.createOffer().then(function (desc) {
@@ -200,28 +208,37 @@ if (user_header != null) {
                     channel.trigger("client-sdp", {
                         sdp: desc,
                         room: user,
-                        from: id
+                        from: document.querySelector(".me-2").textContent
                     });
                     room = user;
                 });
+                var audioTrack = stream.getAudioTracks();
+
+                if (audioTrack.length > 0) {
+                    stream.removeTrack(audioTrack[0]);
+                }
+
+                if (window.URL) {
+                    document.getElementById("selfview").srcObject = stream;
+                } else {
+                    document.getElementById("selfview").src = stream;
+                }
             })
             .catch(error => {
-                console.log("DKDK")
-
                 console.log("an error occured", error);
             });
     }
-    function toggleEndCallButton() {
-        if (document.getElementById("endCall").style.display == "block") {
-            document.getElementById("endCall").style.display = "none";
+    function toggleVideoPopUp() {
+        if (document.getElementById("video_call").style.display == "block") {
+            document.getElementById("video_call").style.display = "none";
         } else {
-            document.getElementById("endCall").style.display = "block";
+            document.getElementById("video_call").style.display = "block";
         }
     }
 
     channel.bind("client-sdp", function (msg) {
         if (msg.room == id) {
-            var answer = confirm("You have a call from: " + msg.from + "Would you like to answer?");
+            var answer = confirm("You have a call from: " + msg.from + ". Would you like to answer?");
             if (!answer) {
                 return channel.trigger("client-reject", { "room": msg.room, "rejected": id });
             }
@@ -229,12 +246,8 @@ if (user_header != null) {
             getCam()
                 .then(stream => {
                     localUserMedia = stream;
-                    toggleEndCallButton();
-                    if (window.URL) {
-                        document.getElementById("selfview").src = window.URL.createObjectURL(stream);
-                    } else {
-                        document.getElementById("selfview").src = stream;
-                    }
+                    toggleVideoPopUp();
+
                     caller.addStream(stream);
                     var sessionDesc = new RTCSessionDescription(msg.sdp);
                     caller.setRemoteDescription(sessionDesc);
@@ -246,6 +259,17 @@ if (user_header != null) {
                         });
                     });
 
+                    var audioTrack = stream.getAudioTracks();
+
+                    if (audioTrack.length > 0) {
+                        stream.removeTrack(audioTrack[0]);
+                    }
+
+                    if (window.URL) {
+                        document.getElementById("selfview").srcObject = stream;
+                    } else {
+                        document.getElementById("selfview").src = stream;
+                    }
                 })
                 .catch(error => {
                     console.log('an error occured', error);
@@ -274,7 +298,7 @@ if (user_header != null) {
             track.stop();
         }
         prepareCaller();
-        toggleEndCallButton();
+        toggleVideoPopUp();
     }
 }
 
@@ -2005,18 +2029,21 @@ function checkResponsiveUI() {
         btn.style.visibility = "visible"
 
         if (!toggle.checked) {
-            title.hidden = ""
+            if (title)
+                title.hidden = ""
             page_b.hidden = "hidden"
         }
         else {
-            title.hidden = "hidden"
+            if (title)
+                title.hidden = "hidden"
             page_a.hidden = "hidden"
         }
 
     } else {
         page_b.hidden = ""
         page_a.hidden = ""
-        title.hidden = ""
+        if (title)
+            title.hidden = ""
         btn.style.visibility = "hidden"
     }
 }
