@@ -809,6 +809,7 @@ function sendDeleteCommentRequest() {
 // ============================================ Reports ============================================
 
 function popupControllReportPost() {
+    document.querySelector('.dropdown_menu').toggleAttribute('hidden');
     document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
     document.querySelector('#create_report_button').dataset.comment = 0
 }
