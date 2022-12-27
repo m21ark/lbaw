@@ -15,11 +15,16 @@ use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
-    public function show($name)
+    public function show($name, Request $request)
     {
+
+        $request->validate([
+            'name' => 'string|exists:group,name', 
+        ]);
+
         $group = Group::where('name', $name)->first();
 
-        if ($group == null) {
+        if ($group == null) { // Never reached, if that happens then someone hacked validator
             //No group with that name so we return to the home page
             return redirect()->route('home');
         }
@@ -41,6 +46,12 @@ class GroupController extends Controller
 
     public function create(Request $request)
     {
+
+        $request->validate([
+            'name' => 'required|string|min:1|max:100|unique:group,name',
+            'description' => 'required|string|min:1|max:2000',
+        ]);
+
         if ($request->user() === null && Group::where('name', '=', $request->input('name'))->firstOrFail() !== null) {
             return response()->json(['failure' => 401]);
         }
@@ -50,8 +61,8 @@ class GroupController extends Controller
 
         $group = new Group();
 
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
+        $group->name = strip_tags($request->input('name'));
+        $group->description = strip_tags($request->input('description'));
         $group->visibility = $request->input('visibility');
         // TODO : ADD PROFILE IMAGE
 
@@ -73,7 +84,7 @@ class GroupController extends Controller
         // THIS IS A FUNCTION AND DOES NOT NEED POLICY HERE... but in the callee function
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -92,8 +103,13 @@ class GroupController extends Controller
         }
     }
 
-    public function delete($name)
+    public function delete($name, Request $request)
     {
+
+        $request->validate([
+            'name' => 'string|min:1|max:100|exists:group,name', // NOTE exists group Name
+        ]);
+
         $group = Group::where('name', $name)->first();
         $this->authorize('delete', $group); // POLICY....WORKING
         $group->delete();
@@ -104,14 +120,21 @@ class GroupController extends Controller
     public function edit(Request $request)
     {
 
+
+        $request->validate([
+            'id_group' => 'string|exists:group,id',
+            'description' => 'required|string|min:1|max:2000',
+            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000',
+        ]);
+
         DB::beginTransaction();
         $id_group = $request->input('id_group');
         $group = Group::find($id_group);
 
         $this->authorize('update', $group); // POLICY....WORKING
 
-        $group->name = $request->input('name');
-        $group->description = $request->input('description');
+        $group->name = strip_tags($request->input('name'));
+        $group->description = strip_tags($request->input('description'));
         $group->visibility = $request->input('visibility') == 'on' ? true : false;
 
         if ($request->hasFile('photo')) {
@@ -140,7 +163,7 @@ class GroupController extends Controller
         $group->topics()->delete();
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -160,8 +183,13 @@ class GroupController extends Controller
         }
     }
 
-    public function listGroups($username)
+    public function listGroups($username, Request $request)
     {
+
+        $request->validate([
+            'username' => 'string|exists:user,name',
+        ]);
+
         $user = User::where('username', $username)->firstOrFail();
 
         if ($user === null)
@@ -189,8 +217,13 @@ class GroupController extends Controller
         return $owner;
     }
 
-    public function removeGroupMember($idGroup, $idUser)
+    public function removeGroupMember($idGroup, $idUser, Request $request)
     {
+
+        $request->validate([
+            'idGroup' => 'string|exists:group,id',
+            'idUser' => 'string|exists:user,id',
+        ]);
 
         $group = Group::find($idGroup);
 

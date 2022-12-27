@@ -21,15 +21,20 @@ class FriendsRequestController extends Controller
         return view('pages.friends_requests', ['user' => Auth::user(), 'requests' => Auth::user()->pendentFriendsRequests, 'isrequests' => true]);
     }
 
-    public function friends($username)
+    public function friends($username, Request $request)
     {
+
         if (!Auth::check())
             return redirect()->route('home');
 
-        $user = User::where('username', '=', $username)->firstOrFail();
+        $request->validate([
+            'username' => 'string|exists:user,username', 
+        ]);
+
+        $user = User::where('username', '=', $username)->firstOrFail(); 
 
         if ($user === null)
-            return redirect()->route('home');
+            return redirect()->route('home'); // This should never happen ... if this happens, the user is trying to hack the system (in this case, validator function)
 
         // CHECK authserviceproviders to understand from where this policy comes
         $this->authorize('view', $user);
@@ -39,12 +44,13 @@ class FriendsRequestController extends Controller
 
     public function send($id_rcv, Request $request)
     {
+
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
         // N é preciso Policy uma vez que basta estar com session
 
-        validator($request->route()->parameters(), [
+        validator($request->route()->parameters(), [ // VALIDATOR
             'id_rcv' => 'required|exists:user,id',
         ])->validate();
 
@@ -105,7 +111,7 @@ class FriendsRequestController extends Controller
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
         $sender = User::find($id);
-        $this->authorize('delete', $sender); // FUNCIONA
+        $this->authorize('delete', $sender); // FUNCIONA ... look at UserPolicy
 
         FriendsRequest::where('id_user_sender', '=', Auth::user()->id)
             ->where('id_user_receiver', '=', $id)
