@@ -27,16 +27,21 @@
             $topics = implode(' ', $topics);
             ?>
 
-            <label for="group_edit_tags" class="">Topics</label>
+            <label for="group_edit_tags" class="" data-toggle="tooltip" data-placement="top"
+                title="Topics of interest to a group should be separated by spaces">Topics</label>
             <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags" value="{{ $topics }}">
 
             <label for="group_photo" class="">Profile Picture</label>
             <input type="file" class="form-control" id="group_photo" name="photo">
 
-            <label for="group_visibility" class="">Group Public Visibility</label>
-            <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
-                id="flexSwitchCheckChecked" @if ($group->visibility) checked @endif>
+            <div class="mt-2">
+                <label for="group_visibility" data-toggle="tooltip" data-placement="top"
+                    title="Visibility influences who can view your content. If unchecked, the group is considered private and it's posts can only be seen by members. Otherwise, the content is available to everyone. Even if the group is marked as private, it can still be discovered in search and receive new join requests.">
+                    Group Public Visibility</label>
+                <input class="ms-2 form-check-input" id="group_visibility" type="checkbox" role="switch"
+                    id="flexSwitchCheckChecked" @if ($group->visibility) checked @endif>
+            </div>
 
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_group_button" type="submit">Save
                 Changes</button>

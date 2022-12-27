@@ -12,7 +12,8 @@
                 </a>
             </div>
 
-            <label for="user_name" class="">Username</label>
+            <label for="user_name" class="" data-toggle="tooltip" data-placement="top"
+                title="The username should be unique and serve as an identifier for each user. We don't recommend you change it very often.">Username</label>
             <input type="text" id="user_name" value="{{ $user->username }}" data-name="{{ $user->username }}"
                 data-id="{{ $user->id }}" class="form-control mb-3" placeholder="Username">
 
@@ -20,11 +21,12 @@
             <input type="email" id="user_email" class="form-control mb-3" value="{{ $user->email }}"
                 placeholder="Email" required>
 
-            <label for="user_bdate" class=" mt-2">Birthdate</label>
+            <label for="user_bdate" class=" mt-2" data-toggle="tooltip" data-placement="top"
+                title="Your birthdate shouldn't be changed unless an error ocurred.">Birthdate</label>
             <input type="date" id="user_bdate" class="form-control mb-3" value="{{ $user->birthdate }}" required>
 
             <label for="user_bio" class="">Bio</label>
-            <textarea rows="8" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
+            <textarea rows="4" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
 
             <?php
             $topics = [];
@@ -34,16 +36,23 @@
             $topics = implode(' ', $topics);
             ?>
 
-            <label for="profile_edit_tags" class="">Topics of Interest</label>
+            <label for="profile_edit_tags" class="" data-toggle="tooltip" data-placement="top"
+                title="You can have up to 3 topics of interest to share your passions with the world. Your interests can be seen by everyone on your profile">Topics
+                of Interest</label>
             <input type="text" id="profile_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags" value="{{ $topics }}">
 
-            <label for="profile_pic" class="">Profile Picture</label>
+            <label for="profile_pic" class="" data-toggle="tooltip" data-placement="top"
+                title="Your profile picture can be publicly seen by every user.">Profile Picture</label>
             <input type="file" class="form-control" id="profile_pic" name="photo" />
 
-            <label for="profile_visibility" class=" me-3">Profile Public Visibility</label>
-            <input class="form-check-input" id="profile_visibility" type="checkbox" role="switch"
-                id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
+            <div class="mt-3">
+                <label for="profile_visibility" class="me-3" data-toggle="tooltip" data-placement="top"
+                    title="Visibility influences who can view your content. If unchecked, the profile is considered private and it's posts can only be seen by members and you can only recieve messages from friends. Otherwise, the content is available to everyone. Even if the profile is marked as private, it can still be discovered in search and receive new friend requests.">Profile
+                    Public Visibility</label>
+                <input class="form-check-input" id="profile_visibility" type="checkbox" role="switch"
+                    id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
+            </div>
 
             <!-- TODO: Falta se quer mudar de passe(cuidado com a hash)-->
 

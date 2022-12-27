@@ -23,7 +23,7 @@
             $topics = implode(' ', $topics);
             ?>
 
-            <label for="post_edit_tags" class="">Hashtags</label>
+            <label for="post_edit_tags" class="">Topics</label>
             <input type="text" id="post_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags" value="{{ $topics }}">
 

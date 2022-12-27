@@ -17,12 +17,12 @@
                 </a>
             </div>
 
-
             <label for="inputText" class="">Text</label>
             <textarea rows="8" id="inputText" class="form-control mb-3" placeholder="Content" name="text" required
                 autofocus style="resize: none;" @if ($popup_id === 'popup_show_group_post') data-group='{{ $group_name }}' @endif></textarea>
 
-            <label for="post_create_tags" class="">Hashtags</label>
+            <label for="post_create_tags" class="" data-toggle="tooltip" data-placement="top"
+                title="Post tags should be separated by spaces.">Tags</label>
             <input type="text" id="post_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags">
 

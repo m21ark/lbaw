@@ -15,7 +15,9 @@
                     <legend>Register Form</legend>
 
                     @if ($errors->has('username'))
-                        <label for="inputUsername" class=" mt-2">Username <small>(Required)</small></label>
+                        <label for="inputUsername" class=" mt-2" data-toggle="tooltip" data-placement="top"
+                            title="The username should be unique and serve as an identifier for each user. We don't recommend you change it very often.">Username
+                            <small>(Required)</small></label>
                         <input type="text" id="inputUsername" value="{{ old('username') }}"
                             class="form-control mb-3 is-invalid" placeholder="Username" name="username" required autofocus>
                         <div class="text-danger">

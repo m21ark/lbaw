@@ -15,9 +15,7 @@
             <h2 class="text-center mt-5">{{ $user->username }} is not part of any groups</h2>
         @endif
 
-
         <div>
-
             @auth
                 @if (Auth::user()->username === $user->username)
                     <button class='btn btn-primary w-100 mb-3 mt-3' id="popup_btn_group_create">Create Group</button>
@@ -27,7 +25,8 @@
 
             @if ($user->groupsOwner->count() > 0)
                 <div class="mt-3 mb-4 container">
-                    <h2>Groups Owned ({{ $user->groupsOwner->count() }})</h2>
+                    <h2 data-toggle="tooltip" data-placement="right" title="Groups where you are an owner">Groups Owned
+                        ({{ $user->groupsOwner->count() }})</h2>
                     <hr>
                     <div class="d-flex flex-wrap">
                         @foreach ($user->groupsOwner as $x)
@@ -54,7 +53,8 @@
         <div>
             @if ($user->groupsMember->count() > 0)
                 <div class="mt-5 mb-4 container">
-                    <h2>Groups Member ({{ $user->groupsMember->count() }})</h2>
+                    <h2 data-placement="right" title="Groups where you are a member">Groups Member
+                        ({{ $user->groupsMember->count() }})</h2>
                     <hr>
                     <div class="d-flex flex-wrap">
                         @foreach ($user->groupsMember as $x)
