@@ -1,4 +1,4 @@
-<div id="carouselExampleControls" class="carousel slide" data-interval="false">
+<div id="carousel-Controls-{{$post->id }}" class="carousel slide" data-interval="false">
     <div class="carousel-inner">
         @for ($i = 0; $i < count($post->images); $i++)
             <div class="carousel-item <?php if ($i == 0) {
@@ -10,13 +10,14 @@
     </div>
 
     @if (count($post->images) > 1)
-        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"
-            data-placement="right" title="Previous Image" style="filter: invert(100%);">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"
-            data-placement="right" title="Next Image" style="filter: invert(100%);">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        </a>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-{{$post->id }}" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-{{$post->id }}" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     @endif
+    
 </div>

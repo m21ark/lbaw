@@ -1226,6 +1226,17 @@ updateFeedOnOrder();
 updateFeedOnScroll();
 updateFeedOnClick();
 
+const renderCarouselItems = (id, items) => {
+    const carouselInnerId = document.querySelector(`#carousel-inner-${id}`);
+  
+    items.forEach((el, j) => {
+      let carouselTemplate = carouselItemTemplate(el, j);
+      carouselInnerId.innerHTML += carouselTemplate;
+    })
+  
+}
+
+
 function createPost(post) {
 
     let new_post = document.createElement('article');
