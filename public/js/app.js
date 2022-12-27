@@ -20,7 +20,7 @@ if (user_header != null) {
 
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
-            id_post: data.obj.id_post,
+            id_post: data.obj.id_post ?? (data.obj.comment !==undefined ? data.obj.comment.id_post : null),
             sender: data.sender,
             notification_date: Date.now(),
             id_parent: data.obj.id_parent,
@@ -1859,7 +1859,6 @@ function timeSince(date) {
 }
 
 function createCustomMessageBody(notf) {
-
     if (notf.tipo == "Comment") {
         if (notf.id_parent == null)
             return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
@@ -1867,13 +1866,13 @@ function createCustomMessageBody(notf) {
             return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username + "</a>" + " wants to connect"; // TODO. accept/reject
+        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you.`; 
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
