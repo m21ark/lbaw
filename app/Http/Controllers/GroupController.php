@@ -32,7 +32,7 @@ class GroupController extends Controller
         if (!$group->visibility) {
             $this->authorize('view', $group); // POLICY
         }
-        return view('pages.group', ['group' => $group, 'in_group' => $this->userInGroup(Auth::user(), $group), 'user' => Auth::user()]);
+        return view('pages.group', ['group' => $group, 'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false, 'user' => Auth::user()]);
     }
 
     public static function userInGroup(User $user1, Group $group)
