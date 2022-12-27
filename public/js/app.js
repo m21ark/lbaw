@@ -1114,6 +1114,10 @@ function updateSearchOnInputAndClick() {
 
             if (event.key !== "Enter") return;
 
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = ''
+
             updateSearch()
 
             let searchBarString = searchBar.value.trim().replaceAll('#', '%23')
@@ -1167,7 +1171,9 @@ function updateSearch() {
         offset = 0;
         selected_filter = type_search;
         scroll_end = false;
-        document.querySelector('#timeline').innerHTML = '';
+        let timeline = document.querySelector('#timeline')
+        timeline.innerHTML = createSpinner();
+        
     }
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search + '/offset/' + offset, {}, function () {
@@ -1176,11 +1182,14 @@ function updateSearch() {
 
         if (!timeline) return;
 
+        if (offset === 0) {
+            timeline.innerHTML = '';
+        }
+
         let received;
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
-            // ignore for now
             console.log('Erro')
         }
 
