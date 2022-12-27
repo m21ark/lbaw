@@ -615,7 +615,7 @@ function sendCreateGroupRequest(event) {
     event.preventDefault()
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
-    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
+    let visibility = document.querySelector('#popup_show_group_create #group_visibility').checked
     let tags = document.querySelector('#popup_show_group_create #group_create_tags').value
 
     if (name == '' || description == '' || visibility == null) {
@@ -717,7 +717,7 @@ function sendEditProfileRequest(event) {
     let email = document.querySelector('#popup_show_profile_edit #user_email').value
     let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
     let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
-    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
+    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').checked
     let tags = document.querySelector('#popup_show_profile_edit #profile_edit_tags').value
 
     let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name

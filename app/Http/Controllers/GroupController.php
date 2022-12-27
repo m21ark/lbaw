@@ -124,27 +124,15 @@ class GroupController extends Controller
 
     public function edit(Request $request)
     {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello from Terminal");
 
         $request->validate([
             'id_group' => 'integer|exists:group,id',
             'description' => 'required|string|min:1|max:2000',
         ]);
-        $out->writeln("Hello from Terminal");
 
         DB::beginTransaction();
         $id_group = $request->input('id_group');
         $group = Group::find($id_group);
-
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello from Terminal");
-        $out->writeln($request->input('id_group'));
-
-        $out->writeln(strip_tags($request->input('name')));
-        $out->writeln(strip_tags($request->input('description')));
-        $out->writeln($request->input('visibility'));
-
 
         $this->authorize('update', $group); // POLICY....WORKING
 
