@@ -109,7 +109,7 @@ Route::get('api/post/feed/{type_feed}/order/{type_order}/offset/{offset}', 'Post
 
 // ======================= SEARCH ITEMS =======================
 
-Route::get('api/search/{query_string}/type/{type_search}', 'SearchController@search');
+Route::get('api/search/{query_string}/type/{type_search}/offset/{offset}', 'SearchController@search');
 
 // ======================= GROUP CRUD =======================
 
