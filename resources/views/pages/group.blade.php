@@ -11,7 +11,12 @@
     </a>
 
     <div id="toggle_list_A">
-        @include('partials.group_feed')
+        @if ($can_view_timeline)
+            @include('partials.group_feed')
+        @else
+            <h2 class="mt-4">Join Group to see more</h2>
+            <i class="fa-solid fa-lock fa-10x"></i>
+        @endif
     </div>
 @endsection
 
