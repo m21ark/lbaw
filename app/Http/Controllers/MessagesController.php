@@ -7,12 +7,19 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Message;
 use App\Events\NewNotification;
+use Exception;
 
 class MessagesController extends Controller
 {
 
     public function create($id, Request $request)
     {
+
+        $request->validate([
+            'id' => 'integer|exists:user,id',
+            'text' => 'string|min:1|max:2000' // strip tags to sanitize inout // SEE BELLOW
+        ]);
+
         if (!Auth::check())
             return response()->json(['failure' => 403]);
 
@@ -26,7 +33,7 @@ class MessagesController extends Controller
         }
 
         $sms = new Message();
-        $sms->text = $request->text;
+        $sms->text = strip_tags($request->text);
         $sms->id_sender = Auth::user()->id;
         $sms->id_receiver = intval($id);
 
@@ -43,17 +50,24 @@ class MessagesController extends Controller
     }
 
 
-    public function show($sender_username = null)
-    {
+    public function show($sender_username = null, Request $request)
+    {   
 
-        if (!Auth::check())
+        if (!Auth::check()) 
             return redirect('403');
 
         $user = Auth::user();
 
-        if ($sender_username !== null)
+        if ($sender_username !== null) {
+            try {
+                validator($request->route()->parameters(), [
+                    'sender_username' => 'required|exists:user,username',
+                ])->validate();
+            } catch (Exception $e) {
+                return redirect()->route('message_home'); // This is necessary as the redirect might go to the previous request and not to the previous page
+            }
             $receiver = User::where('username', '=', $sender_username)->firstOrFail();
-
+        }
         $messages = $user->messages()
             ->filter(function ($item) use ($sender_username) {
                 return $item->sender->username === $sender_username

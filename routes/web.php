@@ -2,6 +2,8 @@
 
 // ======================= PASSWORD RECOVERY =======================
 
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
@@ -82,7 +84,13 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
-Route::get('messages/', 'MessagesController@show');
+Route::get('messages/', function() {
+    if (!Auth::check()) 
+        return redirect('403');
+
+    $user = Auth::user();
+    return view('pages.messages', ['user' => $user, 'messages' => null, 'sender' => null]);
+}) -> name('message_home');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');

@@ -17,8 +17,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function show($username)
+    public function show($username, Request $request)
     {
+
+        $request->validate([
+            'username' => 'bail|string|exists:user,username'
+        ]);
+
         $user = User::where('username', $username)->first();
 
         // EVERYONE CAN SEE THE PAGE ... only some can see the post
@@ -45,6 +50,13 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        $request->validate([
+            'username' => 'string|max:255|unique:user',
+            'bdate' => 'date',
+            'visibility' => 'string',
+            'bio' => 'string|max:1000',
+        ]);
+
         if ($user == null) {
             return redirect()->route('home');
         }
@@ -52,11 +64,11 @@ class ProfileController extends Controller
         // NO NEED FOR POLICY ... only the stated above
 
         DB::beginTransaction();
-        $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
+        $user->username = strip_tags($request->input('username')) ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
-        $user->email = $request->input('email') ?? $user->email; // TODO: Check if email is unique
-        $user->bio = $request->input('bio') ?? $user->bio;
+        $user->email = strip_tags($request->input('email')) ?? $user->email; // TODO: Check if email is unique
+        $user->bio = strip_tags($request->input('bio')) ?? $user->bio;
 
         // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS

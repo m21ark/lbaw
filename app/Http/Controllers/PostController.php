@@ -123,20 +123,19 @@ class PostController extends Controller
         $request->validate([
             'group_name' => 'sometimes|string',
             'text' => 'string|min:0|max:1000',
-            'tags' => 'string',
-            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000' // 50MB per image
+            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:0|max:50000' // 50MB per image
         ]);
 
         DB::beginTransaction();
         $post = new Post();
 
         if ($request->input('group_name') != null) {
-            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
+            $post->id_group = Group::where('name', strip_tags($request->input('group_name')))->first()->id;
         }
 
         $this->authorize('create', $post); // POLICY
 
-        $post->text = $request->input('text');
+        $post->text = strip_tags($request->input('text'));
         $post->id_poster = Auth::user()->id;
 
         $post->save();
@@ -153,7 +152,7 @@ class PostController extends Controller
     {   // THIS IS A FUNCTION ... no need for POLICY
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -211,7 +210,6 @@ class PostController extends Controller
             'id' => 'integer|exists:post,id',
             'group_name' => 'sometimes|string',
             'text' => 'string|min:0|max:1000',
-            'tags' => 'string',
             'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000' // 50MB per image
         ]);
 
@@ -219,9 +217,10 @@ class PostController extends Controller
 
         $post = Post::find($id);
 
-        $this->authorize('update', $post);
+        $this->authorize('update', $post);// POLICY
 
-        $post->text = $request->input('text'); // POLICY
+
+        $post->text = strip_tags($request->input('text')); 
 
         File::delete($post->images->pluck('path')->toArray());
         $post->images()->delete();
@@ -238,7 +237,7 @@ class PostController extends Controller
         $post->topics()->delete();
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 

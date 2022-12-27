@@ -29,8 +29,13 @@ class NotificationController extends Controller
     }
 
 
-    public function markAsSeen($id)
+    public function markAsSeen($id, Request $request)
     {
+
+        $request->validate([
+            'id' => 'string|exists:notification,id', 
+        ]);
+
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 

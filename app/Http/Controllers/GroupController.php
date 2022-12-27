@@ -50,7 +50,6 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|min:1|max:100|unique:group,name',
             'description' => 'required|string|min:1|max:2000',
-            'tags' => 'string|min:0|max:1000'
         ]);
 
         if ($request->user() === null && Group::where('name', '=', $request->input('name'))->firstOrFail() !== null) {
@@ -126,7 +125,6 @@ class GroupController extends Controller
             'id_group' => 'string|exists:group,id',
             'description' => 'required|string|min:1|max:2000',
             'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000',
-            'tags' => 'string|min:0|max:1000'
         ]);
 
         DB::beginTransaction();
