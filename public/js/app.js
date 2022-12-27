@@ -637,7 +637,7 @@ function sendEditGroupRequest(event) {
     event.preventDefault();
     let name = document.querySelector('#popup_show_group_edit #group_name').value
     let description = document.querySelector('#popup_show_group_edit #group_description').value
-    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
+    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').checked
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
     let tags = document.querySelector('#popup_show_group_edit #group_edit_tags').value

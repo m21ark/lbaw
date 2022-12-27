@@ -29,6 +29,7 @@ class GroupController extends Controller
             return redirect()->route('home');
         }
 
+        $can_view_timeline = true;
         if (!$group->visibility) {
             $can_view_timeline = Auth::check() ? $request->user()->can('view', $group) : false; // POLICY
         }
@@ -123,25 +124,38 @@ class GroupController extends Controller
 
     public function edit(Request $request)
     {
-
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("Hello from Terminal");
 
         $request->validate([
-            'id_group' => 'string|exists:group,id',
+            'id_group' => 'integer|exists:group,id',
             'description' => 'required|string|min:1|max:2000',
-            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000',
         ]);
+        $out->writeln("Hello from Terminal");
 
         DB::beginTransaction();
         $id_group = $request->input('id_group');
         $group = Group::find($id_group);
 
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("Hello from Terminal");
+        $out->writeln($request->input('id_group'));
+
+        $out->writeln(strip_tags($request->input('name')));
+        $out->writeln(strip_tags($request->input('description')));
+        $out->writeln($request->input('visibility'));
+
+
         $this->authorize('update', $group); // POLICY....WORKING
 
         $group->name = strip_tags($request->input('name'));
         $group->description = strip_tags($request->input('description'));
-        $group->visibility = $request->input('visibility') == 'on' ? true : false;
+        $group->visibility = $request->input('visibility');
 
         if ($request->hasFile('photo')) {
+            $request->validate([
+            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
+            ]);
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 
