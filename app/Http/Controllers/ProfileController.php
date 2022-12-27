@@ -77,6 +77,10 @@ class ProfileController extends Controller
 
             $user->photo = 'user/' . strval($user->id) . '.jpg';
 
+            $request->validate([
+                'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
+            ]);
+
             try {
                 $request->file('photo')->move(public_path('user/'), $user->id . '.jpg');
             } catch (Exception $e) {
