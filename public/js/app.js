@@ -137,18 +137,24 @@ if (user_header != null) {
         const servers = {
             iceServers: [
                 {
-                    urls: [
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-                    ]
+                  urls: "stun:relay.metered.ca:80",
                 },
                 {
-                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                    credential: 'webrtc',
-                    username: 'webrtc'
-                }
+                  urls: "turn:relay.metered.ca:80",
+                  username: "efb717a8ddfc21d15bb72a5d",
+                  credential: "/8ZyEZ2tVt/zMXVW",
+                },
+                {
+                  urls: "turn:relay.metered.ca:443",
+                  username: "efb717a8ddfc21d15bb72a5d",
+                  credential: "/8ZyEZ2tVt/zMXVW",
+                },
+                {
+                  urls: "turn:relay.metered.ca:443?transport=tcp",
+                  username: "efb717a8ddfc21d15bb72a5d",
+                  credential: "/8ZyEZ2tVt/zMXVW",
+                },
             ],
-            iceCandidatePoolSize: 10,
         };
 
         //Initializing a peer connection
