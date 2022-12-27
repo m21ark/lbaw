@@ -33,7 +33,7 @@ class ProfileController extends Controller
         }
 
         $statistics = [
-            'post_num' => $user->posts->count(),
+            'post_num' => $user->posts->where('id_group', '=', null)->count(),
             'comment_num' => $user->comments->count(),
             'like_comment_num' => $user->like_in_comments->count(),
             'like_post_num' => $user->like_in_post->count(),

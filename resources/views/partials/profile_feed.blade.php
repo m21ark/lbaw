@@ -7,7 +7,9 @@
             <h2 class="text-center mt-5">No posts yet</h2>
         @endif
         @foreach ($user->posts as $post)
-            @include('partials.post_item', ['post' => $post])
+            @if ($post->id_group == null)
+                @include('partials.post_item', ['post' => $post])
+            @endif
         @endforeach
     @else
         <h2 class="mb-5"> <i class="fa-solid fa-lock fa-2x me-4 mt-5"></i>This account is private</h2>
