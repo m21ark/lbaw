@@ -1061,6 +1061,10 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').appendChild(art.lastChild);
             var text = document.createTextNode('');
             document.querySelector('.message_body').append(text);
+
+            const recipientUser = document.location.pathname.substring(10);
+            document.querySelector('#compact_message_text_' + recipientUser).innerHTML = "<b>You: </b>" + message;
+            document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
             return;
         }
         else {
@@ -1074,6 +1078,8 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                 `);
                 last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
+                document.querySelector('.message_body').appendChild(art);
+
             }
             else if ((!isSender && last_messanger.classList.contains('justify-content-start'))) {
                 let last_time_anchor = last_messanger.lastElementChild.lastElementChild
@@ -1093,6 +1099,10 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             var text = document.createTextNode('');
             document.querySelector('.message_body').append(text);
         }
+
+        const recipientUser = document.location.pathname.substring(10);
+        document.querySelector('#compact_message_text_' + recipientUser).innerHTML = "<b>You: </b>" + message;
+        document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
     }
 }
 
