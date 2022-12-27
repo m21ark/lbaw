@@ -18,10 +18,10 @@
                     style="width:90%;min-width:20em;max-width: 40em">
                     {{ csrf_field() }}
 
-                    <h1 class="h3 mb-3 font-weight-normal">Password Recovery Page</h1>
+                    <h1 class="h3 mb-3 font-weight-normal">New Password Page</h1>
 
                     <fieldset>
-                        <legend>Recovery Form</legend>
+                        <legend>Password Form</legend>
 
                         <p>Please provide a new password</p>
 

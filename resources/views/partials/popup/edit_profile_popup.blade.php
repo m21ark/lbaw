@@ -54,10 +54,10 @@
                     id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
             </div>
 
-            <!-- TODO: Falta se quer mudar de passe(cuidado com a hash)-->
-
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save
                 Changes</button>
+
+            <a href="/resetAuthPassword" class="w-100 btn btn-outline-dark mt-4 p-2">Change Password</a>
 
             <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" type="submit">Delete
                 Account</button>

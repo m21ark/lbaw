@@ -16,7 +16,11 @@ Route::get('/forgot-password-sent', function () {
 
 Route::get('/password/reset/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+})->name('password.reset');
+
+
+Route::get('/resetAuthPassword', 'PasswordRecoverController@showChangePassword');
+
 
 Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
 Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');
@@ -85,7 +89,7 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/', function() {
-    if (!Auth::check()) 
+    if (!Auth::check())
         return redirect('403');
 
     $user = Auth::user();
