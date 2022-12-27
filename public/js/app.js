@@ -320,6 +320,13 @@ function startContextualHelp() {
         {
             element: document.querySelector("#feed_filter"),
             intro: "We allow you to see different timelines. Isn't that amazing???😮"
+        },
+        {
+            element: document.querySelector(".me-2").parentElement,
+            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+        },
+        {
+            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>" 
         }
         ]
       }).start();
