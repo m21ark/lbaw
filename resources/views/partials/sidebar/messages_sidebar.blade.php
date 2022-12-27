@@ -2,9 +2,6 @@
     <h2>Recent Messages</h2>
 
     <div class="mt-4 list-group w-auto">
-
-        <a href="#!" class="btn btn-primary mb-4 w-50 m-auto">New message</a>
-
         <div class="w-100 m-auto">
             @foreach ($user->getContactedUsers() as $message)
                 <?php $name = $message->id_sender === Auth::user()->id ? $message->receiver->username : $message->sender->username; ?>
@@ -16,7 +13,7 @@
                     <div class="d-flex gap-2 w-100 justify-content-between">
                         <div>
                             <h6 class="mb-0">{{ $name }}</h6>
-                            <p class="mb-0 opacity-75">{{ $message->text }}</p>
+                            <p class="mb-0 opacity-75" style="max-width: 20em;overflow:hidden">{{ $message->text }}</p>
                         </div>
                         <small
                             class="opacity-50 text-nowrap">{{ date('W', strtotime(date('Y-m-d H:i:s'))) - date('W', strtotime($message->date)) }}w</small>

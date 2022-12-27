@@ -18,7 +18,7 @@
             <small class="me-5">{{ $post->post_date }}</small>
 
             <div class="dropdown">
-                <button class="btn dropdownPostButton" type="button">&vellip;</button>
+                <button class="btn dropdownPostButton" type="button" data-placement="right" title="More Options">&vellip;</button>
                 <div class="dropdown_menu" style="z-index: 200000" hidden>
                     <a class="dropdown-item" href="{{ url('/profile/' . $post->owner->username) }}">Go to
                         Profile</a>
@@ -134,7 +134,7 @@
                 <div class="card_footer form-control d-flex align-items-center">
                     <input type="text" name="comment_post" data-uid={{ Auth::user()->id }} data-pid={{ $post->id }}
                         id="comment_post_input" class="me-2 form-control mt-3 mb-2" placeholder="Make a comment">
-                    <a href="#!" class="pt-2 ms-3 me-4" id="comment_post_send">
+                    <a href="#!" class="pt-2 ms-3 me-4" id="comment_post_send" data-placement="right" title="Publish Comment">
                         <h3><i class="fa-solid fa-paper-plane"></i></h3>
                     </a>
                 </div>

@@ -5,12 +5,13 @@
         @else
             @auth
                 @if (Auth::user()->id == $comment->id_commenter)
-                    <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}"
-                        class="pt-1 text-decoration-none popup_btn_comment_edit ">
+                    <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}" data-toggle="tooltip"
+                        data-placement="top" title="Edit Comment" class="pt-1 text-decoration-none popup_btn_comment_edit">
                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
                     </a>
                 @else
-                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}">
+                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}"
+                        data-placement="top" title="Report Comment">
                         <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
                     </a>
                 @endif
@@ -25,7 +26,7 @@
             @auth
                 @if ($comment->poster->id !== Auth::user()->id)
                     <a href="#" class="pt-2 text-decoration-none comment_reply_btn" data-id="{{ $comment->id }}"
-                        data-username="{{ $comment->poster->username }}">
+                        data-placement="top" title="Reply to this comment" data-username="{{ $comment->poster->username }}">
                         <h3><i class="fa-solid fa-reply"></i></h3>
                     </a>
                     </a>
@@ -87,7 +88,8 @@
         <span class="me-5"></span>
 
         @if (sizeof($comment->replies) > 0)
-            <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!">
+            <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!"
+                data-placement="top" title="Show Comment Replies">
 
                 <span class="mt-1 me-3 text-dark" style="font-size:1.5em">{{ sizeof($comment->replies) }}</span>
 
@@ -114,12 +116,13 @@
                             @auth
                                 @if (Auth::user()->id == $reply->id_commenter)
                                     <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
+                                        data-placement="top" title="Edit Comment Reply"
                                         class="pt-1 text-decoration-none popup_btn_comment_edit ">
                                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
                                     </a>
                                 @else
-                                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create"
-                                        data-id="{{ $reply->id }}">
+                                    <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-placement="top"
+                                        title="Report Comment Reply" data-id="{{ $reply->id }}">
                                         <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
                                     </a>
                                 @endif

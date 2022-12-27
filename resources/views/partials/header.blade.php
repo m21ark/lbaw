@@ -1,7 +1,6 @@
 <header class="p-3 text-bg-primary">
 
-    <div class="d-flex flex-wrap align-items-center  justify-content-between w-100">
-
+    <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
 
         <div class="text-start">
             <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120"></a>
@@ -16,6 +15,7 @@
 
             @if (Auth::check())
                 <div class="d-flex align-items-center">
+                    <span id="contextual-help"><i class="fa-regular fa-circle-question fa-2x"></i></span>
                     <a class="text-white text-decoration-none me-3"
                         href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2" id="auth_id"

@@ -3,45 +3,62 @@
 
     <div id="user_info">
 
+
         <div class="card border-secondary mb-4" style="min-width: 18em">
-            <h3 class="p-2 me-5">About me
+            <div class="card-header">
+                <h3 class="p-2 me-5">About me
+
+                    @auth
+                        @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
+                            <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
+                        @endif
+                    @endauth
+
+                </h3>
+
                 @auth
-                    @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
-                        <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
-                    @endif
                     @if (Auth::user()->username !== $user->username)
-                        <a hred="#!" class="btn btn-primary">
+                        <a hred="#!" class="w-100 btn btn-primary m-2 mt-0 mb-2">
                             @if (!$friends && in_array(Auth::user()->id, $user->friendsRequests->pluck('id_user_sender')->toArray()))
-                                <span class="cancel_request"><i class="fa-solid fa-user-clock"
-                                        data-id="{{ $user->id }}"></i></span>
+                                <span class="w-100 cancel_request"><i class="fa-solid fa-user-clock"
+                                        data-id="{{ $user->id }}"></i> <span>Cancel Friend Request</span></span>
                             @elseif (!$friends && $user->id != Auth::user()->id)
-                                <span class="send_request"><i class="fa-solid fa-user-plus"
-                                        data-id="{{ $user->id }}"></i></span>
+                                <span class="w-100 send_request"><i class="fa-solid fa-user-plus"
+                                        data-id="{{ $user->id }}"></i>
+                                    <span>Send Friend Request</span></span>
                             @elseif ($user->id && $user->id != Auth::user()->id)
-                                <span class="cancel_request"><i class="fa-solid fa-user-check"
-                                        data-id="{{ $user->id }}"></i></span>
+                                <span class="w-100 cancel_request"><i class="fa-solid fa-user-check"
+                                        data-id="{{ $user->id }}"></i> <span>Remove Friend</span></span>
                             @endif
                         </a>
                     @endif
                 @endauth
-            </h3>
+            </div>
 
-            <div class="m-auto">
-                <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="Profile Image"
+            <div style="margin: auto">
+                <img class="profile_img rounded-circle mt-2" src="{{ asset($user->photo) }}" alt="Profile Image"
                     width="150">
-                <h3 id="username" class="">{{ $user->username }}</h3>
+                <h3 id="username" class="text-center mt-2">{{ $user->username }}</h3>
             </div>
 
             <div class="card-body">
                 <h3>Bio</h3>
                 <p class="card-text">{{ $user->bio }}</p>
+
+                <p class="card-text"><b>Visibility: </b><span class="card-text">
+                        @if ($user->visibility)
+                            Public
+                        @else
+                            Private
+                        @endif
+                    </span>
+                </p>
             </div>
 
-            <div class="card-footer">
+            <div class="card-header card-footer">
                 <h3>Interests</h3>
 
                 <div class="d-flex justify-content-evenly">
-
 
                     @foreach ($user->interests as $interest)
                         <a class="btn btn-primary" href={{ url('/search/' . $interest->topic->topic) }}>
@@ -54,7 +71,7 @@
 
             @auth
                 @if (Auth::user()->isAdmin)
-                    <div class="mt-4 pt-4 card-footer">
+                    <div class=" pt-4 card-footer">
                         <h4>Admin Information</h4>
                         <hr>
                         <?php $ban_date = $user->ban_date ?? 'N/A'; ?>

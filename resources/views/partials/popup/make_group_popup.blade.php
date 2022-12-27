@@ -11,18 +11,23 @@
             </div>
 
 
-            <label for="group_name" class="">Group Name</label>
+            <label for="group_name" class="" data-toggle="tooltip" data-placement="top"
+                title="The group name should be unique and serve as an identifier for each group. We don't recommend you change it very often">Group
+                Name</label>
             <input type="text" id="group_name" class="form-control mb-3" placeholder="Group Name">
 
             <label for="group_description" class="">Description</label>
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 style="resize: none;"></textarea>
 
-            <label for="group_create_tags" class="">Topics</label>
+            <label for="group_create_tags" class="" data-toggle="tooltip" data-placement="top"
+                title="You can have up to 3 topics of interest to share what the group is about. This topics are visible in the group page">Topics</label>
             <input type="text" id="group_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags">
 
-            <label for="group_visibility" class=" me-3">Group Public Visibility</label>
+            <label for="group_visibility" class=" me-3" data-toggle="tooltip" data-placement="top"
+                title="Visibility influences who can view your content. If unchecked, the group is considered private and it's posts can only be seen by members. Otherwise, the content is available to everyone. Even if the group is marked as private, it can still be discovered in search and receive new join requests">Group
+                Public Visibility</label>
             <input class="form-check-input" id="group_visibility" type="checkbox" role="switch"
                 id="flexSwitchCheckChecked" checked>
 

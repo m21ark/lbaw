@@ -6,7 +6,8 @@
     <h2 class="mt-4 mb-4">Admin Console<a href="/admin/statistics" class="ms-3 btn btn-outline-primary mt-3 mb-3 enc"><i
                 class="fa-solid fa-bar-chart me-2"></i>Statistics</a></h2>
 
-    <div class="position-absolute d-flex" style="right:3%">
+    <div class="position-absolute d-flex" style="right:3%" data-toggle="tooltip" data-placement="left"
+        title="Choose to show the desired report type">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
             <input type="checkbox" id="list_toggle_btn">
@@ -17,7 +18,7 @@
 
     <div id="toggle_list_A">
         <div class="list-group d-flex mb-5 flex-wrap">
-            <h3 class="mt-2">Pendent Reports</h3>
+            <h3 class="mt-4">Pendent Reports</h3>
             <div class="d-flex align-items-center">
                 <h5 class="me-4">Search reports:</h5>
                 <div class="header_searchbar mb-3 mt-3">

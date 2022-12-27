@@ -11,7 +11,8 @@
                 </a>
             </div>
 
-            <label for="report_description" class="">Motive</label>
+            <label for="report_description" class="" data-toggle="tooltip" data-placement="top"
+            title="Describe in the best way you can why the content is being reported.">Motive</label>
             <textarea rows="8" id="report_description" class="form-control mb-3"
                 placeholder="Indicate your motive for this report" style="resize: none;"></textarea>
 
