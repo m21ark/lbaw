@@ -11,13 +11,13 @@
 
     @if (count($post->images) > 1)
         <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-{{$post->id }}" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-{{$post->id }}" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+            <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-{{$post->id }}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     @endif
     
 </div>

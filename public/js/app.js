@@ -1226,15 +1226,6 @@ updateFeedOnOrder();
 updateFeedOnScroll();
 updateFeedOnClick();
 
-const renderCarouselItems = (id, items) => {
-    const carouselInnerId = document.querySelector(`#carousel-inner-${id}`);
-  
-    items.forEach((el, j) => {
-      let carouselTemplate = carouselItemTemplate(el, j);
-      carouselInnerId.innerHTML += carouselTemplate;
-    })
-  
-}
 
 
 function createPost(post) {
@@ -1245,12 +1236,14 @@ function createPost(post) {
     let images = '', bottom = '', like = '', dropdown = '', topics='';
 
     imageControls = `
-     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </a>`
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-${post.id }" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
+    <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-${post.id }" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>`
 
     if (post.hasLiked) {
         like = '<h3 data-liked="1">&#x2764;</h3>'
@@ -1300,7 +1293,7 @@ function createPost(post) {
         })
 
         images = `
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div id="carousel-Controls-${post.id }" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 ${imageDiv}
             </div>
