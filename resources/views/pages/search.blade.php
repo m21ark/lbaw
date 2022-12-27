@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('page_title', 'Search')
+
+
 @section('content')
     <div class="list-group list-group-checkable form-check d-flex p-1 mb-3 flex justify-content-between text-bg-light"
         id="search_filter">

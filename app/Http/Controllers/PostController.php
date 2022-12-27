@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+
 
 class PostController extends Controller
 {
 
     public static function areFriends(User $user1, User $user2)
-    {
+    {   // THIS IS A FUNCTION ... IT DOES NOT NEED A POLICY
         return DB::table('friend_request')
             ->where('id_user_sender', $user1->id)
             ->where('id_user_receiver', $user2->id)->where('acceptance_status', 'Accepted')->exists() ||
@@ -29,15 +31,19 @@ class PostController extends Controller
             ->where('id_user_receiver', $user1->id)->where('acceptance_status', 'Accepted')->exists();
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
+        $request->validate([
+            'id' => 'integer|exists:post,id'
+        ]);
+
         // TODO: use id to get post from database
-        $post   = Post::withCount('likes', 'comments')->find($id);
+        $post = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
             return view('pages.404');
 
-        // policy, nr_comments_post
+        // POLICY
         if (!$post->owner->visibility) {
             $this->authorize('view', $post);
         }
@@ -46,41 +52,48 @@ class PostController extends Controller
 
     public function feed(Request $request)
     {
+
+        $request->validate([
+            'type_feed' => 'sometimes|string|required',
+            'type_order' => 'string'
+        ]);
+
         $posts = [];
         $offset = $request->route('offset');
 
+        // TODO ... PROVAVELMENTE ESTAS QUERIES ESTÃO A TORNAR O RETRIVAL DOS POSTS MAIS LENTO ... mudar
+
+        // We just need to check if the user can access for_you, friends, groups
+        // In other words, the user has only to be authenticated, else 401 error is returned
+        // Authorization inside fee_for_you ,friends and viral functions
+
         if ($request->route('type_feed') === "for_you") {
-            //$this->authorize('feed', $posts);
             $posts = $this->feed_for_you();
         } else if ($request->route('type_feed') === "friends") {
-            //$this->authorize('feed', $posts);
             $posts = $this->feed_friends();
         } else if ($request->route('type_feed') === "groups") {
-            //$this->authorize('feed', $posts);
             $posts = $this->feed_groups();
         } else if ($request->route('type_feed') === "viral") {
             $posts = $this->feed_viral();
         }
-        
+
         if ($request->route('type_order') === "popularity") {
             $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
                 ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
                 ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
                 ->orderBy('ranking', 'desc');
-
         } else if ($request->route('type_order') === "date") {
             $posts = $posts->orderBy('post_date', 'desc');
-        
         } else if ($request->route('type_order') === "likes") {
             $posts = $posts->orderBy('likes_count', 'desc');
         }
-        
-            
+
+        // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
         $posts = $posts->skip($offset)->limit(10)->get();
 
 
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
-        
+
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->topics = $this->post_topics($post->id);
@@ -100,23 +113,30 @@ class PostController extends Controller
                 $post->hasLiked = true;
             }
         }
-        
+
         return json_encode($posts);
     }
 
 
     public function create(Request $request)
     {
+
+        $request->validate([
+            'group_name' => 'sometimes|string',
+            'text' => 'string|min:0|max:1000',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:0|max:50000' // 50MB per image
+        ]);
+
         DB::beginTransaction();
         $post = new Post();
 
         if ($request->input('group_name') != null) {
-            $post->id_group = Group::where('name', $request->input('group_name'))->first()->id;
+            $post->id_group = Group::where('name', strip_tags($request->input('group_name')))->first()->id;
         }
-        //TODO
-        $this->authorize('create', $post);
 
-        $post->text = $request->input('text');
+        $this->authorize('create', $post); // POLICY
+
+        $post->text = strip_tags($request->input('text'));
         $post->id_poster = Auth::user()->id;
 
         $post->save();
@@ -125,13 +145,15 @@ class PostController extends Controller
         $this->add_topics($request, $post);
 
         DB::commit();
+
+        return response()->json(['success' => 'Post created successfully.']);
     }
 
     private function add_topics(Request $request, Post $post)
-    {
+    {   // THIS IS A FUNCTION ... no need for POLICY
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -151,7 +173,7 @@ class PostController extends Controller
     }
 
     public function upload_img(Request $request, Post $post)
-    {
+    { // THIS IS A FUNCTION ... no need for POLICY
         if ($request->hasFile('photos')) {
             $i = 0;
             foreach ($request->photos as $imagefile) {
@@ -170,10 +192,14 @@ class PostController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete($id, Request $request)
     {
+        $request->validate([
+            'id' => 'integer|exists:post,id'
+        ]);
+
         $post = Post::find($id);
-        $this->authorize('delete', $post);
+        $this->authorize('delete', $post); // POLICY
         DB::table('post')->where('id', $id)->delete();
         return $post;
     }
@@ -181,13 +207,21 @@ class PostController extends Controller
     public function edit(Request $request, $id)
     {
 
+        $request->validate([
+            'id' => 'integer|exists:post,id',
+            'group_name' => 'sometimes|string',
+            'text' => 'string|min:0|max:1000',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000' // 50MB per image
+        ]);
+
         DB::beginTransaction();
 
         $post = Post::find($id);
 
-        $this->authorize('update', $post);
+        $this->authorize('update', $post);// POLICY
 
-        $post->text = $request->input('text');
+
+        $post->text = strip_tags($request->input('text')); 
 
         File::delete($post->images->pluck('path')->toArray());
         $post->images()->delete();
@@ -200,11 +234,11 @@ class PostController extends Controller
     }
 
     private function edit_topics(Request $request, Post $post)
-    {
+    { // THIS IS A FUNCTION ... no need for POLICY
         $post->topics()->delete();
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -225,9 +259,9 @@ class PostController extends Controller
     }
 
     public function feed_friends()
-    {
+    {    // NOT AN API
 
-        if (!Auth::check()) {
+        if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
         }
 
@@ -254,7 +288,7 @@ class PostController extends Controller
     }
 
     public function feed_groups()
-    {
+    { // NOT AN API
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]);
         }
@@ -265,7 +299,7 @@ class PostController extends Controller
                 ->from('group_join_request')
                 ->where('id_user', $id)
                 ->where('acceptance_status', 'Accepted');
-            })
+        })
             ->join('user', 'user.id', '=', 'post.id_poster')
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
             ->withCount('likes', 'comments');
@@ -274,7 +308,7 @@ class PostController extends Controller
     }
 
     public function feed_viral()
-    {
+    { // NOT AN API
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->where('visibility', true)
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
@@ -284,9 +318,9 @@ class PostController extends Controller
     }
 
     public function feed_for_you()
-    {
+    { // NOT AN API
         if (!Auth::check()) {
-            return response()->json(['Please login' => 401]);
+            return response()->json(['Please login' => 401]); // Authorization
         }
 
         $posts_groups = $this->feed_groups();
@@ -298,7 +332,7 @@ class PostController extends Controller
             ->union($posts_friends)
             ->distinct();
 
-        
+
         return $posts;
     }
 
@@ -312,4 +346,5 @@ class PostController extends Controller
             ->get();
         return $topics;
     }
+
 }

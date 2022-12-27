@@ -2,7 +2,7 @@
 
 // ======================= PASSWORD RECOVERY =======================
 
-use App\Http\Controllers\GroupController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
@@ -84,11 +84,19 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
-Route::get('messages/', 'MessagesController@show');
+Route::get('messages/', function() {
+    if (!Auth::check()) 
+        return redirect('403');
+
+    $user = Auth::user();
+    return view('pages.messages', ['user' => $user, 'messages' => null, 'sender' => null]);
+}) -> name('message_home');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');
 Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
+Route::post('/broadcast/auth', 'PusherController@pusherAuth')->middleware('auth');
+
 
 // ======================================= APIS ========================================
 
@@ -97,7 +105,6 @@ Route::get('group/{group_name}/requests', 'GroupJoinRequestController@show');
 
 
 Route::get('api/post/feed/{type_feed}/order/{type_order}/offset/{offset}', 'PostController@feed');
-Route::get('api/post/topics/{post_id}', 'PostController@post_topics');
 
 
 // ======================= SEARCH ITEMS =======================
@@ -118,13 +125,11 @@ Route::delete('api/profile/{username}', 'ProfileController@delete');
 // ======================= OWNER CRUD =======================
 
 Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@addGroupOwner'); // talvez n seja post
-Route::delete('api/group/{id_group}/owner/{id_user}', 'GroupController@removeGroupOwner');
 
 
 // ======================= MEMBER CRUD =======================
 
 Route::get('api/group/{id_group}/member/{id_user}', 'GroupController@getGroupMembers');
-Route::post('api/group/member', 'GroupController@addGroupMember');
 Route::delete('api/group/{id_group}/member/{id_user}', 'GroupController@removeGroupMember');
 
 
@@ -175,8 +180,8 @@ Route::delete('api/user/friend/{id}', 'FriendsRequestController@delete');
 
 Route::put('api/group/{group_name}/request/{id_sender}/accept', 'GroupJoinRequestController@accept');
 Route::put('api/group/{group_name}/request/{id_sender}/reject', 'GroupJoinRequestController@reject');
-Route::post('api/group/request/{id}/send', 'GroupJoinRequestController@send'); // POR FAZER
-Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete'); // POR FAZER
+Route::post('api/group/request/{id}/send', 'GroupJoinRequestController@send');
+Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete');
 
 
 // ======================= Reports ==========================

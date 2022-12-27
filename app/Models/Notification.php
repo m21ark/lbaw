@@ -11,7 +11,7 @@ class Notification extends Model
     public $timestamps  = false;
     protected $table = 'notification';
 
-    public function sender() 
+    public function sender()
     {
         return $this->belongsTo('App\Models\User', 'id_sender', 'id');
     }

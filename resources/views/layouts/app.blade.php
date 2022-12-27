@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('page_title')</title>
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
 
     <!-- Bootstrap -->
@@ -30,7 +30,7 @@
 
 </head>
 
-<body class="m-auto">
+<body class="m-auto min-vh-100" style="min-height:50em">
 
     <!-- Header -->
     @include('partials.header')
@@ -59,7 +59,7 @@
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
         @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
-
+        @include('partials.popup.video_call_popup')
         @include('partials.notification_stack')
     </main>
 

@@ -5,30 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Report;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-
-    /*
-    id SERIAL PRIMARY KEY,
-    report_date DATE NOT NULL,
-    "description" TEXT,
-    decision_date DATE,
-    decision accept_st,
-    id_reporter INTEGER NOT NULL REFERENCES "user"(id),
-    id_admin INTEGER REFERENCES administrator(id),
-    id_comment INTEGER REFERENCES "comment"(id),
-    id_post INTEGER REFERENCES post(id)
-    */
-
-    public function show(String $username)
+    public function show(String $username, Request $request)
     {
+        try {
+            validator($request->route()->parameters(), [
+                'username' => 'required|exists:user,username',
+            ])->validate();
+        } catch (Exception $e) {
+            return redirect()->route('admin'); // This is necessary as the redirect might go to the previous request and not to the previous page
+        }
+
         $user = User::where('username', $username)->first();
-        if ($user === null)
+        if ($user === null) // POLICY
             return redirect('404');
+
+        // POLICY
+        $this->authorize('viewAny', Report::class);
 
         $statistics = [
             'post_num' => Post::where('id_poster', $user->id)->count(),
@@ -82,16 +81,26 @@ class ReportController extends Controller
 
     public function create(Request $request)
     {
-        // TODO: POLICY
+        
+
+        $this->authorize('create', Report::class); // POLICY
+
         $report = new Report();
         $report->report_date = date('Y-m-d H:i:s');
-        $report->description = $request->description;
+        $report->description = strip_tags($request->description);
         $report->decision = 'Pendent';
 
-        if ($request->id_comment > 0)
+        if ($request->id_comment > 0) {
+            $request->validate([
+                'id_comment' => 'integer|exists:comment,id',
+            ]);
             $report->id_comment = $request->id_comment;
-        else
+        } else {
+            $request->validate([
+                'id_post' => 'integer|exists:post,id'
+            ]);
             $report->id_post = $request->id_post;
+        }
 
         $report->id_reporter = Auth::user()->id;
         $report->id_admin = null;
@@ -101,15 +110,19 @@ class ReportController extends Controller
         return $report;
     }
 
-    public function rejectAll(Int $userID)
+    public function rejectAll(Int $userID, Request $request)
     {
+        $request->validate([
+            'userID' => 'integer|exists:user,id',
+        ]);
+        $this->authorize('updateAny', Report::class); //POLICY
         $this->updateAllPendent($userID, 'Rejected');
     }
 
     public function updateAllPendent($userID, $decision)
     {
-
-        // TODO POLICY
+        
+        $this->authorize('updateAny', Report::class); //POLICY
 
         $reportsPost = Report::select('user_report.*')
             ->where('id_post', '<>', NULL)
@@ -136,9 +149,14 @@ class ReportController extends Controller
         }
     }
 
-    public function banUser(Int $userID, String $time_option)
+    public function banUser(Int $userID, String $time_option, Request $request)
     {
-        // TODO POLICY
+        $request->validate([
+            'userID' => 'integer|exists:user,id',
+            'time_option' => 'integer|between:1,8'
+        ]);
+
+        $this->authorize('updateAny', Report::class); //POLICY
 
         $user = User::find($userID);
         switch ($time_option) {
@@ -174,27 +192,36 @@ class ReportController extends Controller
 
     public function edit(Request $request)
     {
-        // TODO: POLICY
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("HERE1");
+
+        validator($request->route()->parameters(), [
+            'id' => 'integer|exists:report,id',
+            'decision' => 'string|in:Pendent,Accepted,Rejected'
+        ])->validate();
+
+        $this->authorize('updateAny', Report::class); //POLICY
+
         $report = Report::find($request->id);
-        $out->writeln("HERE1_3");
-        $out->writeln(Auth::user()->id === null);
+
         $report->id_admin = Auth::user()->id;
-        $out->writeln("HERE2");
+
         $report->decision = $request->decision;
         $report->decision_date = date('Y-m-d H:i:s');
-        $out->writeln("HERE3");
+
         // TODO ALTERAR BANDATE NO USER
         $report->save();
-        $out->writeln("HERE4");
+
         return $report;
     }
 
-    public function delete(int $id)
+    public function delete(int $id, Request $request) // TODO: ACHO QUE ISTO N E USADO EM LADO NENHUM
     {
-        // TODO: POLICY
-        // TODO NEM SEI SE FAZ SENTIDO APAGAR REPORT NEM COMO SERIA?
+
+        $request->validate([
+            'id' => 'integer|exists:report,id',
+        ]);
+
+        $this->authorize('delete', Report::class); //POLICY
+
         $report = Report::find($id);
         $report->delete();
         return $report;

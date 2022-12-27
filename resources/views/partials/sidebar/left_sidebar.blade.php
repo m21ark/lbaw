@@ -1,5 +1,5 @@
 <div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light overflow-auto"
-    id="notifications_container" style="max-height: 45em">
+    id="notifications_container" style="max-height: 95vh">
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
 
@@ -132,7 +132,7 @@
                 <p style="padding: 0;margin:0;">Notifications</p>
             </a>
 
-            <a href={{ url('/messages/sender_username') }} class="btn">
+            <a href={{ url('/messages') }} class="btn">
                 <span class="position-relative">
                     <i class="fa-solid fa-envelope fa-2x"></i>
                     <span

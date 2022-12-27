@@ -1,15 +1,22 @@
 // Enable pusher logging - don't include this in production
-// Pusher.logToConsole = true;
+Pusher.logToConsole = true;
 
-var pusher = new Pusher('c827040c068ce8231c02', {
-    cluster: 'eu'
+var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
+    cluster: 'eu',
+    authEndpoint: '/broadcast/auth',
+    encrypted: true,
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        }
+    }
 });
 
 let user_header = document.querySelector('#auth_id');
 if (user_header != null) {
     let id = user_header.dataset.id;
-    var channel = pusher.subscribe('App.User.' + id);
-    channel.bind('my-event', function (data) {
+    var channel1 = pusher.subscribe('App.User.' + id);
+    channel1.bind('my-event', function (data) {
 
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
@@ -42,7 +49,258 @@ if (user_header != null) {
             updateNrNotfications();
             addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
+
+
     });
+
+
+    var usersOnline,
+        users = [],
+        sessionDesc,
+        currentcaller,
+        room,
+        caller,
+        localUserMedia;
+    const channel = pusher.subscribe("presence-videocall");
+
+    channel.bind("pusher:subscription_succeeded", members => {
+        //set the member count
+        usersOnline = members.count;
+        id = channel.members.me.id;
+        members.each(member => {
+            if (member.id != channel.members.me.id) {
+                users.push(member.id);
+            }
+        });
+
+        render();
+    });
+
+    channel.bind("pusher:member_added", member => {
+        users.push(member.id);
+        render();
+    });
+
+    channel.bind("pusher:member_removed", member => {
+        // for remove member from list:
+        var index = users.indexOf(member.id);
+        users.splice(index, 1);
+        if (member.id == room) {
+            endCall();
+        }
+        render();
+    });
+
+    function render() {
+      // ONLINE STATUS OF USERS
+    }
+
+    /////////////////////////////////////////////
+    // FROM PUSHER WEBRTC TUTORIAL
+    //To iron over browser implementation anomalies like prefixes
+    GetRTCPeerConnection();
+    GetRTCSessionDescription();
+    GetRTCIceCandidate();
+    //prepare the caller to use peerconnection
+    prepareCaller();
+    function GetRTCIceCandidate() {
+        window.RTCIceCandidate =
+            window.RTCIceCandidate ||
+            window.webkitRTCIceCandidate ||
+            window.mozRTCIceCandidate ||
+            window.msRTCIceCandidate;
+
+        return window.RTCIceCandidate;
+    }
+
+    function GetRTCPeerConnection() {
+        window.RTCPeerConnection =
+            window.RTCPeerConnection ||
+            window.webkitRTCPeerConnection ||
+            window.mozRTCPeerConnection ||
+            window.msRTCPeerConnection;
+        return window.RTCPeerConnection;
+    }
+
+    function GetRTCSessionDescription() {
+        console.log("GetRTCSessionDescription called");
+        window.RTCSessionDescription =
+            window.RTCSessionDescription ||
+            window.webkitRTCSessionDescription ||
+            window.mozRTCSessionDescription ||
+            window.msRTCSessionDescription;
+        return window.RTCSessionDescription;
+    }
+    //////////////////////////////////////////////////
+    function prepareCaller() {
+
+        const servers = {
+            iceServers: [
+                {
+                    urls: [
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+                    ]
+                },
+                {
+                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+                    credential: 'webrtc',
+                    username: 'webrtc'
+                }
+            ],
+            iceCandidatePoolSize: 10,
+        };
+
+        //Initializing a peer connection
+        caller = new window.RTCPeerConnection(servers);
+        //Listen for ICE Candidates and send them to remote peers
+        caller.onicecandidate = function (evt) {
+            if (!evt.candidate) return;
+            onIceCandidate(caller, evt);
+        };
+        //onaddstream handler to receive remote feed and show in remoteview video element
+        caller.onaddstream = function (evt) {
+            if (window.URL) {
+                document.getElementById("remoteview").srcObject = evt.stream;
+            } else {
+                document.getElementById("remoteview").src = evt.stream;
+            }
+        };
+    }
+
+    function onIceCandidate(peer, evt) {
+        if (evt.candidate) {
+            channel.trigger("client-candidate", {
+                "candidate": evt.candidate,
+                "room": room
+            });
+        }
+    }
+
+    channel.bind("client-candidate", function(msg) {
+        if(msg.room==room){
+            caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+        }
+    });
+
+    function getCam() {
+        return navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        });
+    }
+    
+    //Create and send offer to remote peer on button click
+    function callUser(user) {
+
+        let res = confirm('Are you sure you want to make a video call?');
+        if (!res)
+            return;
+
+        getCam()
+            .then(stream => {
+                toggleVideoPopUp();
+                caller.addStream(stream);
+                localUserMedia = stream;
+                caller.createOffer().then(function (desc) {
+                    caller.setLocalDescription(new RTCSessionDescription(desc));
+                    channel.trigger("client-sdp", {
+                        sdp: desc,
+                        room: user,
+                        from: document.querySelector(".me-2").textContent
+                    });
+                    room = user;
+                });
+
+                // remove self audio 
+                var audioTrack = stream.getAudioTracks();
+
+                if (audioTrack.length > 0) {
+                    stream.removeTrack(audioTrack[0]);
+                }
+
+                if (window.URL) {
+                    document.getElementById("selfview").srcObject = stream;
+                } else {
+                    document.getElementById("selfview").src = stream;
+                }
+            })
+            .catch(error => {
+                console.log("an error occured", error);
+            });
+    }
+    function toggleVideoPopUp() {
+        if (document.getElementById("video_call").style.display == "block") {
+            document.getElementById("video_call").style.display = "none";
+        } else {
+            document.getElementById("video_call").style.display = "block";
+        }
+    }
+
+    // Incoming video call
+    channel.bind("client-sdp", function (msg) {
+        if (msg.room == id) {
+            var answer = confirm("You have a call from: " + msg.from + ". Would you like to answer?");
+            if (!answer) {
+                return channel.trigger("client-reject", { "room": msg.room, "rejected": id });
+            }
+            room = msg.room;
+            getCam()
+                .then(stream => {
+                    localUserMedia = stream;
+                    toggleVideoPopUp();
+
+                    caller.addStream(stream);
+                    var sessionDesc = new RTCSessionDescription(msg.sdp);
+                    caller.setRemoteDescription(sessionDesc);
+                    caller.createAnswer().then(function (sdp) {
+                        caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        channel.trigger("client-answer", {
+                            "sdp": sdp,
+                            "room": room
+                        });
+                    });
+
+                    var audioTrack = stream.getAudioTracks();
+
+                    if (audioTrack.length > 0) {
+                        stream.removeTrack(audioTrack[0]);
+                    }
+
+                    if (window.URL) {
+                        document.getElementById("selfview").srcObject = stream;
+                    } else {
+                        document.getElementById("selfview").src = stream;
+                    }
+                })
+                .catch(error => {
+                    console.log('an error occured', error);
+                })
+        }
+    });
+    channel.bind("client-answer", function (answer) {
+        if (answer.room == room) {
+            caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+        }
+    });
+
+    channel.bind("client-reject", function (answer) {
+        if (answer.room == room) {
+            console.log("Call declined");
+            alert("call to " + answer.rejected + "was politely declined");
+            endCall();
+        }
+    });
+
+    function endCall() {
+        room = undefined;
+        caller.close();
+        for (let track of localUserMedia.getTracks()) {
+            track.stop();
+        }
+        prepareCaller();
+        toggleVideoPopUp();
+    }
 }
 
 function createElementFromHTML(htmlString) {
@@ -58,7 +316,7 @@ function addNotification(message_body, sender) {
     let notf = createElementFromHTML(`
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} photo" style="max-width: 100%; height: auto; width: 3em">
+          <img src="/${sender.photo}" class="rounded me-2 img-fluid" alt="${sender.username} Profile Image" style="max-width: 100%; height: auto; width: 3em">
           <strong class="me-auto">${sender.username}</strong>
           <small class="text-muted">just now</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -129,9 +387,9 @@ function addEventListeners() {
     }
     );
 
-    assignFunctionClick('#report_toggle', () => {
-        document.querySelector('#pendent_report_list').toggleAttribute('hidden')
-        document.querySelector('#past_report_list').toggleAttribute('hidden')
+    assignFunctionClick('#list_toggle_btn', () => {
+        document.querySelector('#toggle_list_A').toggleAttribute('hidden')
+        document.querySelector('#toggle_list_B').toggleAttribute('hidden')
     })
 
     assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
@@ -286,6 +544,9 @@ function addedHandler(class_name) {
             logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
+        // console.log(this.response)
+        // TODO : smth like this for every page
+        // alert.innerHTML = this.response !== null ?  JSON.parse(this.response).success : 'Action successful';
         alert.innerHTML = 'Action successful';
         if (this.status < 200 || this.status >= 300) {
             class_alert = 'alert-danger'
@@ -365,11 +626,12 @@ function sendEditGroupRequest(event) {
 
 }
 
-function sendDeleteGroupRequest() {
+function sendDeleteGroupRequest(e) {
+    e.preventDefault();
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
-        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { });
+        sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { window.location = '/home' });
     }
 }
 
@@ -385,9 +647,8 @@ function sendKickpMemberRequest(event) {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { location.reload(); });
 
-    location.reload();
 }
 
 
@@ -556,7 +817,8 @@ function popupControllReportPost() {
     document.querySelector('#create_report_button').dataset.comment = 0
 }
 
-function sendCreateReportRequest() {
+function sendCreateReportRequest(e) {
+    e.preventDefault();
     let id_post = document.querySelector('#create_report_button').dataset.post
     let id_comment = document.querySelector('#create_report_button').dataset.comment
     let description = document.querySelector('#report_description').value
@@ -700,7 +962,7 @@ function sms_html(art, isSender, message, time) {
                 ${time_anchor}
             </div>
             <img class="rounded-circle" src="${photo}"
-              alt="your photo" style="width: 45px; height: 100%;">
+              alt="Self Profile Image" style="width: 45px; height: 100%;">
         </div>`);
         art.appendChild(div);
     }
@@ -711,7 +973,7 @@ function sms_html(art, isSender, message, time) {
         let div = createElementFromHTML(`
             <div class="d-flex flex-row justify-content-start rcv_sms">
                 <img class="rounded-circle" src="${photo}"
-                  alt="sender photo" style="width: 45px; height: 100%;">
+                  alt="Message Sender Profile Image" style="width: 45px; height: 100%;">
                 <div>
                     <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                     ${time_anchor}
@@ -969,10 +1231,10 @@ function createPost(post) {
     if (post.images.length !== 0) {
         let imageDiv = '';
 
-        post.images.forEach(function (image) {
+        post.images.forEach(function (image, i) {
             imageDiv += `
-                <div class="carousel-item active">
-                    <img class="d-block w-100" src="/${image.path}" alt="Primeiro Slide">
+                <div class="carousel-item ${i == 0 ? 'active' : ''}">
+                    <img class="d-block w-100" src="/${image.path}" alt="Post Content Image">
                 </div>
             `
         })
@@ -1013,7 +1275,7 @@ function createPost(post) {
 
                         <a href='/profile/${post.owner}' .
                             class="text-decoration-none d-flex flex-row align-items-center">
-                            <img src="/${post.photo}" width="60" class="rounded-circle me-3">
+                            <img src="/${post.photo}" width="60" class="rounded-circle me-3" alt="Post Owner Profile Image">
                             <strong class="font-weight-bold">${post.owner}</strong>
                         </a>
 
@@ -1254,7 +1516,7 @@ function createUserCard(user) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
-        <img height="50%" src="/${user.photo}" class="card-img-top" alt="user_avatar">
+        <img height="50%" src="/${user.photo}" class="card-img-top" alt="User Profile Image">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
@@ -1284,7 +1546,7 @@ function createGroupCard(group) {
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
-        <img height="60%" src="/${group.photo}" class="card-img-top" alt="user_avatar">
+        <img height="60%" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
@@ -1405,7 +1667,7 @@ function createUserReportCardPending(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     new_card.innerHTML = `
-        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a>${user.report_count} reports</a>
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">View</a>
@@ -1440,7 +1702,7 @@ function createUserReportCardPast(user) {
     }
 
     new_card.innerHTML = `
-        <img class="me-3 rounded-circle" src="/${user.photo}" alt="user_avatar" width="50" height="50">
+        <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
         <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
         <a class="text-muted text-decoration-none">${user.decision_date}</a>
     ` + button + `
@@ -1570,6 +1832,8 @@ function createCustomMessageBody(notf) {
 
 }
 
+side_bar_text = [];
+
 function createNotificationList(event) {
 
     if (event !== null)
@@ -1583,7 +1847,9 @@ function createNotificationList(event) {
         let side_bar_elms = document.querySelectorAll('.enc');
 
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (i < 5) {
+            if (e.textContent != "" && !e.textContent.includes("Post")) {
+                side_bar_text[i] = " " + e.textContent
+                console.log(side_bar_text)
                 e.removeChild(e.lastChild);
                 e.style.display = 'none';
             }
@@ -1610,7 +1876,7 @@ function createNotificationList(event) {
             let notf = createElementFromHTML(`
         <div class="toast show mb-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
             <div class="toast-header">
-              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+              <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User Profile Image" style="max-width: 100%; height: auto; width: 3em">
               <strong class="me-auto">${_notifications[i].sender.username}</strong>
               <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -1628,9 +1894,9 @@ function createNotificationList(event) {
         notifications.innerHTML = '';
 
         let side_bar_elms = document.querySelectorAll('.enc');
-        let side_bar_text = [" Home", " Friends Requests", " My Groups", " Notifications", " Messages", ""];
         [].forEach.call(side_bar_elms, function (e, i) {
-            if (side_bar_text[i] != "" && i < 6) {
+            console.log(side_bar_text)
+            if (side_bar_text[i] != "" && side_bar_text[i] != undefined) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
                 e.style.display = '';
@@ -1781,7 +2047,7 @@ function fillNotificationPage() {
         let notf = createElementFromHTML(`
             <div class="toast show mb-3" style="width:100%;height:8em;">
                 <div class="toast-header">
-                  <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User photo" style="max-width: 100%; height: auto; width: 3em">
+                  <img src="/${_notifications[i].sender.photo}" class="rounded me-2 img-fluid" alt="User Profile Image" style="max-width: 100%; height: auto; width: 3em">
                   <strong class="me-auto">${_notifications[i].sender.username}</strong>
                   <small class="text-muted">${timeSince(new Date(_notifications[i].notification_date))}</small>
                   <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -1803,8 +2069,8 @@ if (window.location.pathname == "/notifications") {
 }
 
 
-if (window.location.pathname.substring(0,10) == "/messages/") {
-    
+if (window.location.pathname.substring(0, 10) == "/messages/") {
+
     const input = document.getElementById("sms_input");
 
     let scrollBody = document.querySelector("#message_body")
@@ -1817,3 +2083,64 @@ if (window.location.pathname.substring(0,10) == "/messages/") {
         }
     });
 }
+
+
+if (window.location.pathname.substring(0, 6) == "/post/") {
+
+    const input = document.getElementById("comment_post_input");
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("comment_post_send").click();
+        }
+    });
+}
+
+function groupPostResponsiveUI() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    if (width <= 80)
+        document.querySelector('#list_toggle_btn').click()
+}
+
+
+function checkResponsiveUI() {
+    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
+
+    let page_a = document.getElementById("toggle_list_A")
+    let page_b = document.getElementById("toggle_list_B")
+    let btn = document.getElementById("list_toggle_btn_div")
+    let title = document.querySelector("h1")
+    let toggle = document.getElementById("list_toggle_btn")
+
+    if (width <= 80) {
+
+        page_a.hidden = ""
+        btn.style.visibility = "visible"
+
+        if (!toggle.checked) {
+            if (title)
+                title.hidden = ""
+            page_b.hidden = "hidden"
+        }
+        else {
+            if (title)
+                title.hidden = "hidden"
+            page_a.hidden = "hidden"
+        }
+
+    } else {
+        page_b.hidden = ""
+        page_a.hidden = ""
+        if (title)
+            title.hidden = ""
+        btn.style.visibility = "hidden"
+    }
+}
+
+let curr_path = window.location.pathname
+if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
+    setInterval(() => { checkResponsiveUI() }, 500);
+}
+

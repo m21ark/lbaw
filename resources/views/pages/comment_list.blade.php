@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', $user->username.'`s Comment List')
+
 @section('content')
     <div class="justify-content-center align-items-center">
 

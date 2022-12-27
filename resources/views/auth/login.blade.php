@@ -1,32 +1,39 @@
 @extends('layouts.app')
 
+@section('page_title', 'Login')
+
 @section('content')
     <div class=" d-flex align-items-center justify-content-around">
 
         <body class="text-center">
             <form method="POST" action="{{ route('login') }}">
+
+                <h1 class="h3 mb-3 font-weight-normal">Login Page</h1>
+
                 {{ csrf_field() }}
 
                 @if (session('error'))
                     <div class="alert alert-danger">
-                        {{ session('error') }}
+                        <i class="fa-solid fa-circle-exclamation"></i>{{ session('error') }}
                     </div>
                 @endif
 
-                <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
-                <label for="inputEmail" class="">Email address</label>
-                <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
-                    placeholder="Email" name="email" required autofocus autofocus="">
-                <label for="inputPassword" class="">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
-                    required>
+                <fieldset>
+                    <legend>Login Form</legend>
+                    <label for="inputEmail" class="">Email Address <small>(Required)</small></label>
+                    <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
+                        placeholder="Email" name="email" required autofocus autofocus="">
+                    <label for="inputPassword" class="">Password <small>(Required)</small></label>
+                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
+                        required>
+                </fieldset>
 
                 <button class="btn btn-lg btn-primary btn-block mt-4 w-100" type="submit">Login</button>
 
                 <!-- TODO: Make better error message -->
                 @if ($errors->has('password'))
-                    <span class="error">
-                        {{ $errors->first('password') }}
+                    <span class="alert text-danger error">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('password') }}
                     </span>
                 @endif
 

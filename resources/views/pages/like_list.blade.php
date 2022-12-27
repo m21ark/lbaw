@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', $user->username.'`s Like List')
+
 @section('content')
     <div class="justify-content-center align-items-center">
 
@@ -17,20 +19,20 @@
                 <div class="d-flex justify-content-center mb-3">
                     <h4 class="me-3">Show Posts</h4>
                     <label class="switch">
-                        <input type="checkbox" id="report_toggle">
+                        <input type="checkbox" id="list_toggle_btn">
                         <span class="slider round"></span>
                     </label>
                     <h4 class="ms-3">Show Comments</h4>
                 </div>
 
-                <div id="pendent_report_list">
+                <div id="toggle_list_A">
                     <h2>Posts</h2>
                     @foreach ($posts as $post)
                         @include('partials.post_item', ['post' => $post])
                     @endforeach
                 </div>
 
-                <div hidden id="past_report_list">
+                <div hidden id="toggle_list_B">
 
                     <h2 class="mb-5">Comments</h2>
                     @foreach ($comments as $comment)

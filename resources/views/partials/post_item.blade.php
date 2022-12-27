@@ -1,5 +1,8 @@
 <div class="container mt-5 mb-5 post_item " id="post_main_page">
 
+    @isset($showComments)
+        <h1 class="mb-4">Post</h1>
+    @endisset
 
     <div class="card post_card p-0">
 
@@ -7,7 +10,8 @@
 
             <a href={{ url('/profile/' . $post->owner->username) }}
                 class="text-decoration-none d-flex flex-row align-items-center">
-                <img src="{{ asset($post->owner->photo) }}" width="60" class="rounded-circle me-3">
+                <img src="{{ asset($post->owner->photo) }}" width="60" alt="Post Owner Profile Image"
+                    class="rounded-circle me-3">
                 <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
             </a>
 

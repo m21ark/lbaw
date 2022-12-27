@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page_title', 'Admin Statistics')
+
 @section('content')
     <div>
 

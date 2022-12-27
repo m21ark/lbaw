@@ -21,13 +21,16 @@ class AdminController extends Controller
         if (!Auth::check())
             return redirect('403');
 
-        $this->authorize('view', Auth::user()->isAdmin);
+        $this->authorize('view', Auth::user()->isAdmin); // WORKING
 
         return view('pages.admin', ['reports' => Report::get()]);
     }
 
     public function showStatistics()
     {
+
+        $this->authorize('view', Auth::user()->isAdmin); // WORKING
+
         $statistics = [
             'posts_c' => Post::count(),
             'users_c' => User::count(),
@@ -43,22 +46,16 @@ class AdminController extends Controller
     public function usersReportesPending(Request $request)
     {
 
+        $request->validate([
+            'query_string' => 'string|min:0|max:1000' // THE is not such a big username name
+        ]);
+
         $query_string = $request->route('query_string');
+
+        $this->authorize('view', Auth::user()->isAdmin); // WORKING
 
         if ($query_string === '*') $query_string = '';
 
-        /*
-        select username, "user_report".* from "user_report"
-        join post on(post.id = id_post)
-        join "user" on (post.id_poster = "user".id)
-        where decision = 'Pendent';
-
-        select * from "user_report"
-        join post on (post.id = user_report.id_post)
-        join "user" on ("user".id = post.id_poster)
-        where username LIKE '%' and id_post IS NOT NULL and user_report.decision = 'Pendent';
-
-        */
 
         $users_reported_post = Report::where('id_post', '<>', NULL)
             ->where('user_report.decision', 'Pendent')
@@ -87,6 +84,11 @@ class AdminController extends Controller
 
     public function usersReportesPast(Request $request)
     {
+        $request->validate([
+            'query_string' => 'string|min:0|max:1000' // THE is not such a big username name
+        ]);
+
+        $this->authorize('view', Auth::user()->isAdmin); // WORKING
 
         $query_string = $request->route('query_string');
 

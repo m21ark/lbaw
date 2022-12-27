@@ -17,10 +17,16 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function show($username)
+    public function show($username, Request $request)
     {
+
+        $request->validate([
+            'username' => 'bail|string|exists:user,username'
+        ]);
+
         $user = User::where('username', $username)->first();
 
+        // EVERYONE CAN SEE THE PAGE ... only some can see the post
         if ($user == null) {
             //No user with that name so we return to the home page
             return redirect()->route('home');
@@ -31,11 +37,11 @@ class ProfileController extends Controller
             'comment_num' => $user->comments->count(),
             'like_comment_num' => $user->like_in_comments->count(),
             'like_post_num' => $user->like_in_post->count(),
-            'group_num' => $user->groupsMember->count(),
+            'group_num' => $user->groupsMember->count() + $user->groupsOwner->count(),
             'friends_num' => $user->friends()->count(),
         ];
 
-        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : null;
+        $friends = Auth::check() ? PostController::areFriends(Auth::user(), $user) : false;
         return view('pages.profile', ['user' => $user, 'statistics' => $statistics, 'friends' => $friends]);
     }
 
@@ -44,16 +50,25 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        $request->validate([
+            'username' => 'string|max:255|unique:user',
+            'bdate' => 'date',
+            'visibility' => 'string',
+            'bio' => 'string|max:1000',
+        ]);
+
         if ($user == null) {
             return redirect()->route('home');
         }
 
+        // NO NEED FOR POLICY ... only the stated above
+
         DB::beginTransaction();
-        $user->username = $request->input('username') ?? $user->username; // TODO: Check if username is unique
+        $user->username = strip_tags($request->input('username')) ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility') == 'on' ? true : false;
-        $user->email = $request->input('email') ?? $user->email; // TODO: Check if email is unique
-        $user->bio = $request->input('bio') ?? $user->bio;
+        $user->email = strip_tags($request->input('email')) ?? $user->email; // TODO: Check if email is unique
+        $user->bio = strip_tags($request->input('bio')) ?? $user->bio;
 
         // TODO : ADD PASSWORD
         // TODO: EDIT ALSO USER INTERESTS
@@ -73,18 +88,21 @@ class ProfileController extends Controller
 
         DB::commit();
 
-        return redirect()->route('profile', $user->username);
+        return redirect()->route('profile', $user->username)->with('success', 'Profile updated successfully');
     }
 
 
-    public function delete($username)
+    public function delete($username, Request $request)
     {
 
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
         // Mesmo problema que em grupos... triggers impedem de apagar
         // aqui julgo que é a cena de n poder deixar grupos sem outros owners
         $user = User::where('username', $username)->first();
 
-        // TODO ::: POLICY
+        $this->authorize('forceDelete', $user); // Policy ... Working
 
         $user->username = "deleted_User" . $user->id;
         $user->email = "deleted_email" . $user->id . "@d.com";
@@ -107,11 +125,11 @@ class ProfileController extends Controller
     }
 
     private function edit_topics(Request $request, User $user)
-    {
+    {   // NO NEED FOR POLICY
         $user->interests()->delete();
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -132,11 +150,17 @@ class ProfileController extends Controller
     }
 
 
-    public function listLikes($username)
+    public function listLikes($username, Request $request)
     {
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
+
         $user = User::where('username', $username)->first();
         if ($user == null)
             return redirect()->route('home');
+
+        $this->authorize('view', $user); // Policy ... Working
 
         $posts = Post::join('like_post', 'like_post.id_post', '=', 'post.id')
             ->where('like_post.id_user', $user->id)
@@ -151,11 +175,18 @@ class ProfileController extends Controller
         return view('pages.like_list', ['user' => $user, 'posts' => $posts, 'comments' => $comments]);
     }
 
-    public function listComments($username)
+    public function listComments($username, Request $request)
     {
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
+
         $user = User::where('username', $username)->first();
         if ($user == null)
             return redirect()->route('home');
+
+        $this->authorize('view', $user); // Policy ... Working
+
 
         $comments = $user->comments;
         return view('pages.comment_list', ['user' => $user, 'comments' => $comments]);

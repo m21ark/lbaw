@@ -22,6 +22,7 @@ class PasswordRecoverController extends Controller
 
         $token_link = config('app.url') . '/password/reset/' . $token;
 
+        // THIS IS A GUEST endpoint ... no need for POLICY
 
         $mailData = [
             'name' => $username,
@@ -30,8 +31,6 @@ class PasswordRecoverController extends Controller
         ];
 
         Mail::to($mailData['email'])->send(new Mailtrap($mailData));
-
-        // dd("Email was sent successfully.");
     }
 
     public function validatePasswordRequest(Request $request)
@@ -40,9 +39,10 @@ class PasswordRecoverController extends Controller
         $user = DB::table('user')->where('email', '=', $request->email)
             ->first();
 
+        // THIS IS A GUEST endpoint ... no need for POLICY
+
         if ($user === null) {
-            // TODO: Ricardo faz a mesma magia q fizeste no login
-            return redirect()->back()->withErrors(['email' => trans('Email does not exist')]);
+            return redirect()->back()->with('error', 'Not a valid email'); // input validation
         }
 
         //Create Password Reset Token
@@ -61,6 +61,8 @@ class PasswordRecoverController extends Controller
     public function resetPassword(Request $request)
     {
         // TODO: Validate password
+
+        // THIS IS A GUEST endpoint ... no need for POLICY
 
         $password = $request->password;
 
