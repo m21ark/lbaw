@@ -1019,7 +1019,6 @@ function sms_html(art, isSender, message, time) {
         art.appendChild(div);
     }
     else {
-
         let photo = document.querySelector("#sms_photo").src;
         let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
@@ -1063,7 +1062,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').append(text);
 
             const recipientUser = document.location.pathname.substring(10);
-            document.querySelector('#compact_message_text_' + recipientUser).innerHTML = "<b>You: </b>" + message;
+            document.querySelector('#compact_message_text_' + recipientUser).innerHTML = message;
             document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
             return;
         }
@@ -1101,7 +1100,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
         }
 
         const recipientUser = document.location.pathname.substring(10);
-        document.querySelector('#compact_message_text_' + recipientUser).innerHTML = "<b>You: </b>" + message;
+        document.querySelector('#compact_message_text_' + recipientUser).innerHTML =  message;
         document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
     }
 }
