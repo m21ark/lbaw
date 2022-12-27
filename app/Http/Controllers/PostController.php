@@ -89,13 +89,14 @@ class PostController extends Controller
         }
 
         // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
-        $posts = $posts->skip($offset)->limit(5)->get();
+        $posts = $posts->skip($offset)->limit(10)->get();
 
 
         // TODO: pass the current log in user to js in order to know if the post is theirs or not
 
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
+            $post->topics = $this->post_topics($post->id);
             $post->hasLiked = false;
             $post->isOwner = false;
             $post->auth = 0;
@@ -257,8 +258,8 @@ class PostController extends Controller
         }
     }
 
-    private function feed_friends()
-    { // NOT AN API
+    public function feed_friends()
+    {    // NOT AN API
 
         if (!Auth::check()) { // Authorization
             return response()->json(['Please login' => 401]);
@@ -286,9 +287,9 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_groups()
+    public function feed_groups()
     { // NOT AN API
-        if (!Auth::check()) { // Authorization
+        if (!Auth::check()) {
             return response()->json(['Please login' => 401]);
         }
 
@@ -306,8 +307,8 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_viral()
-    { // THIS IS A FUNCTION ... no need for POLICY ... Its a guest functionality
+    public function feed_viral()
+    { // NOT AN API
         $posts = Post::join('user', 'user.id', '=', 'post.id_poster')
             ->where('visibility', true)
             ->select('post.id', 'post.text', 'post_date', 'username as owner', 'photo')
@@ -316,8 +317,8 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function feed_for_you()
-    {// NOT AN API
+    public function feed_for_you()
+    { // NOT AN API
         if (!Auth::check()) {
             return response()->json(['Please login' => 401]); // Authorization
         }
@@ -334,4 +335,16 @@ class PostController extends Controller
 
         return $posts;
     }
+
+    public function post_topics($post_id)
+    {
+        // TODO: POLICY
+
+        $topics = PostTopic::where('id_post', $post_id)
+            ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
+            ->select('topic.topic')
+            ->get();
+        return $topics;
+    }
+
 }

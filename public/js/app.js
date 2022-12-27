@@ -1082,11 +1082,10 @@ addEventListeners();
 // =================================== Home ==========================================
 
 let offset = 0;
+let scroll_end;
+let scroll_updating;
 
 function updateFeed(feed) {
-
-    let pathname = window.location.pathname
-    if (pathname !== '/home') return;
 
     let type_order = 'popularity';
     let orders = document.querySelectorAll('.feed-order');
@@ -1097,43 +1096,53 @@ function updateFeed(feed) {
         })
     }
 
-    if (!document.querySelector('#timeline')) {
-        return;
-    }
-
     sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
+        if(!timeline) return;
 
         if (offset === 0) {
             timeline.innerHTML = '';
         }
 
-        if (received.length === 0) {
+        if (received.length === 0 && !scroll_end) {
             timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+            scroll_end = true;
         }
 
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
 
-        offset += 5
+        offset += received.length;
+        scroll_updating = false
     })
 
 
 }
 
 function updateFeedOnLoad() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
+
+    let timeline = document.querySelector('#timeline')
+    if (!timeline) return;
+    timeline.innerHTML = createSpinner();
+
     let feed_filters = document.querySelector('#feed_radio_viral')
     if (feed_filters) {
         feed_filters.checked = true
     }
     offset = 0
+    scroll_end = false
+    scroll_updating = false;
     updateFeed('viral')
 }
 
 function updateFeedOnOrder() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
     let orders = document.querySelectorAll('.feed-order')
 
@@ -1141,6 +1150,10 @@ function updateFeedOnOrder() {
 
     orders.forEach(function (order) {
         order.addEventListener('click', function () {
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = createSpinner();
+
             let filters = document.querySelectorAll('#feed_filter input')
             if (!filters) return;
 
@@ -1150,6 +1163,8 @@ function updateFeedOnOrder() {
             })
 
             offset = 0
+            scroll_end = false
+            scroll_updating = false
             updateFeed(checked_filter)
         })
     })
@@ -1157,6 +1172,8 @@ function updateFeedOnOrder() {
 }
 
 function updateFeedOnClick() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
     let filters = document.querySelectorAll('.feed-filter')
 
@@ -1164,7 +1181,12 @@ function updateFeedOnClick() {
 
     filters.forEach(function (filter) {
         filter.addEventListener('click', function () {
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = createSpinner();
+
             offset = 0
+            scroll_end = false
             updateFeed(filter.value)
         })
     })
@@ -1172,9 +1194,13 @@ function updateFeedOnClick() {
 }
 
 function updateFeedOnScroll() {
-
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
+    
     window.onscroll = function (ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
+            if (scroll_updating) return;
+            scroll_updating = true;
             let filters = document.querySelectorAll('#feed_filter input')
 
             let checked_filter = 'viral';
@@ -1199,7 +1225,7 @@ function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
-    let images = '', bottom = '', like = '', dropdown = '';
+    let images = '', bottom = '', like = '', dropdown = '', topics='';
 
     imageControls = `
      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
@@ -1268,6 +1294,19 @@ function createPost(post) {
     }
 
 
+    if (post.topics.length > 0) {
+        topics = '<div>';
+
+        post.topics.forEach(topicItem => {
+            topics += `
+                <a href="/search/%23${topicItem.topic}"
+                class="btn btn-primary me-2 mb-3 ms-2">#${topicItem.topic}</a>
+            `
+        });
+
+        topics += '</div>'
+    }
+
 
     new_post.innerHTML = `
 
@@ -1302,10 +1341,13 @@ function createPost(post) {
 
                     ${images}
 
+                    
+
 
                     <div>
                         <p class="text-justify p-3">${post.text}</p>
 
+                        ${topics}
 
                         <div class="card-footer d-flex justify-content-evenly">
 
@@ -1333,9 +1375,20 @@ function createPost(post) {
 }
 
 
+function createSpinner() {
+    return `
+    <div class="text-center">
+        <div class="spinner-border m-5" style="width: 5rem; height: 5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    `
+}
 
 
 //  ======================================= Search ======================================
+
+let selected_filter;
 
 function updateSearchOnInputAndClick() {
 
@@ -1346,29 +1399,33 @@ function updateSearchOnInputAndClick() {
         return;
     }
 
-    let search_filters = document.querySelector('input#search_radio_user')
-
-    if (search_filters) {
-        search_filters.checked = true
-    }
-
+    scroll_end = false;
+    offset = 0;
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
-    query_string = pathname.replaceAll('%20', ' ').split('/')[2]
+    query_string = pathname.replaceAll('%20', ' ').replaceAll('%23', '#').split('/')[2]
 
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
         updateSearch()
+        updateSearchOnScroll()
     }
 
     // Add event listeners when input changes
 
     if (searchBar) {
-        searchBar.addEventListener('input', function () {
+        searchBar.addEventListener('keypress', function (event) {
+
+            if (event.key !== "Enter") return;
+
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            timeline.innerHTML = ''
+
             updateSearch()
 
-            let searchBarString = searchBar.value.trim()
+            let searchBarString = searchBar.value.trim().replaceAll('#', '%23')
 
             // Update the path on top
             if (searchBarString !== '') {
@@ -1390,8 +1447,7 @@ function updateSearchOnInputAndClick() {
             filter.addEventListener('click', updateSearch)
         })
     }
-
-    updateSearch();
+    
 }
 
 
@@ -1410,29 +1466,43 @@ function updateSearch() {
     const searchBar = document.querySelector('#search_bar')
     if (!searchBar) return;
 
-    query_string = searchBar.value
+    query_string = searchBar.value.replaceAll('#', '%23');
 
-    if (query_string === '')
+    if (query_string === '') {
         query_string = '*';
+    }
 
-    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search, {}, function () {
+    if (type_search !== selected_filter) {
+        offset = 0;
+        selected_filter = type_search;
+        scroll_end = false;
+        let timeline = document.querySelector('#timeline')
+        timeline.innerHTML = createSpinner();
+        
+    }
+
+    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search + '/offset/' + offset, {}, function () {
 
         let timeline = document.querySelector('#timeline');
 
         if (!timeline) return;
+
+        if (offset === 0) {
+            timeline.innerHTML = '';
+        }
+
         let received;
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
-            // ignore for now
+            console.log('Erro')
         }
 
         if (received == null) return;
 
-        timeline.innerHTML = '';
-
-        if (received.length === 0) {
-            timeline.innerHTML = `<h3 class="text-center mt-5">No results found</h3>`
+        if (received.length === 0 && scroll_end === false) {
+            timeline.innerHTML += `<h3 class="text-center mt-5">No results found</h3>`
+            scroll_end = true;
         }
 
         received.forEach(function (searchHit) {
@@ -1449,19 +1519,43 @@ function updateSearch() {
 
         })
 
-    })
+        offset += received.length;
 
+    })
 
 }
 
 
 
+function updateSearchOnScroll() {
+
+    selected_filter = document.querySelector('#search_filter input[checked]').value;
+
+    window.onscroll = function (ev) {
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+
+            if (selected_filter === 'posts') {
+                updateSearch()
+            }
+        }
+    };
+}
+
+
 function createUserCard(user) {
     let new_card = document.createElement('article');
+    let privacy;
 
     let bio_short = user.bio;
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
+
+    if (user.visibility === true) {
+        privacy = 'Public'
+    } else {
+        privacy = 'Private'
+    }
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
@@ -1470,6 +1564,10 @@ function createUserCard(user) {
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
 
+            <p class="card-text"><b>Visibility: </b>
+                <span class="card-text">
+                    ${privacy}
+                </span>
         </div>
 
         <div class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
@@ -1531,14 +1629,12 @@ function searchRedirect() {
 
     searchBar.addEventListener('keypress', function (event) {
 
-        //window.location.href = '/search/hey' + this.value
-
         if (event.key !== "Enter") return;
 
         this.value = this.value.trim()
 
         if (this.value !== '') {
-            window.location.href = '/search/' + this.value.replaceAll(' ', '%20')
+            window.location.href = '/search/' + this.value.replaceAll(' ', '%20').replaceAll('#', '%23')
         } else {
             window.location.href = '/search/*';
         }
@@ -1548,7 +1644,6 @@ function searchRedirect() {
 }
 
 searchRedirect();
-
 updateSearchOnInputAndClick();
 
 
