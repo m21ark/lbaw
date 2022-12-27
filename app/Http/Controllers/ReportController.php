@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Report;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,13 +14,20 @@ class ReportController extends Controller
 {
     public function show(String $username, Request $request)
     {
+        try {
+            validator($request->route()->parameters(), [
+                'username' => 'required|exists:user,username',
+            ])->validate();
+        } catch (Exception $e) {
+            return redirect()->route('admin'); // This is necessary as the redirect might go to the previous request and not to the previous page
+        }
+
         $user = User::where('username', $username)->first();
         if ($user === null) // POLICY
             return redirect('404');
 
         // POLICY
         $this->authorize('viewAny', Report::class);
-
 
         $statistics = [
             'post_num' => Post::where('id_poster', $user->id)->count(),
@@ -73,17 +81,24 @@ class ReportController extends Controller
 
     public function create(Request $request)
     {
+        
 
         $this->authorize('create', Report::class); // POLICY
 
         $report = new Report();
         $report->report_date = date('Y-m-d H:i:s');
-        $report->description = $request->description;
+        $report->description = strip_tags($request->description);
         $report->decision = 'Pendent';
 
         if ($request->id_comment > 0) {
+            $request->validate([
+                'id_comment' => 'integer|exists:comment,id',
+            ]);
             $report->id_comment = $request->id_comment;
         } else {
+            $request->validate([
+                'id_post' => 'integer|exists:post,id'
+            ]);
             $report->id_post = $request->id_post;
         }
 
@@ -95,15 +110,18 @@ class ReportController extends Controller
         return $report;
     }
 
-    public function rejectAll(Int $userID)
+    public function rejectAll(Int $userID, Request $request)
     {
+        $request->validate([
+            'userID' => 'integer|exists:user,id',
+        ]);
         $this->authorize('updateAny', Report::class); //POLICY
         $this->updateAllPendent($userID, 'Rejected');
     }
 
     public function updateAllPendent($userID, $decision)
     {
-
+        
         $this->authorize('updateAny', Report::class); //POLICY
 
         $reportsPost = Report::select('user_report.*')
@@ -131,8 +149,12 @@ class ReportController extends Controller
         }
     }
 
-    public function banUser(Int $userID, String $time_option)
+    public function banUser(Int $userID, String $time_option, Request $request)
     {
+        $request->validate([
+            'userID' => 'integer|exists:user,id',
+            'time_option' => 'integer|between:1,8'
+        ]);
 
         $this->authorize('updateAny', Report::class); //POLICY
 
@@ -171,6 +193,11 @@ class ReportController extends Controller
     public function edit(Request $request)
     {
 
+        validator($request->route()->parameters(), [
+            'id' => 'integer|exists:report,id',
+            'decision' => 'string|in:Pendent,Accepted,Rejected'
+        ])->validate();
+
         $this->authorize('updateAny', Report::class); //POLICY
 
         $report = Report::find($request->id);
@@ -186,8 +213,12 @@ class ReportController extends Controller
         return $report;
     }
 
-    public function delete(int $id) // TODO: ACHO QUE ISTO N E USADO EM LADO NENHUM
+    public function delete(int $id, Request $request) // TODO: ACHO QUE ISTO N E USADO EM LADO NENHUM
     {
+
+        $request->validate([
+            'id' => 'integer|exists:report,id',
+        ]);
 
         $this->authorize('delete', Report::class); //POLICY
 

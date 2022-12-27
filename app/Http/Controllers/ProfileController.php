@@ -92,9 +92,12 @@ class ProfileController extends Controller
     }
 
 
-    public function delete($username)
+    public function delete($username, Request $request)
     {
 
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
         // Mesmo problema que em grupos... triggers impedem de apagar
         // aqui julgo que é a cena de n poder deixar grupos sem outros owners
         $user = User::where('username', $username)->first();
@@ -126,7 +129,7 @@ class ProfileController extends Controller
         $user->interests()->delete();
         if ($request->input('tags') != null) {
 
-            $topics = explode(' ', $request->input('tags'));
+            $topics = explode(' ', strip_tags($request->input('tags')));
 
             foreach ($topics as $topic) {
 
@@ -147,8 +150,12 @@ class ProfileController extends Controller
     }
 
 
-    public function listLikes($username)
+    public function listLikes($username, Request $request)
     {
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
+
         $user = User::where('username', $username)->first();
         if ($user == null)
             return redirect()->route('home');
@@ -168,8 +175,12 @@ class ProfileController extends Controller
         return view('pages.like_list', ['user' => $user, 'posts' => $posts, 'comments' => $comments]);
     }
 
-    public function listComments($username)
+    public function listComments($username, Request $request)
     {
+        $request->validate([
+            'username' => 'string|max:255|exists:user,username',
+        ]);
+
         $user = User::where('username', $username)->first();
         if ($user == null)
             return redirect()->route('home');
