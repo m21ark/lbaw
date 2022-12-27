@@ -25,8 +25,8 @@
             </label>
 
             <input class="list-group-item-check pe-none feed-filter" type="radio" name="feed_filter"
-                id="feed_radio_groups">
-            <label class="list-group-item rounded-3" for="feed_radio_groups" value="groups" data-toggle="tooltip" data-placement="top" title="Your group news">
+                id="feed_radio_groups" value="groups">
+            <label class="list-group-item rounded-3" for="feed_radio_groups" data-toggle="tooltip" data-placement="top" title="Your group news">
                 Groups
             </label>
 
