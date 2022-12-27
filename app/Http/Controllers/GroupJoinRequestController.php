@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\GroupJoinRequest;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,10 +18,18 @@ class GroupJoinRequestController extends Controller
      * @param  \App\Models\GroupJoinRequest  $groupJoinRequest
      * @return \Illuminate\Http\Response
      */
-    public function show($group_name)
+    public function show($group_name, Request $request)
     {
         if (!Auth::check())
             return redirect()->route('home');
+
+        try {
+            validator($request->route()->parameters(), [ // VALIDATOR
+                'group_name' => 'required|exists:group,name|string', 
+            ])->validate();
+        } catch (Exception $e) {
+            return redirect()->route('home'); // This is necessary as the redirect might go to the previous request and not to the previous page
+        }
 
         $group = Group::where('name', $group_name)->first();
         $this->authorize('update', $group); // GROUP POLICY ... working
@@ -61,13 +70,20 @@ class GroupJoinRequestController extends Controller
         return response()->json(['The request was ' . $new_state . " with success" => 200]);
     }
 
-    public function send($id, Request $resquest)
+    public function send($id, Request $request)
     {
         if (!Auth::check())
             return response()->json(['You need to authenticate to use this endpoint' => 403]);
 
-        Auth::user()->can('create'); // POLICY ... WORKING
+        validator($request->route()->parameters(), [
+            'id' => 'required|exists:group,id',
+        ])->validate();
 
+
+        if($request->user()->can('create')) {// POLICY ... WORKING ... should always be true
+            return response()->json(['You cannot send a request to this group' => 403]);
+        }
+        
         $frequest = new GroupJoinRequest();
         $frequest->id_user = Auth::user()->id;
         $frequest->id_group = $id;

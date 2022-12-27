@@ -16,6 +16,7 @@
 
             @if (Auth::check())
                 <div class="d-flex align-items-center">
+                    <span id="contextual-help"><i class="fa-regular fa-circle-question fa-2x"></i></span>
                     <a class="text-white text-decoration-none me-3"
                         href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2" id="auth_id"

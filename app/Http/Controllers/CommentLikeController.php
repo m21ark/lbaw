@@ -13,15 +13,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentLikeController extends Controller
 {
-    public function toggle(Request $request)
+    public function toggle(Request $request) // TODO ... alterar... não se devia passar o id_user .... o utilizador vais estar logado e já se sabe quem é
     {
+
+        $request->validate([
+            'id_comment' => 'string|exists:comment,id', 
+        ]);
 
         $user = $request->input('id_user');
         $comment = $request->input('id_comment');
 
         $commentModel = Comment::find($comment);
 
-        // THIS policiy is the same as the comment policy ... check authserviceprovider to understand more
+        // THIS policie is the same as the comment policy ... check authserviceprovider to understand more
         // The user must be able to see it to comment it ... TODO ... alterar
 
 

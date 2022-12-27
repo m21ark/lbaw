@@ -137,6 +137,12 @@
 
 /*  ====================== AJUSTES =====================*/
 
+#contextual-help {
+    margin-right: 1em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 p {
     line-height: 1.4;
 }
@@ -153,6 +159,11 @@ ul.nav a:hover {
 .profile_img {
     display: block;
     margin: auto;
+}
+
+.help_photo {
+    height: 50%;
+    width: 80%;
 }
 
 .header_searchbar {
@@ -309,10 +320,11 @@ ul.nav a:hover {
 
 #video_call {
     position: fixed;
-    top: 10%;
-    left: 0;
-    right: 0;
+    top: 50%;
+    left: 50%;
+    right: 50%;
     width: 80%;
+    transform: translate(-50%, -50%);
     display: none;
     padding: 2em;
 }
@@ -429,9 +441,10 @@ ul.nav a:hover {
     background-color: #a4c6f0;
     box-shadow: 2px 2px 5px grey;
     position: fixed;
-    top: 6em;
-    left: 0;
-    right: 0;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
     margin-left: auto;
     margin-right: auto;
     width: 30em;

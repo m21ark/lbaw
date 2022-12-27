@@ -46,6 +46,10 @@ class AdminController extends Controller
     public function usersReportesPending(Request $request)
     {
 
+        $request->validate([
+            'query_string' => 'string|min:0|max:1000' // THE is not such a big username name
+        ]);
+
         $query_string = $request->route('query_string');
 
         $this->authorize('view', Auth::user()->isAdmin); // WORKING
@@ -80,6 +84,9 @@ class AdminController extends Controller
 
     public function usersReportesPast(Request $request)
     {
+        $request->validate([
+            'query_string' => 'string|min:0|max:1000' // THE is not such a big username name
+        ]);
 
         $this->authorize('view', Auth::user()->isAdmin); // WORKING
 

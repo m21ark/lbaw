@@ -1,5 +1,5 @@
 <div aria-live="polite" aria-atomic="true" class="l_navbar show flex-column flex-shrink-0 p-3 bg-light overflow-auto"
-    id="notifications_container" style="max-height: 45em">
+    id="notifications_container" style="max-height: 95vh">
 </div>
 <div id="leftbar" class="flex-column flex-shrink-0 p-3 bg-light">
 

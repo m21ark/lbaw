@@ -28,6 +28,10 @@ class FriendsRequestPolicy
 
     public function delete(User $user, User $model)
     {
-        return PostController::areFriends($user, $model);
+        return PostController::areFriends($user, $model) 
+        || FriendsRequest::where('id_user_sender', '=', $user->id)
+        ->where('id_user_receiver', '=', $model->id) 
+        || FriendsRequest::where('id_user_sender', '=', $user->id)
+        ->where('id_user_receiver', '=', $model->id);
     }
 }
