@@ -368,7 +368,6 @@ function addNotification(message_body, sender) {
 
 function addEventListeners() {
 
-    // Toggle para botões que escondem paginas
     let listener_list = [
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
@@ -821,7 +820,11 @@ function sendCreateCommentRequest() {
 
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
-        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, function () {
+            let comment_div = document.createElement('div')
+            comment_div.innerHTML = this.responseText
+            document.querySelector('#post_comment_section').appendChild(comment_div)
+        });
         document.querySelector('#comment_post_input').value = ''
         // TODO falta adicionar comentario e a notificao de action success
     }
@@ -840,7 +843,7 @@ function sendEditCommentRequest() {
     let res = confirm('Are you sure you want edit this comment?');
     if (res) {
         sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
-        //location.reload();
+        document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
         logItem('#popup_show_comment_edit')(0);
     }
 
@@ -853,7 +856,8 @@ function sendDeleteCommentRequest() {
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
         sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
-        location.reload();
+        document.querySelector(`#comment_item_${id_comment}`).remove()
+        logItem('#popup_show_comment_edit')(0);
     }
 }
 
@@ -1975,6 +1979,9 @@ function sendRequestResponse(isAFriendReq, accept) {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
 
+        let res = confirm("You sure you want to " + response + " this request?");
+        if (!res) return;
+
         let gname = window.location.pathname.split('/')[2];;
 
         let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname + '/request/' + id + "/" + response;
@@ -2070,6 +2077,10 @@ function deleteFriendship() {
 
 function deleteFriendFromFriendPage() {
     let card = this.parentNode.parentNode.parentNode
+
+    let res = confirm("You sure you want to remove this friend?");
+    if (!res) return;
+
     sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
         if (this.status == 200) {
             card.style = "display: none";

@@ -167,6 +167,10 @@ ul.nav a:hover {
     width: 80%;
 }
 
+#contextual-help:hover{
+    cursor: pointer;
+}
+
 .header_searchbar {
     width: 35%
 }
