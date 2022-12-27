@@ -157,6 +157,12 @@
 
 /*  ====================== AJUSTES =====================*/
 
+#contextual-help {
+    margin-right: 1em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 p {
     line-height: 1.4;
 }
@@ -174,6 +180,11 @@ ul.nav a:hover {
 .profile_img {
     display: block;
     margin: auto;
+}
+
+.help_photo {
+    height: 50%;
+    width: 80%;
 }
 
 .header_searchbar {

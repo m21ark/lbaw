@@ -303,6 +303,28 @@ if (user_header != null) {
     }
 }
 
+//////////////////////////  Contextual Help //////////////////////////
+
+function startContextualHelp() {
+    introJs().setOptions({
+        steps: [{
+          intro: "Hello world!"
+        }, {
+          element: document.querySelector('#leftbar').firstElementChild,
+          intro: "Here you can quickly access the main features of our app"
+        },
+        {
+          element: document.querySelector("#popup_btn_post"),
+          intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+        },
+        {
+            element: document.querySelector("#feed_filter"),
+            intro: "We allow you to see different timelines. Isn't that amazing???😮"
+        }
+        ]
+      }).start();
+}
+
 function createElementFromHTML(htmlString) {
     var div = document.createElement('div');
     div.innerHTML = htmlString.trim();
@@ -376,6 +398,7 @@ function addEventListeners() {
         ['.cancel_friend', deleteFriendFromFriendPage],
         ['.send_g_request', sendGRequest],
         ['.cancel_g_request', deleteGRequest],
+        ['#contextual-help', startContextualHelp],
     ];
 
 
