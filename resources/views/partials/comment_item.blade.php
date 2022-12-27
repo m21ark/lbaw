@@ -18,7 +18,7 @@
             @endauth
         @endisset
 
-        <small>{{ $comment->post_date }}</small>
+        <small>{{ Carbon\Carbon::parse($comment->post_date)->diffForHumans() }}</small>
 
         @isset($showPostLink)
             <a href="/post/{{ $comment->post->id }}">See Post</a>

@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Topic;
 use App\Models\Image;
 use App\Models\Like;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -87,17 +88,21 @@ class SearchController extends Controller
 
         if ($query_string[0] !== '#') {
             $posts = $this->searchPostsFTS($query_string, $offset);
-            foreach ($posts as $post) {$post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);}
+            foreach ($posts as $post) {
+                $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
+            }
         } else {
             $posts = $this->searchPostsTopic($query_string, $offset);
         }
 
-        
+
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
             $post->hasLiked = false;
             $post->isOwner = false;
             $post->auth = 0;
+
+            $post->post_date =  Carbon::parse($post->post_date)->diffForHumans();
 
             if (!Auth::check()) continue;
             $post->auth = Auth::user()->id;
@@ -112,21 +117,22 @@ class SearchController extends Controller
                 $post->hasLiked = true;
             }
         }
-        
+
 
         return $posts;
     }
 
 
-    private function searchPostsTopic($query_string, $offset) {
+    private function searchPostsTopic($query_string, $offset)
+    {
         $posts = [];
 
         $topics_search = explode("#", $query_string);
-        
+
         if ($topics_search[0] === "") {
             array_shift($topics_search);
         }
-        
+
 
         for ($i = 0; $i < sizeof($topics_search); $i++) {
             $topics_search[$i] = trim($topics_search[$i]);
@@ -141,14 +147,14 @@ class SearchController extends Controller
 
         $limiter = 20;
 
-        
+
         $posts_filtered = [];
 
         foreach ($posts as $post) {
             $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
-            
+
             foreach ($post->topics as $topic) {
-                
+
                 if (!in_array($topic->topic, $topics_search)) {
                     continue;
                 }
@@ -157,7 +163,7 @@ class SearchController extends Controller
                     $offset--;
                     break;
                 }
-                
+
                 $posts_filtered[] = $post;
                 $limiter--;
                 break;
@@ -167,11 +173,12 @@ class SearchController extends Controller
                 break;
             }
         }
-        
+
         return $posts_filtered;
     }
 
-    private function searchPostsFTS($query_string, $offset) {
+    private function searchPostsFTS($query_string, $offset)
+    {
 
         $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
             ->groupBy('id_post');

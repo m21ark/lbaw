@@ -33,7 +33,7 @@ class NotificationController extends Controller
     {
 
         $request->validate([
-            'id' => 'string|exists:notification,id', 
+            'id' => 'string|exists:notification,id',
         ]);
 
         if (!Auth::check())

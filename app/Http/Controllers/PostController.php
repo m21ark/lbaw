@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Like;
 use App\Models\PostTopic;
 use App\Models\Topic;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -100,6 +101,8 @@ class PostController extends Controller
             $post->hasLiked = false;
             $post->isOwner = false;
             $post->auth = 0;
+
+            $post->post_date =  Carbon::parse($post->post_date)->diffForHumans();
 
             if (!Auth::check()) continue;
             $post->auth = Auth::user()->id;
@@ -218,10 +221,10 @@ class PostController extends Controller
 
         $post = Post::find($id);
 
-        $this->authorize('update', $post);// POLICY
+        $this->authorize('update', $post); // POLICY
 
 
-        $post->text = strip_tags($request->input('text')); 
+        $post->text = strip_tags($request->input('text'));
 
         File::delete($post->images->pluck('path')->toArray());
         $post->images()->delete();
@@ -346,5 +349,4 @@ class PostController extends Controller
             ->get();
         return $topics;
     }
-
 }
