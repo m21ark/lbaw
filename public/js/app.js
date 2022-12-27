@@ -1549,7 +1549,7 @@ function createUserCard(user) {
 
     let bio_short = user.bio;
     if (bio_short.length > 50)
-        bio_short = user.bio.substring(0, 100) + '...'
+        bio_short = user.bio.substring(0, 75) + '...'
 
     if (user.visibility === true) {
         privacy = 'Public'
@@ -1585,7 +1585,7 @@ function createGroupCard(group) {
 
     let bio_short = group.description;
     if (bio_short.length > 50)
-        bio_short = bio_short.substring(0, 100) + '...'
+        bio_short = bio_short.substring(0, 75) + '...'
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
@@ -1711,8 +1711,8 @@ function createUserReportCardPending(user) {
 
     new_card.innerHTML = `
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
-        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
-        <a>${user.report_count} reports</a>
+        <a class="me-3" style="width:10em" href='/profile/${user.username}'>${user.username}</a>
+        <a style="width:5em">${user.report_count} reports</a>
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">View</a>
     `
 
@@ -1725,7 +1725,7 @@ function createUserReportCardPast(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     if (user.decision === 'Rejected') {
-        button = `<a href="#" class=" btn btn-success">REJ</a>`
+        button = `<a href="#" class=" btn btn-success" style="width:7em">REJ</a>`
     } else if (user.decision === 'Accepted') {
         let banDate = new Date(user.ban_date).getTime();
         let today = new Date().getTime();
@@ -1737,17 +1737,17 @@ function createUserReportCardPast(user) {
         }
 
         if (time > 0) {
-            button = `<a href="#" class=" btn btn-warning">${time}d</a>`
+            button = `<a href="#" class=" btn btn-warning" style="width:7em">${time}d</a>`
         } else {
-            button = `<a href="#" class=" btn btn-info">Finished</a>`
+            button = `<a href="#" class=" btn btn-info" style="width:7em">Finished</a>`
         }
 
     }
 
     new_card.innerHTML = `
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
-        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
-        <a class="text-muted text-decoration-none">${user.decision_date}</a>
+        <a class="me-3" style="width:10em" href='/profile/${user.username}'>${user.username}</a>
+        <a class="text-muted text-decoration-none" style="width:7em">${user.decision_date}</a>
     ` + button + `
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">Edit</a>
     `;

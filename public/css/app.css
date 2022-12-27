@@ -6,7 +6,7 @@
         box-shadow: 2px 2px 5px lightgray;
         display: grid;
         grid-template-columns: 1fr 4fr 1.5fr;
-        grid-template-rows: 5em auto auto;
+        grid-template-rows: 4.5em auto auto;
 
         grid-template-areas: "header  header header"
             "navbar  content rightbar"
@@ -94,6 +94,7 @@
     main {
         grid-area: content;
         margin: 5.5em 1em;
+        min-height: 65em;
     }
 
     header {
