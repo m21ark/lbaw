@@ -1240,10 +1240,17 @@ function updateSearchOnScroll() {
 
 function createUserCard(user) {
     let new_card = document.createElement('article');
+    let privacy;
 
     let bio_short = user.bio;
     if (bio_short.length > 50)
         bio_short = user.bio.substring(0, 100) + '...'
+
+    if (user.visibility === true) {
+        privacy = 'Public'
+    } else {
+        privacy = 'Private'
+    }
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em">
@@ -1252,6 +1259,10 @@ function createUserCard(user) {
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
 
+            <p class="card-text"><b>Visibility: </b>
+                <span class="card-text">
+                    ${privacy}
+                </span>
         </div>
 
         <div class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
