@@ -54,7 +54,7 @@ class MessagesController extends Controller
     {   
 
         if (!Auth::check()) 
-            return redirect('403');
+            return abort('403');
 
         $user = Auth::user();
 

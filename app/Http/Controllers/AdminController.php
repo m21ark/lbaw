@@ -19,7 +19,7 @@ class AdminController extends Controller
     public function show()
     {
         if (!Auth::check())
-            return redirect('403');
+            return abort('403');
 
         $this->authorize('view', Auth::user()->isAdmin); // WORKING
 

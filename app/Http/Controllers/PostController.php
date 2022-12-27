@@ -41,7 +41,7 @@ class PostController extends Controller
         $post = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
-            return view('pages.404');
+            return abort('404');
 
         // POLICY
         if (!$post->owner->visibility) {
