@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page_title', $user->username.'`s Like List')
+@section('page_title', $user->username . '`s Like List')
 
 @section('content')
     <div class="justify-content-center align-items-center">
@@ -16,7 +16,8 @@
         @else
             <div class="mt-4 mb-3 container">
 
-                <div class="d-flex justify-content-center mb-3">
+                <div class="d-flex justify-content-center mb-3" data-placement="bottom"
+                    title="Choose what liked content you want to see">
                     <h4 class="me-3">Show Posts</h4>
                     <label class="switch">
                         <input type="checkbox" id="list_toggle_btn">

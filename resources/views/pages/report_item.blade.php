@@ -16,7 +16,7 @@
 
                 @if ($user->ban_date === null)
                     <div>
-                        <a id="ban_user_btn" href="#!" class="mt-1 btn btn-danger">
+                        <a id="ban_user_btn" href="#!" class="mr-1 mb-1 mt-1 btn btn-danger">
                             <h5>Ban User</h5>
                         </a>
                         <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">

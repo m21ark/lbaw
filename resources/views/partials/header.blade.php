@@ -1,7 +1,6 @@
 <header class="p-3 text-bg-primary">
 
-    <div class="d-flex flex-wrap align-items-center  justify-content-between w-100">
-
+    <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
 
         <div class="text-start">
             <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120"></a>

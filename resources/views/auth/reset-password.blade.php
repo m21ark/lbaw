@@ -25,11 +25,15 @@
 
                         <p>Please provide a new password</p>
 
-                        <p>Password <small>(Required)</small></p>
+                        <label for="inputPassword" data-toggle="tooltip" data-placement="top"
+                            title="Your password should be composed of at least 8 characters with letters, numbers and symbols">Password
+                            <small>(Required)</small></label>
                         <input type="password" id="inputPassword" class="form-control mb-4" placeholder="Password"
                             name="password" required>
 
-                        <p>Confirm Password <small>(Required)</small></p>
+                        <label for="inputRPassword" data-toggle="tooltip" data-placement="top"
+                            title="Repeat the previous password to confirm it">Confirm Password
+                            <small>(Required)</small></label>
                         <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Confirm Password"
                             name="password_confirmation" required>
 

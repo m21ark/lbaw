@@ -1,7 +1,7 @@
 <div class="pop_up reveal-modal" id="video_call">
     <div class="d-flex justify-content-between mb-2">
         <h3>Video Call</h3>
-        <h3 id="endCall" onclick="endCall()">
+        <h3 id="endCall" onclick="endCall()" data-toggle="tooltip" data-placement="left" title="End current call">
             <span class="p-1 text-danger">
                 <i class="fa-solid fa-phone-slash"></i>
             </span>End Call

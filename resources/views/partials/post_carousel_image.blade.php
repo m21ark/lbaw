@@ -11,11 +11,11 @@
 
     @if (count($post->images) > 1)
         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"
-            style="filter: invert(100%);">
+            data-placement="right" title="Previous Image" style="filter: invert(100%);">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         </a>
         <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"
-            style="filter: invert(100%);">
+            data-placement="right" title="Next Image" style="filter: invert(100%);">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </a>
     @endif

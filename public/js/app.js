@@ -189,7 +189,7 @@ if (user_header != null) {
             audio: true
         });
     }
-    
+
     //Create and send offer to remote peer on button click
     function callUser(user) {
 
@@ -212,7 +212,7 @@ if (user_header != null) {
                     room = user;
                 });
 
-                // remove self audio 
+                // remove self audio
                 var audioTrack = stream.getAudioTracks();
 
                 if (audioTrack.length > 0) {
@@ -326,7 +326,7 @@ function startContextualHelp() {
             intro: "You can rapidly go to your profile ...  🏃🏃🏃"
         },
         {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>" 
+            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
         }
         ]
       }).start();
@@ -1892,6 +1892,7 @@ function sendRequest() {
             parent.addEventListener('click', deleteFriendship);
             parent.classList.add('cancel_request');
             parent.classList.remove('send_request');
+            parent.lastChild.innerHTML = 'Cancel Friend Request'
         }
         addedHandler(null).call(this);
     });
@@ -1949,6 +1950,7 @@ function deleteFriendship() {
                 parent.addEventListener('click', sendRequest);
                 parent.classList.remove('cancel_request');
                 parent.classList.add('send_request');
+                parent.lastChild.innerHTML = 'Send Friend Request'
             }
             addedHandler(null).call(this);
         });

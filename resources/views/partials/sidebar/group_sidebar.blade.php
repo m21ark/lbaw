@@ -5,22 +5,33 @@
     <div class="card border-secondary mb-4">
 
         <div class="card-header">
-            <h3 class="p-2 ">{{ $group->name }}</h3>
-
-            @auth
+            <h3 class="p-2 ">{{ $group->name }}
                 @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
                     <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                @elseif (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
-                    <a class=" cancel_g_request btn btn-primary"><i class="fa-solid fa-clock-rotate-left"
-                            data-id="{{ $group->id }}"></i> <span>Cancel Request</span></a>
-                @elseif (!$in_group)
-                    <a class=" send_g_request btn btn-primary"><i class="fa-solid fa-door-open"
-                            data-id="{{ $group->id }}"></i> <span>Request to Join</span></a>
                 @endif
-            @endauth
+            </h3>
+
+            @auth
+
+                @if (!$in_group && in_array(Auth::user()->id, $group->groupJoinRequests->pluck('id_user')->toArray()))
+                    <a class="w-100 cancel_g_request btn btn-primary"><i class="fa-solid fa-clock-rotate-left"
+                            data-toggle="tooltip" data-placement="bottom" title="Cancel Join Group Request"
+                            data-id="{{ $group->id }}"></i>
+                        <span>Cancel Request</span></a>
+                @elseif (!$in_group)
+                    <a class="w-100 send_g_request btn btn-primary"><i class="fa-solid fa-door-open" data-toggle="tooltip"
+                            data-placement="bottom" title="Ask to join group" data-id="{{ $group->id }}"></i>
+                        <span>Request to Join</span></a>
+                @endif
+
+        @endauth
+
+
         </div>
 
-        <div class="mt-3 m-auto ">
+
+
+        <div class="mt-3 m-auto">
             <img class="profile_img rounded-circle" src="{{ asset($group->photo) }}" alt="Group Profile Image"
                 width="150" height="150">
         </div>
@@ -109,8 +120,9 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
 
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-outline-secondary kick_member_button' data-idUser="{{ $member->user->id }}"
-                            data-idGroup="{{ $group->id }}">Kick</a>
+                        <a class='btn btn-outline-secondary kick_member_button' data-toggle="tooltip"
+                            data-placement="bottom" title="Remove user from group"
+                            data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
                     @endif
 
                 </div>

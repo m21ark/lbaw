@@ -26,7 +26,8 @@
                 <fieldset>
                     <legend>Email Password Recovery Form</legend>
 
-                    <label for="inputEmail">Email Address <small>(Required)</small></label>
+                    <label for="inputEmail" data-toggle="tooltip" data-placement="top"
+                        title="Email associated to your account">Email Address <small>(Required)</small></label>
                     <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email"
                         required>
 
