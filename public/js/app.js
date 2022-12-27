@@ -1082,11 +1082,9 @@ addEventListeners();
 
 let offset = 0;
 let scroll_end;
+let scroll_updating;
 
 function updateFeed(feed) {
-
-    let pathname = window.location.pathname
-    if (pathname !== '/home') return;
 
     let type_order = 'popularity';
     let orders = document.querySelectorAll('.feed-order');
@@ -1117,12 +1115,16 @@ function updateFeed(feed) {
         })
 
         offset += received.length;
+        scroll_updating = false
     })
 
 
 }
 
 function updateFeedOnLoad() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
+
     let timeline = document.querySelector('#timeline')
     if (!timeline) return;
     timeline.innerHTML = createSpinner();
@@ -1133,10 +1135,13 @@ function updateFeedOnLoad() {
     }
     offset = 0
     scroll_end = false
+    scroll_updating = false;
     updateFeed('viral')
 }
 
 function updateFeedOnOrder() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
     let orders = document.querySelectorAll('.feed-order')
 
@@ -1158,6 +1163,7 @@ function updateFeedOnOrder() {
 
             offset = 0
             scroll_end = false
+            scroll_updating = false
             updateFeed(checked_filter)
         })
     })
@@ -1165,6 +1171,8 @@ function updateFeedOnOrder() {
 }
 
 function updateFeedOnClick() {
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
 
     let filters = document.querySelectorAll('.feed-filter')
 
@@ -1185,9 +1193,13 @@ function updateFeedOnClick() {
 }
 
 function updateFeedOnScroll() {
-
+    let pathname = window.location.pathname
+    if (pathname !== '/home') return;
+    
     window.onscroll = function (ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
+            if (scroll_updating) return;
+            scroll_updating = true;
             let filters = document.querySelectorAll('#feed_filter input')
 
             let checked_filter = 'viral';
