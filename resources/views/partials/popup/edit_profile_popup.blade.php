@@ -24,7 +24,7 @@
             <input type="date" id="user_bdate" class="form-control mb-3" value="{{ $user->birthdate }}" required>
 
             <label for="user_bio" class="">Bio</label>
-            <textarea rows="8" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
+            <textarea rows="4" id="user_bio" class="form-control mb-3" placeholder="Bio" style="resize: none;">{{ $user->bio }}</textarea>
 
             <?php
             $topics = [];

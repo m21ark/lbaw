@@ -3,11 +3,20 @@
 @section('page_title', 'Group Requests')
 
 @section('content')
+
+
+    <h1 class="mt-5 mb-4"> <a href="/group/{{ $group->name }}">{{ $group->name }}</a>'s Join Request List</h1>
+    @if ($requests->where('acceptance_status', 'Pendent')->count() === 0)
+        <h5 class="mt-5">No Pendent Group Join Requests</h5>
+    @endif
+
     <div id="timeline" class="d-flex flex-wrap justify-content-center align-items-center">
+
         @foreach ($requests as $requester)
             @if ($requester->acceptance_status == 'Pendent')
                 <div class="card mt-4 me-3" style="width: 15em;height:29em" id="group_request_{{ $requester->user->id }}">
-                    <img height="50%" src="/{{ $requester->user->photo }}" class="card-img-top" alt="Requester Profile Image">
+                    <img height="50%" src="/{{ $requester->user->photo }}" class="card-img-top"
+                        alt="Requester Profile Image">
                     <div class="card-body">
                         <h5 class="card-title group_request_sender">
                             <a href="/profile/{{ $requester->user->username }}"> {{ $requester->user->username }}</a>

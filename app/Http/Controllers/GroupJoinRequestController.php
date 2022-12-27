@@ -34,7 +34,7 @@ class GroupJoinRequestController extends Controller
         $group = Group::where('name', $group_name)->first();
         $this->authorize('update', $group); // GROUP POLICY ... working
 
-        return view('pages.group_requests', ['requests' => $group->groupJoinRequests]);
+        return view('pages.group_requests', ['requests' => $group->groupJoinRequests, 'group' => $group]);
     }
 
     public function accept($group_name, $id_sender, Request $request)

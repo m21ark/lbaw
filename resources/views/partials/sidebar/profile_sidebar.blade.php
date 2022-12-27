@@ -35,6 +35,15 @@
             <div class="card-body">
                 <h3>Bio</h3>
                 <p class="card-text">{{ $user->bio }}</p>
+
+                <p class="card-text"><b>Visibility: </b><span class="card-text">
+                        @if ($user->visibility)
+                            Public
+                        @else
+                            Private
+                        @endif
+                    </span>
+                </p>
             </div>
 
             <div class="card-footer">

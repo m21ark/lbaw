@@ -745,11 +745,11 @@ function sendEditProfileRequest(event) {
 function sendDeleteProfileRequest() {
     let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
 
-    let res = prompt('Are you sure you want to delete your ' + username + ' account?\nPlease insert your username to confirm:');
+    let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username)
         sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
     else
-        alert('Invalid input! Account not deleted!');
+        alert('Account not deleted!');
 
 }
 
@@ -843,6 +843,7 @@ function sendDeleteCommentRequest() {
 // ============================================ Reports ============================================
 
 function popupControllReportPost() {
+    document.querySelector('.dropdown_menu').toggleAttribute('hidden');
     document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
     document.querySelector('#create_report_button').dataset.comment = 0
 }
@@ -1901,6 +1902,7 @@ function sendGRequest() {
     let child = this.firstChild;
     sendAjaxRequest('post', "/api/group/request/" + child.dataset.id + "/send", {}, function (e) {
         if (this.status == 200) {
+
             child.classList.remove('fa-door-open');
             child.classList.remove('send_g_request');
             child.classList.add('fa-clock-rotate-left');
@@ -1908,6 +1910,7 @@ function sendGRequest() {
             parent.addEventListener('click', deleteGRequest);
             parent.classList.add('cancel_g_request');
             parent.classList.remove('send_g_request');
+            parent.lastChild.innerHTML = 'Cancel Request'
         }
         addedHandler(null).call(this);
     });
@@ -1919,6 +1922,7 @@ function deleteGRequest() {
     sendAjaxRequest('delete', "/api/group/request/" + child.dataset.id, {},
         function (e) {
             if (this.status == 200) {
+
                 child.classList.remove('fa-clock-rotate-left');
                 child.classList.add('fa-door-open');
                 child.classList.add('send_g_request');
@@ -1926,6 +1930,7 @@ function deleteGRequest() {
                 parent.addEventListener('click', sendGRequest);
                 parent.classList.remove('cancel_g_request');
                 parent.classList.add('send_g_request');
+                parent.lastChild.innerHTML = 'Request to Join'
             }
             addedHandler(null).call(this);
         });
@@ -2060,6 +2065,9 @@ function checkResponsiveUI() {
     let btn = document.getElementById("list_toggle_btn_div")
     let title = document.querySelector("h1")
     let toggle = document.getElementById("list_toggle_btn")
+
+    if (page_a == null || page_b == null || btn == null || toggle == null)
+        return;
 
     if (width <= 80) {
 
