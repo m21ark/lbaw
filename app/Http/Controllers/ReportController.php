@@ -81,7 +81,7 @@ class ReportController extends Controller
 
     public function create(Request $request)
     {
-        
+
 
         $this->authorize('create', Report::class); // POLICY
 
@@ -121,7 +121,7 @@ class ReportController extends Controller
 
     public function updateAllPendent($userID, $decision)
     {
-        
+
         $this->authorize('updateAny', Report::class); //POLICY
 
         $reportsPost = Report::select('user_report.*')

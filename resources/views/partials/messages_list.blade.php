@@ -38,7 +38,7 @@
                             {{ $message->text }}
                         </p>
                     @endforeach
-                    <p class="small ms-3 mb-3 rounded-3 text-muted">{{ Str::substr($message->date, 10, 9) }}</p>
+                    <p class="small ms-3 mb-3 rounded-3 text-muted">{{ Str::substr($message->date, 10, 6) }}</p>
                 </div>
                 @if ($message->id_sender === Auth::user()->id)
                     <img class="rounded-circle" src="/{{ $message->sender->photo }}" alt="Self Profile Image"

@@ -16,7 +16,7 @@
                             <p class="mb-0 opacity-75" style="max-width: 20em;overflow:hidden">{{ $message->text }}</p>
                         </div>
                         <small
-                            class="opacity-50 text-nowrap">{{ date('W', strtotime(date('Y-m-d H:i:s'))) - date('W', strtotime($message->date)) }}w</small>
+                            class="opacity-50 text-nowrap">{{ Carbon\Carbon::parse($message->date)->diffForHumans() }}</small>
                     </div>
                 </a>
             @endforeach

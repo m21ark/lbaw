@@ -92,7 +92,7 @@ if (user_header != null) {
     });
 
     function render() {
-      // ONLINE STATUS OF USERS
+        // ONLINE STATUS OF USERS
     }
 
     /////////////////////////////////////////////
@@ -183,8 +183,8 @@ if (user_header != null) {
         }
     }
 
-    channel.bind("client-candidate", function(msg) {
-        if(msg.room==room){
+    channel.bind("client-candidate", function (msg) {
+        if (msg.room == room) {
             caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
         }
     });
@@ -314,14 +314,14 @@ if (user_header != null) {
 function startContextualHelp() {
     introJs().setOptions({
         steps: [{
-          intro: "Hello world!"
+            intro: "Hello world!"
         }, {
-          element: document.querySelector('#leftbar').firstElementChild,
-          intro: "Here you can quickly access the main features of our app"
+            element: document.querySelector('#leftbar').firstElementChild,
+            intro: "Here you can quickly access the main features of our app"
         },
         {
-          element: document.querySelector("#popup_btn_post"),
-          intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            element: document.querySelector("#popup_btn_post"),
+            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
         },
         {
             element: document.querySelector("#feed_filter"),
@@ -335,7 +335,7 @@ function startContextualHelp() {
             intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
         }
         ]
-      }).start();
+    }).start();
 }
 
 function createElementFromHTML(htmlString) {
@@ -1106,7 +1106,7 @@ function updateFeed(feed) {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
-        if(!timeline) return;
+        if (!timeline) return;
 
         if (offset === 0) {
             timeline.innerHTML = '';
@@ -1202,7 +1202,7 @@ function updateFeedOnClick() {
 function updateFeedOnScroll() {
     let pathname = window.location.pathname
     if (pathname !== '/home') return;
-    
+
     window.onscroll = function (ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
             if (scroll_updating) return;
@@ -1233,7 +1233,7 @@ function createPost(post) {
     let new_post = document.createElement('article');
     new_post.classList.add('post');
 
-    let images = '', bottom = '', like = '', dropdown = '', topics='';
+    let images = '', bottom = '', like = '', dropdown = '', topics = '';
 
     imageControls = `
     <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-${post.id }" data-bs-slide="prev">
@@ -1351,7 +1351,7 @@ function createPost(post) {
 
                     ${images}
 
-                    
+
 
 
                     <div>
@@ -1457,7 +1457,7 @@ function updateSearchOnInputAndClick() {
             filter.addEventListener('click', updateSearch)
         })
     }
-    
+
 }
 
 
@@ -1488,7 +1488,7 @@ function updateSearch() {
         scroll_end = false;
         let timeline = document.querySelector('#timeline')
         timeline.innerHTML = createSpinner();
-        
+
     }
 
     sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search + '/offset/' + offset, {}, function () {
