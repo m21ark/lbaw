@@ -14,6 +14,14 @@ class GroupPolicy
 {
     use HandlesAuthorization;
 
+    // THIS IS EXECUTED BEFORE ANY OTHER POLICY
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin !== null) {
+            return true;
+        }
+    }
+
     public function view(User $user, Group $group)
     {
         return GroupController::userInGroup($user, $group); // only if group is not public ...

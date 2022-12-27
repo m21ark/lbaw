@@ -11,7 +11,6 @@
                 <h1 class="h3 mb-3 font-weight-normal">Login Page</h1>
 
                 {{ csrf_field() }}
-
                 @if (session('error'))
                     <div class="alert alert-danger">
                         <i class="fa-solid fa-circle-exclamation"></i>{{ session('error') }}
@@ -20,9 +19,18 @@
 
                 <fieldset>
                     <legend>Login Form</legend>
-                    <label for="inputEmail" class="">Email Address <small>(Required)</small></label>
-                    <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
-                        placeholder="Email" name="email" required autofocus autofocus="">
+                    @if ($errors->has('email'))
+                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top" title="The email account associated with your nexus account">Email Address <small>(Required)</small></label>
+                        <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3 is-invalid"
+                            placeholder="Email" name="email" required autofocus autofocus="">
+                        <div class="text-danger">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('email') }}
+                        </div>
+                    @else
+                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top" title="The email account associated with your nexus account">Email Address <small>(Required)</small></label>
+                        <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
+                            placeholder="Email" name="email" required autofocus autofocus="">
+                    @endif
                     <label for="inputPassword" class="">Password <small>(Required)</small></label>
                     <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password"
                         required>

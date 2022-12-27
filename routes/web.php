@@ -86,7 +86,7 @@ Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/', function() {
     if (!Auth::check()) 
-        return redirect('403');
+        return abort('403');
 
     $user = Auth::user();
     return view('pages.messages', ['user' => $user, 'messages' => null, 'sender' => null]);

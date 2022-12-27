@@ -29,10 +29,15 @@ class GroupController extends Controller
             return redirect()->route('home');
         }
 
+        $can_view_timeline = true;
         if (!$group->visibility) {
-            $this->authorize('view', $group); // POLICY
+            $can_view_timeline = Auth::check() ? $request->user()->can('view', $group) : false; // POLICY
         }
-        return view('pages.group', ['group' => $group, 'in_group' => $this->userInGroup(Auth::user(), $group), 'user' => Auth::user()]);
+        return view('pages.group', ['group' => $group, 
+        'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false, 
+        'user' => Auth::user(),
+        'can_view_timeline' => $can_view_timeline,
+        ]);
     }
 
     public static function userInGroup(User $user1, Group $group)
@@ -120,11 +125,9 @@ class GroupController extends Controller
     public function edit(Request $request)
     {
 
-
         $request->validate([
-            'id_group' => 'string|exists:group,id',
+            'id_group' => 'integer|exists:group,id',
             'description' => 'required|string|min:1|max:2000',
-            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000',
         ]);
 
         DB::beginTransaction();
@@ -135,9 +138,12 @@ class GroupController extends Controller
 
         $group->name = strip_tags($request->input('name'));
         $group->description = strip_tags($request->input('description'));
-        $group->visibility = $request->input('visibility') == 'on' ? true : false;
+        $group->visibility = $request->input('visibility');
 
         if ($request->hasFile('photo')) {
+            $request->validate([
+            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
+            ]);
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
 

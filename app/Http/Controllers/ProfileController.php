@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'username' => 'string|max:255|unique:user',
+            'username' => 'string|max:255',
             'bdate' => 'date',
             'visibility' => 'string',
             'bio' => 'string|max:1000',
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         DB::beginTransaction();
         $user->username = strip_tags($request->input('username')) ?? $user->username; // TODO: Check if username is unique
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
-        $user->visibility = $request->input('visibility') == 'on' ? true : false;
+        $user->visibility = $request->input('visibility');
         $user->email = strip_tags($request->input('email')) ?? $user->email; // TODO: Check if email is unique
         $user->bio = strip_tags($request->input('bio')) ?? $user->bio;
 
@@ -76,6 +76,10 @@ class ProfileController extends Controller
         if ($request->hasFile('photo')) {
 
             $user->photo = 'user/' . strval($user->id) . '.jpg';
+
+            $request->validate([
+                'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
+            ]);
 
             try {
                 $request->file('photo')->move(public_path('user/'), $user->id . '.jpg');
