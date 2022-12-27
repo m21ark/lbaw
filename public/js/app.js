@@ -442,24 +442,35 @@ function addEventListeners() {
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
-
-
 }
 
 function sendRejectAllReportsRequest(event) {
     userID = document.querySelector('#reject_all_reports').dataset.userid
 
     let res = confirm('Are you sure you want to reject all reports?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/report/reject_all/${userID}`, {}, () => { });
+        document.querySelector('#reports_list').innerHTML = ''
+        document.querySelector('#reports_list').innerHTML = '<h3 class="text-center mt-4">No reports to show</h3>'
+        document.querySelector('#reports_list_count').innerHTML = '0'
+        document.querySelector('#reject_all_reports').remove()
+    }
 }
 
 function sendRejectReportRequest(event) {
     id = event.currentTarget.dataset.reportid
 
     let res = confirm('Are you sure you want to reject this report?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => { });
+        document.querySelector(`#reports_list_item_${id}`).remove()
+        document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
+        if (document.querySelector('#reports_list_count').innerHTML == 0) {
+            document.querySelector('#reports_list').innerHTML = '<h3 class="text-center mt-4">No reports to show</h3>'
+            document.querySelector('#reject_all_reports').remove()
+        }
+    }
+
 }
 
 function commentPopupsController() {
@@ -482,16 +493,22 @@ function sendBanUserRequest(event) {
     time_selected = elem.value
 
     let res = confirm('Are you sure you want to ban this user?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
+        location.reload()
+    }
+
 }
 
 function sendUnbanUserRequest(event) {
     userID = document.querySelector('#unban_user_btn').dataset.userid
 
     let res = confirm('Are you sure you want to unban this user?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/8`, {}, () => { });
+        location.reload()
+    }
+
 }
 
 function commentRepliesController() {

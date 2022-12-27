@@ -10,7 +10,8 @@
         <div class="mt-4 p-4 card text-bg-light" style="width:50%;max-width:35em">
             <h3 id="username"><a class="text-decoration-none" href="/profile/{{ $user->username }}">{{ $user->username }}</a>
             </h3>
-            <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="Reported User Profile Image" width="250">
+            <img class="profile_img rounded-circle" src="{{ asset($user->photo) }}" alt="Reported User Profile Image"
+                width="250">
 
             <div class="mt-1 mb-5 d-flex justify-content-evenly flex-wrap me-2">
 
@@ -90,7 +91,7 @@
     </div>
 
     <div id="toggle_list_A" class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Pendent Reports ({{ sizeof($reports) }})
+        <h3 class="mb-3">Pendent Reports (<span id="reports_list_count">{{ sizeof($reports) }}</span>)
 
             @if (count($reports) !== 0)
                 <a id="reject_all_reports" href="#!" class="btn btn-warning ms-3" data-userid="{{ $user->id }}">
@@ -101,32 +102,34 @@
         </h3>
 
         @if (count($reports) === 0)
-            <p class="text-center">No pending reports to view</p>
+            <h3 class="text-center mt-4">No reports to show</h3>
         @endif
 
-        @foreach ($reports as $report)
-            <div class="card p-3 mb-4">
-                <h5 class="mb-4">Report description:</h5>
-                <p>{{ $report->description }}</p>
-                <a href="#!" class="position-absolute btn btn-outline-danger reject_user_report_btn"
-                    style="width: 20%;right:2em" data-reportid="{{ $report->id }}">Reject</a>
+        <div id="reports_list">
+            @foreach ($reports as $report)
+                <div class="card p-3 mb-4" id="reports_list_item_{{ $report->id }}">
+                    <h5 class="mb-4">Report description:</h5>
+                    <p>{{ $report->description }}</p>
+                    <a href="#!" class="position-absolute btn btn-outline-danger reject_user_report_btn"
+                        style="width: 20%;right:2em" data-reportid="{{ $report->id }}">Reject</a>
 
 
-                <p><b>Made by: </b> <a class="text-decoration-none"
-                        href="/profile/{{ $report->reporter->username }}">{{ $report->reporter->username }}</a> on
-                    {{ $report->report_date }}</p>
+                    <p><b>Made by: </b> <a class="text-decoration-none"
+                            href="/profile/{{ $report->reporter->username }}">{{ $report->reporter->username }}</a> on
+                        {{ $report->report_date }}</p>
 
 
-                <h5 class="mt-3">Reported content:</h5>
+                    <h5 class="mt-3">Reported content:</h5>
 
-                @if ($report->id_post === null)
-                    @include('partials.comment_item', ['comment' => $report->comment])
-                @else
-                    @include('partials.post_item', ['post' => $report->post])
-                @endif
+                    @if ($report->id_post === null)
+                        @include('partials.comment_item', ['comment' => $report->comment])
+                    @else
+                        @include('partials.post_item', ['post' => $report->post])
+                    @endif
 
-            </div>
-        @endforeach
+                </div>
+            @endforeach
+        </div>
     </div>
 
 
