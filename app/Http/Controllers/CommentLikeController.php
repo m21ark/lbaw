@@ -17,7 +17,7 @@ class CommentLikeController extends Controller
     {
 
         $request->validate([
-            'id_comment' => 'string|exists:comment,id', 
+            'id_comment' => 'string|exists:comment,id',
         ]);
 
         $user = $request->input('id_user');
@@ -26,14 +26,9 @@ class CommentLikeController extends Controller
         $commentModel = Comment::find($comment);
 
         // THIS policie is the same as the comment policy ... check authserviceprovider to understand more
-        // The user must be able to see it to comment it ... TODO ... alterar
-
-
-        // TODO THIS BROKE THE LIKE FUNCTIONALITY
-        /*
+        // The user must be able to see it to comment it ...
         if (!$request->user()->can('view', $commentModel))
             return response()->json(["You are not allowed to like this resourse" => 301]);
-        */
 
         $like = CommentLike::where('id_user', $user)
             ->where('id_comment', $comment)

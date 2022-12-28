@@ -6,9 +6,11 @@
 
         <div class="card-header">
             <h3 class="p-2 ">{{ $group->name }}
-                @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                    <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
-                @endif
+                @auth
+                    @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
+                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                    @endif
+                @endauth
             </h3>
 
             @auth
@@ -24,7 +26,7 @@
                         <span>Request to Join</span></a>
                 @endif
 
-        @endauth
+            @endauth
 
 
         </div>
@@ -87,11 +89,12 @@
     <h3 class="mb-4">Members</h3>
 
     <div class="list-group align-items-center d-flex mb-2 group_member_list">
-
-        <a href='/group/{{ $group->name }}/requests' class="btn btn-outline-secondary mb-3"><i
-                class="fa-solid fa-user-group"></i> Pendent Requests
-            ({{ count($group->groupJoinRequests->where('acceptance_status', 'Pendent')->toArray()) }})</a>
-
+        @if (Auth::check() &&
+            (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin))
+            <a href='/group/{{ $group->name }}/requests' class="btn btn-outline-secondary mb-3"><i
+                    class="fa-solid fa-user-group"></i> Pendent Requests
+                ({{ count($group->groupJoinRequests->where('acceptance_status', 'Pendent')->toArray()) }})</a>
+        @endif
         @foreach ($group->owners as $owner)
             <div class="list-group-item max_width_rightbar">
                 <img src="{{ asset($owner->user->photo) }}" alt="Post Owner Profile Image" width="50"
@@ -119,12 +122,13 @@
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
 
-                    @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-outline-secondary kick_member_button' data-toggle="tooltip"
-                            data-placement="bottom" title="Remove user from group"
-                            data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
-                    @endif
-
+                    @auth
+                        @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
+                            <a class='btn btn-outline-secondary kick_member_button' data-toggle="tooltip"
+                                data-placement="bottom" title="Remove user from group"
+                                data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
+                        @endif
+                    @endauth
                 </div>
             @endif
         @endforeach

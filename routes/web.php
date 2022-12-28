@@ -89,13 +89,13 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('edit_profile/{username}', 'ProfileController@showEdit')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
-Route::get('messages/', function() {
+Route::get('messages/', function () {
     if (!Auth::check())
-        return redirect('403');
+        return abort('403');
 
     $user = Auth::user();
     return view('pages.messages', ['user' => $user, 'messages' => null, 'sender' => null]);
-}) -> name('message_home');
+})->name('message_home');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');

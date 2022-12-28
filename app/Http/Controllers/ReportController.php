@@ -24,7 +24,7 @@ class ReportController extends Controller
 
         $user = User::where('username', $username)->first();
         if ($user === null) // POLICY
-            return redirect('404');
+            return abort('404');
 
         // POLICY
         $this->authorize('viewAny', Report::class);

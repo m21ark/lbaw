@@ -20,7 +20,7 @@ if (user_header != null) {
 
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
-            id_post: data.obj.id_post,
+            id_post: data.obj.id_post ?? (data.obj.comment !== undefined ? data.obj.comment.id_post : null),
             sender: data.sender,
             notification_date: Date.now(),
             id_parent: data.obj.id_parent,
@@ -137,18 +137,24 @@ if (user_header != null) {
         const servers = {
             iceServers: [
                 {
-                    urls: [
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-                    ]
+                    urls: "stun:relay.metered.ca:80",
                 },
                 {
-                    url: 'turn:turn.anyfirewall.com:443?transport=tcp',
-                    credential: 'webrtc',
-                    username: 'webrtc'
-                }
+                    urls: "turn:relay.metered.ca:80",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
+                },
+                {
+                    urls: "turn:relay.metered.ca:443",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
+                },
+                {
+                    urls: "turn:relay.metered.ca:443?transport=tcp",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
+                },
             ],
-            iceCandidatePoolSize: 10,
         };
 
         //Initializing a peer connection
@@ -624,7 +630,7 @@ function sendCreateGroupRequest(event) {
     event.preventDefault()
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
-    let visibility = document.querySelector('#popup_show_group_create #group_visibility').value
+    let visibility = document.querySelector('#popup_show_group_create #group_visibility').checked
     let tags = document.querySelector('#popup_show_group_create #group_create_tags').value
 
     if (name == '' || description == '' || visibility == null) {
@@ -646,7 +652,7 @@ function sendEditGroupRequest(event) {
     event.preventDefault();
     let name = document.querySelector('#popup_show_group_edit #group_name').value
     let description = document.querySelector('#popup_show_group_edit #group_description').value
-    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').value
+    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').checked
     let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
     let tags = document.querySelector('#popup_show_group_edit #group_edit_tags').value
@@ -1249,6 +1255,8 @@ updateFeedOnOrder();
 updateFeedOnScroll();
 updateFeedOnClick();
 
+
+
 function createPost(post) {
 
     let new_post = document.createElement('article');
@@ -1257,12 +1265,14 @@ function createPost(post) {
     let images = '', bottom = '', like = '', dropdown = '', topics = '';
 
     imageControls = `
-     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" style="filter: invert(100%);">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" style="filter: invert(100%);">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </a>`
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-${post.id}" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
+    <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-${post.id}" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>`
 
     if (post.hasLiked) {
         like = '<h3 data-liked="1">&#x2764;</h3>'
@@ -1312,7 +1322,7 @@ function createPost(post) {
         })
 
         images = `
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div id="carousel-Controls-${post.id}" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 ${imageDiv}
             </div>
@@ -1882,7 +1892,6 @@ function timeSince(date) {
 }
 
 function createCustomMessageBody(notf) {
-
     if (notf.tipo == "Comment") {
         if (notf.id_parent == null)
             return notf.sender.username + " made a comment in your <a href=/post/" + notf.id_post + ">Post</a>";
@@ -1890,13 +1899,13 @@ function createCustomMessageBody(notf) {
             return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return "<a href=/profile/" + notf.sender.username + ">" + notf.sender.username + "</a>" + " wants to connect"; // TODO. accept/reject
+        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you.`;
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
