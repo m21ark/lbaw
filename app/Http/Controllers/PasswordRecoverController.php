@@ -79,6 +79,12 @@ class PasswordRecoverController extends Controller
 
         // THIS IS A GUEST endpoint ... no need for POLICY
 
+        if($request->password != $request->password_confirmation)
+            return redirect()->back()->with('error', 'Passwords do not match'); // input validation
+
+        if(strlen($request->password) < 8)
+            return redirect()->back()->with('error', 'Password needs to be at least 8 characters long'); // input validation
+
         $password = $request->password;
 
         // Validate the token

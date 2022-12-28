@@ -640,7 +640,14 @@ function sendCreateGroupRequest(event) {
 
     let res = confirm('Are you sure you want to create this group?');
     if (res) {
-        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility, tags: tags }, addedHandler('#popup_show_group_create'));
+        sendAjaxRequest('post', '/api/group', { name: name, description: description, visibility: visibility, tags: tags }, function () {
+            addedHandler('#popup_show_group_create')
+            if (this.status == 200) {
+                location.pathname = '/group/' + name;
+            }
+        })
+
+
         // TODO: Fazer redirect para grupo criado
     }
 
@@ -757,8 +764,8 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, () => {console.log(this.status);if (this.status >= 200 && this.status <= 300) {
-            location.pathname = '/profile/' + username;}});
+        sendFormData('post', '/api/profile/' + oldName, formData, () => {
+            location.pathname = '/profile/' + username;});
         
     }
 }
