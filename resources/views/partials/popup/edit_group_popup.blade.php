@@ -28,9 +28,13 @@
             ?>
 
             <label for="group_edit_tags" class="" data-toggle="tooltip" data-placement="top"
-                title="Topics of interest to a group should be separated by spaces">Topics</label>
-            <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                title="You can have up to 3 tags to share what the group is about. This tags are visible in the group page">Tags</label>
+            <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Add up to 3 group tags"
                 name="tags" value="{{ $topics }}">
+
+            <div id="group_edit_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+            </div>
 
             <label for="group_photo" class="">Profile Picture</label>
             <input type="file" class="form-control" id="group_photo" name="photo">

@@ -21,9 +21,13 @@
                 style="resize: none;"></textarea>
 
             <label for="group_create_tags" class="" data-toggle="tooltip" data-placement="top"
-                title="You can have up to 3 topics of interest to share what the group is about. This topics are visible in the group page">Topics</label>
-            <input type="text" id="group_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
+                title="You can have up to 3 tags to share what the group is about. This tags are visible in the group page">Topics</label>
+            <input type="text" id="group_create_tags" class="form-control mb-3" placeholder="Add up to 3 group tags"
                 name="tags">
+
+            <div id="group_create_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+            </div>
 
             <label for="group_visibility" class=" me-3" data-toggle="tooltip" data-placement="top"
                 title="Visibility influences who can view your content. If unchecked, the group is considered private and it's posts can only be seen by members. Otherwise, the content is available to everyone. Even if the group is marked as private, it can still be discovered in search and receive new join requests">Group

@@ -42,6 +42,10 @@
             <input type="text" id="profile_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
                 name="tags" value="{{ $topics }}">
 
+            <div id="profile_edit_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+            </div>
+
             <label for="profile_pic" class="" data-toggle="tooltip" data-placement="top"
                 title="Your profile picture can be publicly seen by every user.">Profile Picture</label>
             <input type="file" class="form-control" id="profile_pic" name="photo" />

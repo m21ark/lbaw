@@ -23,8 +23,12 @@
 
             <label for="post_create_tags" class="" data-toggle="tooltip" data-placement="top"
                 title="Post tags should be separated by spaces.">Tags</label>
-            <input type="text" id="post_create_tags" class="form-control mb-3" placeholder="Space separeted tags"
-                name="tags">
+            <input type="text" id="post_create_tags" class="form-control mb-3"
+                placeholder="Add up to 3 post tags" name="tags">
+
+            <div id="post_create_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+            </div>
 
             <label for="post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="post_photos" name="photos" multiple>

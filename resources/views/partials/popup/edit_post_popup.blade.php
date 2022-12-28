@@ -23,9 +23,14 @@
             $topics = implode(' ', $topics);
             ?>
 
-            <label for="post_edit_tags" class="">Topics</label>
-            <input type="text" id="post_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
+            <label for="post_edit_tags" class="">Tags</label>
+            <input type="text" id="post_edit_tags" class="form-control mb-3" placeholder="Add up to 3 post tags"
                 name="tags" value="{{ $topics }}">
+
+            <div id="post_edit_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+            </div>
+
 
             <label for="edit_post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="edit_post_photos" name="photos" multiple>
