@@ -656,7 +656,6 @@ function sendCreateGroupRequest(event) {
 function sendEditGroupRequest(event) {
 
     event.preventDefault();
-<<<<<<< HEAD
     let name = document.querySelector('#popup_show_group_edit #group_name').value
     let description = document.querySelector('#popup_show_group_edit #group_description').value
     let visibility = document.querySelector('#popup_show_group_edit #group_visibility').checked
@@ -664,15 +663,6 @@ function sendEditGroupRequest(event) {
     let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
     let tags = bubble_tags_array.join(' ');
     let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
-=======
-    let name = document.querySelector('#group_edit_page #group_name').value
-    let description = document.querySelector('#group_edit_page #group_description').value
-    let visibility = document.querySelector('#group_edit_page #group_visibility').checked
-    let oldName = document.querySelector('#group_edit_page #group_description').dataset.name
-    let id_group = document.querySelector('#group_edit_page #group_description').dataset.id
-    let tags = document.querySelector('#group_edit_page #group_edit_tags').value
-    let pho = document.querySelector('#group_edit_page #group_photo').files[0]
->>>>>>> 0fe4449283295505c460c94e133e97ed8f851967
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -775,7 +765,7 @@ function sendEditProfileRequest(event) {
     if (res) {
         sendFormData('post', '/api/profile/' + oldName, formData, () => {
             location.pathname = '/profile/' + username;});
-        
+
     }
 }
 
