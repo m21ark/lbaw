@@ -89,6 +89,7 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('edit_profile/{username}', 'ProfileController@showEdit')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
+
 Route::get('messages/', function () {
     if (!Auth::check())
         return abort('403');
@@ -129,7 +130,7 @@ Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 // ======================= OWNER CRUD =======================
 
-Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@addGroupOwner'); // talvez n seja post
+Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@addGroupOwner')->name('promoteMember'); // talvez n seja post
 
 
 // ======================= MEMBER CRUD =======================
