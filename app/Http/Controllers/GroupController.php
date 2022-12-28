@@ -41,6 +41,27 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showEdit($name, Request $request)
+    {
+        $request->validate([
+            'name' => 'string|exists:group,name',
+        ]);
+
+        $group = Group::where('name', $name)->first();
+
+        if ($group == null) { // Never reached, if that happens then someone hacked validator
+            //No group with that name so we return to the home page
+            return redirect()->route('home');
+        }
+
+        if (!$request->user()->can('view', $group) && !Auth::user()->isAdmin)
+        {
+            return abort('403');
+        }
+
+        return view('pages.edit_group', ['group' => $group, 'user' => Auth::user()]);
+    }
+
     public static function userInGroup(User $user1, Group $group)
     {   // METODO STATIC N PRECISA DE POLICY
         return DB::table('group_join_request')

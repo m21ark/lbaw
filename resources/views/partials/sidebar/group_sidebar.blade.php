@@ -8,7 +8,7 @@
             <h3 class="p-2 ">{{ $group->name }}
                 @auth
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                        <a class='btn btn-secondary' id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
+                        <a class='btn btn-secondary' href={{'/group/'.$group->name.'/edit'}} id="popup_btn_group_edit" data-idGroup="{{ $group->name }}">Edit</a>
                     @endif
                 @endauth
             </h3>

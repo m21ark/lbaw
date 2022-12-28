@@ -378,7 +378,6 @@ function addEventListeners() {
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
-        ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
         ['#popup_btn_report_post_create', popupControllReportPost],
         ['#sms_send_btn', sendMessage],
@@ -657,13 +656,13 @@ function sendCreateGroupRequest(event) {
 function sendEditGroupRequest(event) {
 
     event.preventDefault();
-    let name = document.querySelector('#popup_show_group_edit #group_name').value
-    let description = document.querySelector('#popup_show_group_edit #group_description').value
-    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').checked
-    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
-    let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
-    let tags = document.querySelector('#popup_show_group_edit #group_edit_tags').value
-    let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
+    let name = document.querySelector('#group_edit_page #group_name').value
+    let description = document.querySelector('#group_edit_page #group_description').value
+    let visibility = document.querySelector('#group_edit_page #group_visibility').checked
+    let oldName = document.querySelector('#group_edit_page #group_description').dataset.name
+    let id_group = document.querySelector('#group_edit_page #group_description').dataset.id
+    let tags = document.querySelector('#group_edit_page #group_edit_tags').value
+    let pho = document.querySelector('#group_edit_page #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -680,7 +679,7 @@ function sendEditGroupRequest(event) {
 
     let res = confirm('Are you sure you want to edit this group?');
     if (res)
-        sendFormData('post', '/api/group/' + oldName, formData, addedHandler('#popup_show_group_edit'));
+        sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
 
 }
 

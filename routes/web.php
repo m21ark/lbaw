@@ -88,6 +88,7 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('edit_profile/{username}', 'ProfileController@showEdit');
 Route::get('group/{name}', 'GroupController@show')->name('group');
+Route::get('group/{name}/edit', 'GroupController@showEdit');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 Route::get('messages/', function () {
     if (!Auth::check())

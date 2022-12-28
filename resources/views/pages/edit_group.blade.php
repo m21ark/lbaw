@@ -1,14 +1,17 @@
+@extends('layouts.app')
+
+@section('page_title', 'Edit Profile')
+
+@section('content')
+
 @if (Auth::check())
-    <div class="pop_up" hidden id="popup_show_group_edit">
+    <div style="max-width: 30em;margin:auto;margin-top:2em;" id="group_edit_page">
         <form style="width:100%;" method='post' action={{ route('editGroup', $group->name) }}
             enctype="multipart/form-data">
             {{ csrf_field() }}
             <!-- Start popup body -->
             <div class="d-flex justify-content-between align-items-top">
                 <h3 class="h3 mb-3 font-weight-normal">Edit Group</h3>
-                <a href="#" class="close_popup_btn" style="font-size: 2.5em">
-                    <i class="fa-solid fa-rectangle-xmark text-danger"></i>
-                </a>
             </div>
 
             <label for="group_name" class="">Group Name</label>
@@ -53,3 +56,6 @@
         </form>
     </div>
 @endif
+
+
+@endsection
