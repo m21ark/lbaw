@@ -732,7 +732,7 @@ function sendEditProfileRequest(event) {
     let email = document.querySelector('#profile_edit_page #user_email').value
     let bdate = document.querySelector('#profile_edit_page #user_bdate').value
     let bio = document.querySelector('#profile_edit_page #user_bio').value
-    let visibility = document.querySelector('#profile_edit_page #profile_visibility').value
+    let visibility = document.querySelector('#profile_edit_page #profile_visibility').checked
     let tags = document.querySelector('#profile_edit_page #profile_edit_tags').value
 
     let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name

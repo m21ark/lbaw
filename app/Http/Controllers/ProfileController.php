@@ -47,7 +47,11 @@ class ProfileController extends Controller
 
     public function showEdit($username)
     {
-        if (Auth::user()->username != $username || !Auth::user()->isAdmin) {
+        if (Auth::check() == false) {
+            return redirect()->route('home');
+        }
+
+        if (Auth::user()->username !== $username && !Auth::user()->isAdmin) {
             return redirect()->route('home');
         }
 
