@@ -685,7 +685,7 @@ function sendEditGroupRequest(event) {
 
 function sendDeleteGroupRequest(e) {
     e.preventDefault();
-    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name;
+    let oldName = document.querySelector('#group_edit_page #group_description').dataset.name;
     let res = confirm('Are you sure you want to delete this group?');
     if (res) {
         sendAjaxRequest('delete', '/api/group/' + oldName, {}, () => { window.location = '/home' });
@@ -770,15 +770,17 @@ function sendEditProfileRequest(event) {
 }
 
 
-function sendDeleteProfileRequest() {
+function sendDeleteProfileRequest(e) {
+    e.preventDefault();
     let username = document.querySelector('#profile_edit_page #user_name').dataset.name
 
     let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
-    if (res === username)
+    if (res === username) {
         sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
-    else
+    }
+    else {
         alert('Account not deleted!');
-
+    }
 }
 
 

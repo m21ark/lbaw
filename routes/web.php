@@ -126,7 +126,7 @@ Route::delete('api/group/{name}', 'GroupController@delete');
 // ======================= PROFILE CRUD =======================
 
 Route::post('api/profile/{id}', 'ProfileController@edit')->name('editProfile');
-Route::delete('api/profile/{username}', 'ProfileController@delete');
+Route::delete('api/profile/{username}', 'ProfileController@delete')->name('deleteProfile');
 
 // ======================= OWNER CRUD =======================
 
