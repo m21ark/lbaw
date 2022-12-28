@@ -369,7 +369,7 @@ function startContextualHelp() {
     
 }
 
-else if(url_atual.match("/group_list/.*/")!=null){
+else if(url_atual.match(/group_list\/.*/)){
     introJs().setOptions({
         steps: [{
             intro: "This is our my friends request page"
