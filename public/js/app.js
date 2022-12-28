@@ -373,7 +373,6 @@ function addEventListeners() {
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
-        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
         ['#popup_btn_report_post_create', popupControllReportPost],
         ['#sms_send_btn', sendMessage],
@@ -723,16 +722,16 @@ function sendDeleteGroupMemberRequest() {
 function sendEditProfileRequest(event) {
 
     event.preventDefault();
-    let username = document.querySelector('#popup_show_profile_edit #user_name').value
-    let email = document.querySelector('#popup_show_profile_edit #user_email').value
-    let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
-    let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
-    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').value
-    let tags = document.querySelector('#popup_show_profile_edit #profile_edit_tags').value
+    let username = document.querySelector('#profile_edit_page #user_name').value
+    let email = document.querySelector('#profile_edit_page #user_email').value
+    let bdate = document.querySelector('#profile_edit_page #user_bdate').value
+    let bio = document.querySelector('#profile_edit_page #user_bio').value
+    let visibility = document.querySelector('#profile_edit_page #profile_visibility').value
+    let tags = document.querySelector('#profile_edit_page #profile_edit_tags').value
 
-    let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
-    let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
-    let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
+    let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
+    let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
+    let pho = document.querySelectorAll('#profile_edit_page #profile_pic')[0].files[0];
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -752,14 +751,14 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, addedHandler('#popup_show_profile_edit'));
-        //todo: fazer redirect para o perfil editado
+        sendFormData('post', '/api/profile/' + oldName, formData, console.log);
+        location.pathname = '/profile/' + username;
     }
 }
 
 
 function sendDeleteProfileRequest() {
-    let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+    let username = document.querySelector('#profile_edit_page #user_name').dataset.name
 
     let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username)
@@ -1100,7 +1099,7 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
         }
 
         const recipientUser = document.location.pathname.substring(10);
-        document.querySelector('#compact_message_text_' + recipientUser).innerHTML =  message;
+        document.querySelector('#compact_message_text_' + recipientUser).innerHTML = message;
         document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
     }
 }

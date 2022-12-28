@@ -10,7 +10,7 @@
 
                     @auth
                         @if (Auth::user()->id == $user->id || Auth::user()->isAdmin)
-                            <a href="#" class="btn btn-secondary w-20" id="popup_btn_profile_edit">Edit</a>
+                            <a href="/edit_profile/{{ $user->username }}" class="btn btn-secondary w-20">Edit</a>
                         @endif
                     @endauth
 
