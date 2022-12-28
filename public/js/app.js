@@ -375,7 +375,7 @@ function addNotification(message_body, sender) {
 function addEventListeners() {
 
     let listener_list = [
-        ['#popup_btn_post', logItem('#popup_show_post')],
+        ['#popup_btn_post', () => { logItem('#popup_show_post')(); bubble_tags_array = []; }],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
@@ -556,6 +556,10 @@ function logItem(btn_id) {
     return function (e) {
         const item = document.querySelector(btn_id);
         item.toggleAttribute('hidden');
+
+        let drop = document.querySelector('.dropdown_menu')
+        if (drop)
+            drop.hidden = true;
     }
 }
 
@@ -614,11 +618,17 @@ function addedHandler(class_name) {
 }
 
 function closePopups() {
+
     let popups = document.querySelectorAll('.pop_up')
+
     if (popups)
         popups.forEach(e => {
             e.setAttribute('hidden', true);
         });
+
+
+
+    giveBackBubbleTags()
 }
 
 
@@ -656,13 +666,13 @@ function sendCreateGroupRequest(event) {
 function sendEditGroupRequest(event) {
 
     event.preventDefault();
-    let name = document.querySelector('#popup_show_group_edit #group_name').value
-    let description = document.querySelector('#popup_show_group_edit #group_description').value
-    let visibility = document.querySelector('#popup_show_group_edit #group_visibility').checked
-    let oldName = document.querySelector('#popup_show_group_edit #group_description').dataset.name
-    let id_group = document.querySelector('#popup_show_group_edit #group_description').dataset.id
+    let name = document.querySelector('#group_edit_page #group_name').value
+    let description = document.querySelector('#group_edit_page #group_description').value
+    let visibility = document.querySelector('#group_edit_page #group_visibility').checked
+    let oldName = document.querySelector('#group_edit_page #group_description').dataset.name
+    let id_group = document.querySelector('#group_edit_page #group_description').dataset.id
     let tags = bubble_tags_array.join(' ');
-    let pho = document.querySelector('#popup_show_group_edit #group_photo').files[0]
+    let pho = document.querySelector('#group_edit_page #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -678,9 +688,10 @@ function sendEditGroupRequest(event) {
     formData.append('tags', tags);
 
     let res = confirm('Are you sure you want to edit this group?');
-    if (res)
-        sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
-
+    if (!res)
+        return;
+    sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
+    location.pathname = '/group/' + name;
 }
 
 function sendDeleteGroupRequest(e) {
@@ -764,7 +775,8 @@ function sendEditProfileRequest(event) {
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
         sendFormData('post', '/api/profile/' + oldName, formData, () => {
-            location.pathname = '/profile/' + username;});
+            location.pathname = '/profile/' + username;
+        });
 
     }
 }
@@ -955,6 +967,7 @@ function sendCreatePostRequest(isProfile) {
         }
 
         event.preventDefault();
+        giveBackBubbleTags();
     }
 }
 
@@ -2299,18 +2312,40 @@ function removeBubbleTag(inputID, text) {
     }
 }
 
+function giveBackBubbleTags() {
+
+    let tagCont = document.querySelector('#post_create_tags_container')
+    let input = document.querySelector('#post_create_tags')
+    if (tagCont && input) {
+        tagCont.innerHTML = ""
+        input.value = ""
+        input.disabled = false
+    }
+
+    bubble_tags_array = [];
+    const arr = ['#group_create_tags', '#post_edit_tags', '#group_edit_tags', '#profile_edit_tags']
+
+    arr.forEach(e => {
+        let elem = document.querySelector(e)
+        if (elem) {
+            let new_element = elem.cloneNode(true);
+            elem.parentNode.replaceChild(new_element, elem);
+        }
+    })
+
+    addBubbleTagBehavior('#group_create_tags', '#group_create_tags_container', 3)
+    addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
+    addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
+    addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
+}
+
 addBubbleTagBehavior('#post_create_tags', '#post_create_tags_container', 3)
 addBubbleTagBehavior('#group_create_tags', '#group_create_tags_container', 3)
-
 addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
 addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
-
 addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
 
+// setInterval(() => { console.log(bubble_tags_array) }, 500);
+
 // ================================== END OF BUBBLE TAGS ==================================
-
-
-setInterval(() => {
-    console.log(bubble_tags_array)
-}, 1000)
 
