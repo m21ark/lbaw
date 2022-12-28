@@ -5,9 +5,11 @@
                 <h5 data-placement="right" title="Groups where you are an owner">Groups Owned</h5>
                 <ul class="list-unstyled list-group list-group-flush">
                     @foreach (Auth::user()->groupsOwner as $x)
-                        <a href={{ url('/group/' . $x->group->name) }} class="btn" aria-current="page">
-                            <li class="list-group-item">{{ $x->group->name }} </li>
-                        </a>
+                        <li class="list-group-item">
+                            <a href={{ url('/group/' . $x->group->name) }} class="btn"
+                                aria-current="page">{{ $x->group->name }}
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
             </div>
@@ -18,9 +20,11 @@
                 <h5 data-placement="right" title="Groups where you are a member">Member Groups</h5>
                 <ul class="list-unstyled list-group list-group-flush">
                     @foreach (Auth::user()->groupsMember as $x)
-                        <a href={{ url('/group/' . $x->group->name) }} class="btn" aria-current="page">
-                            <li class="list-group-item">{{ $x->group->name }} </li>
-                        </a>
+                        <li class="list-group-item">
+                            <a href={{ url('/group/' . $x->group->name) }} class="btn" aria-current="page">
+                                {{ $x->group->name }}
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
             </div>

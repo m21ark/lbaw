@@ -14,8 +14,8 @@
         @if ($can_view_timeline)
             @include('partials.group_feed')
         @else
-            <h2 class="mt-4">Join Group to see more</h2>
-            <i class="fa-solid fa-lock fa-10x"></i>
+            <h2 class="mt-5"> <i class="fa-solid fa-lock"></i> This group is private </h2>
+            <h3 class="mt-3">Join group to see content</h3>
         @endif
     </div>
 @endsection
