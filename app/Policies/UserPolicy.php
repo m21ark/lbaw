@@ -34,11 +34,11 @@ class UserPolicy
     public function delete(User $user, User $model)
     {
         // DELETE A FRIEND FROM FRIENDS LIST
-        return PostController::areFriends($user, $model) 
-        || FriendsRequest::where('id_user_sender', '=', $user->id)
-        ->where('id_user_receiver', '=', $model->id) 
-        || FriendsRequest::where('id_user_sender', '=', $user->id)
-        ->where('id_user_receiver', '=', $model->id);
+        return PostController::areFriends($user, $model)
+            || FriendsRequest::where('id_user_sender', '=', $user->id)
+            ->where('id_user_receiver', '=', $model->id)
+            || FriendsRequest::where('id_user_sender', '=', $user->id)
+            ->where('id_user_receiver', '=', $model->id);
     }
 
     public function forceDelete(User $user, User $model)

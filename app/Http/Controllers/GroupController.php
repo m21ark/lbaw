@@ -41,6 +41,27 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showEdit($name, Request $request)
+    {
+        $request->validate([
+            'name' => 'string|exists:group,name',
+        ]);
+
+        $group = Group::where('name', $name)->first();
+
+        if ($group == null) { // Never reached, if that happens then someone hacked validator
+            //No group with that name so we return to the home page
+            return redirect()->route('home');
+        }
+
+        if (!$request->user()->can('view', $group) && !Auth::user()->isAdmin)
+        {
+            return abort('403');
+        }
+
+        return view('pages.edit_group', ['group' => $group, 'user' => Auth::user()]);
+    }
+
     public static function userInGroup(User $user1, Group $group)
     {   // METODO STATIC N PRECISA DE POLICY
         return DB::table('group_join_request')
@@ -63,14 +84,11 @@ class GroupController extends Controller
         }
 
         // No need for policy ... the user just only has to have a authenticated account
-        // e se já houve um com o nome ..
 
         $group = new Group();
-
         $group->name = strip_tags($request->input('name'));
         $group->description = strip_tags($request->input('description'));
         $group->visibility = $request->input('visibility');
-        // TODO : ADD PROFILE IMAGE
 
         // Insert Group Owner
         $ownerId = Auth::user()->id;
@@ -78,8 +96,10 @@ class GroupController extends Controller
         $group->save();
 
         $owner = $this->addGroupOwner($ownerId, $group->id);
-
         $group->owners()->save($owner);
+
+        $this->addGroupMember($ownerId, $group->id);
+
         $this->add_topics($request, $group);
 
         return response()->json(['The group was created with success' => 200]);
@@ -208,6 +228,18 @@ class GroupController extends Controller
     }
 
 
+
+    public function addGroupMember($idUser, $idGroup)
+    {
+        /*
+            This is not an api endpoint. It's called in another function that grantes the correct policy
+            Hence this does not need a Policy
+        */
+
+        DB::table('group_join_request')->insert(
+            ['id_group' => $idGroup, 'id_user' => $idUser, 'acceptance_status' => 'Accepted']
+        );
+    }
 
     public function addGroupOwner($idUser, $idGroup)
     {
