@@ -17,5 +17,3 @@
     'popup_id' => 'popup_show_group_post',
     'group_name' => $group->name,
 ])
-
-@include('partials.popup.edit_group_popup', ['group' => $group])

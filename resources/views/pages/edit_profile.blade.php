@@ -72,8 +72,10 @@
 
             <a href="/resetAuthPassword" class="w-100 btn btn-outline-dark mt-4 p-2">Change Password</a>
 
-            <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" type="submit">Delete
-                Account</button>
+            <input type="submit" class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button"
+                method="delete" formaction={{ route('deleteProfile', $user->username) }} type="submit"
+                value="Delete Account" />
+
 
             <div style="margin-top: 2em">
                 <a href="/profile/{{ $user->username }}">Go back to profile</a>
