@@ -25,7 +25,8 @@
                         </div>
                     @else
                         <label for="inputUsername" class=" mt-2" data-toggle="tooltip" data-placement="top"
-                        title="The username should be unique and serve as an identifier for each user. You can change it later.">Username <small>(Required)</small></label>
+                            title="The username should be unique and serve as an identifier for each user. You can change it later.">Username
+                            <small>(Required)</small></label>
                         <input type="text" id="inputUsername" value="{{ old('username') }}" class="form-control mb-3"
                             placeholder="Username" name="username" required autofocus>
                     @endif
@@ -46,14 +47,14 @@
 
                     @if ($errors->has('birthdate'))
                         <label for="inputDate" class=" mt-2" data-toggle="tooltip" data-placement="top"
-                        title="You must be above 16 to register in Nexus">Birthdate <small>(Required)</small></label>
+                            title="You must be above 16 to register in Nexus">Birthdate <small>(Required)</small></label>
                         <input type="date" id="inputDate" class="form-control mb-3 is-invalid" name="birthdate" required>
                         <div class="text-danger">
                             <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('birthdate') }}
                         </div>
                     @else
                         <label for="inputDate" class=" mt-2" data-toggle="tooltip" data-placement="top"
-                        title="You must be above 16 to register in Nexus">Birthdate <small>(Required)</small></label>
+                            title="You must be above 16 to register in Nexus">Birthdate <small>(Required)</small></label>
                         <input type="date" id="inputDate" class="form-control mb-3" name="birthdate" required>
                     @endif
 

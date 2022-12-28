@@ -20,14 +20,19 @@
                 <fieldset>
                     <legend>Login Form</legend>
                     @if ($errors->has('email'))
-                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top" title="The email account associated with your nexus account">Email Address <small>(Required)</small></label>
-                        <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3 is-invalid"
-                            placeholder="Email" name="email" required autofocus autofocus="">
+                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top"
+                            title="The email account associated with your nexus account">Email Address
+                            <small>(Required)</small></label>
+                        <input type="email" id="inputEmail" value="{{ old('email') }}"
+                            class="form-control mb-3 is-invalid" placeholder="Email" name="email" required autofocus
+                            autofocus="">
                         <div class="text-danger">
                             <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('email') }}
                         </div>
                     @else
-                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top" title="The email account associated with your nexus account">Email Address <small>(Required)</small></label>
+                        <label for="inputEmail" class="" data-toggle="tooltip" data-placement="top"
+                            title="The email account associated with your nexus account">Email Address
+                            <small>(Required)</small></label>
                         <input type="email" id="inputEmail" value="{{ old('email') }}" class="form-control mb-3"
                             placeholder="Email" name="email" required autofocus autofocus="">
                     @endif

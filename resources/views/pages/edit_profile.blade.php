@@ -1,16 +1,16 @@
-@if (Auth::check())
-    <div class="pop_up" hidden id="popup_show_profile_edit">
+@extends('layouts.app')
+
+@section('page_title', 'Edit Profile')
+
+@section('content')
+
+    <div style="max-width: 30em;margin:auto;margin-top:2em;" id="profile_edit_page">
         <form style="width:100%;" method='post' action={{ route('editProfile', $user->username) }}
             enctype="multipart/form-data">
 
-            <!-- Start popup body -->
             {{ csrf_field() }}
-            <div class="d-flex justify-content-between align-items-top">
-                <h3 class="h3 mb-3 font-weight-normal">Edit Profile</h3>
-                <a href="#" class="close_popup_btn" style="font-size: 2.5em">
-                    <i class="fa-solid fa-rectangle-xmark text-danger"></i>
-                </a>
-            </div>
+
+            <h3 class="h3 mt-3 mb-3 font-weight-normal">Edit Profile</h3>
 
             <label for="user_name" class="" data-toggle="tooltip" data-placement="top"
                 title="The username should be unique and serve as an identifier for each user. We don't recommend you change it very often.">Username</label>
@@ -18,8 +18,8 @@
                 data-id="{{ $user->id }}" class="form-control mb-3" placeholder="Username">
 
             <label for="user_email" class=" mt-2">Email address</label>
-            <input type="email" id="user_email" class="form-control mb-3" value="{{ $user->email }}"
-                placeholder="Email" required>
+            <input type="email" id="user_email" class="form-control mb-3" value="{{ $user->email }}" placeholder="Email"
+                required>
 
             <label for="user_bdate" class=" mt-2" data-toggle="tooltip" data-placement="top"
                 title="Your birthdate shouldn't be changed unless an error ocurred.">Birthdate</label>
@@ -54,15 +54,19 @@
                     id="flexSwitchCheckChecked" @if ($user->visibility) checked @endif>
             </div>
 
-            <!-- TODO: Falta se quer mudar de passe(cuidado com a hash)-->
-
             <button class="btn btn-lg btn-primary mt-4 w-100" id="edit_profile_button" type="submit">Save
                 Changes</button>
 
+            <a href="/resetAuthPassword" class="w-100 btn btn-outline-dark mt-4 p-2">Change Password</a>
+
             <button class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" type="submit">Delete
                 Account</button>
-            <!-- End popup body -->
+
+            <div style="margin-top: 2em">
+                <a href="/profile/{{ $user->username }}">Go back to profile</a>
+            </div>
 
         </form>
     </div>
-@endif
+
+@endsection

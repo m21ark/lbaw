@@ -45,6 +45,16 @@ class ProfileController extends Controller
         return view('pages.profile', ['user' => $user, 'statistics' => $statistics, 'friends' => $friends]);
     }
 
+    public function showEdit($username)
+    {
+        if (Auth::user()->username != $username || !Auth::user()->isAdmin) {
+            return redirect()->route('home');
+        }
+
+        $user = User::where('username', $username)->first();
+        return view('pages.edit_profile', ['user' => $user]);
+    }
+
     public function edit(Request $request)
     {
 

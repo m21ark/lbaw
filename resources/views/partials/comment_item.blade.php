@@ -1,4 +1,4 @@
-<div class="card mb-4 comment_item">
+<div class="card mb-4 comment_item" id="comment_item_{{ $comment->id }}">
     <div class="card-header d-flex justify-content-evenly align-items-center">
         @isset($showPostLink)
             <p></p>

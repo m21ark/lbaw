@@ -59,7 +59,7 @@ class SearchController extends Controller
     {   // this also includes de tsvectors of bio
         // FUNCTION CALLED IN SEARCH
         $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('username', 'LIKE', '%' . $query_string . '%')
+            ->orWhere('username', 'ILIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
             ->limit(40)
@@ -73,7 +73,7 @@ class SearchController extends Controller
     {   // this also includes de tsvectors of bio
         // FUNCTION CALLED IN SEARCH
         $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('name', 'LIKE', '%' . $query_string . '%')
+            ->orWhere('name', 'ILIKE', '%' . $query_string . '%')
             ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
             ->orderBy('ranking', 'desc')
             ->limit(40)
@@ -231,7 +231,7 @@ class SearchController extends Controller
     {
         // FUNCTION CALLED IN SEARCH
 
-        $topics = Topic::where('topic', 'LIKE', '%' . $query_string . '%')
+        $topics = Topic::where('topic', 'ILIKE', '%' . $query_string . '%')
             ->limit(30)
             ->get();
 

@@ -16,7 +16,11 @@ Route::get('/forgot-password-sent', function () {
 
 Route::get('/password/reset/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+})->name('password.reset');
+
+
+Route::get('/resetAuthPassword', 'PasswordRecoverController@showChangePassword');
+
 
 Route::post('reset_password_without_token', 'PasswordRecoverController@validatePasswordRequest');
 Route::post('reset_password_with_token', 'PasswordRecoverController@resetPassword');
@@ -82,15 +86,16 @@ Route::get('comment_list/{username}', "ProfileController@listComments");
 
 Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
+Route::get('edit_profile/{username}', 'ProfileController@showEdit')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('search/{query}', 'SearchController@show')->name('search');
-Route::get('messages/', function() {
-    if (!Auth::check()) 
+Route::get('messages/', function () {
+    if (!Auth::check())
         return abort('403');
 
     $user = Auth::user();
     return view('pages.messages', ['user' => $user, 'messages' => null, 'sender' => null]);
-}) -> name('message_home');
+})->name('message_home');
 Route::get('messages/{sender_username}', 'MessagesController@show')->name('messages');
 Route::get('user/friends/requests', 'FriendsRequestController@show');
 Route::get('user/friends/{username}', 'FriendsRequestController@friends');

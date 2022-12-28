@@ -20,7 +20,7 @@ if (user_header != null) {
 
         // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
-            id_post: data.obj.id_post ?? (data.obj.comment !==undefined ? data.obj.comment.id_post : null),
+            id_post: data.obj.id_post ?? (data.obj.comment !== undefined ? data.obj.comment.id_post : null),
             sender: data.sender,
             notification_date: Date.now(),
             id_parent: data.obj.id_parent,
@@ -137,22 +137,22 @@ if (user_header != null) {
         const servers = {
             iceServers: [
                 {
-                  urls: "stun:relay.metered.ca:80",
+                    urls: "stun:relay.metered.ca:80",
                 },
                 {
-                  urls: "turn:relay.metered.ca:80",
-                  username: "efb717a8ddfc21d15bb72a5d",
-                  credential: "/8ZyEZ2tVt/zMXVW",
+                    urls: "turn:relay.metered.ca:80",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
                 },
                 {
-                  urls: "turn:relay.metered.ca:443",
-                  username: "efb717a8ddfc21d15bb72a5d",
-                  credential: "/8ZyEZ2tVt/zMXVW",
+                    urls: "turn:relay.metered.ca:443",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
                 },
                 {
-                  urls: "turn:relay.metered.ca:443?transport=tcp",
-                  username: "efb717a8ddfc21d15bb72a5d",
-                  credential: "/8ZyEZ2tVt/zMXVW",
+                    urls: "turn:relay.metered.ca:443?transport=tcp",
+                    username: "efb717a8ddfc21d15bb72a5d",
+                    credential: "/8ZyEZ2tVt/zMXVW",
                 },
             ],
         };
@@ -374,13 +374,11 @@ function addNotification(message_body, sender) {
 
 function addEventListeners() {
 
-    // Toggle para botões que escondem paginas
     let listener_list = [
         ['#popup_btn_post', logItem('#popup_show_post')],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_group_edit', logItem('#popup_show_group_edit')],
-        ['#popup_btn_profile_edit', logItem('#popup_show_profile_edit')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
         ['#popup_btn_report_post_create', popupControllReportPost],
         ['#sms_send_btn', sendMessage],
@@ -448,24 +446,35 @@ function addEventListeners() {
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
     });
-
-
 }
 
 function sendRejectAllReportsRequest(event) {
     userID = document.querySelector('#reject_all_reports').dataset.userid
 
     let res = confirm('Are you sure you want to reject all reports?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/report/reject_all/${userID}`, {}, () => { });
+        document.querySelector('#reports_list').innerHTML = ''
+        document.querySelector('#reports_list').innerHTML = '<h3 class="text-center mt-4">No reports to show</h3>'
+        document.querySelector('#reports_list_count').innerHTML = '0'
+        document.querySelector('#reject_all_reports').remove()
+    }
 }
 
 function sendRejectReportRequest(event) {
     id = event.currentTarget.dataset.reportid
 
     let res = confirm('Are you sure you want to reject this report?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => { });
+        document.querySelector(`#reports_list_item_${id}`).remove()
+        document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
+        if (document.querySelector('#reports_list_count').innerHTML == 0) {
+            document.querySelector('#reports_list').innerHTML = '<h3 class="text-center mt-4">No reports to show</h3>'
+            document.querySelector('#reject_all_reports').remove()
+        }
+    }
+
 }
 
 function commentPopupsController() {
@@ -488,16 +497,22 @@ function sendBanUserRequest(event) {
     time_selected = elem.value
 
     let res = confirm('Are you sure you want to ban this user?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
+        location.reload()
+    }
+
 }
 
 function sendUnbanUserRequest(event) {
     userID = document.querySelector('#unban_user_btn').dataset.userid
 
     let res = confirm('Are you sure you want to unban this user?');
-    if (res)
+    if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/8`, {}, () => { });
+        location.reload()
+    }
+
 }
 
 function commentRepliesController() {
@@ -713,16 +728,16 @@ function sendDeleteGroupMemberRequest() {
 function sendEditProfileRequest(event) {
 
     event.preventDefault();
-    let username = document.querySelector('#popup_show_profile_edit #user_name').value
-    let email = document.querySelector('#popup_show_profile_edit #user_email').value
-    let bdate = document.querySelector('#popup_show_profile_edit #user_bdate').value
-    let bio = document.querySelector('#popup_show_profile_edit #user_bio').value
-    let visibility = document.querySelector('#popup_show_profile_edit #profile_visibility').checked
-    let tags = document.querySelector('#popup_show_profile_edit #profile_edit_tags').value
+    let username = document.querySelector('#profile_edit_page #user_name').value
+    let email = document.querySelector('#profile_edit_page #user_email').value
+    let bdate = document.querySelector('#profile_edit_page #user_bdate').value
+    let bio = document.querySelector('#profile_edit_page #user_bio').value
+    let visibility = document.querySelector('#profile_edit_page #profile_visibility').value
+    let tags = document.querySelector('#profile_edit_page #profile_edit_tags').value
 
-    let oldName = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
-    let idUser = document.querySelector('#popup_show_profile_edit #user_name').dataset.id
-    let pho = document.querySelectorAll('#popup_show_profile_edit #profile_pic')[0].files[0];
+    let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
+    let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
+    let pho = document.querySelectorAll('#profile_edit_page #profile_pic')[0].files[0];
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
@@ -742,14 +757,14 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, addedHandler('#popup_show_profile_edit'));
-        //todo: fazer redirect para o perfil editado
+        sendFormData('post', '/api/profile/' + oldName, formData, console.log);
+        location.pathname = '/profile/' + username;
     }
 }
 
 
 function sendDeleteProfileRequest() {
-    let username = document.querySelector('#popup_show_profile_edit #user_name').dataset.name
+    let username = document.querySelector('#profile_edit_page #user_name').dataset.name
 
     let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username)
@@ -810,7 +825,11 @@ function sendCreateCommentRequest() {
 
     let res = confirm('Are you sure you want to publish this comment?');
     if (res) {
-        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, () => { });
+        sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, function () {
+            let comment_div = document.createElement('div')
+            comment_div.innerHTML = this.responseText
+            document.querySelector('#post_comment_section').appendChild(comment_div)
+        });
         document.querySelector('#comment_post_input').value = ''
         // TODO falta adicionar comentario e a notificao de action success
     }
@@ -829,7 +848,7 @@ function sendEditCommentRequest() {
     let res = confirm('Are you sure you want edit this comment?');
     if (res) {
         sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
-        //location.reload();
+        document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
         logItem('#popup_show_comment_edit')(0);
     }
 
@@ -842,7 +861,8 @@ function sendDeleteCommentRequest() {
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
         sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
-        location.reload();
+        document.querySelector(`#comment_item_${id_comment}`).remove()
+        logItem('#popup_show_comment_edit')(0);
     }
 }
 
@@ -1004,7 +1024,6 @@ function sms_html(art, isSender, message, time) {
         art.appendChild(div);
     }
     else {
-
         let photo = document.querySelector("#sms_photo").src;
         let time_anchor = time !== null ? `<p class="small ms-3 mb-3 rounded-3 text-muted">${time}</p>` : '';
         let div = createElementFromHTML(`
@@ -1046,6 +1065,10 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             document.querySelector('.message_body').appendChild(art.lastChild);
             var text = document.createTextNode('');
             document.querySelector('.message_body').append(text);
+
+            const recipientUser = document.location.pathname.substring(10);
+            document.querySelector('#compact_message_text_' + recipientUser).innerHTML = message;
+            document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
             return;
         }
         else {
@@ -1059,6 +1082,8 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
                 <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">${message}</p>
                 `);
                 last_messanger.lastElementChild.previousElementSibling.insertBefore(new_sms, last_time_anchor)
+                document.querySelector('.message_body').appendChild(art);
+
             }
             else if ((!isSender && last_messanger.classList.contains('justify-content-start'))) {
                 let last_time_anchor = last_messanger.lastElementChild.lastElementChild
@@ -1078,6 +1103,10 @@ function uploadSms(isSender, message) { // NAO QUERO SABER SE DEU CORRETO, TALVE
             var text = document.createTextNode('');
             document.querySelector('.message_body').append(text);
         }
+
+        const recipientUser = document.location.pathname.substring(10);
+        document.querySelector('#compact_message_text_' + recipientUser).innerHTML = message;
+        document.querySelector('#compact_message_time_' + recipientUser).innerHTML = 'now';
     }
 }
 
@@ -1236,11 +1265,11 @@ function createPost(post) {
     let images = '', bottom = '', like = '', dropdown = '', topics = '';
 
     imageControls = `
-    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-${post.id }" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-Controls-${post.id}" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>
     <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-${post.id }" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel-Controls-${post.id}" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"  style="filter: invert(100%);"></span>
         <span class="visually-hidden">Next</span>
     </button>`
@@ -1293,7 +1322,7 @@ function createPost(post) {
         })
 
         images = `
-        <div id="carousel-Controls-${post.id }" class="carousel slide" data-ride="carousel">
+        <div id="carousel-Controls-${post.id}" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 ${imageDiv}
             </div>
@@ -1559,7 +1588,7 @@ function createUserCard(user) {
 
     let bio_short = user.bio;
     if (bio_short.length > 50)
-        bio_short = user.bio.substring(0, 100) + '...'
+        bio_short = user.bio.substring(0, 75) + '...'
 
     if (user.visibility === true) {
         privacy = 'Public'
@@ -1595,7 +1624,7 @@ function createGroupCard(group) {
 
     let bio_short = group.description;
     if (bio_short.length > 50)
-        bio_short = bio_short.substring(0, 100) + '...'
+        bio_short = bio_short.substring(0, 75) + '...'
 
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
@@ -1721,8 +1750,8 @@ function createUserReportCardPending(user) {
 
     new_card.innerHTML = `
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
-        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
-        <a>${user.report_count} reports</a>
+        <a class="me-3" style="width:10em" href='/profile/${user.username}'>${user.username}</a>
+        <a style="width:5em">${user.report_count} reports</a>
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">View</a>
     `
 
@@ -1735,7 +1764,7 @@ function createUserReportCardPast(user) {
     new_card.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2')
 
     if (user.decision === 'Rejected') {
-        button = `<a href="#" class=" btn btn-success">REJ</a>`
+        button = `<a href="#" class=" btn btn-success" style="width:7em">REJ</a>`
     } else if (user.decision === 'Accepted') {
         let banDate = new Date(user.ban_date).getTime();
         let today = new Date().getTime();
@@ -1747,17 +1776,17 @@ function createUserReportCardPast(user) {
         }
 
         if (time > 0) {
-            button = `<a href="#" class=" btn btn-warning">${time}d</a>`
+            button = `<a href="#" class=" btn btn-warning" style="width:7em">${time}d</a>`
         } else {
-            button = `<a href="#" class=" btn btn-info">Finished</a>`
+            button = `<a href="#" class=" btn btn-info" style="width:7em">Finished</a>`
         }
 
     }
 
     new_card.innerHTML = `
         <img class="me-3 rounded-circle" src="/${user.photo}" alt="User Report Profile Image" width="50" height="50">
-        <a class="me-3" href='/profile/${user.username}'>${user.username}</a>
-        <a class="text-muted text-decoration-none">${user.decision_date}</a>
+        <a class="me-3" style="width:10em" href='/profile/${user.username}'>${user.username}</a>
+        <a class="text-muted text-decoration-none" style="width:7em">${user.decision_date}</a>
     ` + button + `
         <a href="/admin/report/${user.username}" class="btn btn-outline-dark">Edit</a>
     `;
@@ -1870,7 +1899,7 @@ function createCustomMessageBody(notf) {
             return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you.`; 
+        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you.`;
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
@@ -1967,6 +1996,9 @@ function sendRequestResponse(isAFriendReq, accept) {
         let id = this.id.split("_")[1];
         let response = accept ? "accept" : "reject";
 
+        let res = confirm("You sure you want to " + response + " this request?");
+        if (!res) return;
+
         let gname = window.location.pathname.split('/')[2];;
 
         let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname + '/request/' + id + "/" + response;
@@ -2062,6 +2094,10 @@ function deleteFriendship() {
 
 function deleteFriendFromFriendPage() {
     let card = this.parentNode.parentNode.parentNode
+
+    let res = confirm("You sure you want to remove this friend?");
+    if (!res) return;
+
     sendAjaxRequest('delete', "/api/user/friend/" + this.dataset.id, {}, function (e) {
         if (this.status == 200) {
             card.style = "display: none";

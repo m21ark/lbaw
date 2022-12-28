@@ -89,7 +89,8 @@
     <h3 class="mb-4">Members</h3>
 
     <div class="list-group align-items-center d-flex mb-2 group_member_list">
-        @if (Auth::check() && (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin))
+        @if (Auth::check() &&
+            (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin))
             <a href='/group/{{ $group->name }}/requests' class="btn btn-outline-secondary mb-3"><i
                     class="fa-solid fa-user-group"></i> Pendent Requests
                 ({{ count($group->groupJoinRequests->where('acceptance_status', 'Pendent')->toArray()) }})</a>

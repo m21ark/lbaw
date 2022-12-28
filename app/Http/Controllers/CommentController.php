@@ -40,6 +40,8 @@ class CommentController extends Controller
                 Auth::user(),
                 $comment
             ));
+
+            return view('partials.comment_item', ['comment' => $comment])->render();
         } else if (sizeof($matches[0]) === 1) {
 
             // TODO adicionar notificação de erro
@@ -79,6 +81,8 @@ class CommentController extends Controller
                     Auth::user(),
                     $comment
                 ));
+
+                return view('partials.comment_item', ['comment' => $comment])->render();
             }
         }
     }

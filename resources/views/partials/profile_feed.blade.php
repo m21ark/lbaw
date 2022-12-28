@@ -17,6 +17,3 @@
         <img src="/NotFriends.jpg" class="img-fluid mt-4" alt="You are not friends. Please make a friends request">
     @endif
 </div>
-
-<!-- Edit Profile Popup -->
-@include('partials.popup.edit_profile_popup', ['user' => $user])

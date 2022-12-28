@@ -58,6 +58,21 @@ class PasswordRecoverController extends Controller
         return redirect()->route('forgot-password-sent');
     }
 
+    public function showChangePassword()
+    {
+        if (!auth()->check())
+            return redirect()->route('home');
+
+        $token = Str::random(40);
+
+        DB::table('password_resets')->insert([
+            'email' => Auth::user()->email,
+            'token' => $token,
+        ]);
+
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
     public function resetPassword(Request $request)
     {
         // TODO: Validate password

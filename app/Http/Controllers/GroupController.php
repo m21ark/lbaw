@@ -19,7 +19,7 @@ class GroupController extends Controller
     {
 
         $request->validate([
-            'name' => 'string|exists:group,name', 
+            'name' => 'string|exists:group,name',
         ]);
 
         $group = Group::where('name', $name)->first();
@@ -33,10 +33,11 @@ class GroupController extends Controller
         if (!$group->visibility) {
             $can_view_timeline = Auth::check() ? $request->user()->can('view', $group) : false; // POLICY
         }
-        return view('pages.group', ['group' => $group, 
-        'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false, 
-        'user' => Auth::user(),
-        'can_view_timeline' => $can_view_timeline,
+        return view('pages.group', [
+            'group' => $group,
+            'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false,
+            'user' => Auth::user(),
+            'can_view_timeline' => $can_view_timeline,
         ]);
     }
 
@@ -142,7 +143,7 @@ class GroupController extends Controller
 
         if ($request->hasFile('photo')) {
             $request->validate([
-            'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
+                'photo' => 'image|mimes:jpg,jpeg,png,ico|min:1|max:50000', // VALIDATE IMAGE
             ]);
 
             $group->photo = 'group/' . strval($group->id) . '.jpg';
