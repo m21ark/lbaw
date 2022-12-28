@@ -757,8 +757,9 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, console.log);
-        location.pathname = '/profile/' + username;
+        sendFormData('post', '/api/profile/' + oldName, formData, () => {console.log(this.status);if (this.status >= 200 && this.status <= 300) {
+            location.pathname = '/profile/' + username;}});
+        
     }
 }
 
