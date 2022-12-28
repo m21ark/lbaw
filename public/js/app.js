@@ -375,7 +375,7 @@ function addNotification(message_body, sender) {
 function addEventListeners() {
 
     let listener_list = [
-        ['#popup_btn_post', logItem('#popup_show_post')],
+        ['#popup_btn_post', () => { logItem('#popup_show_post')(); bubble_tags_array = []; }],
         ['#popup_btn_group_post', logItem('#popup_show_group_post')],
         ['#popup_btn_group_create', logItem('#popup_show_group_create')],
         ['#popup_btn_post_edit', logItem('#popup_show_post_edit')],
@@ -556,6 +556,10 @@ function logItem(btn_id) {
     return function (e) {
         const item = document.querySelector(btn_id);
         item.toggleAttribute('hidden');
+
+        let drop = document.querySelector('.dropdown_menu')
+        if (drop)
+            drop.hidden = true;
     }
 }
 
@@ -614,11 +618,17 @@ function addedHandler(class_name) {
 }
 
 function closePopups() {
+
     let popups = document.querySelectorAll('.pop_up')
+
     if (popups)
         popups.forEach(e => {
             e.setAttribute('hidden', true);
         });
+
+
+
+    giveBackBubbleTags()
 }
 
 
@@ -630,7 +640,7 @@ function sendCreateGroupRequest(event) {
     let name = document.querySelector('#popup_show_group_create #group_name').value
     let description = document.querySelector('#popup_show_group_create #group_description').value
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').checked
-    let tags = document.querySelector('#popup_show_group_create #group_create_tags').value
+    let tags = bubble_tags_array.join(' ');
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
@@ -661,7 +671,7 @@ function sendEditGroupRequest(event) {
     let visibility = document.querySelector('#group_edit_page #group_visibility').checked
     let oldName = document.querySelector('#group_edit_page #group_description').dataset.name
     let id_group = document.querySelector('#group_edit_page #group_description').dataset.id
-    let tags = document.querySelector('#group_edit_page #group_edit_tags').value
+    let tags = bubble_tags_array.join(' ');
     let pho = document.querySelector('#group_edit_page #group_photo').files[0]
 
     if (name == '' || description == '' || visibility == null) {
@@ -678,9 +688,10 @@ function sendEditGroupRequest(event) {
     formData.append('tags', tags);
 
     let res = confirm('Are you sure you want to edit this group?');
-    if (res)
-        sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
-
+    if (!res)
+        return;
+    sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
+    location.pathname = '/group/' + name;
 }
 
 function sendDeleteGroupRequest(e) {
@@ -739,7 +750,7 @@ function sendEditProfileRequest(event) {
     let bdate = document.querySelector('#profile_edit_page #user_bdate').value
     let bio = document.querySelector('#profile_edit_page #user_bio').value
     let visibility = document.querySelector('#profile_edit_page #profile_visibility').checked
-    let tags = document.querySelector('#profile_edit_page #profile_edit_tags').value
+    let tags = bubble_tags_array.join(' ');
 
     let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
     let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
@@ -764,8 +775,9 @@ function sendEditProfileRequest(event) {
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
         sendFormData('post', '/api/profile/' + oldName, formData, () => {
-            location.pathname = '/profile/' + username;});
-        
+            location.pathname = '/profile/' + username;
+        });
+
     }
 }
 
@@ -917,36 +929,33 @@ function sendCreatePostRequest(isProfile) {
 
         if (isProfile) {
             let textarea = document.querySelector('#popup_show_post textarea');
-            let tags = document.querySelector('#post_create_tags');
+            let tags = bubble_tags_array.join(' ');
             let photos = document.querySelector('#popup_show_post #post_photos').files;
             let res = confirm('Are you sure you want to profile post this?');
 
             let formData = new FormData();
 
             formData.append('text', textarea.value);
-            formData.append('tags', tags.value);
+            formData.append('tags', tags);
 
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
             }
 
-
-
             if (res && textarea != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_post'));
             textarea.value = ''
-            tags.value = ''
         }
 
         else {
             let textarea = document.querySelector('#popup_show_group_post textarea');
-            let tags = document.querySelector('#post_create_tags');
+            let tags = bubble_tags_array.join(' ');
             let res = confirm('Are you sure you want to group post this?');
             let photos = document.querySelector('#popup_show_group_post #post_photos').files;
 
             let formData = new FormData();
             formData.append('text', textarea.value);
-            formData.append('tags', tags.value);
+            formData.append('tags', tags);
             formData.append('group_name', textarea.dataset.group);
             for (var x = 0; x < photos.length; x++) {
                 formData.append("photos[]", photos[x]);
@@ -955,10 +964,10 @@ function sendCreatePostRequest(isProfile) {
             if (res && textarea.value != null)
                 sendFormData('post', '/api/post/', formData, addedHandler('#popup_show_group_post'));
             textarea.value = ''
-            tags.value = ''
         }
 
         event.preventDefault();
+        giveBackBubbleTags();
     }
 }
 
@@ -968,14 +977,14 @@ function sendEditPostRequest(event) {
     let res = confirm('Are you sure you want to edit this post?');
 
     let textarea = document.querySelector('#popup_show_post_edit textarea');
-    let tags = document.querySelector('#post_edit_tags');
+    let tags = bubble_tags_array.join(' ');
     let photos = document.querySelector('#popup_show_post_edit #edit_post_photos').files;
     let id = document.querySelector('#popup_show_post_edit #delete_post_button').dataset.id
 
 
     let formData = new FormData();
     formData.append('text', textarea.value);
-    formData.append('tags', tags.value);
+    formData.append('tags', tags);
     for (var x = 0; x < photos.length; x++) {
         formData.append("photos[]", photos[x]);
     }
@@ -2249,4 +2258,94 @@ let curr_path = window.location.pathname
 if (curr_path.substring(0, 7) == "/group/" || curr_path.substring(0, 10) == "/messages/") {
     setInterval(() => { checkResponsiveUI() }, 500);
 }
+
+// ================================== BUBBLE TAGS ==================================
+
+function addBubbleTagBehavior(inputID, tagsID, maxSize) {
+
+    const input = document.querySelector(inputID);
+    const tagsContainer = document.querySelector(tagsID);
+
+    if (input == null || tagsContainer == null) return;
+
+    let taglist = tagsContainer.querySelectorAll('span')
+
+    if (taglist.length > 0)
+        taglist.forEach(e => {
+            let text = e.innerText.trim();
+            bubble_tags_array.push(text);
+        });
+
+    input.addEventListener('keypress', function (event) {
+
+        if (event.key !== " ") return;
+        let text = input.value.trim();
+        if (text.length == 0) return;
+        input.value = "";
+        if (bubble_tags_array.includes(text)) return;
+        bubble_tags_array.push(text);
+
+        let tag = createElementFromHTML(`<span id="bubble_tag_item_${text}"
+    class="badge bg-light me-2 p-2 mb-2 text-dark" style="font-size:1.25em">${text}
+     <a href="#" onclick="removeBubbleTag('${inputID}','${text}')">
+     <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i></a>   </span>`);
+
+        tagsContainer.appendChild(tag);
+
+        if (bubble_tags_array.length >= maxSize) {
+            input.value = `Max ${maxSize} tags`;
+            input.disabled = true;
+            return;
+        }
+    });
+}
+
+let bubble_tags_array = [];
+function removeBubbleTag(inputID, text) {
+    let input = document.querySelector(inputID);
+    let tag = document.querySelector(`#bubble_tag_item_${text}`)
+    tag.remove()
+    bubble_tags_array = bubble_tags_array.filter(e => e != tag.innerText.trim())
+    if (input.disabled) {
+        input.disabled = false;
+        input.value = "";
+    }
+}
+
+function giveBackBubbleTags() {
+
+    let tagCont = document.querySelector('#post_create_tags_container')
+    let input = document.querySelector('#post_create_tags')
+    if (tagCont && input) {
+        tagCont.innerHTML = ""
+        input.value = ""
+        input.disabled = false
+    }
+
+    bubble_tags_array = [];
+    const arr = ['#group_create_tags', '#post_edit_tags', '#group_edit_tags', '#profile_edit_tags']
+
+    arr.forEach(e => {
+        let elem = document.querySelector(e)
+        if (elem) {
+            let new_element = elem.cloneNode(true);
+            elem.parentNode.replaceChild(new_element, elem);
+        }
+    })
+
+    addBubbleTagBehavior('#group_create_tags', '#group_create_tags_container', 3)
+    addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
+    addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
+    addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
+}
+
+addBubbleTagBehavior('#post_create_tags', '#post_create_tags_container', 3)
+addBubbleTagBehavior('#group_create_tags', '#group_create_tags_container', 3)
+addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
+addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
+addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
+
+// setInterval(() => { console.log(bubble_tags_array) }, 500);
+
+// ================================== END OF BUBBLE TAGS ==================================
 

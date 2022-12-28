@@ -33,14 +33,27 @@
             for ($i = 0; $i < sizeof($user->interests); $i++) {
                 array_push($topics, $user->interests[$i]->topic->topic);
             }
-            $topics = implode(' ', $topics);
             ?>
 
             <label for="profile_edit_tags" class="" data-toggle="tooltip" data-placement="top"
                 title="You can have up to 3 topics of interest to share your passions with the world. Your interests can be seen by everyone on your profile">Topics
                 of Interest</label>
-            <input type="text" id="profile_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
-                name="tags" value="{{ $topics }}">
+            <input type="text" id="profile_edit_tags" class="form-control mb-3" name="tags"
+                @if (sizeof($topics) == 3) disabled value="Max of 3 tags" @else placeholder="Add up to 3 profile interests" @endif>
+
+            <div id="profile_edit_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+                @foreach ($topics as $topic)
+                    <span id="bubble_tag_item_{{ $topic }}" class="badge bg-light me-2 p-2 mb-2 text-dark"
+                        style="font-size:1.25em">{{ $topic }}
+                        <a href="#" onclick="removeBubbleTag('#profile_edit_tags','{{ $topic }}')">
+                            <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i>
+                        </a>
+                    </span>
+                @endforeach
+            </div>
+
+
 
             <label for="profile_pic" class="" data-toggle="tooltip" data-placement="top"
                 title="Your profile picture can be publicly seen by every user.">Profile Picture</label>
@@ -59,9 +72,10 @@
 
             <a href="/resetAuthPassword" class="w-100 btn btn-outline-dark mt-4 p-2">Change Password</a>
 
-            <input type="submit" class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button" 
-                method="delete" formaction={{ route('deleteProfile', $user->username) }} type="submit" value="Delete Account" />
-            
+            <input type="submit" class="btn btn-lg btn-outline-danger mt-4 w-100" id="delete_profile_button"
+                method="delete" formaction={{ route('deleteProfile', $user->username) }} type="submit"
+                value="Delete Account" />
+
 
             <div style="margin-top: 2em">
                 <a href="/profile/{{ $user->username }}">Go back to profile</a>

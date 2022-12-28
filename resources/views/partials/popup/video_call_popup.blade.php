@@ -8,9 +8,7 @@
         </h3>
     </div>
 
-   
-    <video id="remoteview"  controls autoplay></video>
-    <video id="selfview" class="position-absolute bottom-0 end-0 mb-2" style="width: 30%;transform: translate(-5%, -2%);" controls autoplay
-        muted></video>
-
+    <video id="remoteview" controls autoplay></video>
+    <video id="selfview" class="position-absolute bottom-0 end-0 mb-2"
+        style="width: 30%;transform: translate(-5%, -2%);" controls autoplay muted></video>
 </div>

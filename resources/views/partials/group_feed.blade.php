@@ -17,4 +17,3 @@
     'popup_id' => 'popup_show_group_post',
     'group_name' => $group->name,
 ])
-

@@ -15,17 +15,30 @@
             <label for="post_text" class="">Description</label>
             <textarea rows="8" id="post_text" class="form-control mb-3" placeholder="Post Text" style="resize: none;">{{ $post->text }}</textarea>
 
+
             <?php
             $topics = [];
             for ($i = 0; $i < sizeof($post->topics); $i++) {
                 array_push($topics, $post->topics[$i]->topic->topic);
             }
-            $topics = implode(' ', $topics);
             ?>
 
-            <label for="post_edit_tags" class="">Topics</label>
-            <input type="text" id="post_edit_tags" class="form-control mb-3" placeholder="Space separeted tags"
-                name="tags" value="{{ $topics }}">
+            <label for="post_edit_tags" class="">Tags</label>
+            <input type="text" id="post_edit_tags" class="form-control mb-3" name="tags"
+                @if (sizeof($topics) == 3) disabled value="Max of 3 tags" @else placeholder="Add up to 3 post tags" @endif>
+
+            <div id="post_edit_tags_container" class="mb-2">
+                <!-- TAGS INSERTED HERE WITH JS -->
+                @foreach ($topics as $topic)
+                    <span id="bubble_tag_item_{{ $topic }}" class="badge bg-light me-2 p-2 mb-2 text-dark"
+                        style="font-size:1.25em">{{ $topic }}
+                        <a href="#" onclick="removeBubbleTag('#post_edit_tags','{{ $topic }}')">
+                            <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i>
+                        </a>
+                    </span>
+                @endforeach
+            </div>
+
 
             <label for="edit_post_photos" class="">Photos</label>
             <input type="file" class="form-control" id="edit_post_photos" name="photos" multiple>

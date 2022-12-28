@@ -54,8 +54,7 @@ class GroupController extends Controller
             return redirect()->route('home');
         }
 
-        if (!$request->user()->can('view', $group) && !Auth::user()->isAdmin)
-        {
+        if (!$request->user()->can('view', $group) && !Auth::user()->isAdmin) {
             return abort('403');
         }
 
