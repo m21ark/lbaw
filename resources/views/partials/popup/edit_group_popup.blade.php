@@ -19,21 +19,29 @@
             <textarea rows="8" id="group_description" class="form-control mb-3" placeholder="Group description"
                 data-name="{{ $group->name }}" data-id="{{ $group->id }}" style="resize: none;">{{ $group->description }}</textarea>
 
+
             <?php
             $topics = [];
             for ($i = 0; $i < sizeof($group->topics); $i++) {
                 array_push($topics, $group->topics[$i]->topic->topic);
             }
-            $topics = implode(' ', $topics);
             ?>
 
             <label for="group_edit_tags" class="" data-toggle="tooltip" data-placement="top"
                 title="You can have up to 3 tags to share what the group is about. This tags are visible in the group page">Tags</label>
-            <input type="text" id="group_edit_tags" class="form-control mb-3" placeholder="Add up to 3 group tags"
-                name="tags" value="{{ $topics }}">
+            <input type="text" id="group_edit_tags" class="form-control mb-3" name="tags"
+                @if (sizeof($topics) == 3) disabled value="Max of 3 tags" @else placeholder="Add up to 3 group tags" @endif>
 
             <div id="group_edit_tags_container" class="mb-2">
                 <!-- TAGS INSERTED HERE WITH JS -->
+                @foreach ($topics as $topic)
+                    <span id="bubble_tag_item_{{ $topic }}" class="badge bg-light me-2 p-2 mb-2 text-dark"
+                        style="font-size:1.25em">{{ $topic }}
+                        <a href="#" onclick="removeBubbleTag('#group_edit_tags','{{ $topic }}')">
+                            <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i>
+                        </a>
+                    </span>
+                @endforeach
             </div>
 
             <label for="group_photo" class="">Profile Picture</label>

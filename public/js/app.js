@@ -2253,7 +2253,13 @@ function addBubbleTagBehavior(inputID, tagsID, maxSize) {
 
     if (input == null || tagsContainer == null) return;
 
-    let tags_id = 1;
+    let taglist = tagsContainer.querySelectorAll('span')
+
+    if (taglist.length > 0)
+        taglist.forEach(e => {
+            let text = e.innerText.trim();
+            bubble_tags_array.push(text);
+        });
 
     input.addEventListener('keypress', function (event) {
 
@@ -2264,9 +2270,9 @@ function addBubbleTagBehavior(inputID, tagsID, maxSize) {
         if (bubble_tags_array.includes(text)) return;
         bubble_tags_array.push(text);
 
-        let tag = createElementFromHTML(`<span id="bubble_tag_item_${tags_id}"
+        let tag = createElementFromHTML(`<span id="bubble_tag_item_${text}"
     class="badge bg-light me-2 p-2 mb-2 text-dark" style="font-size:1.25em">${text}
-     <a href="#" onclick="removeBubbleTag('${inputID}',${tags_id++})">
+     <a href="#" onclick="removeBubbleTag('${inputID}','${text}')">
      <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i></a>   </span>`);
 
         tagsContainer.appendChild(tag);
@@ -2280,9 +2286,9 @@ function addBubbleTagBehavior(inputID, tagsID, maxSize) {
 }
 
 let bubble_tags_array = [];
-function removeBubbleTag(inputID, tags_id) {
+function removeBubbleTag(inputID, text) {
     let input = document.querySelector(inputID);
-    let tag = document.querySelector(`#bubble_tag_item_${tags_id}`)
+    let tag = document.querySelector(`#bubble_tag_item_${text}`)
     tag.remove()
     bubble_tags_array = bubble_tags_array.filter(e => e != tag.innerText.trim())
     if (input.disabled) {
@@ -2300,3 +2306,9 @@ addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
 addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
 
 // ================================== END OF BUBBLE TAGS ==================================
+
+
+setInterval(() => {
+    console.log(bubble_tags_array)
+}, 1000)
+
