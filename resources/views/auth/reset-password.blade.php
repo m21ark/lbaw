@@ -25,6 +25,13 @@
 
                         <p>Please provide a new password</p>
 
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+                            </div>
+                        @endif
+
+
                         <label for="inputPassword" data-toggle="tooltip" data-placement="top"
                             title="Your password should be composed of at least 8 characters with letters, numbers and symbols">Password
                             <small>(Required)</small></label>
