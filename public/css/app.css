@@ -114,7 +114,7 @@
     main {
         grid-area: content;
         margin: 5.5em 1em;
-        min-height: 45em;
+        min-height: 35em;
     }
 
     header {
@@ -153,7 +153,6 @@
         min-width: 35em;
         grid-row: 4;
     }
-
 
     #video_call {
         position: fixed;

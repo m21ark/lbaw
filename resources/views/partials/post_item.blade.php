@@ -25,7 +25,7 @@
                         Profile</a>
 
                     @auth
-                        @if (Auth::user()->id == $post->owner->id)
+                        @if (Auth::user()->id == $post->owner->id || Auth::user()->isAdmin)
                             @isset($showComments)
                                 <a class="dropdown-item" id="popup_btn_post_edit" href="#">Edit
                                     post</a>
