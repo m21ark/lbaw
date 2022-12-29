@@ -29,11 +29,17 @@ class CommentPolicy
 
     public function update(User $user, Comment $comment)
     {
+        if (Auth::user()->isAdmin)
+            return true;
+
         return $user->id == $comment->id_commenter;
     }
 
     public function delete(User $user, Comment $comment)
     {
+        if (Auth::user()->isAdmin)
+            return true;
+
         return $user->id == $comment->id_commenter;
     }
 }

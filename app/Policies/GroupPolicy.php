@@ -34,11 +34,17 @@ class GroupPolicy
 
     public function update(User $user, Group $group)
     {
+        if (Auth::user()->isAdmin)
+            return true;
+
         return in_array($user->id, $group->owners->pluck('id_user')->toArray());
     }
 
     public function delete(User $user, Group $group)
     {
+        if (Auth::user()->isAdmin)
+            return true;
+
         return in_array($user->id, $group->owners->pluck('id_user')->toArray());
     }
 }
