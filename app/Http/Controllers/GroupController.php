@@ -41,6 +41,20 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showMemberList($name){
+   
+
+    $group = Group::where('name', $name)->first();
+
+    if ($group == null) { // Never reached, if that happens then someone hacked validator
+        //No group with that name so we return to the home page
+        return redirect()->route('home');
+    }
+
+    return view('pages.member_list', [
+        'group' => $group,
+    ]);
+    }
     public static function userInGroup(User $user1, Group $group)
     {   // METODO STATIC N PRECISA DE POLICY
         return DB::table('group_join_request')
@@ -240,4 +254,30 @@ class GroupController extends Controller
             ->where('id_group', $idGroup)->where('id_user', $idUser)
             ->update(['acceptance_status' => 'Rejected']);
     }
+
+    public function newGroupOwner($idGroup, $idUser)
+    {
+        /*
+            This is not an api endpoint. It's called in another function that grantes the correct policy
+            Hence this does not need a Policy
+        */
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("Hello from 0");
+        $owner = new Owner();
+        $out->writeln("Hello from 1");
+        $owner->id_user = $idUser;
+        $out->writeln("Hello from 2");
+        $owner->id_group = $idGroup;
+        $out->writeln("Hello from 3");
+        
+        $owner->save();
+        /*
+        DB::table('owner')->insert(
+            ['id_user' => $idUser,'id_group' => $idGroup]
+        );*/
+        $out->writeln("Hello from 4");
+        return $owner;
+    }
 }
+
+

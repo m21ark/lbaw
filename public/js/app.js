@@ -902,6 +902,7 @@ function addEventListeners() {
     })
 
     assignFunctionClickAll('.reject_user_report_btn', sendRejectReportRequest)
+    assignFunctionClickAll('.promoteToOwner', sendNewOwnerRequest)
 
 
     // LIKES ACTIONS
@@ -1175,6 +1176,22 @@ function sendKickpMemberRequest(event) {
 
     sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { location.reload(); });
 
+}
+
+function sendNewOwnerRequest(event) {
+    console.log("here")
+    let e = event.currentTarget
+
+    let id_group = e.getAttribute('data-idGroup')
+    let id_user = e.getAttribute('data-idUser')
+
+    let res = confirm("Are you sure you want to promote this user?");
+
+    if (!res)
+        return;
+
+    sendAjaxRequest('post', `/api/group/${id_group}/owner/${id_user}`, null, () => {location.reload()});
+    
 }
 
 

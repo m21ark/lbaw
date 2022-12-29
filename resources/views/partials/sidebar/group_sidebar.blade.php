@@ -86,9 +86,9 @@
         group</button>
         @if (Auth::check() &&
             (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray())))
-            <a href="/promote_member/{{$group->name }}"class='btn btn-primary w-100 mb-3 mt-2'>
+            <a href="/group/member_list/{{$group->name }}"class='btn btn-primary w-100 mb-3 mt-2'>
         Promote Members</a> 
-      
+
         @endif
            
       

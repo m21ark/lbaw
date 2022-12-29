@@ -78,6 +78,9 @@ Route::get('notifications', function () {
     return view('pages.notifications');
 });
 
+
+
+
 Route::get('group_list/{username}', "GroupController@listGroups");
 Route::get('like_list/{username}', "ProfileController@listLikes");
 Route::get('comment_list/{username}', "ProfileController@listComments");
@@ -88,6 +91,7 @@ Route::get('post/{id}', 'PostController@show')->name('post');
 Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('edit_profile/{username}', 'ProfileController@showEdit')->name('profile');
 Route::get('group/{name}', 'GroupController@show')->name('group');
+Route::get('group/member_list/{name}','GroupController@showMemberList');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 
 Route::get('messages/', function () {
@@ -130,9 +134,7 @@ Route::delete('api/profile/{username}', 'ProfileController@delete');
 
 // ======================= OWNER CRUD =======================
 
-Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@addGroupOwner')->name('promoteMember'); // talvez n seja post
-
-
+Route::post('api/group/{id_group}/owner/{id_user}', 'GroupController@newGroupOwner')->name('promoteMember'); // talvez n seja post
 // ======================= MEMBER CRUD =======================
 
 Route::get('api/group/{id_group}/member/{id_user}', 'GroupController@getGroupMembers');
