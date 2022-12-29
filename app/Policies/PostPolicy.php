@@ -40,6 +40,15 @@ class PostPolicy
 
     public function delete(User $user, Post $post)
     {
-        return $post->owner->id == $user->id;
+        if ($post->owner->id == $user->id)
+            return true;
+
+        // Test if is group owner trying to remove post
+        if (isset($post->group)) {
+            foreach ($post->group->owners as $owner) {
+                if ($owner->id_user == Auth::user()->id)
+                    return true;
+            }
+        }
     }
 }

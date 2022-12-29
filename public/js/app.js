@@ -1615,8 +1615,8 @@ function createUserCard(user) {
     }
 
     new_card.innerHTML = `
-    <div class="card mt-4 me-3" style="width: 15em;height:29em">
-        <img height="50%" src="/${user.photo}" class="card-img-top" alt="User Profile Image">
+    <div class="card mt-4 me-3" style="width: 15em;height:31em">
+        <img height="50%" style="max-height:20em" src="/${user.photo}" class="card-img-top" alt="User Profile Image">
         <div class="card-body">
             <h5 class="card-title">${user.username}</h5>
             <p class="card-text">${bio_short}</p>
@@ -1635,8 +1635,6 @@ function createUserCard(user) {
     return new_card;
 }
 
-
-
 function createGroupCard(group) {
     let new_card = document.createElement('article');
 
@@ -1645,8 +1643,8 @@ function createGroupCard(group) {
         bio_short = bio_short.substring(0, 75) + '...'
 
     new_card.innerHTML = `
-    <div class="card mt-4 me-3" style="width: 15em;height:29em;justify-content:between">
-        <img height="60%" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
+    <div class="card mt-4 me-3" style="width: 15em;height:28em;justify-content:between">
+        <img height="50%" style="max-height:20em" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
@@ -2201,12 +2199,14 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
 
     const input = document.getElementById("comment_post_input");
 
-    input.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            document.getElementById("comment_post_send").click();
-        }
-    });
+    if (input) {
+        input.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("comment_post_send").click();
+            }
+        });
+    }
 }
 
 function groupPostResponsiveUI() {
