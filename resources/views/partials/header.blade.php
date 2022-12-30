@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
 
         <div class="text-start">
-            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120"></a>
+            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120" id="logo_img"></a>
         </div>
 
         <div class="header_searchbar">
@@ -24,11 +24,11 @@
                             height="40" class="rounded-circle">
                     </a>
 
-                    <a href={{ url('/logout') }} type="button" class="btn btn-light">Logout</a>
+                    <a href={{ url('/logout') }} class="btn btn-outline-light" id="logout_btn">Logout</a>
                 </div>
             @else
-                <a href={{ url('/login') }} type="button" class="btn btn-outline-light me-3">Login</a>
-                <a href={{ url('/register') }} type="button" class="btn btn-light">Sign-up</a>
+                <a href={{ url('/login') }} class="btn btn-outline-light me-3">Login</a>
+                <a href={{ url('/register') }} class="btn btn-light">Sign-up</a>
             @endif
         </div>
     </div>

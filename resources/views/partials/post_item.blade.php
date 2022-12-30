@@ -61,24 +61,29 @@
     </div>
 
 
-    <a href="/post/{{ $post->id }}" class="text-decoration-none" style="color: black">
-        @if (!$post->images->isEmpty())
-            @include('partials.post_carousel_image')
-        @endif
+    @if (!isset($showComments))
+        <a href="/post/{{ $post->id }}" class="text-decoration-none" style="color: black">
+    @endif
 
+    @if (!$post->images->isEmpty())
+        @include('partials.post_carousel_image')
+    @endif
+
+
+    <div>
+        <p class="text-justify p-2" style="margin-bottom:0em ">{{ $post->text }}</p>
 
         <div>
-            <p class="text-justify p-2" style="margin-bottom:0em ">{{ $post->text }}</p>
-
-            <div>
-                @foreach ($post->topics as $post_topic)
-                    <a href="/search/%23{{ $post_topic->topic->topic }}"
-                        class="btn btn-primary me-2 mb-3 ms-2">#{{ $post_topic->topic->topic }}</a>
-                @endforeach
-            </div>
+            @foreach ($post->topics as $post_topic)
+                <a href="/search/%23{{ $post_topic->topic->topic }}"
+                    class="btn btn-primary me-2 mb-3 ms-2">#{{ $post_topic->topic->topic }}</a>
+            @endforeach
         </div>
+    </div>
 
-    </a>
+    @if (!isset($showComments))
+        </a>
+    @endif
 
 
 
@@ -113,7 +118,8 @@
             </a>
 
 
-            <a class="ms-5 text-decoration-none" href="/post/{{ $post->id }}">
+            <a class="ms-5 text-decoration-none"
+                @if (!isset($showComments)) href="/post/{{ $post->id }}" @endif>
 
                 <span class="mt-1 me-3 text-dark" style="font-size:1.2em">{{ sizeof($post->comments) }}</span>
 
@@ -123,7 +129,9 @@
 
 
             </a>
-        @else
+        @endauth
+        @guest
+
             <a class="text-decoration-none">
                 <span class="me-3 text-dark" style="font-size:1.2em;">{{ $post->likes->count() }}</span>
                 <span style="font-size: 1.3em">
@@ -136,7 +144,8 @@
                 <span style="font-size: 1.3em">
                     <i class="ms-3 fa-regular fa-comment-dots"></i>
                 </span>
-            @endauth
+            </a>
+        @endguest
 
 
 

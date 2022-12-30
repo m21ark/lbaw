@@ -1367,8 +1367,8 @@ function createPost(post) {
 
     new_post.innerHTML = `
 
-<div class="container mt-5 mb-5 post_item" style="width:50em">
-    <div class="row d-flex align-items-center mw-50 justify-content-center ">
+<div class="container mt-5 mb-5 post_item" style="width:90%">
+    <div class="row d-flex align-items-center  justify-content-center ">
             <div class="card post_card p-0">
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">

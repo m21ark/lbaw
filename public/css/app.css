@@ -76,6 +76,47 @@
 
 }
 
+@media(max-width: 40em) {
+    header {
+        font-size: 0.9em;
+    }
+
+    header .header_searchbar {
+        width: 30%;
+    }
+
+    header img#logo_img {
+        width: 5em;
+    }
+
+    header #logout_btn {
+        font-size: 0.9em;
+        padding: 0.6em;
+    }
+
+    #leftbar .fa-2x, #small_leftbar .fa-2x {
+        font-size: 1.3em;
+    }
+
+    #leftbar span, #small_leftbar p {
+        font-size: 0.7em;
+    }
+
+    article.post .card.post_card .card-header img {
+        width: 2.7em;
+    }
+
+    article.post .card.post_card .card-header strong {
+        font-size: 0.8em;
+    }
+
+    article.post .card.post_card .card-header small {
+        font-size: 0.7em;
+    }
+
+
+}
+
 
 @media (max-width: 80em) {
 
@@ -150,7 +191,7 @@
 
     #post_comment_section {
         margin: -6em auto 7em auto;
-        min-width: 35em;
+        min-width: 30em;
         grid-row: 4;
     }
 
