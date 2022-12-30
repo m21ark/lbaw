@@ -1228,6 +1228,8 @@ function sendCreateGroupRequest(event) {
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').checked
     let tags = bubble_tags_array.join(' ');
 
+    name = name.split(' ').join('_');
+
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
         return;
@@ -1241,7 +1243,6 @@ function sendCreateGroupRequest(event) {
                 location.pathname = '/group/' + name;
             }
         })
-
 
         // TODO: Fazer redirect para grupo criado
     }
@@ -1276,7 +1277,18 @@ function sendEditGroupRequest(event) {
     let res = confirm('Are you sure you want to edit this group?');
     if (!res)
         return;
-    sendFormData('post', '/api/group/' + oldName, formData, function() { location.pathname = '/group/' + name; addedHandler(null)});
+    sendFormData('post', '/api/group/' + oldName, formData, 
+    function() {
+
+        if (this.status >= 200 && this.status < 300) {
+            location.hash = 'success'
+            location = '/group/' + name;
+        }
+        else {
+            location.hash = 'error'
+            location.pathname = '/group/' + oldName;
+        }
+    });
 }
 
 function sendDeleteGroupRequest(e) {
@@ -1355,7 +1367,7 @@ function sendEditProfileRequest(event) {
 
     let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
     let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
-    console.log(idUser)
+
     let pho = document.querySelectorAll('#profile_edit_page #profile_pic')[0].files[0];
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
@@ -1377,11 +1389,33 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, () => {
-            location.pathname = '/profile/' + username;
+        sendFormData('post', '/api/profile/' + oldName, formData, function() {
+            
+            if (this.status >= 200 && this.status < 300) {
+                location.hash = 'success'
+                location = '/profile/' + username;
+            }
+            else {
+                location.hash = 'error'
+                location.pathname = '/profile/' + oldName;
+            }
+
         });
 
     }
+}
+
+if (window.location.hash === "#success") {
+    let r = {status: 201};
+    setTimeout(function() {
+        addedHandler(null).call(r)
+    }, 500);
+}
+else if (window.location.hash === "#error") {
+    let r = {status: 400};
+    setTimeout(function() {
+        addedHandler(null).call(r)
+    }, 500);
 }
 
 
@@ -1454,6 +1488,7 @@ function sendCreateCommentRequest() {
             comment_div.innerHTML = this.responseText
             comment_div.onclick = sendLikeCommentRequest
             document.querySelector('#post_comment_section').appendChild(comment_div)
+            addedHandler(null).call(this)
         });
         document.querySelector('#comment_post_input').value = ''
         // TODO falta adicionar comentario e a notificao de action success
