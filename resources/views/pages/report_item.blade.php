@@ -79,8 +79,6 @@
 
     </div>
 
-
-
     <div class="mt-5 d-flex justify-content-center">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
@@ -114,14 +112,16 @@
 
 
     <div id="toggle_list_B" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Past Reports ({{ sizeof($decided_reports) }})</h3>
+        <h3 class="mb-3">Past Reports (<span id="reports_decided_list_count">{{ sizeof($decided_reports) }}</span>)</h3>
 
         @if (count($decided_reports) === 0)
-            <p class="text-center">No past reports to view</p>
+            <p class="text-center" id="no_past_reports_sms">No past reports to view</p>
         @endif
 
-        @foreach ($decided_reports as $report)
-            @include('partials.report_decided_item', ['report' => $report])
-        @endforeach
+        <div id="reports_decided_list">
+            @foreach ($decided_reports as $report)
+                @include('partials.report_decided_item', ['report' => $report])
+            @endforeach
+        </div>
     </div>
 @endsection

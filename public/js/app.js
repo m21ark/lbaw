@@ -1,5 +1,5 @@
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
+Pusher.logToConsole = false;
 
 var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
     cluster: 'eu',
@@ -31,7 +31,8 @@ if (user_header != null) {
                 uploadSms(false, data.obj.text)();
             }
             else {
-                addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
+                let aux = `<a href="/messages/${data.sender.username}">${data.sender.username}</a>`
+                addNotification(aux + ' messaged you: ' + data.obj.text, data.sender);
             }
         }
         else if (data.type == "Like") {
@@ -123,7 +124,7 @@ if (user_header != null) {
     }
 
     function GetRTCSessionDescription() {
-        console.log("GetRTCSessionDescription called");
+        //console.log("GetRTCSessionDescription called");
         window.RTCSessionDescription =
             window.RTCSessionDescription ||
             window.webkitRTCSessionDescription ||
@@ -1045,12 +1046,15 @@ function sendRejectReportRequest(event) {
 
     let res = confirm('Are you sure you want to reject this report?');
     if (res) {
-        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => {
-
-            console.log(this)
-
-
-
+        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, function () {
+            let report_div = document.createElement('div')
+            report_div.innerHTML = this.responseText
+            document.querySelector('#reports_decided_list').appendChild(report_div)
+            let count = document.querySelector(`#reports_decided_list_count`)
+            count.innerHTML = parseInt(count.innerHTML) + 1;
+            let aux = document.querySelector('#no_past_reports_sms');
+            if (aux)
+                aux.remove()
         });
         document.querySelector(`#reports_list_item_${id}`).remove()
         document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
