@@ -1323,7 +1323,6 @@ function sendKickpMemberRequest(event) {
 }
 
 function sendNewOwnerRequest(event) {
-    console.log("here")
     let e = event.currentTarget
 
     let id_group = e.getAttribute('data-idGroup')
@@ -1466,7 +1465,7 @@ function toggleLikeHTML(event) {
     let hasLiked = like_a.dataset.liked === '1'
     let like_icon = like_a.lastElementChild.firstElementChild
 
-    // console.log(like_a, like_icon, hasLiked)
+    //console.log(like_a, like_icon, hasLiked)
 
     like_a.firstElementChild.innerHTML = parseInt(like_a.firstElementChild.innerHTML) + (hasLiked ? -1 : 1);
     like_a.setAttribute('data-liked', (hasLiked ? '0' : '1'));
@@ -1565,7 +1564,9 @@ function sendCreateReportRequest(e) {
 
     let res = confirm('Are you sure you want to submit this report?');
     if (res) {
-        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, () => { });
+        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
     }
 }
@@ -1950,12 +1951,13 @@ function createPost(post) {
     </button>`
 
     if (post.hasLiked) {
-        like = '<h3 data-liked="1">&#x2764;</h3>'
+        like = '<i class="fa-solid fa-heart text-danger"></i>'
     } else {
-        like = '<h3 data-liked="0">&#9825;</h3>'
+        like = '<i class="fa-regular fa-heart"></i>'
     }
 
     if (post.auth !== 0) {
+
         if (post.isOwner) {
             dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
         } else {
@@ -1964,24 +1966,43 @@ function createPost(post) {
         }
 
         bottom = `
-        <div class="d-flex">
-            <p class="me-3">${post.likes_count}</p>
 
-            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
-               ${like}
+        <a class="text-decoration-none " data-uid=${post.auth} onclick="sendLikePostRequest(event)"
+        data-id=${post.id} data-liked="${post.hasLiked ? '1' : '0'}" href="#!">
+
+        <span class="me-3 text-dark" style="font-size:1.2em;">${post.likes_count}</span>
+            <span style="font-size: 1.3em">
+                 ${like}
+            </span>
             </a>
-        </div>
+
+
+
+        <a class="text-decoration-none" href="/post/${post.id}">
+        <span class="mt-1 me-3 text-dark" style="font-size:1.2em">${post.comments_count}</span>
+        <span style="font-size: 1.3em">
+            <i class="ms-3 fa-regular fa-comment-dots"></i>
+        </span>
+    </a>
         `
 
     } else {
 
         bottom = `
-        <div class="d-flex">
-            <p class="me-3">${post.likes_count}</p>
-            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none">
-                <h2><strong>&#9825;</strong></h2>
-            </a>
-        </div>
+        <a class="text-decoration-none">
+            <span class="me-3 text-dark" style="font-size:1.2em;">${post.likes_count}</span>
+                <span style="font-size: 1.3em">
+                   ${like}
+                </span>
+          </a>
+
+
+          <a class="text-decoration-none" href="/post/${post.id}">
+          <span class="mt-1 me-3 text-dark" style="font-size:1.2em">${post.comments_count}</span>
+          <span style="font-size: 1.3em">
+              <i class="ms-3 fa-regular fa-comment-dots"></i>
+          </span>
+      </a>
         `
     }
 
@@ -2051,15 +2072,17 @@ function createPost(post) {
 
                     </div>
 
-                    <!-- TODO: Ver imagens da database -->
 
-                    ${images}
-
+                    <a class="text-decoration-none" href="/post/${post.id}" style="color: black">
+                         ${images}
+                    </a>
 
 
 
                     <div>
+                    <a class="text-decoration-none" href="/post/${post.id}" style="color: black">
                         <p class="text-justify p-3">${post.text}</p>
+                    </a>
 
                         ${topics}
 
@@ -2069,11 +2092,9 @@ function createPost(post) {
 
                             ${bottom}
 
-                            <div class="d-flex">
-                                <p class="me-3">${post.comments_count}</p>
-                                <a href="/post/${post.id}" class="text-decoration-none"><span
-                                        class="commenticon">&#128172;</span></a>
-                            </div>
+
+
+
 
 
                         </div>
@@ -2209,7 +2230,7 @@ function updateSearch() {
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
-            console.log('Erro')
+            //console.log('Erro')
         }
 
         if (received == null) return;
@@ -2615,7 +2636,7 @@ function createNotificationList(event) {
         [].forEach.call(side_bar_elms, function (e, i) {
             if (e.textContent != "" && !e.textContent.includes("Post")) {
                 side_bar_text[i] = " " + e.textContent
-                console.log(side_bar_text)
+
                 e.removeChild(e.lastChild);
                 e.style.display = 'none';
             }
@@ -2661,7 +2682,7 @@ function createNotificationList(event) {
 
         let side_bar_elms = document.querySelectorAll('.enc');
         [].forEach.call(side_bar_elms, function (e, i) {
-            console.log(side_bar_text)
+
             if (side_bar_text[i] != "" && side_bar_text[i] != undefined) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
@@ -2687,7 +2708,7 @@ function sendRequestResponse(isAFriendReq, accept) {
         let gname = window.location.pathname.split('/')[2];;
 
         let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname + '/request/' + id + "/" + response;
-        console.log(reqURI);
+
         let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
         sendAjaxRequest('put', reqURI, {}, function () {
             if (this.status == 200) {

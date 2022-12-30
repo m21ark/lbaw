@@ -128,8 +128,6 @@
                 <span class="me-3" style="font-size: 1.3em">
                     <i class="ms-3 fa-regular fa-comment-dots"></i>
                 </span>
-
-
             </a>
         @endauth
         @guest
