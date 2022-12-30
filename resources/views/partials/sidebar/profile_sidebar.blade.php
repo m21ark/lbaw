@@ -18,7 +18,7 @@
 
                 @auth
                     @if (Auth::user()->username !== $user->username)
-                        <a hred="#!" class="w-100 btn btn-primary m-2 mt-0 mb-2">
+                        <a hred="#!" class="w-100 btn btn-primary  mt-0 mb-2">
                             @if (!$friends && in_array(Auth::user()->id, $user->friendsRequests->pluck('id_user_sender')->toArray()))
                                 <span class="w-100 cancel_request"><i class="fa-solid fa-user-clock"
                                         data-id="{{ $user->id }}"></i> <span>Cancel Friend Request</span></span>

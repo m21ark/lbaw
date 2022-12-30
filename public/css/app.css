@@ -76,6 +76,51 @@
 
 }
 
+@media(max-width: 40em) {
+    header {
+        font-size: 0.9em;
+    }
+
+    header .header_searchbar {
+        width: 30%;
+    }
+
+    header img#logo_img {
+        width: 5em;
+    }
+
+    header #logout_btn {
+        font-size: 0.9em;
+        padding: 0.6em;
+    }
+
+    #leftbar .fa-2x, #small_leftbar .fa-2x {
+        font-size: 1.3em;
+    }
+
+    #leftbar span, #small_leftbar p {
+        font-size: 0.7em;
+    }
+
+    article.post .card.post_card .card-header img {
+        width: 2.7em;
+    }
+
+    article.post .card.post_card .card-header strong {
+        font-size: 0.8em;
+    }
+
+    article.post .card.post_card .card-header small {
+        font-size: 0.7em;
+    }
+
+    #user_info {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
 
 @media (max-width: 80em) {
 
@@ -150,7 +195,7 @@
 
     #post_comment_section {
         margin: -6em auto 7em auto;
-        min-width: 35em;
+        min-width: 30em;
         grid-row: 4;
     }
 
@@ -176,6 +221,11 @@
 }
 
 /*  ====================== AJUSTES =====================*/
+
+div#timeline.d-flex.flex-wrap>article.post {
+    width: 100%;
+    max-width: 50em;
+}
 
 #contextual-help {
     margin-right: 1em;
@@ -464,9 +514,8 @@ ul.nav a:hover {
     padding: 0.0em
 }
 
-#search_filter * {
-    width: 32%;
-    text-align: center;
+#search_filter .list-group-item p {
+    padding: 0.0em
 }
 
 #feed_filter .list-group-item {
@@ -476,6 +525,7 @@ ul.nav a:hover {
 #search_filter .list-group-item {
     margin: 0.5em;
 }
+
 
 /* ====================== Popups ===================== */
 

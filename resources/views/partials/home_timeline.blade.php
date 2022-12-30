@@ -1,7 +1,6 @@
 @auth
     <div class="d-flex text-bg-light w-100" style="max-width:55em;margin:auto">
 
-        <div style="width: 2em"></div>
 
         <div class="list-group list-group-checkable form-check d-flex p-1 flex justify-content-between align-items-center flex-sm-fill"
             id="feed_filter">
@@ -32,6 +31,8 @@
 
 
         </div>
+
+        <!--
 
         <div class="ms-4 orderFilter dropdown" style="width:7em;">
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
@@ -66,11 +67,13 @@
             </div>
         </div>
 
+        -->
+
     </div>
 
 @endauth
 
 
-<div id="timeline" class="mt-3">
+<div id="timeline" class="home_timeline mt-3">
     <!-- Add posts here -->
 </div>

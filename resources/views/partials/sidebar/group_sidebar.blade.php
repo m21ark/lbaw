@@ -82,18 +82,6 @@
 
     </div>
 
-
-    <button id="popup_btn_group_post" onclick="groupPostResponsiveUI()" class='btn btn-primary w-100 mb-3 mt-2'>Post on
-        group</button>
-        @if (Auth::check() &&
-            (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray())))
-            <a href="/group/member_list/{{$group->name }}"class='btn btn-primary w-100 mb-3 mt-2'>
-        Promote Members</a> 
-
-        @endif
-           
-      
-
     <h3 class="mb-4">Members</h3>
 
     <div class="list-group align-items-center d-flex mb-2 group_member_list">
@@ -129,25 +117,20 @@
                         href={{ url('/profile', ['username' => $member->user->username]) }}>{{ $member->user->username }}</a>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"></svg>
-
-                    @auth
-                        @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
-                            <a class='btn btn-outline-secondary kick_member_button' data-toggle="tooltip"
-                                data-placement="bottom" title="Remove user from group"
-                                data-idUser="{{ $member->user->id }}" data-idGroup="{{ $group->id }}">Kick</a>
-                        @endif
-                    @endauth
                 </div>
             @endif
         @endforeach
 
         @auth
             @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
-                <button class='btn btn-outline-secondary w-100 mb-3 mt-3' id="leave_group_button"
+                <a href="/group/member_list/{{ $group->name }}"class='btn btn-outline-primary w-100 mb-3 mt-3'>
+                    Full Member List
+                </a>
+
+                <button class='btn btn-outline-secondary w-100 mb-3 mt-2' id="leave_group_button"
                     data-idGroup="{{ $group->id }}" data-idUser="{{ Auth::user()->id }}">Leave
                     Group</button>
             @endif
-
         @endauth
 
     </div>

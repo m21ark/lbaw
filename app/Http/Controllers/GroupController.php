@@ -38,6 +38,7 @@ class GroupController extends Controller
             'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false,
             'user' => Auth::user(),
             'can_view_timeline' => $can_view_timeline,
+            'ShowGroupPostButton' => true,
         ]);
     }
 
@@ -61,19 +62,26 @@ class GroupController extends Controller
         return view('pages.edit_group', ['group' => $group, 'user' => Auth::user()]);
     }
 
-    public function showMemberList($name){
-   
+    public function showMemberList($name, Request $request)
+    {
+        $request->validate([
+            'name' => 'string|exists:group,name',
+        ]);
 
-    $group = Group::where('name', $name)->first();
+        $group = Group::where('name', $name)->first();
 
-    if ($group == null) { // Never reached, if that happens then someone hacked validator
-        //No group with that name so we return to the home page
-        return redirect()->route('home');
-    }
+        if ($group == null) {
+            //No group with that name so we return to the home page
+            return redirect()->route('home');
+        }
 
-    return view('pages.member_list', [
-        'group' => $group,
-    ]);
+        if (!$request->user()->can('view', $group) && !Auth::user()->isAdmin) {
+            return abort('403');
+        }
+
+        return view('pages.member_list', [
+            'group' => $group,
+        ]);
     }
     public static function userInGroup(User $user1, Group $group)
     {   // METODO STATIC N PRECISA DE POLICY
@@ -293,7 +301,7 @@ class GroupController extends Controller
             Hence this does not need a Policy
         */
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-       
+
         $owner = new Owner();
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;
@@ -301,5 +309,3 @@ class GroupController extends Controller
         return $owner;
     }
 }
-
-

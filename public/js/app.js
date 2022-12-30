@@ -313,38 +313,38 @@ if (user_header != null) {
 
 function startContextualHelp() {
     var url_atual = window.location.pathname;
-    if(url_atual=="/home"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our Home page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#feed_filter"),
-            intro: "We allow you to see different timelines. Isn't that amazing???😮"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-     }).start();
+    if (url_atual == "/home") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our Home page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#feed_filter"),
+                intro: "We allow you to see different timelines. Isn't that amazing???😮"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
     }
-  else if(url_atual =="/user/friends/requests"){
+    else if (url_atual == "/user/friends/requests") {
         introJs().setOptions({
             steps: [{
                 intro: "This is our my friends request page"
@@ -364,7 +364,7 @@ function startContextualHelp() {
                 element: document.querySelector("#timeline"),
                 intro: "Here you can see all your friend request.You can accept ou declined the request"
             },
-           
+
             {
                 element: document.querySelector(".me-2").parentElement,
                 intro: "You can rapidly go to your profile ...  🏃🏃🏃"
@@ -374,551 +374,551 @@ function startContextualHelp() {
             }
             ]
         }).start();
-    
-}
 
-else if(url_atual.match(/group_list\/.*/)){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our my groups list page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#popup_btn_group_create"),
-            intro: "Here you can create a new Group"
-        },
+    }
 
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Hero you can see all your groups "
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    else if (url_atual.match(/group_list\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our my groups list page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#popup_btn_group_create"),
+                intro: "Here you can create a new Group"
+            },
 
-}
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Hero you can see all your groups "
+            },
 
-else if(url_atual =="/messages"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our messages page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "You can see all the messages with your friend and you can write another message. Isn't that amazing???😮"
-        },
-        {
-            element: document.querySelector("#toggle_list_B"),
-            intro: "You can see all the users you send messages recently"
-        },
-       
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-}
-else if(url_atual.match(/profile\/.*/) && !url_atual.match(/edit_profile\/.*/)){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is a profile page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#user_info"),
-            intro: "Here you can see all the information about the profile"
-        },
+    }
 
-        {
-            element: document.querySelector("#user_statistics"),
-            intro: "Here you can see how many friends,groups,likes and comments the profile have "
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "We allow you to see different timelines. Isn't that amazing???😮"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
-
-}
-
-else if(url_atual.match(/edit_profile\/.*/)){
-    introJs().setOptions({
-        steps: [{
-            intro: "Here you can change all the information about your profile"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-         
-        {
-            element: document.querySelector("#edit_profile_button"),
-            intro: "Save all the changes of your profile"
-        },
-        {
-            element: document.querySelector("#delete_profile_button"),
-            intro: "Delete your account"
-        },
+    else if (url_atual == "/messages") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our messages page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "You can see all the messages with your friend and you can write another message. Isn't that amazing???😮"
+            },
+            {
+                element: document.querySelector("#toggle_list_B"),
+                intro: "You can see all the users you send messages recently"
+            },
 
 
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Make all the changes you want"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-}
-else if(url_atual.match(/user\/.*/)){  
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our my friends page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Here you can see all your friends,if you want you can remove a friend or just watch the friend´s profile"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    }
+    else if (url_atual.match(/profile\/.*/) && !url_atual.match(/edit_profile\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is a profile page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#user_info"),
+                intro: "Here you can see all the information about the profile"
+            },
 
-}
+            {
+                element: document.querySelector("#user_statistics"),
+                intro: "Here you can see how many friends,groups,likes and comments the profile have "
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "We allow you to see different timelines. Isn't that amazing???😮"
+            },
 
-else if(url_atual.match(/like_list\/.*/)){ 
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our like_list page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Here you can see a list of your entire likes"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-}
-else if(url_atual.match(/group\/.*/)){ 
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our group page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "We allow you to see all the posts of the group. Isn't that amazing???😮"
-        },
-        {
-            element: document.querySelector("#rightbar"),
-            intro: "Here you can see all the information about the group"
-        },
+    }
 
-        {
-            element: document.querySelector("#popup_btn_group_post"),
-            intro: "Here you can post in group"
-        },
-       
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    else if (url_atual.match(/edit_profile\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "Here you can change all the information about your profile"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
 
-}
-else if(url_atual.match(/comment_list\/.*/)) {
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our comment list page "
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "We allow you to see all your comments in other posts"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+            {
+                element: document.querySelector("#edit_profile_button"),
+                intro: "Save all the changes of your profile"
+            },
+            {
+                element: document.querySelector("#delete_profile_button"),
+                intro: "Delete your account"
+            },
 
-}
 
- else if(url_atual.match(/search\/.*/)){ 
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our search page.Here you can all the information you search"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#feed_filter"),
-            intro: "We allow you to see different timelines of your search. Isn't that amazing???😮"
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "The result of your search"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Make all the changes you want"
+            },
 
-}
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-else if(url_atual =="/about"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our about page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Here you can see who we are or what is nexus and How did Nexus come about"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    }
+    else if (url_atual.match(/user\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our my friends page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Here you can see all your friends,if you want you can remove a friend or just watch the friend´s profile"
+            },
 
-}
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-else if(url_atual =="/contacts"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our contacts page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Here you can see who we are and a small description about us"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    }
 
-}
-else if(url_atual =="/features"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our features page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#timeline"),
-            intro: "Here you can see all the features we have"
-        },
-       
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
+    else if (url_atual.match(/like_list\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our like_list page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Here you can see a list of your entire likes"
+            },
 
-}
-else if(url_atual =="/admin"){
-    introJs().setOptions({
-        steps: [{
-            intro: "This is our admin page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#toggle_list_A"),
-            intro: "Here you can see all the reports"
-        },
-        {
-        element: document.querySelector("#searchBarPendent"),
-            intro: "Here you can search  for all the reports"
-        },
-        {
-        element: document.querySelector("#list_toggle_btn"),
-        intro: "Here you can choose if you want only past reports or pendent reports"
-    },
-        
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
-}
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
 
-else if((url_atual.match(/admin\/.*/))&& !url_atual.match(/report\/.*/)){
-    introJs().setOptions({
-        steps: [{ 
-            intro: "This is our admin statistics page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#list-group align-items-center mb-5 mx-5"),
-            intro: "Here you can see all the admin statistics"
-        },
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
-}
-else if((url_atual.match(/report\/.*/))){
-    introJs().setOptions({
-        steps: [{ 
-            intro: "This is our report page"
-        }, {
-            element: document.querySelector('#leftbar').firstElementChild,
-            intro: "Here you can quickly access the main features of our app"
-        },
-        {
-            element: document.querySelector("#search_bar"),
-            intro: "Here you can search for any topic/group or user "
-        },
-        {
-            element: document.querySelector("#popup_btn_post"),
-            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
-        },
-        {
-            element: document.querySelector("#ban_time_select"),
-            intro: "Here you can decide what time the user is baned"
-        },
-        {
-            element: document.querySelector("#list_toggle_btn"),
-            intro: "Here you can choose if you want only past reports or pendent reports"
-        },
-        {
-            element: document.querySelector("#reports_list"),
-            intro: "Here you can see all the reports about the user and all the information about the user"
-        },
-        {
-            element: document.querySelector(".me-2").parentElement,
-            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
-        },
-        {
-            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
-        }
-        ]
-    }).start();
-}
+    }
+    else if (url_atual.match(/group\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our group page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "We allow you to see all the posts of the group. Isn't that amazing???😮"
+            },
+            {
+                element: document.querySelector("#rightbar"),
+                intro: "Here you can see all the information about the group"
+            },
+
+            {
+                element: document.querySelector("#popup_btn_group_post"),
+                intro: "Here you can post in group"
+            },
+
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+    else if (url_atual.match(/comment_list\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our comment list page "
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "We allow you to see all your comments in other posts"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+
+    else if (url_atual.match(/search\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our search page.Here you can all the information you search"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#feed_filter"),
+                intro: "We allow you to see different timelines of your search. Isn't that amazing???😮"
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "The result of your search"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+
+    else if (url_atual == "/about") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our about page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Here you can see who we are or what is nexus and How did Nexus come about"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+
+    else if (url_atual == "/contacts") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our contacts page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Here you can see who we are and a small description about us"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+    else if (url_atual == "/features") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our features page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#timeline"),
+                intro: "Here you can see all the features we have"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+
+    }
+    else if (url_atual == "/admin") {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our admin page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#toggle_list_A"),
+                intro: "Here you can see all the reports"
+            },
+            {
+                element: document.querySelector("#searchBarPendent"),
+                intro: "Here you can search  for all the reports"
+            },
+            {
+                element: document.querySelector("#list_toggle_btn"),
+                intro: "Here you can choose if you want only past reports or pendent reports"
+            },
+
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+    }
+
+    else if ((url_atual.match(/admin\/.*/)) && !url_atual.match(/report\/.*/)) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our admin statistics page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#list-group align-items-center mb-5 mx-5"),
+                intro: "Here you can see all the admin statistics"
+            },
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+    }
+    else if ((url_atual.match(/report\/.*/))) {
+        introJs().setOptions({
+            steps: [{
+                intro: "This is our report page"
+            }, {
+                element: document.querySelector('#leftbar').firstElementChild,
+                intro: "Here you can quickly access the main features of our app"
+            },
+            {
+                element: document.querySelector("#search_bar"),
+                intro: "Here you can search for any topic/group or user "
+            },
+            {
+                element: document.querySelector("#popup_btn_post"),
+                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+            },
+            {
+                element: document.querySelector("#ban_time_select"),
+                intro: "Here you can decide what time the user is baned"
+            },
+            {
+                element: document.querySelector("#list_toggle_btn"),
+                intro: "Here you can choose if you want only past reports or pendent reports"
+            },
+            {
+                element: document.querySelector("#reports_list"),
+                intro: "Here you can see all the reports about the user and all the information about the user"
+            },
+            {
+                element: document.querySelector(".me-2").parentElement,
+                intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+            },
+            {
+                intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+            }
+            ]
+        }).start();
+    }
 }
 
 function createElementFromHTML(htmlString) {
@@ -1315,8 +1315,8 @@ function sendNewOwnerRequest(event) {
     if (!res)
         return;
 
-    sendAjaxRequest('post', `/api/group/${id_group}/owner/${id_user}`, null, () => {location.reload()});
-    
+    sendAjaxRequest('post', `/api/group/${id_group}/owner/${id_user}`, null, () => { location.reload() });
+
 }
 
 
@@ -1967,8 +1967,8 @@ function createPost(post) {
 
     new_post.innerHTML = `
 
-<div class="container mt-5 mb-5 post_item" style="width:50em">
-    <div class="row d-flex align-items-center mw-50 justify-content-center ">
+<div class="container mt-5 mb-5 post_item" style="width:90%;">
+    <div class="row d-flex align-items-center  justify-content-center ">
             <div class="card post_card p-0">
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
@@ -2242,12 +2242,24 @@ function createGroupCard(group) {
     if (bio_short.length > 50)
         bio_short = bio_short.substring(0, 75) + '...'
 
+    if (group.visibility === true) {
+        privacy = 'Public'
+    } else {
+        privacy = 'Private'
+    }
+
+
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:28em;justify-content:between">
         <img height="50%" style="max-height:20em" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
+
+            <p class="card-text"><b>Visibility: </b>
+            <span class="card-text">
+                ${privacy}
+            </span>
 
         </div>
 
@@ -2809,13 +2821,6 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
     }
 }
 
-function groupPostResponsiveUI() {
-    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
-
-    if (width <= 80)
-        document.querySelector('#list_toggle_btn').click()
-}
-
 
 function checkResponsiveUI() {
     let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
@@ -2945,7 +2950,7 @@ addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
 addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
 addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
 
-// setInterval(() => { console.log(bubble_tags_array) }, 500);
+//setInterval(() => { console.log(bubble_tags_array) }, 500);
 
 // ================================== END OF BUBBLE TAGS ==================================
 
