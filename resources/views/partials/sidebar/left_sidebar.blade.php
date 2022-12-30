@@ -12,14 +12,27 @@
             </a>
         </li>
         @auth
+
             <li data-toggle="tooltip" data-placement="top" title="Go to pendent friend's requests page">
                 <a href={{ url('/user/friends/requests') }}
                     class="btn mb-3 d-flex align-items-center justify-content-around" aria-current="page">
-                    <i class="fa-solid fa-user-group fa-2x"></i>
-                    <span style="width: 8em;font-size:1.2em" class="enc">Friends Requests</span>
 
+                    @if (Auth::user()->pendentFriendsRequests->count() > 0)
+                        <span class="position-relative">
+                            <i class="fa-solid fa-user-group fa-2x"></i>
+                            <span
+                                class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger">
+                                {{ Auth::user()->pendentFriendsRequests->count() }}
+                            </span>
+                        </span>
+                    @else
+                        <i class="fa-solid fa-user-group fa-2x"></i>
+                    @endif
+
+                    <span style="width: 8em;font-size:1.2em" class="enc">Friends Requests</span>
                 </a>
             </li>
+
             <li data-toggle="tooltip" data-placement="top" title="Go to your group list page">
                 <a href="/group_list/{{ Auth::user()->username }}"
                     class=" btn mb-3 drop_my_group d-flex align-items-center justify-content-around" aria-current="page">
@@ -140,6 +153,17 @@
             <li data-toggle="tooltip" data-placement="top" title="Go to pendent friend's requests page">
                 <a href={{ url('/user/friends/requests') }} class="btn">
                     <i class="fa-solid fa-user-group fa-2x"></i>
+
+                    @if (Auth::user()->pendentFriendsRequests->count() > 0)
+                        <span class="position-relative">
+                            <span
+                                class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-danger">
+                                {{ Auth::user()->pendentFriendsRequests->count() }}
+                            </span>
+                        </span>
+                    @endif
+
+
                     <p style="padding: 0;margin:0;">Friend Requests</p>
                 </a>
             </li>
