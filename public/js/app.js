@@ -31,7 +31,8 @@ if (user_header != null) {
                 uploadSms(false, data.obj.text)();
             }
             else {
-                addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
+                let aux = `<a href="/messages/${data.sender.username}">${data.sender.username}</a>`
+                addNotification(aux + ' messaged you: ' + data.obj.text, data.sender);
             }
         }
         else if (data.type == "Like") {
