@@ -62,7 +62,7 @@ class ProfileController extends Controller
     public function edit(Request $request)
     {
 
-        $user = Auth::user();
+        $user = Auth::user()->isAdmin ? User::find($request->input('idUser')) : Auth::user();
 
         $request->validate([
             'username' => 'string|max:255',

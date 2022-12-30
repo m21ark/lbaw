@@ -1355,6 +1355,7 @@ function sendEditProfileRequest(event) {
 
     let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
     let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
+    console.log(idUser)
     let pho = document.querySelectorAll('#profile_edit_page #profile_pic')[0].files[0];
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
@@ -1371,6 +1372,7 @@ function sendEditProfileRequest(event) {
     formData.append('oldName', oldName);
     formData.append('photo', pho);
     formData.append('tags', tags);
+    formData.append('idUser', idUser);
 
 
     let res = confirm('Are you sure you want to edit your profile?');
