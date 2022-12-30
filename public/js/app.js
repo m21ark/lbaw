@@ -1352,11 +1352,10 @@ function sendDeleteGroupMemberRequest(e) {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, function ()
-    {
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, function () {
         if (this.status >= 200 && this.status < 300) {
             location.hash = 'success'
-            location.reload(); 
+            location.reload();
         }
         else {
             addedHandler(null).call(this)
@@ -1669,10 +1668,10 @@ function sendDeletePostRequest() {
 
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
-        sendAjaxRequest('delete', '/api/post/' + id, {}, function() {
+        sendAjaxRequest('delete', '/api/post/' + id, {}, function () {
             location.reload();
         });
-    
+
 
 }
 

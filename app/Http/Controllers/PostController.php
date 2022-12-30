@@ -39,7 +39,7 @@ class PostController extends Controller
         ]);
 
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-$out->writeln("Hello from Terminal");
+        $out->writeln("Hello from Terminal");
         // TODO: use id to get post from database
         $post = Post::withCount('likes', 'comments')->find($id);
 

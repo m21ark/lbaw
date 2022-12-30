@@ -47,7 +47,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'string|exists:group,name',
         ]);
-        
+
 
         $group = Group::where('name', $name)->first();
 
@@ -174,7 +174,7 @@ class GroupController extends Controller
                 'description' => 'required|string|min:1|max:2000',
                 'name' => 'alpha_dash'
             ]);
-        }   catch (\Illuminate\Validation\ValidationException $th) {
+        } catch (\Illuminate\Validation\ValidationException $th) {
             return response()->json([$th->validator->errors()], 400);
         }
 
@@ -305,7 +305,7 @@ class GroupController extends Controller
         DB::table('group_join_request')
             ->where('id_group', $idGroup)->where('id_user', $idUser)
             ->delete();
-        
+
         return response()->json(['Successfully Removed from group' => 200, 'success' => 'Profile updated successfully'], 200);
     }
 

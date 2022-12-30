@@ -20,7 +20,7 @@ class PostPolicy
 
     public function view(User $user, Post $post)
     {
-        if  ($post->owner->id == $user->id)
+        if ($post->owner->id == $user->id)
             return true;
 
         if (isset($post->group)) {
