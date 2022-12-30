@@ -65,9 +65,11 @@
         <a href="/post/{{ $post->id }}" class="text-decoration-none" style="color: black">
     @endif
 
-    @if (!$post->images->isEmpty())
-        @include('partials.post_carousel_image')
-    @endif
+    <div class="post_item_img_carrosel">
+        @if (!$post->images->isEmpty())
+            @include('partials.post_carousel_image')
+        @endif
+    </div>
 
 
     <div>

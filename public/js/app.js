@@ -1055,6 +1055,8 @@ function sendRejectReportRequest(event) {
             let aux = document.querySelector('#no_past_reports_sms');
             if (aux)
                 aux.remove()
+
+            addedHandler(null).call(this)
         });
         document.querySelector(`#reports_list_item_${id}`).remove()
         document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
@@ -1083,12 +1085,12 @@ function commentPopupsController() {
 function sendBanUserRequest(event) {
     const elem = document.querySelector('#ban_time_select')
     userID = elem.dataset.userid
+    username = elem.dataset.name
     time_selected = elem.value
 
     let res = confirm('Are you sure you want to ban this user?');
     if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
-        location.reload()
     }
 
 }
@@ -1282,17 +1284,17 @@ function sendEditGroupRequest(event) {
     if (!res)
         return;
     sendFormData('post', '/api/group/' + oldName, formData,
-    function() {
+        function () {
 
-        if (this.status >= 200 && this.status < 300) {
-            location.hash = 'success'
-            location = '/group/' + name;
-        }
-        else {
-            location.hash = 'error'
-            location.pathname = '/group/' + oldName;
-        }
-    });
+            if (this.status >= 200 && this.status < 300) {
+                location.hash = 'success'
+                location = '/group/' + name;
+            }
+            else {
+                location.hash = 'error'
+                location.pathname = '/group/' + oldName;
+            }
+        });
 }
 
 function sendDeleteGroupRequest(e) {
@@ -1402,7 +1404,7 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, function() {
+        sendFormData('post', '/api/profile/' + oldName, formData, function () {
 
             if (this.status >= 200 && this.status < 300) {
                 location.hash = 'success'
@@ -1419,14 +1421,14 @@ function sendEditProfileRequest(event) {
 }
 
 if (window.location.hash === "#success") {
-    let r = {status: 201};
-    setTimeout(function() {
+    let r = { status: 201 };
+    setTimeout(function () {
         addedHandler(null).call(r)
     }, 500);
 }
 else if (window.location.hash === "#error") {
-    let r = {status: 400};
-    setTimeout(function() {
+    let r = { status: 400 };
+    setTimeout(function () {
         addedHandler(null).call(r)
     }, 500);
 }

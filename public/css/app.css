@@ -74,6 +74,10 @@
         font-size: 1.1em;
     }
 
+    div#timeline.home_timeline article.post .post_item {
+        max-width: 60em;
+    }
+
 }
 
 @media(max-width: 40em) {
@@ -293,7 +297,7 @@ ul.nav a:hover {
 
 .post_item img {
     max-width: 80%;
-    max-height: 30em;
+    max-height: 35em;
     margin: 0.5em auto;
     border-radius: 0.5em;
 }
