@@ -137,7 +137,9 @@ class ProfileController extends Controller
 
         $user->save();
 
-        Auth::logout();
+        if (Auth::user()->username == $username) {
+            Auth::logout();
+        }
 
         return redirect()->route('home');
     }

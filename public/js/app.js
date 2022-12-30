@@ -1391,7 +1391,7 @@ function sendDeleteProfileRequest(e) {
 
     let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username) {
-        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { window.location = '/home' });
     }
     else {
         alert('Account not deleted!');
