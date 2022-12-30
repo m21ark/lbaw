@@ -811,6 +811,114 @@ else if(url_atual =="/features"){
     }).start();
 
 }
+else if(url_atual =="/admin"){
+    introJs().setOptions({
+        steps: [{
+            intro: "This is our admin page"
+        }, {
+            element: document.querySelector('#leftbar').firstElementChild,
+            intro: "Here you can quickly access the main features of our app"
+        },
+        {
+            element: document.querySelector("#search_bar"),
+            intro: "Here you can search for any topic/group or user "
+        },
+        {
+            element: document.querySelector("#popup_btn_post"),
+            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+        },
+        {
+            element: document.querySelector("#toggle_list_A"),
+            intro: "Here you can see all the reports"
+        },
+        {
+        element: document.querySelector("#searchBarPendent"),
+            intro: "Here you can search  for all the reports"
+        },
+        {
+        element: document.querySelector("#list_toggle_btn"),
+        intro: "Here you can choose if you want only past reports or pendent reports"
+    },
+        
+        {
+            element: document.querySelector(".me-2").parentElement,
+            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+        },
+        {
+            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+        }
+        ]
+    }).start();
+}
+
+else if((url_atual.match(/admin\/.*/))&& !url_atual.match(/report\/.*/)){
+    introJs().setOptions({
+        steps: [{ 
+            intro: "This is our admin statistics page"
+        }, {
+            element: document.querySelector('#leftbar').firstElementChild,
+            intro: "Here you can quickly access the main features of our app"
+        },
+        {
+            element: document.querySelector("#search_bar"),
+            intro: "Here you can search for any topic/group or user "
+        },
+        {
+            element: document.querySelector("#popup_btn_post"),
+            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+        },
+        {
+            element: document.querySelector("#list-group align-items-center mb-5 mx-5"),
+            intro: "Here you can see all the admin statistics"
+        },
+        {
+            element: document.querySelector(".me-2").parentElement,
+            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+        },
+        {
+            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+        }
+        ]
+    }).start();
+}
+else if((url_atual.match(/report\/.*/))){
+    introJs().setOptions({
+        steps: [{ 
+            intro: "This is our report page"
+        }, {
+            element: document.querySelector('#leftbar').firstElementChild,
+            intro: "Here you can quickly access the main features of our app"
+        },
+        {
+            element: document.querySelector("#search_bar"),
+            intro: "Here you can search for any topic/group or user "
+        },
+        {
+            element: document.querySelector("#popup_btn_post"),
+            intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
+        },
+        {
+            element: document.querySelector("#ban_time_select"),
+            intro: "Here you can decide what time the user is baned"
+        },
+        {
+            element: document.querySelector("#list_toggle_btn"),
+            intro: "Here you can choose if you want only past reports or pendent reports"
+        },
+        {
+            element: document.querySelector("#reports_list"),
+            intro: "Here you can see all the reports about the user and all the information about the user"
+        },
+        {
+            element: document.querySelector(".me-2").parentElement,
+            intro: "You can rapidly go to your profile ...  🏃🏃🏃"
+        },
+        {
+            intro: "Hope you have fun using it <img src=\"https://www.mememaker.net/static/images/memes/4851592.jpg\" class=\"help_photo\"/>"
+        }
+        ]
+    }).start();
+}
 }
 
 function createElementFromHTML(htmlString) {
