@@ -20,7 +20,7 @@
                         <a id="ban_user_btn" href="#!" class="mr-1 mb-1 mt-1 btn btn-danger">
                             <h5>Ban User</h5>
                         </a>
-                        <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">
+                        <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}" data-name="{{ $user->username }}">
                             <option selected value="1">7 days</option>
                             <option value="2">15 days</option>
                             <option value="3">30 days</option>
@@ -31,7 +31,7 @@
                         </select>
                     </div>
                 @else
-                    <a id="unban_user_btn" href="#!" class="mt-1 btn btn-warning" data-userid="{{ $user->id }}">
+                    <a id="unban_user_btn" href="#!" class="mt-1 btn btn-warning" data-userid="{{ $user->id }}" data-name="{{ $user->username }}">
                         <h5>Unban User</h5>
                     </a>
                 @endif
