@@ -207,23 +207,10 @@ class ReportController extends Controller
         $report->decision = $request->decision;
         $report->decision_date = date('Y-m-d H:i:s');
 
-        // TODO ALTERAR BANDATE NO USER
         $report->save();
 
-        return $report;
-    }
-
-    public function delete(int $id, Request $request) // TODO: ACHO QUE ISTO N E USADO EM LADO NENHUM
-    {
-
-        $request->validate([
-            'id' => 'integer|exists:report,id',
-        ]);
-
-        $this->authorize('delete', Report::class); //POLICY
-
-        $report = Report::find($id);
-        $report->delete();
-        return $report;
+        return view('partials.report_decided_item', [
+            'report' => $report
+        ])->render();
     }
 }

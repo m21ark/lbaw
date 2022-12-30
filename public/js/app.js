@@ -1049,7 +1049,13 @@ function sendRejectReportRequest(event) {
 
     let res = confirm('Are you sure you want to reject this report?');
     if (res) {
-        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => { });
+        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => {
+
+            console.log(this)
+
+
+
+        });
         document.querySelector(`#reports_list_item_${id}`).remove()
         document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
         if (document.querySelector('#reports_list_count').innerHTML == 0) {

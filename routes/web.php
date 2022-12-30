@@ -92,7 +92,7 @@ Route::get('profile/{username}', 'ProfileController@show')->name('profile');
 Route::get('edit_profile/{username}', 'ProfileController@showEdit');
 Route::get('group/{name}', 'GroupController@show')->name('group');
 Route::get('group/{name}/edit', 'GroupController@showEdit');
-Route::get('group/member_list/{name}','GroupController@showMemberList');
+Route::get('group/member_list/{name}', 'GroupController@showMemberList');
 Route::get('search/{query}', 'SearchController@show')->name('search');
 
 Route::get('messages/', function () {
@@ -197,6 +197,5 @@ Route::delete('api/group/request/{id}', 'GroupJoinRequestController@delete');
 Route::put('api/report/reject_all/{userID}', 'ReportController@rejectAll');
 Route::post('api/report', 'ReportController@create');
 Route::put('api/report', 'ReportController@edit');
-Route::delete('api/report/{id}', 'ReportController@delete');
 
 Route::put('api/user/ban/{userID}/{time_option}', 'ReportController@banUser');
