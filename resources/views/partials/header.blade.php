@@ -3,7 +3,8 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
 
         <div class="text-start">
-            <a href="{{ url('/home') }}"><img src="/logo.jpg" alt="Nexus Logo" width="120" id="logo_img"></a>
+            <a data-toggle="tooltip" data-placement="bottom" title="Go to homepage" href="{{ url('/home') }}"><img
+                    src="/logo.jpg" alt="Nexus Logo" width="120" id="logo_img"></a>
         </div>
 
         <div class="header_searchbar">
@@ -15,7 +16,8 @@
 
             @if (Auth::check())
                 <div class="d-flex align-items-center">
-                    <span id="contextual-help"><i class="fa-regular fa-circle-question fa-2x"></i></span>
+                    <span data-toggle="tooltip" data-placement="bottom" title="Get help in current page"
+                        id="contextual-help"><i class="fa-regular fa-circle-question fa-2x"></i></span>
                     <a class="text-white text-decoration-none me-3"
                         href={{ url('/profile/' . Auth::user()->username) }}>
                         <strong class="me-2" id="auth_id"
