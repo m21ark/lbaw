@@ -85,7 +85,7 @@
             </a>
         @endauth
 
-        <span class="me-5"></span>
+        <span class="me-4 ms-4"></span>
 
         @if (sizeof($comment->replies) > 0)
             <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!"
@@ -129,7 +129,7 @@
                             @endauth
                         @endisset
 
-                        <small>{{ $reply->post_date }}</small>
+                        <small>{{ Carbon\Carbon::parse($reply->post_date)->diffForHumans() }}</small>
 
 
                     </div>
