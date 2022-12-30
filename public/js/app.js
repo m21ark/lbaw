@@ -1341,8 +1341,9 @@ function sendNewOwnerRequest(event) {
 
 
 
-function sendDeleteGroupMemberRequest() {
+function sendDeleteGroupMemberRequest(e) {
 
+    e.preventDefault()
     let id_group = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
     let id_user = document.querySelector('#leave_group_button').getAttribute('data-idUser');
 
@@ -1351,9 +1352,17 @@ function sendDeleteGroupMemberRequest() {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, function ()
+    {
+        if (this.status >= 200 && this.status < 300) {
+            location.hash = 'success'
+            location.reload(); 
+        }
+        else {
+            addedHandler(null).call(this)
+        }
 
-    location.reload();
+    });
 }
 
 
@@ -1660,10 +1669,10 @@ function sendDeletePostRequest() {
 
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
-        sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
-    // location.reload();
-
-    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
+        sendAjaxRequest('delete', '/api/post/' + id, {}, function() {
+            location.reload();
+        });
+    
 
 }
 

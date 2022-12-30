@@ -131,4 +131,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Like', 'id_user');
     }
+
+    public function isOwnerOfGroup($id_group)
+    {
+        return $this->groupsOwner->contains('id_group', $id_group);
+    }
+
+    public function removeOwner($id_group)
+    {
+        $this->groupsOwner()->where('id_group', $id_group)->delete();
+    }
 }
