@@ -48,7 +48,7 @@ if (user_header != null) {
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
             updateNrNotfications();
-            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+            addNoticomment_reply_btnfication(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
 
 
@@ -1459,12 +1459,22 @@ function sendCreateCommentRequest() {
         sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, function () {
             let comment_div = document.createElement('div')
             comment_div.innerHTML = this.responseText
+            let e = comment_div.querySelector('.popup_btn_comment_edit')
+
+            e.addEventListener('click', () => {
+                let id = e.dataset.id
+                let elem = document.querySelector('#popup_show_comment_edit')
+                elem.toggleAttribute('hidden')
+                document.querySelector('#comment_text_edit').value = e.dataset.text
+                document.querySelector('#edit_comment_button').setAttribute('data-id', id)
+                document.querySelector('#delete_comment_button').setAttribute('data-id', id)
+            });
+
             document.querySelector('#post_comment_section').appendChild(comment_div)
+            addedHandler(null).call(this)
         });
         document.querySelector('#comment_post_input').value = ''
-        // TODO falta adicionar comentario e a notificao de action success
     }
-
 }
 
 function sendEditCommentRequest() {
@@ -1478,7 +1488,9 @@ function sendEditCommentRequest() {
 
     let res = confirm('Are you sure you want edit this comment?');
     if (res) {
-        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
+        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
         logItem('#popup_show_comment_edit')(0);
     }
@@ -1491,7 +1503,9 @@ function sendDeleteCommentRequest() {
 
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
-        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
+        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector(`#comment_item_${id_comment}`).remove()
         logItem('#popup_show_comment_edit')(0);
     }
