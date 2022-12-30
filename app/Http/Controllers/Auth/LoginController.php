@@ -67,12 +67,13 @@ class LoginController extends Controller
     public function handleProviderCallback()
     {
 
-        
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("Hello 0");
 
         try {
             $user = Socialite::driver('google')->user();
         } catch (\Exception $e) {
-            return redirect('/login');
+            return redirect('/login')->withErrors(['google_error' => 'Google login failed.']);
         }
 
         $existingUser = User::where('email', $user->email)->first();
@@ -84,7 +85,7 @@ class LoginController extends Controller
             $newUser->username = strtok($user->email, '@');
             $newUser->email = $user->email;
             $newUser->password = bcrypt('password');
-            $newUser->birthdate = '2000-01-01'; //TODO Ver melhor
+            $newUser->birthdate = '2000-01-01';
             $newUser->save();
             auth()->login($newUser);
         }

@@ -17,6 +17,12 @@
                     </div>
                 @endif
 
+                @if ($errors->has('google_error'))
+                    <div class="alert alert-danger">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('google_login') }}
+                    </div>
+                @endif
+
                 <fieldset>
                     <legend>Login Form</legend>
                     @if ($errors->has('email'))
