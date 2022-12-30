@@ -1666,10 +1666,10 @@ function sendDeletePostRequest() {
 
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
-        sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
-    // location.reload();
-
-    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
+        sendAjaxRequest('delete', '/api/post/' + id, {}, function() {
+            location.reload();
+        });
+    
 
 }
 
