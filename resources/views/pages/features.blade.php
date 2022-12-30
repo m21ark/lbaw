@@ -117,6 +117,15 @@
                     </div>
                 </div>
 
+                <div class=" d-flex align-items-start  m-2 border border-secondary p-2">
+                    <div>
+                        <h4 class="fs-2">Video-Call</h4>
+                        <hr>
+                        <p><span style="font-weight: bold">Nexus</span> allows you to do Video-call  with your friends</p>
+
+                    </div>
+                </div>
+
 
             </div>
         </div>
