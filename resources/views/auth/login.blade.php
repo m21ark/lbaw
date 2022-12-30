@@ -19,7 +19,7 @@
 
                 @if ($errors->has('google_error'))
                     <div class="alert alert-danger">
-                        <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('google_login') }}
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('google_error') }}
                     </div>
                 @endif
 

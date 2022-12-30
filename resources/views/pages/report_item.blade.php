@@ -20,7 +20,7 @@
                         <a id="ban_user_btn" href="#!" class="mr-1 mb-1 mt-1 btn btn-danger">
                             <h5>Ban User</h5>
                         </a>
-                        <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}">
+                        <select class="p-3" id="ban_time_select" data-userid="{{ $user->id }}" data-name="{{ $user->username }}">
                             <option selected value="1">7 days</option>
                             <option value="2">15 days</option>
                             <option value="3">30 days</option>
@@ -31,7 +31,7 @@
                         </select>
                     </div>
                 @else
-                    <a id="unban_user_btn" href="#!" class="mt-1 btn btn-warning" data-userid="{{ $user->id }}">
+                    <a id="unban_user_btn" href="#!" class="mt-1 btn btn-warning" data-userid="{{ $user->id }}" data-name="{{ $user->username }}">
                         <h5>Unban User</h5>
                     </a>
                 @endif
@@ -79,8 +79,6 @@
 
     </div>
 
-
-
     <div class="mt-5 d-flex justify-content-center">
         <h4 class="me-3">Pendent Reports</h4>
         <label class="switch">
@@ -114,14 +112,16 @@
 
 
     <div id="toggle_list_B" hidden class="mt-5 text-bg-light p-4" style="margin:auto;max-width:50em">
-        <h3 class="mb-3">Past Reports ({{ sizeof($decided_reports) }})</h3>
+        <h3 class="mb-3">Past Reports (<span id="reports_decided_list_count">{{ sizeof($decided_reports) }}</span>)</h3>
 
         @if (count($decided_reports) === 0)
-            <p class="text-center">No past reports to view</p>
+            <p class="text-center" id="no_past_reports_sms">No past reports to view</p>
         @endif
 
-        @foreach ($decided_reports as $report)
-            @include('partials.report_decided_item', ['report' => $report])
-        @endforeach
+        <div id="reports_decided_list">
+            @foreach ($decided_reports as $report)
+                @include('partials.report_decided_item', ['report' => $report])
+            @endforeach
+        </div>
     </div>
 @endsection

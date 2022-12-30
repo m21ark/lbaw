@@ -47,7 +47,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'string|exists:group,name',
         ]);
-        
+
 
         $group = Group::where('name', $name)->first();
 
@@ -174,7 +174,7 @@ class GroupController extends Controller
                 'description' => 'required|string|min:1|max:2000',
                 'name' => 'alpha_dash'
             ]);
-        }   catch (\Illuminate\Validation\ValidationException $th) {
+        } catch (\Illuminate\Validation\ValidationException $th) {
             return response()->json([$th->validator->errors()], 400);
         }
 
@@ -292,12 +292,21 @@ class GroupController extends Controller
         ]);
 
         $group = Group::find($idGroup);
+        $user = User::find($idUser);
 
-        $this->authorize('delete', $group); // POLICY
+        if ($user->isOwnerOfGroup($idGroup)) {
+            try {
+                $user->removeOwner($idGroup);
+            } catch (Exception $e) {
+                return response()->json(['Should grant succession from group' => 400, 'success' => 'Profile updated successfully'], 400);
+            }
+        }
 
         DB::table('group_join_request')
             ->where('id_group', $idGroup)->where('id_user', $idUser)
-            ->update(['acceptance_status' => 'Rejected']);
+            ->delete();
+
+        return response()->json(['Successfully Removed from group' => 200, 'success' => 'Profile updated successfully'], 200);
     }
 
     public function newGroupOwner($idGroup, $idUser)

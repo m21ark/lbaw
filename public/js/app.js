@@ -1,5 +1,5 @@
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
+Pusher.logToConsole = false;
 
 var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
     cluster: 'eu',
@@ -31,7 +31,8 @@ if (user_header != null) {
                 uploadSms(false, data.obj.text)();
             }
             else {
-                addNotification(data.sender.username + ' message you: ' + data.obj.text, data.sender);
+                let aux = `<a href="/messages/${data.sender.username}">${data.sender.username}</a>`
+                addNotification(aux + ' messaged you: ' + data.obj.text, data.sender);
             }
         }
         else if (data.type == "Like") {
@@ -47,7 +48,7 @@ if (user_header != null) {
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
             updateNrNotfications();
-            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+            addNoticomment_reply_btnfication(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
 
 
@@ -123,7 +124,7 @@ if (user_header != null) {
     }
 
     function GetRTCSessionDescription() {
-        console.log("GetRTCSessionDescription called");
+        //console.log("GetRTCSessionDescription called");
         window.RTCSessionDescription =
             window.RTCSessionDescription ||
             window.webkitRTCSessionDescription ||
@@ -1045,12 +1046,17 @@ function sendRejectReportRequest(event) {
 
     let res = confirm('Are you sure you want to reject this report?');
     if (res) {
-        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, () => {
+        sendAjaxRequest('put', '/api/report', { decision: 'Rejected', id: id }, function () {
+            let report_div = document.createElement('div')
+            report_div.innerHTML = this.responseText
+            document.querySelector('#reports_decided_list').appendChild(report_div)
+            let count = document.querySelector(`#reports_decided_list_count`)
+            count.innerHTML = parseInt(count.innerHTML) + 1;
+            let aux = document.querySelector('#no_past_reports_sms');
+            if (aux)
+                aux.remove()
 
-            console.log(this)
-
-
-
+            addedHandler(null).call(this)
         });
         document.querySelector(`#reports_list_item_${id}`).remove()
         document.querySelector('#reports_list_count').innerHTML = parseInt(document.querySelector('#reports_list_count').innerHTML) - 1;
@@ -1079,12 +1085,12 @@ function commentPopupsController() {
 function sendBanUserRequest(event) {
     const elem = document.querySelector('#ban_time_select')
     userID = elem.dataset.userid
+    username = elem.dataset.name
     time_selected = elem.value
 
     let res = confirm('Are you sure you want to ban this user?');
     if (res) {
         sendAjaxRequest('put', `/api/user/ban/${userID}/${time_selected}`, {}, () => { });
-        location.reload()
     }
 
 }
@@ -1277,18 +1283,18 @@ function sendEditGroupRequest(event) {
     let res = confirm('Are you sure you want to edit this group?');
     if (!res)
         return;
-    sendFormData('post', '/api/group/' + oldName, formData, 
-    function() {
+    sendFormData('post', '/api/group/' + oldName, formData,
+        function () {
 
-        if (this.status >= 200 && this.status < 300) {
-            location.hash = 'success'
-            location = '/group/' + name;
-        }
-        else {
-            location.hash = 'error'
-            location.pathname = '/group/' + oldName;
-        }
-    });
+            if (this.status >= 200 && this.status < 300) {
+                location.hash = 'success'
+                location = '/group/' + name;
+            }
+            else {
+                location.hash = 'error'
+                location.pathname = '/group/' + oldName;
+            }
+        });
 }
 
 function sendDeleteGroupRequest(e) {
@@ -1317,7 +1323,6 @@ function sendKickpMemberRequest(event) {
 }
 
 function sendNewOwnerRequest(event) {
-    console.log("here")
     let e = event.currentTarget
 
     let id_group = e.getAttribute('data-idGroup')
@@ -1336,8 +1341,9 @@ function sendNewOwnerRequest(event) {
 
 
 
-function sendDeleteGroupMemberRequest() {
+function sendDeleteGroupMemberRequest(e) {
 
+    e.preventDefault()
     let id_group = document.querySelector('#leave_group_button').getAttribute('data-idGroup');
     let id_user = document.querySelector('#leave_group_button').getAttribute('data-idUser');
 
@@ -1346,9 +1352,16 @@ function sendDeleteGroupMemberRequest() {
     if (!res)
         return;
 
-    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, () => { });
+    sendAjaxRequest('delete', `/api/group/${id_group}/member/${id_user}`, null, function () {
+        if (this.status >= 200 && this.status < 300) {
+            location.hash = 'success'
+            location.reload();
+        }
+        else {
+            addedHandler(null).call(this)
+        }
 
-    location.reload();
+    });
 }
 
 
@@ -1389,8 +1402,8 @@ function sendEditProfileRequest(event) {
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, function() {
-            
+        sendFormData('post', '/api/profile/' + oldName, formData, function () {
+
             if (this.status >= 200 && this.status < 300) {
                 location.hash = 'success'
                 location = '/profile/' + username;
@@ -1406,14 +1419,14 @@ function sendEditProfileRequest(event) {
 }
 
 if (window.location.hash === "#success") {
-    let r = {status: 201};
-    setTimeout(function() {
+    let r = { status: 201 };
+    setTimeout(function () {
         addedHandler(null).call(r)
     }, 500);
 }
 else if (window.location.hash === "#error") {
-    let r = {status: 400};
-    setTimeout(function() {
+    let r = { status: 400 };
+    setTimeout(function () {
         addedHandler(null).call(r)
     }, 500);
 }
@@ -1460,7 +1473,7 @@ function toggleLikeHTML(event) {
     let hasLiked = like_a.dataset.liked === '1'
     let like_icon = like_a.lastElementChild.firstElementChild
 
-    // console.log(like_a, like_icon, hasLiked)
+    //console.log(like_a, like_icon, hasLiked)
 
     like_a.firstElementChild.innerHTML = parseInt(like_a.firstElementChild.innerHTML) + (hasLiked ? -1 : 1);
     like_a.setAttribute('data-liked', (hasLiked ? '0' : '1'));
@@ -1486,14 +1499,22 @@ function sendCreateCommentRequest() {
         sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, function () {
             let comment_div = document.createElement('div')
             comment_div.innerHTML = this.responseText
-            comment_div.onclick = sendLikeCommentRequest
+            let e = comment_div.querySelector('.popup_btn_comment_edit')
+
+            e.addEventListener('click', () => {
+                let id = e.dataset.id
+                let elem = document.querySelector('#popup_show_comment_edit')
+                elem.toggleAttribute('hidden')
+                document.querySelector('#comment_text_edit').value = e.dataset.text
+                document.querySelector('#edit_comment_button').setAttribute('data-id', id)
+                document.querySelector('#delete_comment_button').setAttribute('data-id', id)
+            });
+
             document.querySelector('#post_comment_section').appendChild(comment_div)
             addedHandler(null).call(this)
         });
         document.querySelector('#comment_post_input').value = ''
-        // TODO falta adicionar comentario e a notificao de action success
     }
-
 }
 
 function sendEditCommentRequest() {
@@ -1507,7 +1528,9 @@ function sendEditCommentRequest() {
 
     let res = confirm('Are you sure you want edit this comment?');
     if (res) {
-        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, () => { });
+        sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
         logItem('#popup_show_comment_edit')(0);
     }
@@ -1520,7 +1543,9 @@ function sendDeleteCommentRequest() {
 
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
-        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, () => { });
+        sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector(`#comment_item_${id_comment}`).remove()
         logItem('#popup_show_comment_edit')(0);
     }
@@ -1547,7 +1572,9 @@ function sendCreateReportRequest(e) {
 
     let res = confirm('Are you sure you want to submit this report?');
     if (res) {
-        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, () => { });
+        sendAjaxRequest('post', '/api/report/', { description: description, id_post: id_post, id_comment: id_comment }, function () {
+            addedHandler(null).call(this)
+        });
         document.querySelector('#popup_show_report_create').toggleAttribute('hidden');
     }
 }
@@ -1641,10 +1668,10 @@ function sendDeletePostRequest() {
 
     let res = confirm('Are you sure you want to delete this post?');
     if (res)
-        sendAjaxRequest('delete', '/api/post/' + id, {}, () => { });
-    // location.reload();
+        sendAjaxRequest('delete', '/api/post/' + id, {}, function () {
+            location.reload();
+        });
 
-    //EM VEZ DO RELOAD DAR DELETE NO DOM TODO
 
 }
 
@@ -1932,12 +1959,13 @@ function createPost(post) {
     </button>`
 
     if (post.hasLiked) {
-        like = '<h3 data-liked="1">&#x2764;</h3>'
+        like = '<i class="fa-solid fa-heart text-danger"></i>'
     } else {
-        like = '<h3 data-liked="0">&#9825;</h3>'
+        like = '<i class="fa-regular fa-heart"></i>'
     }
 
     if (post.auth !== 0) {
+
         if (post.isOwner) {
             dropdown = `<a class="dropdown-item" href="/post/${post.id}">See Post</a>`
         } else {
@@ -1946,24 +1974,43 @@ function createPost(post) {
         }
 
         bottom = `
-        <div class="d-flex">
-            <p class="me-3">${post.likes_count}</p>
 
-            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none" data-uid=${post.auth} data-id=${post.id}>
-               ${like}
+        <a class="text-decoration-none " data-uid=${post.auth} onclick="sendLikePostRequest(event)"
+        data-id=${post.id} data-liked="${post.hasLiked ? '1' : '0'}" href="#!">
+
+        <span class="me-3 text-dark" style="font-size:1.2em;">${post.likes_count}</span>
+            <span style="font-size: 1.3em">
+                 ${like}
+            </span>
             </a>
-        </div>
+
+
+
+        <a class="text-decoration-none" href="/post/${post.id}">
+        <span class="mt-1 me-3 text-dark" style="font-size:1.2em">${post.comments_count}</span>
+        <span style="font-size: 1.3em">
+            <i class="ms-3 fa-regular fa-comment-dots"></i>
+        </span>
+    </a>
         `
 
     } else {
 
         bottom = `
-        <div class="d-flex">
-            <p class="me-3">${post.likes_count}</p>
-            <a href="#!" onclick="sendLikePostRequest(event)" class="like_btn_post text-decoration-none">
-                <h2><strong>&#9825;</strong></h2>
-            </a>
-        </div>
+        <a class="text-decoration-none">
+            <span class="me-3 text-dark" style="font-size:1.2em;">${post.likes_count}</span>
+                <span style="font-size: 1.3em">
+                   ${like}
+                </span>
+          </a>
+
+
+          <a class="text-decoration-none" href="/post/${post.id}">
+          <span class="mt-1 me-3 text-dark" style="font-size:1.2em">${post.comments_count}</span>
+          <span style="font-size: 1.3em">
+              <i class="ms-3 fa-regular fa-comment-dots"></i>
+          </span>
+      </a>
         `
     }
 
@@ -2033,15 +2080,17 @@ function createPost(post) {
 
                     </div>
 
-                    <!-- TODO: Ver imagens da database -->
 
-                    ${images}
-
+                    <a class="text-decoration-none" href="/post/${post.id}" style="color: black">
+                         ${images}
+                    </a>
 
 
 
                     <div>
+                    <a class="text-decoration-none" href="/post/${post.id}" style="color: black">
                         <p class="text-justify p-3">${post.text}</p>
+                    </a>
 
                         ${topics}
 
@@ -2051,11 +2100,9 @@ function createPost(post) {
 
                             ${bottom}
 
-                            <div class="d-flex">
-                                <p class="me-3">${post.comments_count}</p>
-                                <a href="/post/${post.id}" class="text-decoration-none"><span
-                                        class="commenticon">&#128172;</span></a>
-                            </div>
+
+
+
 
 
                         </div>
@@ -2191,7 +2238,7 @@ function updateSearch() {
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
-            console.log('Erro')
+            //console.log('Erro')
         }
 
         if (received == null) return;
@@ -2597,7 +2644,7 @@ function createNotificationList(event) {
         [].forEach.call(side_bar_elms, function (e, i) {
             if (e.textContent != "" && !e.textContent.includes("Post")) {
                 side_bar_text[i] = " " + e.textContent
-                console.log(side_bar_text)
+
                 e.removeChild(e.lastChild);
                 e.style.display = 'none';
             }
@@ -2643,7 +2690,7 @@ function createNotificationList(event) {
 
         let side_bar_elms = document.querySelectorAll('.enc');
         [].forEach.call(side_bar_elms, function (e, i) {
-            console.log(side_bar_text)
+
             if (side_bar_text[i] != "" && side_bar_text[i] != undefined) {
                 let textNode = document.createTextNode(side_bar_text[i]);
                 e.appendChild(textNode);
@@ -2669,7 +2716,7 @@ function sendRequestResponse(isAFriendReq, accept) {
         let gname = window.location.pathname.split('/')[2];;
 
         let reqURI = isAFriendReq ? "/api/user/friend/request/" + id + "/" + response : '/api/group/' + gname + '/request/' + id + "/" + response;
-        console.log(reqURI);
+
         let queryReqs = isAFriendReq ? "#friend_request_" + id : "#group_request_" + id
         sendAjaxRequest('put', reqURI, {}, function () {
             if (this.status == 200) {
