@@ -61,10 +61,21 @@
                 </li>
             @endif
 
-            <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
-                <span style="font-size:1.7em" class="me-4">Post</span>
-                <i class="fa-regular fa-square-plus fa-2x"></i>
-            </button>
+
+            @if (isset($ShowGroupPostButton) &&
+                isset($group) &&
+                in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+                <button id="popup_btn_group_post" class="mt-5 make_post_popup form_button btn btn-primary enc"
+                    type="submit">
+                    <span style="font-size:1.6em" class="me-4">Group Post</span>
+                    <i class="fa-regular fa-square-plus fa-2x"></i>
+                </button>
+            @else
+                <button id="popup_btn_post" class="mt-5 make_post_popup form_button btn btn-primary enc" type="submit">
+                    <span style="font-size:1.6em" class="me-4">Post</span>
+                    <i class="fa-regular fa-square-plus fa-2x"></i>
+                </button>
+            @endif
 
 
         @endauth
@@ -175,12 +186,25 @@
             @endif
 
             <li>
-                <a class="text-primary btn" aria-current="page" id="popup_btn_post">
-                    <span class="position-relative">
-                        <i class="fa-regular fa-square-plus fa-2x"></i>
-                    </span>
-                    <p style="padding: 0;margin:0;">Post</p>
-                </a>
+                @if (isset($ShowGroupPostButton) &&
+                    isset($group) &&
+                    in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+                    <a id="popup_btn_group_post" class="text-primary btn"
+                        aria-current="page">
+                        <span class="position-relative">
+                            <i class="fa-regular fa-square-plus fa-2x"></i>
+                        </span>
+
+                        <p style="padding: 0;margin:0;">Post</p>
+                    </a>
+                @else
+                    <a class="text-primary btn" aria-current="page" id="popup_btn_post">
+                        <span class="position-relative">
+                            <i class="fa-regular fa-square-plus fa-2x"></i>
+                        </span>
+                        <p style="padding: 0;margin:0;">Post</p>
+                    </a>
+                @endif
             </li>
 
         @endauth

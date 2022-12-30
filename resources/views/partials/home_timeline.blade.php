@@ -74,6 +74,6 @@
 @endauth
 
 
-<div id="timeline" class="mt-3">
+<div id="timeline" class="home_timeline mt-3">
     <!-- Add posts here -->
 </div>

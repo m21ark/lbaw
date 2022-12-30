@@ -218,6 +218,11 @@
 
 /*  ====================== AJUSTES =====================*/
 
+div#timeline.d-flex.flex-wrap>article.post {
+    width: 100%;
+    max-width: 50em;
+}
+
 #contextual-help {
     margin-right: 1em;
     margin-top: 0;

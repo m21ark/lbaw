@@ -1,5 +1,7 @@
 @extends('layouts.app')
+
 @section('page_title', 'Group Member List')
+
 @section('content')
     <h1 class="mt-4"><a href="/group/{{ $group->name }}">{{ $group->name }}</a> Member List </h1>
 
@@ -76,14 +78,5 @@
             @endforeach
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 
 @endsection

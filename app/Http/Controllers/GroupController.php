@@ -38,6 +38,7 @@ class GroupController extends Controller
             'in_group' => Auth::check() ? $this->userInGroup(Auth::user(), $group) : false,
             'user' => Auth::user(),
             'can_view_timeline' => $can_view_timeline,
+            'ShowGroupPostButton' => true,
         ]);
     }
 

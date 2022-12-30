@@ -1967,7 +1967,7 @@ function createPost(post) {
 
     new_post.innerHTML = `
 
-<div class="container mt-5 mb-5 post_item" style="width:90%">
+<div class="container mt-5 mb-5 post_item" style="width:90%;">
     <div class="row d-flex align-items-center  justify-content-center ">
             <div class="card post_card p-0">
                 <div>
@@ -2809,13 +2809,6 @@ if (window.location.pathname.substring(0, 6) == "/post/") {
     }
 }
 
-function groupPostResponsiveUI() {
-    let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
-
-    if (width <= 80)
-        document.querySelector('#list_toggle_btn').click()
-}
-
 
 function checkResponsiveUI() {
     let width = (window.innerWidth > 0) ? window.innerWidth / 16 : screen.width / 16;
@@ -2945,7 +2938,7 @@ addBubbleTagBehavior('#post_edit_tags', '#post_edit_tags_container', 3)
 addBubbleTagBehavior('#group_edit_tags', '#group_edit_tags_container', 3)
 addBubbleTagBehavior('#profile_edit_tags', '#profile_edit_tags_container', 3)
 
-// setInterval(() => { console.log(bubble_tags_array) }, 500);
+//setInterval(() => { console.log(bubble_tags_array) }, 500);
 
 // ================================== END OF BUBBLE TAGS ==================================
 

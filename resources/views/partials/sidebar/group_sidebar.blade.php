@@ -82,11 +82,6 @@
 
     </div>
 
-
-    <button id="popup_btn_group_post" onclick="groupPostResponsiveUI()" class='btn btn-primary w-100 mb-3 mt-2'>Post on
-        group</button>
-
-
     <h3 class="mb-4">Members</h3>
 
     <div class="list-group align-items-center d-flex mb-2 group_member_list">

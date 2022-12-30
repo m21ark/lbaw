@@ -7,7 +7,7 @@
     <div class="list-group list-group-checkable form-check d-flex p-1 mb-3 flex justify-content-between text-bg-light"
         id="search_filter">
 
-        <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_user" 
+        <input class="list-group-item-check pe-none" type="radio" name="search_filter" id="search_radio_user"
             value="users">
         <label class="list-group-item rounded-3" for="search_radio_user">
             User
