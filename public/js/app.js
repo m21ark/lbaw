@@ -1531,7 +1531,18 @@ function sendEditCommentRequest() {
         sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, function () {
             addedHandler(null).call(this)
         });
-        document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
+
+        let e = document.querySelector(`#comment_item_${id_comment} p.card-text`)
+        if (e)
+            e.innerHTML = text
+        else {
+            e = document.querySelector(`#comment_item_reply_${id_comment} p.card-text`)
+            if (e) {
+                e.innerHTML = text
+                document.querySelector(`#comment_item_reply_${id_comment} .popup_btn_comment_edit`).dataset.text = text
+            }
+
+        }
         logItem('#popup_show_comment_edit')(0);
     }
 
@@ -1543,10 +1554,34 @@ function sendDeleteCommentRequest() {
 
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
+
         sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, function () {
             addedHandler(null).call(this)
         });
-        document.querySelector(`#comment_item_${id_comment}`).remove()
+
+        let e = document.querySelector(`#comment_item_${id_comment}`)
+        if (e)
+            e.remove()
+        else {
+            e = document.querySelector(`#comment_item_reply_${id_comment}`)
+            if (e) {
+
+                let p = document.querySelector(`#comment_item_reply_${id_comment} .popup_btn_comment_edit`)
+                let c = document.querySelector(`#comment_item_${p.dataset.parent} .reply_count`)
+
+                if (c.dataset.replycount == 1) {
+                    document.querySelector(`#comment_reply_section_${p.dataset.parent}`).remove()
+                    document.querySelector(`#comment_item_${p.dataset.parent} .reveal_comment_replies`).remove()
+                } else {
+                    c.innerHTML = parseInt(c.innerHTML) - 1
+                    c.dataset.replycount = parseInt(c.dataset.replycount) - 1
+                }
+                e.remove()
+            }
+
+        }
+
+
         logItem('#popup_show_comment_edit')(0);
     }
 }

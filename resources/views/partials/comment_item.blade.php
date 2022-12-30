@@ -91,7 +91,7 @@
             <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!"
                 data-placement="top" title="Show Comment Replies">
 
-                <span class="mt-1 me-3 text-dark" style="font-size:1.5em">{{ sizeof($comment->replies) }}</span>
+                <span class="mt-1 me-3 text-dark reply_count" style="font-size:1.5em" data-replycount="{{ sizeof($comment->replies) }}">{{ sizeof($comment->replies) }}</span>
 
                 <span class="me-3" style="font-size: 1.7em">
                     <i class="ms-3 fa-regular fa-comment-dots"></i>
@@ -107,7 +107,7 @@
         <div class="comment_reply_section" id="comment_reply_section_{{ $comment->id }}" hidden>
             <h4 class="mt-4 mb-2">Replies</h4>
             @foreach ($comment->replies as $reply)
-                <div class="card mb-4 comment_reply">
+                <div class="card mb-4 comment_reply" id="comment_item_reply_{{ $reply->id }}">
 
                     <div class="card-header d-flex justify-content-evenly align-items-center">
                         @isset($showPostLink)
@@ -115,7 +115,7 @@
                         @else
                             @auth
                                 @if (Auth::user()->id == $reply->id_commenter)
-                                    <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
+                                    <a href="#!" data-id="{{ $reply->id }}" data-parent="{{ $comment->id }}" data-text="{{ $reply->text }}"
                                         data-placement="top" title="Edit Comment Reply"
                                         class="pt-1 text-decoration-none popup_btn_comment_edit ">
                                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
