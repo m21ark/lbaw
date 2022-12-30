@@ -415,7 +415,7 @@ function startContextualHelp() {
 
     }
 
-    else if (url_atual == "/messages") {
+    else if (url_atual == "/messages" || url_atual.match(/messages\/.*/)) {
         introJs().setOptions({
             steps: [{
                 intro: "This is our messages page"
@@ -432,7 +432,7 @@ function startContextualHelp() {
                 intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
             },
             {
-                element: document.querySelector("#timeline"),
+                element: document.querySelector("#message_body"),
                 intro: "You can see all the messages with your friend and you can write another message. Isn't that amazing???😮"
             },
             {
@@ -613,10 +613,6 @@ function startContextualHelp() {
             {
                 element: document.querySelector("#search_bar"),
                 intro: "Here you can search for any topic/group or user "
-            },
-            {
-                element: document.querySelector("#popup_btn_post"),
-                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
             },
             {
                 element: document.querySelector("#timeline"),
@@ -1274,8 +1270,7 @@ function sendEditGroupRequest(event) {
     let res = confirm('Are you sure you want to edit this group?');
     if (!res)
         return;
-    sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
-    location.pathname = '/group/' + name;
+    sendFormData('post', '/api/group/' + oldName, formData, function() { location.pathname = '/group/' + name; addedHandler(null)});
 }
 
 function sendDeleteGroupRequest(e) {
@@ -1449,6 +1444,7 @@ function sendCreateCommentRequest() {
         sendAjaxRequest('post', `/api/comment/${id_post}`, { id_user: id_user, id_post: id_post, text: text }, function () {
             let comment_div = document.createElement('div')
             comment_div.innerHTML = this.responseText
+            comment_div.onclick = sendLikeCommentRequest
             document.querySelector('#post_comment_section').appendChild(comment_div)
         });
         document.querySelector('#comment_post_input').value = ''
