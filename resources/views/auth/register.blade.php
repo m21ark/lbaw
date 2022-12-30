@@ -40,7 +40,9 @@
                             <i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first('email') }}
                         </div>
                     @else
-                        <label for="inputEmail" class=" mt-2">Email Address <small>(Required)</small></label>
+                        <label for="inputEmail" class=" mt-2" data-toggle="tooltip" data-placement="top"
+                            title="The email given will be associated with your Nexus account">Email Address
+                            <small>(Required)</small></label>
                         <input type="email" id="inputEmail" class="form-control mb-3" placeholder="Email" name="email"
                             required>
                     @endif
@@ -58,7 +60,9 @@
                         <input type="date" id="inputDate" class="form-control mb-3" name="birthdate" required>
                     @endif
 
-                    <label for="inputPassword" class=" mt-2">Password <small>(Required)</small></label>
+                    <label for="inputPassword" data-toggle="tooltip" data-placement="top"
+                        title="Password should be at least 6 characters long" class=" mt-2">Password
+                        <small>(Required)</small></label>
                     <input type="password" id="inputPassword" class="form-control mb-3" placeholder="Password"
                         name="password" required>
 
@@ -69,14 +73,18 @@
                     @endif
 
 
-                    <label for="inputRPassword" class=" mt-2">Confirm Password <small>(Required)</small></label>
+                    <label for="inputRPassword" data-toggle="tooltip" data-placement="top"
+                        title="Password same as last input" class=" mt-2">Confirm Password
+                        <small>(Required)</small></label>
                     <input type="password" id="inputRPassword" class="form-control mb-3" placeholder="Password"
                         name="password_confirmation" required>
 
 
-                    <label for="inputBio" class=" mt-2">Bio <small>(Required)</small></label>
-                    <input type="text" id="inputBio" class="form-control mb-3" placeholder="Bio" name="bio"
-                        required>
+                    <label for="inputBio" class=" mt-2" data-toggle="tooltip" data-placement="top"
+                        title="Tell about yourself to others. This information will be displayed in your profile">Bio
+                        <small>(Required)</small></label>
+                    <input type="text" id="inputBio" class="form-control mb-3" placeholder="Tell others about yourself"
+                        name="bio" required>
 
                 </fieldset>
 

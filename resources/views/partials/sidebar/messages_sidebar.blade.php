@@ -1,6 +1,8 @@
 <nav id="rightbar" class="text-bg-light">
     <h2>Recent Messages</h2>
 
+    <a href="/search/*" class="btn btn-outline-primary w-100 mt-2">New Conversation</a>
+
     <div class="mt-4 list-group w-auto">
         <div class="w-100 m-auto">
             @foreach ($user->getContactedUsers() as $message)

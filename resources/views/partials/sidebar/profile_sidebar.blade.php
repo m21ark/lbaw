@@ -31,6 +31,11 @@
                                         data-id="{{ $user->id }}"></i> <span>Remove Friend</span></span>
                             @endif
                         </a>
+
+                        @if (Auth::user()->username !== $user->username && (Auth::user()->isAdmin || $user->visibility || $friends))
+                            <a href="/messages/{{ $user->username }}" class="btn btn-outline-primary w-100"><i
+                                    class="fa fa-envelope"></i> Send Message</a>
+                        @endif
                     @endif
                 @endauth
             </div>

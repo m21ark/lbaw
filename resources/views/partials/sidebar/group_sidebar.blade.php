@@ -70,7 +70,6 @@
 
         <div class="card-footer pb-0 pt-3">
             <ul class="list-unstyled">
-                <!-- VALUES ARE WRONG COUNTED CAUSE APART FROM FIRST OWNER, OTHER OWNERS HAVE REQUEST TO JOIN -->
                 <li class="lead">{{ sizeof($group->owners) }} Owners</li>
                 <li class="lead">
                     {{ sizeof($group->members->whereNotIn('id_user', $group->owners->pluck('id_user')->toArray())) }}
@@ -122,7 +121,7 @@
         @endforeach
 
         @auth
-            @if (in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
+            @if (Auth::user()->isAdmin || in_array(Auth::user()->id, $group->members->pluck('id_user')->toArray()))
                 <a href="/group/member_list/{{ $group->name }}"class='btn btn-outline-primary w-100 mb-3 mt-3'>
                     Full Member List
                 </a>
