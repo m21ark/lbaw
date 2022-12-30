@@ -645,6 +645,27 @@ paths:
         '403':
           description: 'Forbidden access to resource'
 
+/api/group/{name}/owner/{id}:
+ post: 
+      operationId: R307
+      summary: 'R307: Promote a Member'
+      description: 'Promote a member: OWN'
+      tags:
+        - "M03: Groups"
+
+    parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+         
+      responses:
+        '200':
+          description: 'The group member was promoted successfully'
+        '403':
+          description: 'Forbidden access to resource'     
+
   
   /api/post/{id}:       
     delete:
