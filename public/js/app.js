@@ -2242,12 +2242,24 @@ function createGroupCard(group) {
     if (bio_short.length > 50)
         bio_short = bio_short.substring(0, 75) + '...'
 
+    if (group.visibility === true) {
+        privacy = 'Public'
+    } else {
+        privacy = 'Private'
+    }
+
+
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="width: 15em;height:28em;justify-content:between">
         <img height="50%" style="max-height:20em" src="/${group.photo}" class="card-img-top" alt="Group Profile Image">
         <div class="card-body">
             <h5 class="card-title">${group.name}</h5>
             <p class="card-text">${bio_short}</p>
+
+            <p class="card-text"><b>Visibility: </b>
+            <span class="card-text">
+                ${privacy}
+            </span>
 
         </div>
 

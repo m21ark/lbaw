@@ -114,6 +114,10 @@
         font-size: 0.7em;
     }
 
+    #user_info {
+        display: flex;
+        flex-direction: column;
+    }
 
 }
 
@@ -510,9 +514,8 @@ ul.nav a:hover {
     padding: 0.0em
 }
 
-#search_filter * {
-    width: 32%;
-    text-align: center;
+#search_filter .list-group-item p {
+    padding: 0.0em
 }
 
 #feed_filter .list-group-item {
@@ -522,6 +525,7 @@ ul.nav a:hover {
 #search_filter .list-group-item {
     margin: 0.5em;
 }
+
 
 /* ====================== Popups ===================== */
 
