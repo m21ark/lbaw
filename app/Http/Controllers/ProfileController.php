@@ -62,17 +62,21 @@ class ProfileController extends Controller
     public function edit(Request $request)
     {
 
-        $user = Auth::user();
+        $user = Auth::user()->isAdmin ? User::find($request->input('idUser')) : Auth::user();
 
-        $request->validate([
-            'username' => 'string|max:255',
-            'bdate' => 'date',
-            'visibility' => 'string',
-            'bio' => 'string|max:1000',
-        ]);
+        try {
+            $request->validate([
+                'username' => 'alpha_dash|max:255',
+                'bdate' => 'date',
+                'visibility' => 'string',
+                'bio' => 'string|max:1000',
+            ]);
+        }   catch (\Illuminate\Validation\ValidationException $th) {
+            return response()->json([$th->validator->errors()], 400);
+        }
 
         if ($user == null) {
-            return redirect()->route('home');
+            return response()->json(['Not valid Username' => 400, 'error' => 'You are not logged in']);
         }
 
         // NO NEED FOR POLICY ... only the stated above
@@ -106,7 +110,7 @@ class ProfileController extends Controller
 
         DB::commit();
 
-        return redirect()->route('profile', $user->username)->with('success', 'Profile updated successfully');
+        return response()->json(['Successfully Updated' => 203, 'success' => 'Profile updated successfully'], 203);
     }
 
 
@@ -137,7 +141,9 @@ class ProfileController extends Controller
 
         $user->save();
 
-        Auth::logout();
+        if (Auth::user()->username == $username) {
+            Auth::logout();
+        }
 
         return redirect()->route('home');
     }

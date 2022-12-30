@@ -12,6 +12,13 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin !== null) {
+            return true;
+        }
+    }
+
     public function viewAny(User $user)
     {
         return $user->isAdmin() !== null;
@@ -29,9 +36,6 @@ class UserPolicy
 
     public function update(User $user, User $model)
     {
-        if (Auth::user()->isAdmin)
-            return true;
-
         return $user->id == $model->id;
     }
 

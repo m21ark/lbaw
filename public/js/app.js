@@ -416,7 +416,7 @@ function startContextualHelp() {
 
     }
 
-    else if (url_atual == "/messages") {
+    else if (url_atual == "/messages" || url_atual.match(/messages\/.*/)) {
         introJs().setOptions({
             steps: [{
                 intro: "This is our messages page"
@@ -433,7 +433,7 @@ function startContextualHelp() {
                 intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
             },
             {
-                element: document.querySelector("#timeline"),
+                element: document.querySelector("#message_body"),
                 intro: "You can see all the messages with your friend and you can write another message. Isn't that amazing???😮"
             },
             {
@@ -614,10 +614,6 @@ function startContextualHelp() {
             {
                 element: document.querySelector("#search_bar"),
                 intro: "Here you can search for any topic/group or user "
-            },
-            {
-                element: document.querySelector("#popup_btn_post"),
-                intro: "You can make a post here ... <img src=\"http://www.quickmeme.com/img/8d/8d758a58bdccfedcec9d16d4a028b664cbaa9ceb4c1e14f5d160aa200da60bd2.jpg\" class=\"help_photo\"/>"
             },
             {
                 element: document.querySelector("#timeline"),
@@ -1236,6 +1232,8 @@ function sendCreateGroupRequest(event) {
     let visibility = document.querySelector('#popup_show_group_create #group_visibility').checked
     let tags = bubble_tags_array.join(' ');
 
+    name = name.split(' ').join('_');
+
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
         return;
@@ -1249,7 +1247,6 @@ function sendCreateGroupRequest(event) {
                 location.pathname = '/group/' + name;
             }
         })
-
 
         // TODO: Fazer redirect para grupo criado
     }
@@ -1284,8 +1281,18 @@ function sendEditGroupRequest(event) {
     let res = confirm('Are you sure you want to edit this group?');
     if (!res)
         return;
-    sendFormData('post', '/api/group/' + oldName, formData, addedHandler(null));
-    location.pathname = '/group/' + name;
+    sendFormData('post', '/api/group/' + oldName, formData,
+    function() {
+
+        if (this.status >= 200 && this.status < 300) {
+            location.hash = 'success'
+            location = '/group/' + name;
+        }
+        else {
+            location.hash = 'error'
+            location.pathname = '/group/' + oldName;
+        }
+    });
 }
 
 function sendDeleteGroupRequest(e) {
@@ -1364,6 +1371,7 @@ function sendEditProfileRequest(event) {
 
     let oldName = document.querySelector('#profile_edit_page #user_name').dataset.name
     let idUser = document.querySelector('#profile_edit_page #user_name').dataset.id
+
     let pho = document.querySelectorAll('#profile_edit_page #profile_pic')[0].files[0];
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
@@ -1380,15 +1388,38 @@ function sendEditProfileRequest(event) {
     formData.append('oldName', oldName);
     formData.append('photo', pho);
     formData.append('tags', tags);
+    formData.append('idUser', idUser);
 
 
     let res = confirm('Are you sure you want to edit your profile?');
     if (res) {
-        sendFormData('post', '/api/profile/' + oldName, formData, () => {
-            location.pathname = '/profile/' + username;
+        sendFormData('post', '/api/profile/' + oldName, formData, function() {
+
+            if (this.status >= 200 && this.status < 300) {
+                location.hash = 'success'
+                location = '/profile/' + username;
+            }
+            else {
+                location.hash = 'error'
+                location.pathname = '/profile/' + oldName;
+            }
+
         });
 
     }
+}
+
+if (window.location.hash === "#success") {
+    let r = {status: 201};
+    setTimeout(function() {
+        addedHandler(null).call(r)
+    }, 500);
+}
+else if (window.location.hash === "#error") {
+    let r = {status: 400};
+    setTimeout(function() {
+        addedHandler(null).call(r)
+    }, 500);
 }
 
 
@@ -1398,7 +1429,7 @@ function sendDeleteProfileRequest(e) {
 
     let res = prompt('Are you sure you want to delete your "' + username + '" account?\nPlease insert your username to confirm:');
     if (res === username) {
-        sendAjaxRequest('delete', '/api/profile/' + username, {}, console.log);
+        sendAjaxRequest('delete', '/api/profile/' + username, {}, () => { window.location = '/home' });
     }
     else {
         alert('Account not deleted!');

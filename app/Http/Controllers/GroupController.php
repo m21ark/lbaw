@@ -47,6 +47,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'string|exists:group,name',
         ]);
+        
 
         $group = Group::where('name', $name)->first();
 
@@ -167,10 +168,15 @@ class GroupController extends Controller
     public function edit(Request $request)
     {
 
-        $request->validate([
-            'id_group' => 'integer|exists:group,id',
-            'description' => 'required|string|min:1|max:2000',
-        ]);
+        try {
+            $request->validate([
+                'id_group' => 'integer|exists:group,id',
+                'description' => 'required|string|min:1|max:2000',
+                'name' => 'alpha_dash'
+            ]);
+        }   catch (\Illuminate\Validation\ValidationException $th) {
+            return response()->json([$th->validator->errors()], 400);
+        }
 
         DB::beginTransaction();
         $id_group = $request->input('id_group');
@@ -200,7 +206,7 @@ class GroupController extends Controller
 
         $group->save();
 
-        return $group;
+        return response()->json(['Successfully Updated' => 203, 'success' => 'Profile updated successfully'], 203);
     }
 
     private function edit_topics(Request $request, Group $group)

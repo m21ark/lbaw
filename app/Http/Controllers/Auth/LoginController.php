@@ -67,8 +67,6 @@ class LoginController extends Controller
     public function handleProviderCallback()
     {
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello 0");
 
         try {
             $user = Socialite::driver('google')->user();
