@@ -78,6 +78,7 @@
         max-width: 60em;
     }
 
+    
 }
 
 @media(max-width: 40em) {
@@ -123,6 +124,9 @@
         flex-direction: column;
     }
 
+    #default_img {
+        width: 40vh;
+    }
 }
 
 

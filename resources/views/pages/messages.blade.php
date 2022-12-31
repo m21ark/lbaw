@@ -33,7 +33,7 @@
                     </a>
                 </div>
             @else
-                <img src="/Illustration 18.png" alt="No Conversation Selected Art" width="50%">
+                <img src="/Illustration 18.png" alt="No Conversation Selected Art" width="100%" id="default_img">
             @endif
 
         </div>
