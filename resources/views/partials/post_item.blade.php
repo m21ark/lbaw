@@ -12,7 +12,7 @@
                 class="text-decoration-none d-flex flex-row align-items-center">
                 <img src="{{ asset($post->owner->photo) }}" width="60" alt="Post Owner Profile Image"
                     class="rounded-circle me-3">
-                <strong class="font-weight-bold">{{ $post->owner->username }}</strong>
+                <strong class="font-weight-bold">{{ $post->owner->username }} | {{ $post->id }}</strong>
             </a>
 
             <small class="me-5">{{ Carbon\Carbon::parse($post->post_date)->diffForHumans() }}</small>

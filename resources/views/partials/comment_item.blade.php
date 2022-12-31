@@ -40,7 +40,7 @@
         <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}"
             alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
-            href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
+            href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }} | {{ $comment->id }}</a>
     </div>
 
     <div class="card-body">
@@ -138,7 +138,7 @@
                         <img href="/profile/{{ $reply->poster->username }}" src="/{{ $reply->poster->photo }}"
                             alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
                         <a class="text-decoration-none"
-                            href="/profile/{{ $reply->poster->username }}">{{ $reply->poster->username }}</a>
+                            href="/profile/{{ $reply->poster->username }}">{{ $reply->poster->username }} | {{ $reply->id }}</a>
                     </div>
 
                     <div class="card-body">
