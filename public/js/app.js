@@ -18,7 +18,6 @@ if (user_header != null) {
     var channel1 = pusher.subscribe('App.User.' + id);
     channel1.bind('my-event', function (data) {
 
-        // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post ?? (data.obj.comment !== undefined ? data.obj.comment.id_post : null),
             sender: data.sender,
@@ -83,17 +82,38 @@ if (user_header != null) {
     });
 
     channel.bind("pusher:member_removed", member => {
-        // for remove member from list:
         var index = users.indexOf(member.id);
         users.splice(index, 1);
-        if (member.id == room) {
+        
+        let curr_user = document.querySelector('#sms_rcv')
+        if (curr_user.dataset.id == member.id) {
+            curr_user.removeChild(curr_user.children[1])
+        }
+        if (member.id == room ) { // IF he moves from pages ...
             endCall();
         }
         render();
     });
 
+    function insertAfter(newNode, existingNode) {
+        existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+    }
+
     function render() {
-        // ONLINE STATUS OF USERS
+        users.forEach(element => {
+            // add a green indicator to the img 
+            let l = createElementFromHTML(`
+             <span class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-success" id="notf_nr">online</span>`
+            )
+
+            let onlineStatus = document.querySelector('#sms_rcv')
+
+            if (onlineStatus != null && onlineStatus.dataset.id ==element ) {
+                insertAfter(l, onlineStatus.firstElementChild);
+            }
+
+
+        });
     }
 
     /////////////////////////////////////////////
