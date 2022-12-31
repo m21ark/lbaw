@@ -1,5 +1,5 @@
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = false;
+// Pusher.logToConsole = true;
 
 var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
     cluster: 'eu',
