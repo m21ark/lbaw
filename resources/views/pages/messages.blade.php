@@ -4,10 +4,10 @@
 
 @section('content')
 
-    <a style="visibility: hidden" class="float shadow-lg" id="list_toggle_btn_div">
+    <div style="visibility: hidden" class="float shadow-lg" id="list_toggle_btn_div">
         <label for="list_toggle_btn"><i class="fa fa-bars my-float"></i></label>
         <input style="display: none" type="checkbox" id="list_toggle_btn">
-    </a>
+    </div>
 
     <div id="toggle_list_A">
         <div id="message_frame" class="card">

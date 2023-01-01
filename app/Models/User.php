@@ -204,9 +204,8 @@ class User extends Authenticatable
 
         $categories = collect();
         foreach($randomArray as $product){
-            $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-                   $out->writeln($product);
-            $category = DB::table('group')->where('id', '=', $product)->first();
+
+            $category = Group::find($product)->first();
             if ($category) {
                 $categories->push($category); 
             }

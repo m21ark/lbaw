@@ -2115,7 +2115,7 @@ function createPost(post) {
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                        <a href='/profile/${post.owner}' .
+                        <a href='/profile/${post.owner}'
                             class="text-decoration-none d-flex flex-row align-items-center">
                             <img src="/${post.photo}" width="60" class="rounded-circle me-3" alt="Post Owner Profile Image">
                             <strong class="font-weight-bold">${post.owner}</strong>
