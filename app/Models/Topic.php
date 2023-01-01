@@ -10,4 +10,8 @@ class Topic extends Model
     use HasFactory;
     public $timestamps  = false;
     protected $table = 'topic';
+
+    function group() {
+        return $this->hasMany('App\Models\GroupTopic', 'id_group');
+    }
 }

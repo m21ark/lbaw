@@ -162,18 +162,43 @@ class User extends Authenticatable
                 $sug_user = $entry->sender->id == $friend->id ? $entry->receiver : $entry->sender;
 
                 if (!in_array($sug_user->id, $user_friend)) { // NOT SHOWING FRIENDS OF THE USER
+                    $user_friend[] = $sug_user->id; //not showing the same user twice
                     $suggestion[] = $sug_user;
-               
-                   
                 }
             }
         }
 
         $randomArray = [];
         while (count($randomArray) < 4) {
-          $randomKey = array_rand($suggestion);
-          $randomArray[] = $suggestion[$randomKey];
-          unset($suggestion[$randomKey]);
+            
+            if (!$suggestion)
+                break;
+
+            $randomKey = array_rand($suggestion);
+            $randomArray[] = $suggestion[$randomKey];
+            unset($suggestion[$randomKey]);
+        }
+
+        return $randomArray;
+    }
+
+
+    function groupSuggestions() {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        $out->writeln("Hello from Terminal");
+        $randomArray = [];
+        foreach ($this->interests as $interest) {
+           $suggestion = $interest->topic->group()->get()->toArray();
+
+           while (count($randomArray) < 4) {
+              
+               if (!$suggestion)
+                   break;
+
+               $randomKey = array_rand($suggestion);
+               $randomArray[] = $suggestion[$randomKey];
+               unset($suggestion[$randomKey]);
+           }
         }
 
         return $randomArray;

@@ -77,5 +77,26 @@
             @endif
         </div>
 
+        @if (count(Auth::user()->groupSuggestions()) != 0)
+            <h2 class="mt-3">Some Group Suggestions</h2>
+        
+            <div class="d-flex flex-wrap justify-content-center align-items-center">
+                @foreach ( Auth::user()->groupSuggestions() as  $sug)
+            
+                    <div class="card mt-4 me-3" style="width: 15em;height:29em"
+                        id="friend_request_{{ $sug->id }}">
+                        <img height="50%" src="/{{ $sug->photo }}" class="card-img-top"
+                            alt="User Profile Image">
+                        <div class="card-body">
+                            <h5 class="card-title friend_request_sender">
+                                <a href="/profile/{{ $sug->username }}"> {{ $sug->username }}</a>
+                            </h5>
+                            <p class="card-text">{{ substr($sug->bio, 0, 100) . '...' }}</p>
+                        </div>
+                    </div>    
+                @endforeach
+            </div>
+        @endif
+
     </div>
 @endsection
