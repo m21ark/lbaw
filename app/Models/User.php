@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
@@ -141,4 +142,41 @@ class User extends Authenticatable
     {
         $this->groupsOwner()->where('id_group', $id_group)->delete();
     }
+
+    public function friendOfFriend()
+    {
+        $suggestion = [];
+        $user_friend = [];
+        $user = Auth::user();
+        $user_friend[] = $user->id;
+        foreach (Auth::user()->friends() as $requester) {
+            $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender;
+            $user_friend[] = $friend->id;
+        }
+        
+
+        foreach (Auth::user()->friends() as $requester) {
+            $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender;
+            $profileFriends = $friend->friends();
+            foreach ($profileFriends as $entry){
+                $sug_user = $entry->sender->id == $friend->id ? $entry->receiver : $entry->sender;
+
+                if (!in_array($sug_user->id, $user_friend)) { // NOT SHOWING FRIENDS OF THE USER
+                    $suggestion[] = $sug_user;
+               
+                   
+                }
+            }
+        }
+
+        $randomArray = [];
+        while (count($randomArray) < 4) {
+          $randomKey = array_rand($suggestion);
+          $randomArray[] = $suggestion[$randomKey];
+          unset($suggestion[$randomKey]);
+        }
+
+        return $randomArray;
+    }
+
 }
