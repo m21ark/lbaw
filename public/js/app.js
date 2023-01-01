@@ -1873,6 +1873,7 @@ function updateFeed(feed) {
     sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
+        console.log(received)
         let timeline = document.querySelector('#timeline');
         if (!timeline) return;
 
