@@ -78,23 +78,27 @@
         </div>
 
         @if (count(Auth::user()->groupSuggestions()) != 0)
-            <h2 class="mt-3">Some Group Suggestions</h2>
-        
-            <div class="d-flex flex-wrap justify-content-center align-items-center">
-                @foreach ( Auth::user()->groupSuggestions() as  $sug)
-            
-                    <div class="card mt-4 me-3" style="width: 15em;height:29em"
-                        id="friend_request_{{ $sug->id }}">
-                        <img height="50%" src="/{{ $sug->photo }}" class="card-img-top"
-                            alt="User Profile Image">
-                        <div class="card-body">
-                            <h5 class="card-title friend_request_sender">
-                                <a href="/profile/{{ $sug->username }}"> {{ $sug->username }}</a>
-                            </h5>
-                            <p class="card-text">{{ substr($sug->bio, 0, 100) . '...' }}</p>
+            <div class="mt-5 mb-4 container">
+                <h2 data-placement="right" title="Groups where you are a member">Some Group Suggestions
+                    ({{ $user->groupsMember->count() }})</h2>
+                <hr>
+                <div class="d-flex flex-wrap">
+                    @foreach ($user->groupSuggestions() as $x)
+                        <div class="card mt-4 me-3" style="width: 15em;height:25em">
+                            <img height="60%" alt="Group Profile Image" src="{{ asset($x->photo) }}"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">{{ $x->name }}</h5>
+
+                            </div>
+
+                            <div
+                                class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
+                                <a href="/group/{{ $x->name }}" class="btn btn-primary w-100">Open Group</a>
+                            </div>
                         </div>
-                    </div>    
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         @endif
 

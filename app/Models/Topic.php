@@ -12,6 +12,6 @@ class Topic extends Model
     protected $table = 'topic';
 
     function group() {
-        return $this->hasMany('App\Models\GroupTopic', 'id_group');
+        return $this->hasMany('App\Models\GroupTopic', 'id_topic');
     }
 }

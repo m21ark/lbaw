@@ -184,8 +184,7 @@ class User extends Authenticatable
 
 
     function groupSuggestions() {
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello from Terminal");
+
         $randomArray = [];
         foreach ($this->interests as $interest) {
            $suggestion = $interest->topic->group()->get()->toArray();
@@ -195,13 +194,25 @@ class User extends Authenticatable
                if (!$suggestion)
                    break;
 
+                   
                $randomKey = array_rand($suggestion);
+               
                $randomArray[] = $suggestion[$randomKey];
                unset($suggestion[$randomKey]);
            }
         }
 
-        return $randomArray;
+        $categories = collect();
+        foreach($randomArray as $product){
+            $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+                   $out->writeln($product);
+            $category = DB::table('group')->where('id', '=', $product)->first();
+            if ($category) {
+                $categories->push($category); 
+            }
+        }
+
+        return $categories;
     }
 
 }
