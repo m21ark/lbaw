@@ -141,4 +141,11 @@ class User extends Authenticatable
     {
         $this->groupsOwner()->where('id_group', $id_group)->delete();
     }
+
+
+    public function topics_names()
+    {
+        return $this->belongsToMany('App\Models\Topic', 'topics_interest_user', 'id_user', 'id_topic')->select('name');
+    }
+
 }

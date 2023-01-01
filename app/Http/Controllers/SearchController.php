@@ -58,12 +58,33 @@ class SearchController extends Controller
     private function searchUsers($query_string)
     {   // this also includes de tsvectors of bio
         // FUNCTION CALLED IN SEARCH
-        $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('username', 'ILIKE', '%' . $query_string . '%')
-            ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-            ->orderBy('ranking', 'desc')
-            ->limit(40)
-            ->get();
+        if ($query_string[0] === '#') {
+            $query_string = substr($query_string, 1);
+
+            $topics_search = explode("#", $query_string);
+
+            if ($topics_search[0] === "") {
+                array_shift($topics_search);
+            }
+
+            for ($i = 0; $i < sizeof($topics_search); $i++) {
+                $topics_search[$i] = trim($topics_search[$i]);
+            }
+        
+            $users = User::whereHas('topics_names', function ($query) use ($topics_search) {
+                $query->whereIn('topic', $topics_search);
+            })->get();
+
+        } else {
+            $users = User::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
+                ->orWhere('username', 'ILIKE', '%' . $query_string . '%')
+                ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
+                ->orderBy('ranking', 'desc')
+                ->limit(40)
+                ->get();
+        }
+
+        
 
         return $users;
     }
@@ -72,12 +93,36 @@ class SearchController extends Controller
     private function searchGroups($query_string)
     {   // this also includes de tsvectors of bio
         // FUNCTION CALLED IN SEARCH
-        $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->orWhere('name', 'ILIKE', '%' . $query_string . '%')
-            ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-            ->orderBy('ranking', 'desc')
-            ->limit(40)
-            ->get();
+        if ($query_string[0] === '#') {
+            $query_string = substr($query_string, 1);
+
+            $topics_search = explode("#", $query_string);
+
+            if ($topics_search[0] === "") {
+                array_shift($topics_search);
+            }
+
+            for ($i = 0; $i < sizeof($topics_search); $i++) {
+                $topics_search[$i] = trim($topics_search[$i]);
+            }
+
+            $groups = Group::whereHas('topics_names', function ($query) use ($topics_search) {
+                $query->whereIn('topic', $topics_search);
+            })->get();
+
+        } else {
+            $groups = Group::whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', [$query_string])
+                ->orWhere('name', 'ILIKE', '%' . $query_string . '%')
+                ->selectRaw('*, ts_rank(tsvectors, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
+                ->orderBy('ranking', 'desc')
+                ->limit(40)
+                ->get();
+
+        }
+
+        
+
+        
 
         return $groups;
     }
@@ -242,6 +287,9 @@ class SearchController extends Controller
     private function searchTopics($query_string)
     {
         // FUNCTION CALLED IN SEARCH
+        if ($query_string[0] === '#') {
+            $query_string = substr($query_string, 1);
+        }
 
         $topics = Topic::where('topic', 'ILIKE', '%' . $query_string . '%')
             ->limit(30)
