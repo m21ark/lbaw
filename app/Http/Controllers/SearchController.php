@@ -31,12 +31,12 @@ class SearchController extends Controller
 
         $query_string = trim($request->route('query_string'));
         $type_search = $request->route('type_search');
+        $type_order = $request->route('type_order');
         $offset = $request->route('offset');
 
         if ($query_string === '*') $query_string = ' ';
 
         $searchItems = [];
-
 
         $query_string = str_replace("%23", "#", $query_string);
         $query_string = str_replace("%20", " ", $query_string);
@@ -46,7 +46,7 @@ class SearchController extends Controller
         } else if ($type_search === "groups") {
             $searchItems = $this->searchGroups($query_string);
         } else if ($type_search === "posts") {
-            $searchItems = $this->searchPosts($query_string, $offset);
+            $searchItems = $this->searchPosts($query_string, $type_order, $offset);
         } else if ($type_search === "topics") {
             $searchItems = $this->searchTopics($query_string);
         }
@@ -83,16 +83,16 @@ class SearchController extends Controller
     }
 
 
-    private function searchPosts($query_string, $offset)
+    private function searchPosts($query_string, $type_order, $offset)
     { // this also includes de tsvectors of comments
 
         if ($query_string[0] !== '#') {
-            $posts = $this->searchPostsFTS($query_string, $offset);
+            $posts = $this->searchPostsFTS($query_string, $type_order, $offset);
             foreach ($posts as $post) {
                 $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
             }
         } else {
-            $posts = $this->searchPostsTopic($query_string, $offset);
+            $posts = $this->searchPostsTopic($query_string, $type_order, $offset);
         }
 
 
@@ -118,12 +118,11 @@ class SearchController extends Controller
             }
         }
 
-
         return $posts;
     }
 
 
-    private function searchPostsTopic($query_string, $offset)
+    private function searchPostsTopic($query_string, $type_order, $offset)
     {
         $posts = [];
 
@@ -133,21 +132,26 @@ class SearchController extends Controller
             array_shift($topics_search);
         }
 
-
         for ($i = 0; $i < sizeof($topics_search); $i++) {
             $topics_search[$i] = trim($topics_search[$i]);
         }
 
-
         if (Auth::check()) {
-            $posts = app('App\Http\Controllers\PostController')->feed_for_you()->get();
+            $posts = app('App\Http\Controllers\PostController')->feed_for_you();
         } else {
-            $posts = app('App\Http\Controllers\PostController')->feed_viral()->get();
+            $posts = app('App\Http\Controllers\PostController')->feed_viral();
         }
 
+        if ($type_order === "date") {
+            $posts = $posts->orderBy('post_date', 'desc')->get();
+        } else if ($type_order === "likes") {
+            $posts = $posts->orderBy('likes_count', 'desc')->get();
+        } else if ($type_order === "comments") {
+            $posts = $posts->orderBy('comments_count', 'desc')->get();
+        }
+
+
         $limiter = 20;
-
-
         $posts_filtered = [];
 
         foreach ($posts as $post) {
@@ -177,7 +181,7 @@ class SearchController extends Controller
         return $posts_filtered;
     }
 
-    private function searchPostsFTS($query_string, $offset)
+    private function searchPostsFTS($query_string, $type_order, $offset)
     {
 
         $comments = Comment::selectRaw('id_post, count(comment.id) as comments_count, tsvector_agg(tsvectors) as tsvector_comment')
@@ -212,16 +216,24 @@ class SearchController extends Controller
 
         $posts = $posts->whereRaw('(post.tsvectors || tsvector_comment)::tsvector @@ plainto_tsquery(\'english\', ?)', [$query_string])
             ->join('like_post', 'like_post.id_post', '=', 'post.id')
-            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment')
             ->selectRaw('
             post.id, post.text, post_date, username as owner, id_poster, username, photo,
             comments_count,
             count(like_post.id_user) as likes_count,
-            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])
-            ->orderBy('ranking', 'desc')
-            ->skip($offset)
-            ->limit(20)
-            ->get();
+            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])            
+            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment');
+
+        if ($type_order === "date") {
+            $posts = $posts->orderBy('post_date', 'desc');
+        } else if ($type_order === "likes") {
+            $posts = $posts->orderBy('likes_count', 'desc');
+        } else if ($type_order === "comments") {
+            $posts = $posts->orderBy('comments_count', 'desc');
+        } else {
+            $posts = $posts->orderBy('ranking', 'desc');
+        }
+
+        $posts = $posts->skip($offset)->limit(20)->get();
 
         return $posts;
     }

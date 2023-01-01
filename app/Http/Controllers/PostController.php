@@ -80,16 +80,11 @@ class PostController extends Controller
             $posts = $this->feed_viral();
         }
 
-        if ($request->route('type_order') === "popularity") {
-            $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
-                ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
-                ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
-                ->orderBy('ranking', 'desc');
-        } else if ($request->route('type_order') === "date") {
-            $posts = $posts->orderBy('post_date', 'desc');
-        } else if ($request->route('type_order') === "likes") {
-            $posts = $posts->orderBy('likes_count', 'desc');
-        }
+
+        $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
+            ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
+            ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
+            ->orderBy('ranking', 'desc');
 
         // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
         $posts = $posts->skip($offset)->limit(10)->get();

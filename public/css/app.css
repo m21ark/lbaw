@@ -433,7 +433,7 @@ ul.nav a:hover {
 
 /*  ====================== NAVBAR FILTER ===================== */
 
-#search_filter {
+#feed_filter {
     margin: 4rem auto;
 }
 
@@ -502,19 +502,19 @@ ul.nav a:hover {
     opacity: .5;
 }
 
-#search_filter {
+#feed_filter, #search_filter {
     flex-direction: row;
     margin: 0 auto;
     max-width: 40em;
 }
 
-#search_filter * {
+#search_filter *, #feed_filter * {
     width: 25%;
     height: 2.6em;
     text-align: center;
 }
 
-#search_filter .list-group-item p {
+#feed_filter .list-group-item p {
     padding: 0.0em
 }
 
@@ -522,7 +522,7 @@ ul.nav a:hover {
     padding: 0.0em
 }
 
-#search_filter .list-group-item {
+#feed_filter .list-group-item {
     margin: 0.5em;
 }
 

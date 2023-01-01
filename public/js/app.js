@@ -1859,36 +1859,7 @@ function updateFeedOnLoad() {
     updateFeed('viral')
 }
 
-function updateFeedOnOrder() {
-    let pathname = window.location.pathname
-    if (pathname !== '/home') return;
 
-    let orders = document.querySelectorAll('.feed-order')
-
-    if (!orders) return;
-
-    orders.forEach(function (order) {
-        order.addEventListener('click', function () {
-            let timeline = document.querySelector('#timeline')
-            if (!timeline) return;
-            timeline.innerHTML = createSpinner();
-
-            let filters = document.querySelectorAll('#feed_filter input')
-            if (!filters) return;
-
-            let checked_filter;
-            filters.forEach(function (filter) {
-                if (filter.checked) checked_filter = filter.value;
-            })
-
-            offset = 0
-            scroll_end = false
-            scroll_updating = false
-            updateFeed(checked_filter)
-        })
-    })
-
-}
 
 function updateFeedOnClick() {
     let pathname = window.location.pathname
@@ -1935,7 +1906,6 @@ function updateFeedOnScroll() {
 }
 
 updateFeedOnLoad();
-updateFeedOnOrder();
 updateFeedOnScroll();
 updateFeedOnClick();
 
@@ -2120,7 +2090,7 @@ function createPost(post) {
 
 function createSpinner() {
     return `
-    <div class="text-center">
+    <div class="spinner text-center">
         <div class="spinner-border m-5" style="width: 5rem; height: 5rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -2133,17 +2103,16 @@ function createSpinner() {
 
 let selected_filter;
 
-function updateSearchOnInputAndClick() {
+function updateSearchOnLoad() {
 
     let pathname = window.location.pathname
     if (!/\/search\/[#\*?!.@_\w ]*/.test(pathname)) return;
 
-    if (!document.querySelector('#timeline')) {
-        return;
-    }
+    if (!document.querySelector('#timeline')) return;
 
     scroll_end = false;
     offset = 0;
+
     // Search if there is a query_string in the route (and add it to the search bar)
     const searchBar = document.querySelector('#search_bar')
 
@@ -2152,10 +2121,17 @@ function updateSearchOnInputAndClick() {
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
         updateSearch()
-        updateSearchOnScroll()
     }
 
-    // Add event listeners when input changes
+    updateSearchOnInput()
+    updateSearchOnOrderChange()
+    updateSearchOnScroll()
+    updateSearchOnClick()
+
+}
+
+function updateSearchOnInput() {
+    const searchBar = document.querySelector('#search_bar')
 
     if (searchBar) {
         searchBar.addEventListener('keypress', function (event) {
@@ -2165,6 +2141,9 @@ function updateSearchOnInputAndClick() {
             let timeline = document.querySelector('#timeline')
             if (!timeline) return;
             timeline.innerHTML = ''
+
+            scroll_end = false;
+            offset = 0;
 
             updateSearch()
 
@@ -2178,27 +2157,68 @@ function updateSearchOnInputAndClick() {
             }
 
         })
-
     }
+}
 
 
-    // Add event listeners when a radio has a click
-    const filters = document.querySelectorAll('#search_filter input')
+function updateSearchOnClick() {
+    const filters = document.querySelectorAll('#search_filter .type-search')
 
     if (filters) {
         filters.forEach(function (filter) {
             filter.addEventListener('click', updateSearch)
         })
     }
-
 }
 
 
+function updateSearchOnScroll() {
+
+    selected_filter = document.querySelector('#search_filter input[checked]').value;
+
+    window.onscroll = function (ev) {
+
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+            
+            if (selected_filter === 'posts') {
+                timeline.innerHTML += createSpinner();
+                updateSearch()
+                timeline.querySelector('.spinner').remove()
+            }
+        }
+    };
+}
+
+function updateSearchOnOrderChange() {
+
+    let orders = document.querySelectorAll('.search-order')
+
+    if (!orders) return;
+
+    orders.forEach(function (order) {
+        order.addEventListener('click', function () {
+            let timeline = document.querySelector('#timeline')
+            if (!timeline) return;
+
+            timeline.innerHTML = createSpinner();
+
+            offset = 0
+            scroll_end = false
+            scroll_updating = false
+            updateSearch()
+        })
+    })
+
+}
+
 function updateSearch() {
-    let type_search = '', query_string = '';
+    let type_search = '', query_string = '', order_search = 'default';
 
     // Get the type_search from the radio input
-    const filters = document.querySelectorAll('#search_filter input')
+    const filters = document.querySelectorAll('#search_filter .type-search')
     if (!filters) return;
 
     filters.forEach(filter => {
@@ -2209,25 +2229,46 @@ function updateSearch() {
     const searchBar = document.querySelector('#search_bar')
     if (!searchBar) return;
 
+
+    // Get the order on which it should be sorted
+    const orders = document.querySelectorAll('.search-order')
+    if (!orders) return;
+
+    orders.forEach(order => {
+        if (order.checked) { order_search = order.value }
+    })
+
     query_string = searchBar.value.replaceAll('#', '%23');
 
     if (query_string === '') {
         query_string = '*';
     }
 
+    let timeline = document.querySelector('#timeline')
+
     if (type_search !== selected_filter) {
         offset = 0;
         selected_filter = type_search;
         scroll_end = false;
-        let timeline = document.querySelector('#timeline')
         timeline.innerHTML = createSpinner();
-
+    } else {
+        timeline.innerHTML += createSpinner();
     }
 
-    sendAjaxRequest('get', '/api/search/' + query_string + '/type/' + type_search + '/offset/' + offset, {}, function () {
+    console.log('/api/search/' + query_string + 
+    '/type/' + type_search + 
+    '/order/' + order_search +
+    '/offset/' + offset)
+
+    sendAjaxRequest('get', '/api/search/' + query_string + 
+        '/type/' + type_search + 
+        '/order/' + order_search +
+        '/offset/' + offset
+        , {}, function () {
+        
+        
 
         let timeline = document.querySelector('#timeline');
-
         if (!timeline) return;
 
         if (offset === 0) {
@@ -2238,7 +2279,7 @@ function updateSearch() {
         try {
             received = JSON.parse(this.responseText);
         } catch (error) {
-            //console.log('Erro')
+            console.log('Erro')
         }
 
         if (received == null) return;
@@ -2270,20 +2311,6 @@ function updateSearch() {
 
 
 
-function updateSearchOnScroll() {
-
-    selected_filter = document.querySelector('#search_filter input[checked]').value;
-
-    window.onscroll = function (ev) {
-
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
-
-            if (selected_filter === 'posts') {
-                updateSearch()
-            }
-        }
-    };
-}
 
 
 function createUserCard(user) {
@@ -2397,7 +2424,7 @@ function searchRedirect() {
 }
 
 searchRedirect();
-updateSearchOnInputAndClick();
+updateSearchOnLoad();
 
 
 
