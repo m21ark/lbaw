@@ -1203,7 +1203,7 @@ paths:
   /api/user/friend/request/{id_sender}/reject:
     put:
       operationId: "R403"
-      summary: "R404 Reject a friend request"
+      summary: "R403 Reject a friend request"
       description: "Reject a friend request of a certain user. Access: USR"
       tags:
         - "M04: Requests"
