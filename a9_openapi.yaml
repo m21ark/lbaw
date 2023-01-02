@@ -859,25 +859,6 @@ paths:
         "400":
           description: "There is something wrong with the request body"
 
-  /group_list/{username}:
-    get:
-      operationId: R304
-      summary: "R304: Group list of username"
-      description: "Group list of username. Access: USR"
-      tags:
-        - "M03: Groups"
-      parameters:
-        - in: path
-          name: username
-          schema:
-            type: string
-          required: true
-      responses:
-        "200":
-          description: "Success. Show group list of username page"
-        "404":
-          description: "Does not exist any user with this username"
-
   # ==================================================================
 
   /group/{name}:
@@ -1157,6 +1138,27 @@ paths:
           description: "The group member was promoted successfully"
         "403":
           description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /group_list/{username}:
+    get:
+      operationId: R312
+      summary: "R312: Group list of username"
+      description: "Group list of username. Access: USR"
+      tags:
+        - "M03: Groups"
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Success. Show group list of username page"
+        "404":
+          description: "Does not exist any user with this username"
 
   # ==================================================================
 
