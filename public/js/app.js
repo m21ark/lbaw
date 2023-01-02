@@ -1864,7 +1864,7 @@ function updateFeed(feed) {
     sendAjaxRequest('get', '/api/post/feed/' + feed + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
-        console.log(received)
+
         let timeline = document.querySelector('#timeline');
         if (!timeline) return;
 
@@ -2326,10 +2326,6 @@ function updateSearch() {
         scroll_end = false;
     }
 
-    console.log('/api/search/' + query_string + 
-    '/type/' + type_search + 
-    '/order/' + order_search +
-    '/offset/' + offset)
 
     sendAjaxRequest('get', '/api/search/' + query_string + 
         '/type/' + type_search + 
@@ -2530,8 +2526,6 @@ function updateUserReportsSearch(searchBar, decision) {
     let query_string = searchBar.value;
 
     if (query_string.trim() === '') query_string = '*';
-
-    console.log('/api/admin/' + decision + '_reports/' + query_string)
 
     sendAjaxRequest('get', '/api/admin/' + decision + '_reports/' + query_string, {}, function () {
         let display = document.querySelector("#users-reported-" + decision)
