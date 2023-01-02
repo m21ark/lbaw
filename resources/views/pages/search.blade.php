@@ -31,7 +31,7 @@
         </label>
 
 
-        <div class="orderFilter dropdown" style="width:7em;">
+        <div id="order_filter_dropdown" class="orderFilter dropdown" style="width:7em;">
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
             <div class="dropdown_menu search_order_dropdown_btn" style="z-index: 5;position: absolute; width:36em;" hidden>
                 <!--

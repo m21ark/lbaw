@@ -2239,6 +2239,25 @@ function updateSearchOnClick() {
             filter.addEventListener('click', function(event) {
                 let timeline = document.querySelector('#timeline')
                 if (!timeline) return;
+
+                // If the filter posts is selected display the order dropdown otherwise hide it
+                let dropdown_order = document.querySelector('#order_filter_dropdown')
+                if (!dropdown_order) return;
+
+                const filters = document.querySelectorAll('#search_filter .type-search')
+                if (!filters) return;
+
+                let type_search = ''
+                filters.forEach(filter => {
+                    if (filter.checked) { type_search = filter.value }
+                })
+
+                if (type_search === 'posts') {
+                    dropdown_order.hidden = false
+                } else {
+                    dropdown_order.hidden = true
+                }
+
                 timeline.innerHTML = createSpinner();
 
                 updateSearch()
