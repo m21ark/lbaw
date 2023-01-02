@@ -281,13 +281,19 @@ class SearchController extends Controller
         }
 
         $posts = $posts->whereRaw('(post.tsvectors || tsvector_comment)::tsvector @@ plainto_tsquery(\'english\', ?)', [$query_string])
-            ->join('like_post', 'like_post.id_post', '=', 'post.id')
             ->selectRaw('
-            post.id, post.text, post_date, username as owner, id_poster, username, photo,
+            post.id, post.text, post.post_date, username as owner, id_poster, photo,
             comments_count,
-            count(like_post.id_user) as likes_count,
-            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string])            
-            ->groupBy('post.id', 'owner', 'user.photo', 'comments_count', 'comment.tsvector_comment');
+            ts_rank((post.tsvectors || tsvector_comment)::tsvector, plainto_tsquery(\'english\', ?)) as ranking', [$query_string]);
+
+        $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
+            ->mergeBindings($posts) // you need to get underlying Query Builder
+            ->join('like_post', 'like_post.id_post', '=', 'id')
+            ->selectRaw('
+            id, text, post_date, owner, id_poster, photo,
+            comments_count,
+            count(like_post.id_user) as likes_count, ranking')
+            ->groupBy('id', 'text', 'post_date', 'owner', 'id_poster', 'photo', 'comments_count', 'ranking');
 
         if ($type_order === "date") {
             $posts = $posts->orderBy('post_date', 'desc');

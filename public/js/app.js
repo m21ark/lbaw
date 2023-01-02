@@ -1875,7 +1875,14 @@ function updateFeed(feed) {
         }
 
         if (received.length === 0 && !scroll_end) {
-            timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
+
+            // If offset is 0, it means there was never no content found
+            if (offset === 0) {
+                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No content to show</h3>`));
+            } else {
+                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No more content to show</h3>`));
+            }
+
             scroll_end = true;
 
             let spinners = timeline.querySelectorAll('.spinner');
@@ -2272,6 +2279,9 @@ function updateSearchOnScroll() {
             let timeline = document.querySelector('#timeline')
             if (!timeline) return;
             
+            if (scroll_updating) return;
+            scroll_updating = true;
+
             if (selected_filter === 'posts') {
                 timeline.innerHTML += createSpinner();
                 updateSearch()
@@ -2339,7 +2349,6 @@ function updateSearch() {
         scroll_end = false;
     }
 
-
     sendAjaxRequest('get', '/api/search/' + query_string + 
         '/type/' + type_search + 
         '/order/' + order_search +
@@ -2365,7 +2374,13 @@ function updateSearch() {
         if (received == null) return;
 
         if (received.length === 0 && scroll_end === false) {
-            timeline.innerHTML += `<h3 class="text-center mt-5">No results found</h3>`
+            // If offset is 0, it means there was never no content found
+            if (offset === 0) {
+                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No results found</h3>`));
+            } else {
+                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No more results found</h3>`));
+            }
+
             scroll_end = true;
         }
 
@@ -2384,7 +2399,7 @@ function updateSearch() {
         })
 
         offset += received.length;
-
+        scroll_updating = false;
     })
 
 }
