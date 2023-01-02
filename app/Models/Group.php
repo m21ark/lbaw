@@ -37,4 +37,9 @@ class Group extends Model
     {
         return $this->hasMany('App\Models\GroupTopic', 'id_group');
     }
+
+    public function topics_names() {
+        return $this->belongsToMany('App\Models\Topic', 'group_topic', 'id_group', 'id_topic');
+    }
+    
 }

@@ -115,12 +115,12 @@ Route::post('/broadcast/auth', 'PusherController@pusherAuth')->middleware('auth'
 // ======================= FEED POSTS =======================
 
 
-Route::get('api/post/feed/{type_feed}/order/{type_order}/offset/{offset}', 'PostController@feed');
+Route::get('api/post/feed/{type_feed}/offset/{offset}', 'PostController@feed');
 
 
 // ======================= SEARCH ITEMS =======================
 
-Route::get('api/search/{query_string}/type/{type_search}/offset/{offset}', 'SearchController@search');
+Route::get('api/search/{query_string}/type/{type_search}/order/{type_order}/offset/{offset}', 'SearchController@search');
 
 // ======================= GROUP CRUD =======================
 
