@@ -86,7 +86,7 @@ if (user_header != null) {
         users.splice(index, 1);
         
         let curr_user = document.querySelector('#sms_rcv')
-        if (curr_user.dataset.id == member.id) {
+        if (curr_user !== null && curr_user.dataset.id == member.id) {
             curr_user.removeChild(curr_user.children[1])
         }
         if (member.id == room ) { // IF he moves from pages ...
@@ -111,8 +111,6 @@ if (user_header != null) {
             if (onlineStatus != null && onlineStatus.dataset.id ==element ) {
                 insertAfter(l, onlineStatus.firstElementChild);
             }
-
-
         });
     }
 
