@@ -2483,7 +2483,7 @@ function createTopicCard(topic) {
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="height:4em">
         <div class="d-flex align-items-center card-body">
-            <h4 class="card-title">${topic.topic}</h5>
+            <h4 class="card-title">${topic.topic}|${topic.id}</h5>
         </div>
     </div>
     `
