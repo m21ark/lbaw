@@ -353,7 +353,7 @@ paths:
     get:
       operationId: R116
       summary: "R116 Show the comments list page"
-      description: "Show the comments list of the user .Access: USR"
+      description: "Show the comments list of the user. Access: USR"
       tags:
         - "M01: Authentication and Individual Profile"
 
@@ -533,7 +533,7 @@ paths:
     get:
       operationId: R202
       summary: "R202 View Home Page"
-      description: "Show the home page Access: PUB"
+      description: "Show the home page. Access: PUB"
       tags:
         - "M02: Feed"
       responses:
@@ -569,7 +569,7 @@ paths:
     get:
       operationId: R204
       summary: "R204 Get Posts"
-      description: "Gets the posts according to the parameters and returns the results as json Access: USR and PUB for viral"
+      description: "Gets the posts according to the parameters and returns the results as json. Access: USR and PUB for viral"
       tags:
         - "M02: Feed"
       parameters:
@@ -1023,7 +1023,7 @@ paths:
     post:
       operationId: R307
       summary: "R307: Edit a Group"
-      description: "Edit a Group"
+      description: "Edit a Group. Access: OWN"
       tags:
         - "M03: Groups"
       parameters:
@@ -1058,7 +1058,7 @@ paths:
     delete:
       operationId: R308
       summary: "R308: Delete Group"
-      description: "Deletes a group. Access: USR"
+      description: "Deletes a group. Access: OWN"
       tags:
         - "M03: Groups"
       parameters:
@@ -1204,7 +1204,7 @@ paths:
     put:
       operationId: "R403"
       summary: "R403 Reject a friend request"
-      description: "Reject a friend request of a certain user. Access: USR"
+      description: "Reject a friend request. Access: USR"
       tags:
         - "M04: Requests"
 
@@ -1273,7 +1273,7 @@ paths:
     put:
       operationId: "R406"
       summary: "R406 Accept group join request"
-      description: "Accept group join request. Access: USR"
+      description: "Accept group join request. Access: OWN"
       tags:
         - "M04: Requests"
 
@@ -1302,7 +1302,7 @@ paths:
     put:
       operationId: R407
       summary: "R407: Accept friend request"
-      description: "Accept friend request. Access: OWN"
+      description: "Accept friend request. Access: USR"
       tags:
         - "M04: Requests"
 
@@ -1326,7 +1326,7 @@ paths:
       tags:
         - "M04: Requests"
       summary: "R408: Reject request"
-      description: "Reject group request. Access: OWN, ADM"
+      description: "Reject group request. Access: OWN"
       operationId: "R408"
       parameters:
         - name: group_name
@@ -1372,6 +1372,23 @@ paths:
           description: "Forbidden"
         "419":
           description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /user/friends/{username}:
+    get:
+      operationId: R410
+      summary: "R410: View friends requests"
+      description: "Show the friends of user.Access: USR"
+      tags:
+        - "M08: User Administration and Static pages"
+      responses:
+        "200":
+          description: "Ok. Show friends of user page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "User Not found"
 
   # ==================================================================
 
@@ -1520,7 +1537,7 @@ paths:
     get:
       operationId: R701
       summary: "R701: Search API"
-      description: "Searches for works and returns the results as JSON. Access: PUB."
+      description: "Searches for works and returns the results as JSON. Access: PUB"
 
       tags:
         - "M07: Search"
@@ -1619,27 +1636,10 @@ paths:
           description: "Page not available"
 
   # ==================================================================
-
-  /admin:
-    get:
-      operationId: R803
-      summary: "R803: Admin Page"
-      description: "Show administrator page. Access: ADM"
-      tags:
-        - "M08: User Administration and Static pages"
-
-      responses:
-        "302":
-          description: "Ok. Show admin UI"
-        "404":
-          description: "Page not available"
-
-  # ==================================================================
-
   /features:
     get:
-      operationId: R804
-      summary: "R804: Main Features Page"
+      operationId: R803
+      summary: "R803: Main Features Page"
       description: "Show Nexus Feature page. Access: PUB"
       tags:
         - "M08: User Administration and Static pages"
@@ -1647,6 +1647,22 @@ paths:
       responses:
         "302":
           description: "Ok. Show features page UI"
+        "404":
+          description: "Page not available"
+
+  # ==================================================================
+
+  /admin:
+    get:
+      operationId: R804
+      summary: "R804: Admin Page"
+      description: "Show administrator page. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show admin UI"
         "404":
           description: "Page not available"
 
@@ -1691,27 +1707,10 @@ paths:
 
   # ==================================================================
 
-  /user/friends/{username}:
-    get:
-      operationId: R807
-      summary: "R807: View friends requests"
-      description: "Show the friends of user.Access: USR"
-      tags:
-        - "M08: User Administration and Static pages"
-      responses:
-        "200":
-          description: "Ok. Show friends of user page"
-        "403":
-          description: "Forbidden access to resource"
-        "404":
-          description: "User Not found"
-
-  # ==================================================================
-
   /api/report/reject_all/{userID}:
     put:
-      operationId: "R808"
-      summary: "R808: Reject all pending reports from a user"
+      operationId: "R807"
+      summary: "R807: Reject all pending reports from a user"
       description: "Reject all pending reports from a user. Access: ADM"
       tags:
         - "M08: User Administration and Static pages"
@@ -1733,9 +1732,9 @@ paths:
     put:
       tags:
         - "M08: User Administration and Static pages"
-      summary: "R809: Report user"
+      summary: "R808: Report user"
       description: "Report user. Access: ADM"
-      operationId: "R809"
+      operationId: "R808"
       requestBody:
         description: "Report"
         required: true
@@ -1757,8 +1756,8 @@ paths:
           description: "Not a valid CSRF token"
 
     post:
-      operationId: "R810"
-      summary: "R810: Create a report"
+      operationId: "R809"
+      summary: "R809: Create a report"
       description: "Create a report of a post or comment. Access: USR"
       tags:
         - "M08: User Administration and Static pages"
@@ -1815,9 +1814,9 @@ paths:
     put:
       tags:
         - "M08: User Administration and Static pages"
-      summary: "R811: Ban user"
+      summary: "R810: Ban user"
       description: "Ban user. Access: ADM"
-      operationId: "R811"
+      operationId: "R810"
       parameters:
         - name: userID
           in: path
@@ -1848,8 +1847,8 @@ paths:
 
   /api/admin/pendent_reports/{query_string}:
     get:
-      operationId: "R812"
-      summary: "R812: Get the pendent reports"
+      operationId: "R811"
+      summary: "R811: Get the pendent reports"
       description: "Get the pendent reports. Access: ADM"
       tags:
         - "M08: User Administration and Static pages"
@@ -1889,8 +1888,8 @@ paths:
 
   /api/admin/past_reports/{query_string}:
     get:
-      operationId: "R813"
-      summary: "R813: Get the past reports"
+      operationId: "R812"
+      summary: "R812: Get the past reports"
       description: "Get the past reports. Access: ADM"
       tags:
         - "M08: User Administration and Static pages"
@@ -1930,8 +1929,8 @@ paths:
 
   /api/user/friend/{id}:
     get:
-      operationId: R814
-      summary: "R814: User friends"
+      operationId: R813
+      summary: "R813: User friends"
       description: "Saw the user:USR"
       tags:
         - "M08: User Administration and Static pages"
