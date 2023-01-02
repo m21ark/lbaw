@@ -179,23 +179,49 @@ class SearchController extends Controller
 
         for ($i = 0; $i < sizeof($topics_search); $i++) {
             $topics_search[$i] = trim($topics_search[$i]);
+
+            //echo $topics_search[$i] . "1";
         }
 
         if (Auth::check()) {
-            $posts = app('App\Http\Controllers\PostController')->feed_for_you();
+            $posts_groups = app('App\Http\Controllers\PostController')->feed_groups()->whereHas('topics_names', function ($query) use ($topics_search) {
+                $query->whereIn('topic', $topics_search);
+            });
+            $posts_friends = app('App\Http\Controllers\PostController')->feed_friends()->whereHas('topics_names', function ($query) use ($topics_search) {
+                $query->whereIn('topic', $topics_search);
+            });
+            $posts = app('App\Http\Controllers\PostController')->feed_viral()->whereHas('topics_names', function ($query) use ($topics_search) {
+                $query->whereIn('topic', $topics_search);
+            });
+             
+            $posts = $posts
+                ->union($posts_groups)
+                ->union($posts_friends);
+
+            $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
+                ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
+                ->distinct();
+            
         } else {
             $posts = app('App\Http\Controllers\PostController')->feed_viral();
         }
 
+
         if ($type_order === "date") {
-            $posts = $posts->orderBy('post_date', 'desc')->get();
+            $posts = $posts->orderBy('post_date', 'desc');
         } else if ($type_order === "likes") {
-            $posts = $posts->orderBy('likes_count', 'desc')->get();
+            $posts = $posts->orderBy('likes_count', 'desc');
         } else if ($type_order === "comments") {
-            $posts = $posts->orderBy('comments_count', 'desc')->get();
+            $posts = $posts->orderBy('comments_count', 'desc');
         }
 
+        $posts = $posts->skip($offset)->limit(20)->get();
 
+        foreach ($posts as $post) {
+            $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
+        }
+
+        /*
         $limiter = 20;
         $posts_filtered = [];
 
@@ -222,8 +248,9 @@ class SearchController extends Controller
                 break;
             }
         }
+        */
 
-        return $posts_filtered;
+        return $posts;
     }
 
     private function searchPostsFTS($query_string, $type_order, $offset)

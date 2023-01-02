@@ -1806,16 +1806,7 @@ let scroll_updating;
 
 function updateFeed(feed) {
 
-    let type_order = 'popularity';
-    let orders = document.querySelectorAll('.feed-order');
-    if (orders) {
-        orders.forEach(function (order) {
-            document.querySelector('.feed_order_dropdown_btn').setAttribute('hidden', 'hidden')
-            if (order.checked) type_order = order.value
-        })
-    }
-
-    sendAjaxRequest('get', '/api/post/feed/' + feed + '/order/' + type_order + '/offset/' + offset, {}, function () {
+    sendAjaxRequest('get', '/api/post/feed/' + feed + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
         let timeline = document.querySelector('#timeline');
@@ -2108,7 +2099,9 @@ function updateSearchOnLoad() {
     let pathname = window.location.pathname
     if (!/\/search\/[#\*?!.@_\w ]*/.test(pathname)) return;
 
-    if (!document.querySelector('#timeline')) return;
+    let timeline = document.querySelector('#timeline')
+    if (!timeline) return;
+    timeline.innerHTML = createSpinner();
 
     scroll_end = false;
     offset = 0;
@@ -2120,6 +2113,8 @@ function updateSearchOnLoad() {
 
     if (query_string) {
         if (query_string !== '*') searchBar.value = query_string
+
+
         updateSearch()
     }
 
@@ -2140,7 +2135,7 @@ function updateSearchOnInput() {
 
             let timeline = document.querySelector('#timeline')
             if (!timeline) return;
-            timeline.innerHTML = ''
+            timeline.innerHTML = createSpinner();
 
             scroll_end = false;
             offset = 0;
@@ -2166,7 +2161,13 @@ function updateSearchOnClick() {
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', updateSearch)
+            filter.addEventListener('click', function(event) {
+                let timeline = document.querySelector('#timeline')
+                if (!timeline) return;
+                timeline.innerHTML = createSpinner();
+
+                updateSearch()
+            })
         })
     }
 }
@@ -2244,15 +2245,10 @@ function updateSearch() {
         query_string = '*';
     }
 
-    let timeline = document.querySelector('#timeline')
-
     if (type_search !== selected_filter) {
         offset = 0;
         selected_filter = type_search;
         scroll_end = false;
-        timeline.innerHTML = createSpinner();
-    } else {
-        timeline.innerHTML += createSpinner();
     }
 
     console.log('/api/search/' + query_string + 

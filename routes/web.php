@@ -115,7 +115,7 @@ Route::post('/broadcast/auth', 'PusherController@pusherAuth')->middleware('auth'
 // ======================= FEED POSTS =======================
 
 
-Route::get('api/post/feed/{type_feed}/order/{type_order}/offset/{offset}', 'PostController@feed');
+Route::get('api/post/feed/{type_feed}/offset/{offset}', 'PostController@feed');
 
 
 // ======================= SEARCH ITEMS =======================

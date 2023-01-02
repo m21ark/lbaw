@@ -9,7 +9,9 @@ class Post extends Model
 {
     use HasFactory;
     protected $table = 'post';
-
+    // Don't add create and update timestamps in database.
+    public $timestamps  = false;
+    
     public function owner()
     {
         return $this->belongsTo('App\Models\User', 'id_poster');
@@ -45,7 +47,9 @@ class Post extends Model
         return $this->hasMany('App\Models\PostTopic', 'id_post');
     }
 
+    public function topics_names() {
+        return $this->belongsToMany('App\Models\Topic', 'post_topic', 'id_post', 'id_topic');
+    }
 
-    // Don't add create and update timestamps in database.
-    public $timestamps  = false;
+    
 }

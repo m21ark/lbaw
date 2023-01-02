@@ -57,8 +57,7 @@ class PostController extends Controller
     {
 
         $request->validate([
-            'type_feed' => 'sometimes|string|required',
-            'type_order' => 'string'
+            'type_feed' => 'sometimes|string|required'
         ]);
 
         $posts = [];
@@ -83,14 +82,13 @@ class PostController extends Controller
 
         $posts = DB::table(DB::raw("({$posts->toSql()}) as sub"))
             ->mergeBindings($posts->getQuery()) // you need to get underlying Query Builder
+            ->distinct()
             ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
             ->orderBy('ranking', 'desc');
 
         // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
-        $posts = $posts->skip($offset)->limit(10)->get();
+        $posts = $posts->skip($offset)->limit(20)->get();
 
-
-        // TODO: pass the current log in user to js in order to know if the post is theirs or not
 
         foreach ($posts as $post) {
             $post->images = Image::select('path')->where('id_post', $post->id)->get();
@@ -329,8 +327,7 @@ class PostController extends Controller
 
         $posts = $this->feed_viral()
             ->union($posts_groups)
-            ->union($posts_friends)
-            ->distinct();
+            ->union($posts_friends);
 
 
         return $posts;
