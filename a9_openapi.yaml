@@ -492,11 +492,11 @@ paths:
   /broadcast/auth:
     get:
       tags:
-        - "M01: Authentication and Individual Profile. Access: USR"
+        - "M01: Authentication and Individual Profile"
 
       operationId: "R121"
       summary: "RR121: Get auth in pusher"
-      description: "Get auth token from the server so that the client can connect to pusher presence channel and make pusher requests"
+      description: "Get auth token from the server so that the client can connect to pusher presence channel and make pusher requests. Access: USR"
       responses:
         "200":
           description: "Auth"
