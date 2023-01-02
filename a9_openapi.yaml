@@ -1,0 +1,1954 @@
+openapi: 3.0.0
+
+info:
+  version: "2.0"
+  title: "LBAW Nexus Web API"
+  description: "Web Resources Specification (A7) for Nexus"
+
+servers:
+  - url: https://lbaw2261.lbaw.fe.up.pt
+    description: Production server
+  - url: localhost:8000
+    description: Localhost server
+
+tags:
+  - name: "M01: Authentication and Individual Profile"
+  - name: "M02: Feed"
+  - name: "M03: Groups"
+  - name: "M04: Requests"
+  - name: "M05: Messages"
+  - name: "M06: Notifications"
+  - name: "M07: Search"
+  - name: "M08: User Administration and Static pages"
+
+paths:
+  /login:
+    get:
+      operationId: R101
+      summary: "R101: Login Form"
+      description: "Provide login form. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "200":
+          description: "Ok. Show log-in UI05"
+    post:
+      operationId: R102
+      summary: "R102: Login Action"
+      description: "Processes the login form submission. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email: # <!--- form field name
+                  type: string
+                password: # <!--- form field name
+                  type: string
+              required:
+                - email
+                - password
+
+      responses:
+        "302":
+          description: "Redirect after processing the login credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful authentication. Redirect to user profile."
+                  value: "/home"
+                302Error:
+                  description: "Failed authentication. Redirect to login form."
+                  value: "/login"
+
+  # ==================================================================
+
+  /logout:
+    get:
+      operationId: R103
+      summary: "R103: Logout Action"
+      description: "Logout the current authenticated user. Access: USR, ADM"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "302":
+          description: "Redirect after processing logout."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful logout. Redirect to login form."
+                  value: "/login"
+
+  # ==================================================================
+
+  /register:
+    get:
+      operationId: R104
+      summary: "R104: Register Form"
+      description: "Provide new user registration form. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      responses:
+        "200":
+          description: "Ok. Show sign-up UI"
+
+    post:
+      operationId: R105
+      summary: "R105: Register Action"
+      description: "Processes the Register form submission. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email: # <!--- form field name
+                  type: string
+                password: # <!--- form field name
+                  type: string
+                username: # <!--- form field name
+                  type: string
+                birthdate: # <!--- form field name
+                  type: string
+                bio: # <!--- form field name
+                  type: string
+              required:
+                - email
+                - password
+                - username
+                - birthdate
+
+      responses:
+        "302":
+          description: "Redirect after processing the register credentials."
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: "Successful register. Redirect to user profile."
+                  value: "/home"
+                302Error:
+                  description: "Failed to register. Redirect to register form."
+                  value: "/register"
+
+  # ==================================================================
+
+  /google_redirect:
+    get:
+      operationId: R106
+      summary: "R106: Redirect to Google Authentication Provider"
+      description: "Redirect to Google Authentication. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Redirect successful"
+
+  # ==================================================================
+
+  /callback:
+    get:
+      operationId: R107
+      summary: "R107: Google Authentication Provider Callback"
+      description: "Return from Google Authentication Provider. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Google Login callback was successful"
+
+  # ==================================================================
+
+  /resetAuthPassword:
+    get:
+      operationId: R108
+      summary: "R108: Change Authenticated User's Password Page"
+      description: "Change Authenticated User's Password. Access: USR"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Show Change Password Form UI"
+
+  # ==================================================================
+
+  /forgot-password:
+    get:
+      operationId: R109
+      summary: "R109: Forgot Password Form Page"
+      description: "Forgot Password Form Page. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Show Forgot Password Form UI"
+
+  # ==================================================================
+
+  /forgot-password-sent:
+    get:
+      operationId: R110
+      summary: "R110: Forgot Password Sent Page"
+      description: "Forgot Password Sent Page. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Show Forgot Password Sent Page UI"
+
+  # ==================================================================
+
+  /reset_password_without_token:
+    post:
+      operationId: R111
+      summary: "R111: Send Password Recovery Email"
+      description: "Send Password Recovery Email. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+
+      responses:
+        "200":
+          description: "Show Email Sent Page UI"
+        "400":
+          description: "Email not asscociated to any account"
+
+  # ==================================================================
+
+  /reset_password_with_token:
+    post:
+      operationId: R112
+      summary: "R112: Password Update"
+      description: "Password Update Form Submission. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+                token:
+                  type: string
+              required:
+                - password
+                - password_confirmation
+                - token
+
+      responses:
+        "200":
+          description: "Login into the account"
+        "400":
+          description: "Invalid token or password mismatch"
+
+  # ==================================================================
+
+  /password/reset/{token}:
+    get:
+      operationId: R113
+      summary: "R113: Get Set New Password Form"
+      description: "Get Set New Password Form. Access: PUB"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Show Set New Password Form UI"
+
+  # ==================================================================
+
+  /profile/{username}:
+    get:
+      operationId: R114
+      summary: "R114: Profile page"
+      description: "Show the profile page . Access: PUB/USR"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Ok. Show profile page"
+        "404":
+          description: "Profile not found"
+
+  # ==================================================================
+
+  /like_list/{username}:
+    get:
+      operationId: R115
+      summary: "R115: User liked content list"
+      description: "Show User liked content. Access: USR"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Show user liked content UI"
+        "403":
+          description: "Not authenticated or cannot access user liked content"
+
+  # ==================================================================
+
+  /comment_list/{username}:
+    get:
+      operationId: R116
+      summary: "R116 Show the comments list page"
+      description: "Show the comments list of the user .Access: USR"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      responses:
+        "200":
+          description: "Ok. Show comments list of the user page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "User Not found"
+
+  # ==================================================================
+
+  /edit_profile/{username}:
+    get:
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      operationId: "R117"
+      summary: "R117: Get user edit profile page"
+      description: "Get user edit profile page. Access: USR, ADM"
+
+      parameters:
+        - name: username
+          in: path
+          description: "User username"
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: "User profile"
+        "404":
+          description: "User not found"
+        "403":
+          description: "Forbidden"
+
+  # ==================================================================
+
+  /api/profile/{id}:
+    post:
+      operationId: R118
+      summary: "R118: Edit Profile"
+      description: "Edit Profile. Access: OWN"
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                visibility:
+                  type: boolean
+                birthdate:
+                  type: string
+                bio:
+                  type: string
+                photo:
+                  type: object # is it object?
+
+      responses:
+        "200":
+          description: "Profile edited successfully"
+        "403":
+          description: "Forbidden. User is not the owner of the profile"
+
+  # ==================================================================
+
+  /api/profile/{username}:
+    post:
+      operationId: R119
+      summary: "R119: Edit a Profile"
+      description: "Edit a Profile"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                visibility:
+                  type: boolean
+                bio:
+                  type: string
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: "The profile was edit successfully"
+        "403":
+          description: "Forbidden access to resource, the profile is not yours"
+
+    delete:
+      operationId: "R120"
+      summary: "R120: Delete a Profile"
+      description: "Deletes a profile. Access: USR"
+      tags:
+        - "M01: Authentication and Individual Profile"
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "The profile was deleted successfully"
+        "403":
+          description: "Forbidden access to resource, the profile is not yours"
+
+  # ==================================================================
+
+  /broadcast/auth:
+    get:
+      tags:
+        - "M01: Authentication and Individual Profile"
+
+      operationId: "R121"
+      summary: "RR121: Get auth in pusher"
+      description: "Get auth token from the server so that the client can connect to pusher presence channel and make pusher requests. Access: USR"
+      responses:
+        "200":
+          description: "Auth"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /:
+    get:
+      operationId: R201
+      summary: "R201: Website root redirect to home"
+      description: "Website root. Access: PUB"
+      tags:
+        - "M02: Feed"
+
+      responses:
+        "302":
+          description: "Redirect to home"
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302:
+                  description: "Redirect to home"
+                  value: "/home"
+
+  # ==================================================================
+
+  /home:
+    get:
+      operationId: R202
+      summary: "R202 View Home Page"
+      description: "Show the home page Access: PUB"
+      tags:
+        - "M02: Feed"
+      responses:
+        "200":
+          description: "Ok. Show home page UI"
+
+  # ==================================================================
+
+  /post/{id}:
+    get:
+      operationId: R203
+      summary: "R203: View Post Page"
+      description: "Shows post, with comments, likes etc. Access: PUB/USR"
+      tags:
+        - "M02: Feed"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Ok, show Post Page UI02"
+        "403":
+          description: "Forbidden access to resource, the post might be private or it does not exists"
+
+  # ==================================================================
+
+  /api/post/feed/{type_feed}/offset/{offset}:
+    get:
+      operationId: R204
+      summary: "R204 Get Posts"
+      description: "Gets the posts according to the parameters and returns the results as json Access: USR and PUB for viral"
+      tags:
+        - "M02: Feed"
+      parameters:
+        - in: path
+          name: type_feed
+          description: 'Filter parameter. Can be "for_you", "friends", "groups", "viral" '
+          schema:
+            type: string
+          required: true
+
+        - in: path
+          name: offset
+          description: Offset of content to show.
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    post_date:
+                      type: string
+                    owner:
+                      type: string
+                    photo:
+                      type: string
+                    likes_count:
+                      type: integer
+                    comments_count:
+                      type: integer
+                    ranking:
+                      type: number
+                    images:
+                      type: array
+                      items:
+                        type: string
+                    hasLiked:
+                      type: boolean
+                    isOwner:
+                      type: boolean
+                    auth:
+                      type: integer
+
+                example:
+                  - id: 123
+                    text: "The dark side of the force is stronger!!!"
+                    post_date: "2022-05-04 22:22:22"
+                    owner: Darth Vader
+                    photo: user/1.png
+                    likes_count: 10
+                    comments_count: 5
+                    ranking: 4.1292965
+                    images:
+                      - post/666.png
+                      - post/667.png
+                    hasLiked: true
+                    isOwner: false
+                    auth: 0
+
+  # ==================================================================
+
+  /api/comment:
+    put:
+      operationId: R205
+      summary: "R205: Edit comment"
+      description: "Edit comment. Access: OWN"
+      tags:
+        - "M02: Feed"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_comment:
+                  type: integer
+                text:
+                  type: string
+              required:
+                - id_comment
+                - text
+
+      responses:
+        "200":
+          description: "The comment was edited successfully"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /api/comment/{id_post}:
+    post:
+      operationId: "R206"
+      summary: "R206: Create Comment"
+      description: "Create a Comment associated with a certain Post. Access: USR"
+      tags:
+        - "M02: Feed"
+
+      parameters:
+        - in: path
+          name: id_post
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Comment created successfully"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /api/comment/{id_comment}:
+    delete:
+      tags:
+        - "M02: Feed"
+
+      operationId: "R207"
+      summary: "R207: Delete Comment"
+      description: "Delete Comment. Access: OWN, ADM"
+      parameters:
+        - name: id_comment
+          in: path
+          description: "coment_id"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Comment deleted"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /api/post/{id}:
+    delete:
+      operationId: R208
+      summary: "R208: Delete Post"
+      description: "Deletes a post. Access: OWN"
+      tags:
+        - "M02: Feed"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: "The post was deleted successfully"
+        "403":
+          description: "Forbidden access to resource, the post is not yours"
+
+    post:
+      operationId: R209
+      summary: "R209: Edit a Post"
+      description: "Edit a post. Access: OWN"
+      tags:
+        - "M02: Feed"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                picture:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - text
+      responses:
+        "200":
+          description: "The post was edit successfully"
+        "403":
+          description: "Forbidden access to resource, the post is not yours"
+
+  # ==================================================================
+
+  /api/like_post:
+    post:
+      operationId: "R210"
+      summary: "R210: Toggle like on post"
+      description: "Toggle like on post. Access: USR"
+      tags:
+        - "M02: Feed"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_user:
+                  type: integer
+                id_post:
+                  type: integer
+
+      responses:
+        "200":
+          description: "The like was sucessful"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /api/like_comment:
+    post:
+      operationId: "R211"
+      summary: "R211: Toggle like on comment"
+      description: "Toggle like on comment. Access: USR"
+      tags:
+        - "M02: Feed"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_user:
+                  type: integer
+                id_comment:
+                  type: integer
+
+      responses:
+        "200":
+          description: "The like was sucessful"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /api/post:
+    post:
+      operationId: R212
+      summary: "R212: Create a Post"
+      description: "Creates a post. Access: USR"
+      tags:
+        - "M02: Feed"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                group:
+                  type: string
+                picture:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - text
+
+      responses:
+        "201":
+          description: "The post was created successfully"
+        "400":
+          description: "There is something wrong with the request body"
+
+  # ==================================================================
+
+  /group/{name}:
+    get:
+      operationId: R301
+      summary: "R301: Group Profile page"
+      description: "Group Profile. Access: PUB/USR"
+      tags:
+        - "M03: Groups"
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Success. Show group page"
+        "404":
+          description: "Group Profile does not exist"
+
+  # ==================================================================
+
+  /group/{name}/edit:
+    get:
+      operationId: "R302"
+      summary: "R302 Page to edit group"
+      description: "Page to edit group. Access: OWN"
+      tags:
+        - "M03: Groups"
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Show Edit Group Page UI"
+        "403":
+          description: "Abort. Not allowed to edit group if not owner"
+
+  # ==================================================================
+
+  /group/member_list/{name}:
+    get:
+      tags:
+        - "M03: Groups"
+      summary: "R303: Get group members"
+      description: "Get group members of a group. Access: MEM, ADM (OWN of group is member)"
+      operationId: "R303"
+      parameters:
+        - name: name
+          in: path
+          description: "Group name"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Group members"
+        "404":
+          description: "Group not found"
+        "403":
+          description: "Forbidden"
+
+  # ==================================================================
+
+  /api/group/{id_group}/owner/{id_user}:
+    post:
+      operationId: R304
+      summary: "R304: Promote member to owner"
+      description: "Promote member to owner. Access: OWN"
+      tags:
+        - "M03: Groups"
+
+      parameters:
+        - in: path
+          name: id_group
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: id_user
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "New owner added successfully"
+        "403":
+          description: "Forbidden access to resource. User is not owner of the group"
+
+  # ==================================================================
+
+  /api/group/{id_group}/member/{id_user}:
+    delete:
+      operationId: R305
+      summary: "R305: Remove a group a member"
+      description: "Deletes a group member. Access: OWN"
+      tags:
+        - "M03: Groups"
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_group:
+                  type: integer
+                id_user:
+                  type: integer
+
+      responses:
+        "200":
+          description: "The member was removed successfully"
+        "403":
+          description: "Forbidden access to resource or this member doesnt belong in this group"
+
+  # ==================================================================
+
+  /api/group:
+    post:
+      operationId: R306
+      summary: "R306: Create a Group"
+      description: "Creates a Group. Access: USR"
+      tags:
+        - "M03: Groups"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  visibility:
+                    type: integer
+                  image:
+                    type: string
+                    format: binary
+
+      responses:
+        "201":
+          description: "The group was created successfully"
+        "400":
+          description: "There is something wrong with the request body"
+
+  # ==================================================================
+
+  /api/group/{name}:
+    post:
+      operationId: R307
+      summary: "R307: Edit a Group"
+      description: "Edit a Group"
+      tags:
+        - "M03: Groups"
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                visibility:
+                  type: boolean
+                picture:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: "The group was edit successfully"
+        "403":
+          description: "Forbidden access to resource, the Group is not yours"
+
+    delete:
+      operationId: R308
+      summary: "R308: Delete Group"
+      description: "Deletes a group. Access: USR"
+      tags:
+        - "M03: Groups"
+      parameters:
+        - in: path
+          name: name_group
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "The group was deleted successfully"
+        "403":
+          description: "Forbidden access to resource, the group is not yours"
+
+  # ==================================================================
+
+  /api/group_member/{id}:
+    get:
+      operationId: R309
+      summary: "R309: Get group member"
+      description: "Get group member. Access: USR"
+      tags:
+        - "M03: Groups"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The group members were returned successfully"
+        "403":
+          description: "Forbidden access to resource"
+
+    delete:
+      operationId: R310
+      summary: "R310: Delete group member"
+      description: "Delete group member from group with id. Access: OWN"
+      tags:
+        - "M03: Groups"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The group member was deleted successfully"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /api/group/{name}/owner/{id}:
+    post:
+      operationId: R311
+      summary: "R311: Promote a Member"
+      description: "Promote a member: OWN"
+      tags:
+        - "M03: Groups"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The group member was promoted successfully"
+        "403":
+          description: "Forbidden access to resource"
+
+  # ==================================================================
+
+  /group_list/{username}:
+    get:
+      operationId: R312
+      summary: "R312: Group list of username"
+      description: "Group list of username. Access: USR"
+      tags:
+        - "M03: Groups"
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Success. Show group list of username page"
+        "404":
+          description: "Does not exist any user with this username"
+
+  # ==================================================================
+
+  /user/friends/requests:
+    get:
+      operationId: R401
+      summary: "R401 View friends requests"
+      description: "Show the friends requests page.Access: USR"
+      tags:
+        - "M04: Requests"
+      responses:
+        "200":
+          description: "Ok. Show friends requests page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "Not found"
+
+  # ==================================================================
+
+  /group/{group_name}/requests:
+    get:
+      operationId: R402
+      summary: "R402: Group Requests"
+      description: "Group Requests. Access: OWN"
+      tags:
+        - "M04: Requests"
+      parameters:
+        - in: path
+          name: group_name
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Success. Show group requests page"
+        "404":
+          description: "Does not exist any Group Requests"
+
+  # ==================================================================
+
+  /api/user/friend/request/{id_sender}/reject:
+    put:
+      operationId: "R403"
+      summary: "R403 Reject a friend request"
+      description: "Reject a friend request of a certain user. Access: USR"
+      tags:
+        - "M04: Requests"
+
+      parameters:
+        - in: path
+          name: id_sender
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The request was rejected with success"
+        "403":
+          description: "You need to authenticate to use this endpoint"
+
+  # ==================================================================
+
+  /api/group/request/{id}/send:
+    post:
+      operationId: "R404"
+      summary: "R404: Send a group join request"
+      description: "Send a group join request. Access: USR"
+      tags:
+        - "M04: Requests"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The request was sent"
+        "403":
+          description: "You need to authenticate to use this endpoint"
+
+  # ==================================================================
+
+  /api/group/request/{id}:
+    delete:
+      operationId: R405
+      summary: "R405: Delete group request"
+      description: "Delete group request. Access: OWN"
+      tags:
+        - "M04: Requests"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Group request deleted successfully"
+        "403":
+          description: "Forbidden access to resource. User is not owner of the group"
+
+  # ==================================================================
+
+  /api/group/{group_name}/request/{id_sender}/accept:
+    put:
+      operationId: "R406"
+      summary: "R406 Accept group join request"
+      description: "Accept group join request. Access: USR"
+      tags:
+        - "M04: Requests"
+
+      parameters:
+        - in: path
+          name: group_name
+          schema:
+            type: string
+          required: true
+
+        - in: path
+          name: id_sender
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "The request was Accepted with Success"
+        "403":
+          description: "You need to authenticate to use this endpoint"
+
+  # ==================================================================
+
+  /api/user/friend/request/{id_sender}/accept:
+    put:
+      operationId: R407
+      summary: "R407: Accept friend request"
+      description: "Accept friend request. Access: OWN"
+      tags:
+        - "M04: Requests"
+
+      parameters:
+        - in: path
+          name: id_sender
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Friend request accepted successfully"
+        "403":
+          description: "Forbidden. User is not the receiver of the friend request"
+
+  # ==================================================================
+
+  /api/group/{group_name}/request/{id_sender}/reject:
+    put:
+      tags:
+        - "M04: Requests"
+      summary: "R408: Reject request"
+      description: "Reject group request. Access: OWN, ADM"
+      operationId: "R408"
+      parameters:
+        - name: group_name
+          in: path
+          description: "Group name"
+          required: true
+          schema:
+            type: string
+        - name: id_sender
+          in: path
+          description: "Request sender id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Request rejected"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /api/user/friend/request/{id_rcv}/send:
+    post:
+      tags:
+        - "M04: Requests"
+      summary: "R409: Send friend request"
+      description: "Send friend request. Access: USR"
+      operationId: "R409"
+      parameters:
+        - name: id_rcv
+          in: path
+          description: "Request receiver id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Friend request sent"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /messages:
+    get:
+      operationId: R501
+      summary: "R501: Show User's Messages Page"
+      description: "Show User's Messages Page. Access: USR"
+      tags:
+        - "M05: Messages"
+
+      responses:
+        "200":
+          description: "Show Message Page UI"
+        "403":
+          description: "Not authenticated or cannot access the messages"
+
+  # ==================================================================
+
+  /messages/{sender_username}:
+    get:
+      operationId: R502
+      summary: "R502 View message page"
+      description: "Show the messages page UI04. Access: USR"
+      tags:
+        - "M05: Messages"
+      responses:
+        "200":
+          description: "Ok. Show message page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "Not found"
+
+  # ==================================================================
+
+  /api/message/{id}:
+    post:
+      operationId: "R503"
+      summary: "R503: Send a message"
+      description: "Send a message to a certain user. Access: USR"
+      tags:
+        - "M05: Messages"
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+
+      responses:
+        "201":
+          description: "Successfully created"
+        "400":
+          description: "Text cannot be null"
+        "403":
+          description: "Failure"
+
+  # ==================================================================
+
+  /notifications:
+    get:
+      operationId: R601
+      summary: "R601: Notification Page"
+      description: "Notification Page. Access: USR"
+      tags:
+        - "M06: Notifications"
+
+      responses:
+        "200":
+          description: "Show Notification List UI"
+        "403":
+          description: "Not authenticated or cannot access the notifications"
+
+  # ==================================================================
+
+  /api/user/notifications/seen:
+    put:
+      operationId: "R602"
+      summary: "R602: Mark all notifications as seen"
+      description: "Mark all notifications as seen of a certain user. Access: USR"
+      tags:
+        - "M06: Notifications"
+
+      responses:
+        "200":
+          description: "The notifications were marked as seen"
+        "403":
+          description: "You need to authenticate to use this endpoint"
+
+  # ==================================================================
+
+  /api/user/notification/{id}/seen:
+    put:
+      tags:
+        - "M06: Notifications"
+      summary: "R603: Mark notification as seen"
+      description: "Mark notification as seen. Access: USR"
+      operationId: "R603"
+      parameters:
+        - name: id
+          in: path
+          description: "Notification id"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Notification marked as seen"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /api/user/notifications:
+    get:
+      tags:
+        - "M06: Notifications"
+      summary: "R604: Get notifications"
+      description: "Get notifications. Access: USR"
+      operationId: "R604"
+      responses:
+        "200":
+          description: "Notifications"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /api/search/{query_string}/type/{type_search}/order/{type_order}/offset/{offset}:
+    get:
+      operationId: R701
+      summary: "R701: Search API"
+      description: "Searches for works and returns the results as JSON. Access: PUB."
+
+      tags:
+        - "M07: Search"
+
+      parameters:
+        - in: path
+          name: query_string
+          description: String to use for full-text search
+          schema:
+            type: string
+          required: true
+
+        - in: path
+          name: type_search
+          description: "Filter parameter can be: users, groups, posts or topics."
+          schema:
+            type: string
+          required: true
+
+        - in: path
+          name: order
+          description: "Order parameter can be: match, date, likes, comments."
+          schema:
+            type: integer
+          required: true
+
+        - in: path
+          name: offset
+          description: Offset of content to show.
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: Json Search Results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object # It can be users, groups, posts or topics
+
+  # ==================================================================
+
+  /search/{query}:
+    get:
+      operationId: R702
+      summary: "R702: Search"
+      description: "Show Search hits page. Access: PUB"
+      tags:
+        - "M07: Search"
+
+      parameters:
+        - in: query
+          name: query
+          description: "Queried String"
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "302":
+          description: "Ok. Show search page"
+
+  # ==================================================================
+
+  /about:
+    get:
+      operationId: R801
+      summary: "R801: About Page"
+      description: "Show Nexus About page. Access: PUB"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show about page UI"
+        "404":
+          description: "Page not available"
+
+  # ==================================================================
+
+  /contacts:
+    get:
+      operationId: R802
+      summary: "R802: Contacts Page"
+      description: "Show Nexus Contact page. Access: PUB"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show contacts page UI"
+        "404":
+          description: "Page not available"
+
+  # ==================================================================
+
+  /admin:
+    get:
+      operationId: R803
+      summary: "R803: Admin Page"
+      description: "Show administrator page. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show admin UI"
+        "404":
+          description: "Page not available"
+
+  # ==================================================================
+
+  /features:
+    get:
+      operationId: R804
+      summary: "R804: Main Features Page"
+      description: "Show Nexus Feature page. Access: PUB"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "302":
+          description: "Ok. Show features page UI"
+        "404":
+          description: "Page not available"
+
+  # ==================================================================
+
+  /admin/statistics:
+    get:
+      operationId: R805
+      summary: "R805: Admin statistics"
+      description: "Show Admin statistics. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      responses:
+        "200":
+          description: "Show admin statistics UI"
+        "403":
+          description: "Not authenticated or cannot access admin statistics"
+
+  # ==================================================================
+
+  /admin/report/{username}:
+    get:
+      operationId: R806
+      summary: "R806: Get User Report"
+      description: "Get User Report. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Show User Report UI"
+        "403":
+          description: "Not authenticated or cannot access user report"
+
+  # ==================================================================
+
+  /user/friends/{username}:
+    get:
+      operationId: R807
+      summary: "R807: View friends requests"
+      description: "Show the friends of user.Access: USR"
+      tags:
+        - "M08: User Administration and Static pages"
+      responses:
+        "200":
+          description: "Ok. Show friends of user page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "User Not found"
+
+  # ==================================================================
+
+  /api/report/reject_all/{userID}:
+    put:
+      operationId: "R808"
+      summary: "R808: Reject all pending reports from a user"
+      description: "Reject all pending reports from a user. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      parameters:
+        - in: path
+          name: userID
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+
+  # ==================================================================
+
+  /api/report:
+    put:
+      tags:
+        - "M08: User Administration and Static pages"
+      summary: "R809: Report user"
+      description: "Report user. Access: ADM"
+      operationId: "R809"
+      requestBody:
+        description: "Report"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                decision:
+                  type: integer
+                id:
+                  type: integer
+      responses:
+        "200":
+          description: "Report sent"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+    post:
+      operationId: "R810"
+      summary: "R810: Create a report"
+      description: "Create a report of a post or comment. Access: USR"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_post:
+                  type: integer
+                id_comment:
+                  type: integer
+                description:
+                  type: string
+
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_reporter:
+                    type: integer
+                  id_admin:
+                    type: integer
+                  report_date:
+                    type: string
+                  description:
+                    type: string
+                  decision:
+                    type: string
+                  id_post:
+                    type: integer
+                  id_comment:
+                    type: integer
+
+              example:
+                - id_reporter: 1
+                  id_admin: null
+                  report_date: "2022-05-04 22:22:22"
+                  description: "It's offensive"
+                  decision: "Pendent"
+                  id_post: 5
+                  id_comment: null
+
+  # ==================================================================
+
+  /api/user/ban/{userID}/{time_option}:
+    put:
+      tags:
+        - "M08: User Administration and Static pages"
+      summary: "R811: Ban user"
+      description: "Ban user. Access: ADM"
+      operationId: "R811"
+      parameters:
+        - name: userID
+          in: path
+          description: "User ID"
+          required: true
+          schema:
+            type: integer
+        - name: time_option
+          in: path
+          description: "Time option"
+          required: true
+          schema:
+            type: integer
+            oneOf:
+              - minimum: 0
+                maximum: 8
+      responses:
+        "200":
+          description: "User banned"
+        "400":
+          description: "Invalid time option"
+        "403":
+          description: "Forbidden"
+        "419":
+          description: "Not a valid CSRF token"
+
+  # ==================================================================
+
+  /api/admin/pendent_reports/{query_string}:
+    get:
+      operationId: "R812"
+      summary: "R812: Get the pendent reports"
+      description: "Get the pendent reports. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      parameters:
+        - in: path
+          name: query_string
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    photo:
+                      type: string
+                    ban_date:
+                      type: string
+                    decision_date:
+                      type: string
+
+        "403":
+          description: "Forbidden"
+
+  # ==================================================================
+
+  /api/admin/past_reports/{query_string}:
+    get:
+      operationId: "R813"
+      summary: "R813: Get the past reports"
+      description: "Get the past reports. Access: ADM"
+      tags:
+        - "M08: User Administration and Static pages"
+
+      parameters:
+        - in: path
+          name: query_string
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    photo:
+                      type: string
+                    ban_date:
+                      type: string
+                    decision_date:
+                      type: string
+
+        "403":
+          description: "Forbidden"
+
+  # ==================================================================
+
+  /api/user/friend/{id}:
+    get:
+      operationId: R814
+      summary: "R814: User friends"
+      description: "Saw the user:USR"
+      tags:
+        - "M08: User Administration and Static pages"
+      parameters:
+        - in: path
+          name: id
+          description: "User"
+          schema:
+            type: string
+          required: true
+
+      responses:
+        "200":
+          description: "Success show the user friends page"
+        "403":
+          description: "Forbidden access to resource"
+        "404":
+          description: "User not found"
+
+  # ==================================================================
