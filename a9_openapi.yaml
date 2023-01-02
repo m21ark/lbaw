@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   version: "2.0"
   title: "LBAW Nexus Web API"
-  description: "Web Resources Specification (A7) for Nexus"
+  description: "Web Resources Specification (A9) for Nexus"
 
 servers:
   - url: https://lbaw2261.lbaw.fe.up.pt
@@ -1378,8 +1378,8 @@ paths:
   /user/friends/{username}:
     get:
       operationId: R410
-      summary: "R410: View friends requests"
-      description: "Show the friends of user.Access: USR"
+      summary: "R410: View user's friend list"
+      description: "Show the friends of user. Access: USR"
       tags:
         - "M04: Requests"
       responses:
