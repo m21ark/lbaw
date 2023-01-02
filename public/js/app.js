@@ -1207,7 +1207,6 @@ function addedHandler(class_name) {
             logItem(class_name)(0);
         class_alert = 'alert-success'
         let alert = document.createElement('div');
-        // console.log(this.response)
 
         // alert.innerHTML = this.response !== null ?  JSON.parse(this.response).success : 'Action successful';
         alert.innerHTML = 'Action successful';
@@ -1235,8 +1234,6 @@ function closePopups() {
             e.setAttribute('hidden', true);
         });
 
-
-
     giveBackBubbleTags()
 }
 
@@ -1255,6 +1252,11 @@ function sendCreateGroupRequest(event) {
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
+        return;
+    }
+
+    if (description.length >= 1000) {
+        alert('Description must be bellow 1000 characters.');
         return;
     }
 
@@ -1284,6 +1286,11 @@ function sendEditGroupRequest(event) {
 
     if (name == '' || description == '' || visibility == null) {
         alert('Invalid input');
+        return;
+    }
+
+    if (description.length >= 1000) {
+        alert('Description must be bellow 1000 characters.');
         return;
     }
 
@@ -1400,6 +1407,11 @@ function sendEditProfileRequest(event) {
 
     if (username == '' || email == '' || bio == '' || oldName == '' || bdate == null) {
         alert('Invalid input');
+        return;
+    }
+
+    if (bio.length >= 1000) {
+        alert('Bio must be bellow 1000 characters.');
         return;
     }
 
@@ -2486,7 +2498,7 @@ function createTopicCard(topic) {
     new_card.innerHTML = `
     <div class="card mt-4 me-3" style="height:4em">
         <div class="d-flex align-items-center card-body">
-            <h4 class="card-title">${topic.topic}</h5>
+            <h4 class="card-title">${topic.topic}|${topic.id}</h5>
         </div>
     </div>
     `
