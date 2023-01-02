@@ -34,12 +34,6 @@
         <div id="order_filter_dropdown" class="orderFilter dropdown" style="width:7em;">
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
             <div class="dropdown_menu search_order_dropdown_btn" style="z-index: 5;position: absolute; width:36em;" hidden>
-                <!--
-                <label class="list-group-item no_hover" for="order_by_label" style="background-color: white;color:black">
-                        Filter by:
-                </label>
-                <p class="list-group-item-check pe-none search-order" id="order_by_label"></p>
-                -->
                 <input class="list-group-item-check pe-none search-order" type="radio" name="search_order"
                         id="search_radio_order_match" value="match" checked>          
                 
@@ -75,7 +69,7 @@
 
 
     <div id="timeline" class="search_timeline d-flex flex-wrap justify-content-center align-items-center">
-        <!-- TODO: Add results here -->
+        <!-- Add results here -->
 
     </div>
 @endsection
