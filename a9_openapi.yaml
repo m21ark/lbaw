@@ -1381,7 +1381,7 @@ paths:
       summary: "R410: View friends requests"
       description: "Show the friends of user.Access: USR"
       tags:
-        - "M08: User Administration and Static pages"
+        - "M04: Requests"
       responses:
         "200":
           description: "Ok. Show friends of user page"
