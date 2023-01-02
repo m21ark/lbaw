@@ -68,7 +68,7 @@
     </div>
 
 
-    <div id="timeline" class="search_timeline d-flex flex-wrap justify-content-center align-items-center">
+    <div id="timeline" class="search_timeline mt-3">
         <!-- Add results here -->
 
     </div>

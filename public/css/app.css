@@ -74,7 +74,7 @@
         font-size: 1.1em;
     }
 
-    div#timeline.home_timeline article.post .post_item {
+    div#timeline.home_timeline article.post .post_item, div#timeline.search_timeline article.post .post_item {
         max-width: 60em;
     }
 
