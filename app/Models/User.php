@@ -148,6 +148,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Topic', 'topics_interest_user', 'id_user', 'id_topic')->select('name');
     }
 
+
     public function friendOfFriend()
     {
         $suggestion = [];

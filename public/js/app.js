@@ -2531,6 +2531,8 @@ function updateUserReportsSearch(searchBar, decision) {
 
     if (query_string.trim() === '') query_string = '*';
 
+    console.log('/api/admin/' + decision + '_reports/' + query_string)
+
     sendAjaxRequest('get', '/api/admin/' + decision + '_reports/' + query_string, {}, function () {
         let display = document.querySelector("#users-reported-" + decision)
 
