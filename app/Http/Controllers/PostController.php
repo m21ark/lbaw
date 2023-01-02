@@ -38,9 +38,7 @@ class PostController extends Controller
             'id' => 'integer|exists:post,id'
         ]);
 
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln("Hello from Terminal");
-        // TODO: use id to get post from database
+        
         $post = Post::withCount('likes', 'comments')->find($id);
 
         if ($post == null)
@@ -63,8 +61,6 @@ class PostController extends Controller
         $posts = [];
         $offset = $request->route('offset');
 
-        // TODO ... PROVAVELMENTE ESTAS QUERIES ESTÃO A TORNAR O RETRIVAL DOS POSTS MAIS LENTO ... mudar
-
         // We just need to check if the user can access for_you, friends, groups
         // In other words, the user has only to be authenticated, else 401 error is returned
         // Authorization inside fee_for_you ,friends and viral functions
@@ -86,7 +82,7 @@ class PostController extends Controller
             ->selectRaw(' *, (likes_count /EXTRACT(epoch FROM (CURRENT_DATE - post_date))) as ranking')
             ->orderBy('ranking', 'desc');
 
-        // TODO ... lembro-me que em ltw meti o offset e o limit enquanto fazia o order é capaz de ajudar
+
         $posts = $posts->skip($offset)->limit(20)->get();
 
 
@@ -335,8 +331,6 @@ class PostController extends Controller
 
     public function post_topics($post_id)
     {
-        // TODO: POLICY
-
         $topics = PostTopic::where('id_post', $post_id)
             ->join('topic', 'topic.id', '=', 'post_topic.id_topic')
             ->select('topic.topic')

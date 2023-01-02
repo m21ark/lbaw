@@ -160,7 +160,8 @@ class User extends Authenticatable
             $user_friend[] = $friend->id;
         }
         
-
+        // get friends of friends by looping through all friends and saving suggestion that are not 
+        // current friends
         foreach (Auth::user()->friends() as $requester) {
             $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender;
             $profileFriends = $friend->friends();
@@ -192,6 +193,8 @@ class User extends Authenticatable
     function groupSuggestions() {
 
         $randomArray = [];
+        // Get groups that have same interest of the user
+        // randomnly chossing 4 groups to make it a more dynamic suggestion
         foreach ($this->interests as $interest) {
            $suggestion = $interest->topic->group()->get()->toArray();
 
@@ -208,6 +211,7 @@ class User extends Authenticatable
            }
         }
 
+        // Get Collection from array
         $categories = collect();
         foreach($randomArray as $product){
 

@@ -10,7 +10,7 @@ class PostTopic extends Model
     use HasFactory;
     public $timestamps  = false;
     protected $table = 'post_topic';
-    public $incrementing = false; // IMPORTANT: ADD THIS TO ASSOCIATIONS WITHOUT id
+    public $incrementing = false; 
 
     public function post()
     {

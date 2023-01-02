@@ -16,7 +16,7 @@ class CommentController extends Controller
     {
 
         $request->validate([
-            'text' => 'string|min:0|max:2000' // strip tags to sanitize inout // SEE BELLOW
+            'text' => 'string|min:0|max:2000' // strip tags to sanitize input // SEE BELLOW
         ]);
 
         $text = strip_tags($request->input('text'));
@@ -103,7 +103,7 @@ class CommentController extends Controller
     public function delete(Request $request, $id_comment)
     {
         $request->validate([
-            'id_comment' => 'string|exists:comment,id', // strip tags to sanitize inout // SEE BELLOW
+            'id_comment' => 'string|exists:comment,id', 
         ]);
 
         $comment = Comment::find($id_comment);

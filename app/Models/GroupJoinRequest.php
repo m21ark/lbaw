@@ -9,7 +9,7 @@ class GroupJoinRequest extends Model
 {
     use HasFactory;
     public $timestamps  = false;
-    public $incrementing = false; // IMPORTANT: ADD THIS TO ASSOCIATIONS WITHOUT id
+    public $incrementing = false;
     protected $table = 'group_join_request';
 
 

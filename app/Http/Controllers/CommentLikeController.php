@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentLikeController extends Controller
 {
-    public function toggle(Request $request) // TODO ... alterar... não se devia passar o id_user .... o utilizador vais estar logado e já se sabe quem é
+    public function toggle(Request $request)
     {
 
         $request->validate([

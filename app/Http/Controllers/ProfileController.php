@@ -82,14 +82,12 @@ class ProfileController extends Controller
         // NO NEED FOR POLICY ... only the stated above
 
         DB::beginTransaction();
-        $user->username = strip_tags($request->input('username')) ?? $user->username; // TODO: Check if username is unique
+        $user->username = strip_tags($request->input('username')) ?? $user->username;
         $user->birthdate = $request->input('bdate') ?? $user->birthdate;
         $user->visibility = $request->input('visibility');
-        $user->email = strip_tags($request->input('email')) ?? $user->email; // TODO: Check if email is unique
+        $user->email = strip_tags($request->input('email')) ?? $user->email;
         $user->bio = strip_tags($request->input('bio')) ?? $user->bio;
 
-        // TODO : ADD PASSWORD
-        // TODO: EDIT ALSO USER INTERESTS
 
         if ($request->hasFile('photo')) {
 

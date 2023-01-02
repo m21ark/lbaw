@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
-    public function toggle(Request $request) // TODO... mesma coisa do commentLikeController
+    public function toggle(Request $request) 
     {
 
         validator($request->route()->parameters(), [

@@ -75,7 +75,6 @@ class PasswordRecoverController extends Controller
 
     public function resetPassword(Request $request)
     {
-        // TODO: Validate password
 
         // THIS IS A GUEST endpoint ... no need for POLICY
 
@@ -99,7 +98,7 @@ class PasswordRecoverController extends Controller
         //Hash and update the new password
         $user->password = Hash::make($password);
 
-        $user->update(); //or $user->save();
+        $user->update();
 
         //login the user immediately they change password successfully
         Auth::login($user);

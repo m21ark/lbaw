@@ -1041,7 +1041,6 @@ function addEventListeners() {
     // CLOSE POP-UPS ACTION
     assignFunctionClickAll('.close_popup_btn', closePopups)
 
-    // TODO ... passar para o array
     let post_dropDowns = document.querySelectorAll('.dropdownPostButton');
     [].forEach.call(post_dropDowns, function (element) {
         element.addEventListener('click', togglePostDropDown(element.parentNode));
@@ -1211,7 +1210,7 @@ function addedHandler(class_name) {
         class_alert = 'alert-success'
         let alert = document.createElement('div');
         // console.log(this.response)
-        // TODO : smth like this for every page
+
         // alert.innerHTML = this.response !== null ?  JSON.parse(this.response).success : 'Action successful';
         alert.innerHTML = 'Action successful';
         if (this.status < 200 || this.status >= 300) {
@@ -1269,8 +1268,6 @@ function sendCreateGroupRequest(event) {
                 location.pathname = '/group/' + name;
             }
         })
-
-        // TODO: Fazer redirect para grupo criado
     }
 
 }
@@ -2132,7 +2129,6 @@ function createPost(post) {
 
                         <div class="card-footer d-flex justify-content-evenly">
 
-                            <!-- TODO: Aqui devia se passar a contagem da database e n o array completo -->
 
                             ${bottom}
 
@@ -2713,7 +2709,7 @@ function createCustomMessageBody(notf) {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>"; // TODO: temos de ir buscar o post na mesma ... mudar bd
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>"; 
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";

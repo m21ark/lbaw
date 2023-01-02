@@ -315,8 +315,6 @@ class GroupController extends Controller
             This is not an api endpoint. It's called in another function that grantes the correct policy
             Hence this does not need a Policy
         */
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-
         $owner = new Owner();
         $owner->id_user = $idUser;
         $owner->id_group = $idGroup;

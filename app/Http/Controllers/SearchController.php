@@ -120,10 +120,6 @@ class SearchController extends Controller
 
         }
 
-        
-
-        
-
         return $groups;
     }
 
@@ -179,8 +175,6 @@ class SearchController extends Controller
 
         for ($i = 0; $i < sizeof($topics_search); $i++) {
             $topics_search[$i] = trim($topics_search[$i]);
-
-            //echo $topics_search[$i] . "1";
         }
 
         if (Auth::check()) {
