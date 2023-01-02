@@ -1824,16 +1824,23 @@ function updateFeed(feed) {
         }
 
         if (received.length === 0 && !scroll_end) {
-
             timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
             scroll_end = true;
+
+            let spinners = timeline.querySelectorAll('.spinner');
+            spinners.forEach(function (spinner) {
+                spinner.remove();
+            })
         }
 
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
 
-        timeline.innerHTML += createSpinner()
+        if (received.length !== 0) {
+            timeline.innerHTML += createSpinner()
+        }
+        
 
         offset += received.length;
         scroll_updating = false
