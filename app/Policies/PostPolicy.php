@@ -20,14 +20,15 @@ class PostPolicy
 
     public function view(User $user, Post $post)
     {
-        if ($post->owner->id == $user->id)
+
+        if ($post->owner->id == $user->id || $post->owner->visibility == true)
             return true;
 
         if (isset($post->group)) {
             return GroupController::userInGroup($user, $post->group);
         }
 
-        return PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
+        return  PostController::areFriends($user, $post->owner) || $post->id_poster == Auth::id();
     }
 
     public function create(User $user, Post $post)

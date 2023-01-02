@@ -1,4 +1,4 @@
-<div class="container mt-5 mb-5 post_item " id="post_main_page">
+<div class="container mt-5 mb-5 post_item ">
 
     @isset($showComments)
         <h1 class="mb-4">Post</h1>

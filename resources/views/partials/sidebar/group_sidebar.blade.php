@@ -5,7 +5,7 @@
     <div class="card border-secondary mb-4">
 
         <div class="card-header">
-            <h3 class="p-2 ">{{ $group->name }}
+            <h3 class="p-2 ">{{ $group->name }} {{ $group->id }}
                 @auth
                     @if (in_array(Auth::user()->id, $group->owners->pluck('id_user')->toArray()) || Auth::user()->isAdmin)
                         <a class='btn btn-secondary' href={{ '/group/' . $group->name . '/edit' }} id="popup_btn_group_edit"

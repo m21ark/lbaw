@@ -7,12 +7,12 @@
                 @if (Auth::user()->id == $comment->id_commenter)
                     <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}" data-toggle="tooltip"
                         data-placement="top" title="Edit Comment" class="pt-1 text-decoration-none popup_btn_comment_edit">
-                        <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                        <h4><i class="fa-solid fa-pencil text-primary"></i> </h4>
                     </a>
                 @else
                     <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}"
                         data-placement="top" title="Report Comment">
-                        <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                        <h4><i class=" fa-solid fa-flag text-primary"> </i></h4>
                     </a>
                 @endif
             @endauth
@@ -37,7 +37,7 @@
     </div>
 
     <div class="card-header d-flex justify-content-center align-items-center">
-        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}"
+        <img src="/{{ $comment->poster->photo }}"
             alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
             href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
@@ -85,13 +85,13 @@
             </a>
         @endauth
 
-        <span class="me-5"></span>
+        <span class="me-4 ms-4"></span>
 
         @if (sizeof($comment->replies) > 0)
             <a class="ms-5 reveal_comment_replies text-decoration-none" data-id="{{ $comment->id }}" href="#!"
                 data-placement="top" title="Show Comment Replies">
 
-                <span class="mt-1 me-3 text-dark" style="font-size:1.5em">{{ sizeof($comment->replies) }}</span>
+                <span class="mt-1 me-3 text-dark reply_count" style="font-size:1.5em" data-replycount="{{ sizeof($comment->replies) }}">{{ sizeof($comment->replies) }}</span>
 
                 <span class="me-3" style="font-size: 1.7em">
                     <i class="ms-3 fa-regular fa-comment-dots"></i>
@@ -107,7 +107,7 @@
         <div class="comment_reply_section" id="comment_reply_section_{{ $comment->id }}" hidden>
             <h4 class="mt-4 mb-2">Replies</h4>
             @foreach ($comment->replies as $reply)
-                <div class="card mb-4 comment_reply">
+                <div class="card mb-4 comment_reply" id="comment_item_reply_{{ $reply->id }}">
 
                     <div class="card-header d-flex justify-content-evenly align-items-center">
                         @isset($showPostLink)
@@ -115,7 +115,7 @@
                         @else
                             @auth
                                 @if (Auth::user()->id == $reply->id_commenter)
-                                    <a href="#!" data-id="{{ $reply->id }}" data-text="{{ $reply->text }}"
+                                    <a href="#!" data-id="{{ $reply->id }}" data-parent="{{ $comment->id }}" data-text="{{ $reply->text }}"
                                         data-placement="top" title="Edit Comment Reply"
                                         class="pt-1 text-decoration-none popup_btn_comment_edit ">
                                         <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
@@ -129,7 +129,7 @@
                             @endauth
                         @endisset
 
-                        <small>{{ $reply->post_date }}</small>
+                        <small>{{ Carbon\Carbon::parse($reply->post_date)->diffForHumans() }}</small>
 
 
                     </div>

@@ -1,5 +1,5 @@
 // Enable pusher logging - don't include this in production
-Pusher.logToConsole = false;
+// Pusher.logToConsole = true;
 
 var pusher = new Pusher('c827040c068ce8231c02', { // WE CAN ADD ENCRYPTION HERE
     cluster: 'eu',
@@ -18,7 +18,6 @@ if (user_header != null) {
     var channel1 = pusher.subscribe('App.User.' + id);
     channel1.bind('my-event', function (data) {
 
-        // TODO: VER O CASO DO REPLY
         let notfiableJsonPrototype = {
             id_post: data.obj.id_post ?? (data.obj.comment !== undefined ? data.obj.comment.id_post : null),
             sender: data.sender,
@@ -83,17 +82,38 @@ if (user_header != null) {
     });
 
     channel.bind("pusher:member_removed", member => {
-        // for remove member from list:
         var index = users.indexOf(member.id);
         users.splice(index, 1);
-        if (member.id == room) {
+        
+        let curr_user = document.querySelector('#sms_rcv')
+        if (curr_user.dataset.id == member.id) {
+            curr_user.removeChild(curr_user.children[1])
+        }
+        if (member.id == room ) { // IF he moves from pages ...
             endCall();
         }
         render();
     });
 
+    function insertAfter(newNode, existingNode) {
+        existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+    }
+
     function render() {
-        // ONLINE STATUS OF USERS
+        users.forEach(element => {
+            // add a green indicator to the img 
+            let l = createElementFromHTML(`
+             <span class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-success" id="notf_nr">online</span>`
+            )
+
+            let onlineStatus = document.querySelector('#sms_rcv')
+
+            if (onlineStatus != null && onlineStatus.dataset.id ==element ) {
+                insertAfter(l, onlineStatus.firstElementChild);
+            }
+
+
+        });
     }
 
     /////////////////////////////////////////////
@@ -1531,7 +1551,18 @@ function sendEditCommentRequest() {
         sendAjaxRequest('put', `/api/comment`, { id_comment: id_comment, text: text }, function () {
             addedHandler(null).call(this)
         });
-        document.querySelector(`#comment_item_${id_comment} p.card-text`).innerHTML = text
+
+        let e = document.querySelector(`#comment_item_${id_comment} p.card-text`)
+        if (e)
+            e.innerHTML = text
+        else {
+            e = document.querySelector(`#comment_item_reply_${id_comment} p.card-text`)
+            if (e) {
+                e.innerHTML = text
+                document.querySelector(`#comment_item_reply_${id_comment} .popup_btn_comment_edit`).dataset.text = text
+            }
+
+        }
         logItem('#popup_show_comment_edit')(0);
     }
 
@@ -1543,10 +1574,34 @@ function sendDeleteCommentRequest() {
 
     let res = confirm('Are you sure you want delete this comment?');
     if (res) {
+
         sendAjaxRequest('delete', `/api/comment/${id_comment}`, {}, function () {
             addedHandler(null).call(this)
         });
-        document.querySelector(`#comment_item_${id_comment}`).remove()
+
+        let e = document.querySelector(`#comment_item_${id_comment}`)
+        if (e)
+            e.remove()
+        else {
+            e = document.querySelector(`#comment_item_reply_${id_comment}`)
+            if (e) {
+
+                let p = document.querySelector(`#comment_item_reply_${id_comment} .popup_btn_comment_edit`)
+                let c = document.querySelector(`#comment_item_${p.dataset.parent} .reply_count`)
+
+                if (c.dataset.replycount == 1) {
+                    document.querySelector(`#comment_reply_section_${p.dataset.parent}`).remove()
+                    document.querySelector(`#comment_item_${p.dataset.parent} .reveal_comment_replies`).remove()
+                } else {
+                    c.innerHTML = parseInt(c.innerHTML) - 1
+                    c.dataset.replycount = parseInt(c.dataset.replycount) - 1
+                }
+                e.remove()
+            }
+
+        }
+
+
         logItem('#popup_show_comment_edit')(0);
     }
 }
@@ -1809,6 +1864,7 @@ function updateFeed(feed) {
     sendAjaxRequest('get', '/api/post/feed/' + feed + '/offset/' + offset, {}, function () {
 
         let received = JSON.parse(this.responseText);
+        console.log(received)
         let timeline = document.querySelector('#timeline');
         if (!timeline) return;
 
@@ -2039,7 +2095,7 @@ function createPost(post) {
                 <div>
                     <div class="card-header d-flex justify-content-between p-2 px-3">
 
-                        <a href='/profile/${post.owner}' .
+                        <a href='/profile/${post.owner}'
                             class="text-decoration-none d-flex flex-row align-items-center">
                             <img src="/${post.photo}" width="60" class="rounded-circle me-3" alt="Post Owner Profile Image">
                             <strong class="font-weight-bold">${post.owner}</strong>

@@ -32,7 +32,7 @@
                         @foreach ($user->groupsOwner as $x)
                             <?php $group = $x->group; ?>
                             <div class="card mt-4 me-3" style="width: 15em;height:22em">
-                                <img height="60%" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
+                                <img style="height:60%;" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
                                     class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
@@ -59,7 +59,7 @@
                     <div class="d-flex flex-wrap">
                         @foreach ($user->groupsMember as $x)
                             <div class="card mt-4 me-3" style="width: 15em;height:25em">
-                                <img height="60%" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
+                                <img style="height:60%;" alt="Group Profile Image" src="{{ asset($x->group->photo) }}"
                                     class="card-img-top">
                                 <div class="card-body">
                                     <h5 class="card-title mb-3">{{ $x->group->name }}</h5>
@@ -76,6 +76,31 @@
                 </div>
             @endif
         </div>
+
+        @if (count(Auth::user()->groupSuggestions()) != 0)
+            <div class="mt-5 mb-4 container">
+                <h2 data-placement="right" title="Groups where you are a member">Some Group Suggestions
+                    ({{ $user->groupsMember->count() }})</h2>
+                <hr>
+                <div class="d-flex flex-wrap">
+                    @foreach ($user->groupSuggestions() as $x)
+                        <div class="card mt-4 me-3" style="width: 15em;height:25em">
+                            <img style="height:60%;" alt="Group Profile Image" src="{{ asset($x->photo) }}"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">{{ $x->name }}</h5>
+
+                            </div>
+
+                            <div
+                                class="card-footer d-flex flex-wrap justify-content-center align-items-center bg-white">
+                                <a href="/group/{{ $x->name }}" class="btn btn-primary w-100">Open Group</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
     </div>
 @endsection

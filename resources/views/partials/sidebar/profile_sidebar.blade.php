@@ -43,7 +43,7 @@
             <div style="margin: auto">
                 <img class="profile_img rounded-circle mt-2" src="{{ asset($user->photo) }}" alt="Profile Image"
                     width="150">
-                <h3 id="username" class="text-center mt-2">{{ $user->username }}</h3>
+                <h3 id="username" class="text-center mt-2">{{ $user->username }} {{ $user->id }}</h3>
             </div>
 
             <div class="card-body">

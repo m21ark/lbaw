@@ -28,7 +28,7 @@ class LikeController extends Controller
             ->first();
 
 
-        if ($request->user()->can('view', Post::find($post))) // POLICY ... the user must be able to see the post to like it
+        if (!$request->user()->can('view', Post::find($post))) // POLICY ... the user must be able to see the post to like it
             return response()->json(["You are not allowed to like this resourse" => 301]);
 
 
