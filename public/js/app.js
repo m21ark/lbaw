@@ -1812,11 +1812,19 @@ function updateFeed(feed) {
         let timeline = document.querySelector('#timeline');
         if (!timeline) return;
 
+
         if (offset === 0) {
             timeline.innerHTML = '';
+        } else {
+            let spinners = timeline.querySelectorAll('.spinner');
+
+            spinners.forEach(function (spinner) {
+                spinner.remove();
+            })
         }
 
         if (received.length === 0 && !scroll_end) {
+
             timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em">No content to show</h3>`));
             scroll_end = true;
         }
@@ -1824,6 +1832,8 @@ function updateFeed(feed) {
         received.forEach(function (post) {
             timeline.appendChild(createPost(post))
         })
+
+        timeline.innerHTML += createSpinner()
 
         offset += received.length;
         scroll_updating = false
@@ -1879,9 +1889,10 @@ function updateFeedOnScroll() {
     if (pathname !== '/home') return;
 
     window.onscroll = function (ev) {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
             if (scroll_updating) return;
             scroll_updating = true;
+
             let filters = document.querySelectorAll('#feed_filter input')
 
             let checked_filter = 'viral';
@@ -1892,6 +1903,7 @@ function updateFeedOnScroll() {
             }
 
             updateFeed(checked_filter)
+
         }
     };
 }
@@ -2097,7 +2109,7 @@ let selected_filter;
 function updateSearchOnLoad() {
 
     let pathname = window.location.pathname
-    if (!/\/search\/[#\*?!.@_\w ]*/.test(pathname)) return;
+    if (!/\/search\/[#\*?!.%@_\w ]*/.test(pathname)) return;
 
     let timeline = document.querySelector('#timeline')
     if (!timeline) return;
