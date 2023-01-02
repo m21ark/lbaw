@@ -25,7 +25,7 @@
             @if ($requester->acceptance_status == 'Pendent')
                 <div class="card mt-4 me-3" style="width: 15em;height:29em"
                     id="friend_request_{{ $requester->sender->id }}">
-                    <img height="50%" src="/{{ $requester->sender->photo }}" class="card-img-top"
+                    <img style="height:50%;" src="/{{ $requester->sender->photo }}" class="card-img-top"
                         alt="User Profile Image">
                     <div class="card-body">
                         <h5 class="card-title friend_request_sender">
@@ -46,7 +46,7 @@
             @elseif ($requester->acceptance_status == 'Accepted' && !$isrequests)
                 <?php $friend = $requester->sender->id == $user->id ? $requester->receiver : $requester->sender; ?>
                 <div class="card mt-4 me-3 " style="width: 15em;height:29em" id="friend_request_{{ $friend->id }}">
-                    <img height="50%" src="/{{ $friend->photo }}" class="card-img-top" alt="Friend Profile Image">
+                    <img style="height:50%;" src="/{{ $friend->photo }}" class="card-img-top" alt="Friend Profile Image">
                     <div class="card-body">
                         <h5 class="card-title friend_request_sender">
                             <a href="/profile/{{ $friend->username }}"> {{ $friend->username }}</a>
@@ -83,7 +83,7 @@
 
                 <div class="card mt-4 me-3" style="width: 15em;height:29em"
                     id="friend_request_{{ $sug->id }}">
-                    <img height="50%" src="/{{ $sug->photo }}" class="card-img-top"
+                    <img style="height:50%;" src="/{{ $sug->photo }}" class="card-img-top"
                         alt="User Profile Image">
                     <div class="card-body">
                         <h5 class="card-title friend_request_sender">

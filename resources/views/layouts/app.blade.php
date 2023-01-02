@@ -62,7 +62,10 @@
 
         <!-- Hidden Overlapping Pop-ups -->
         <!-- TODO: Put this somewherelse -->
-        @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
+        <?php $page_title = Request::segment(1);?>
+        @if ($page_title != 'group')
+            @include('partials.popup.make_post_popup', ['popup_id' => 'popup_show_post'])
+        @endif
         @include('partials.popup.video_call_popup')
         @include('partials.notification_stack')
     </main>

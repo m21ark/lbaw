@@ -7,12 +7,12 @@
                 @if (Auth::user()->id == $comment->id_commenter)
                     <a href="#!" data-id="{{ $comment->id }}" data-text="{{ $comment->text }}" data-toggle="tooltip"
                         data-placement="top" title="Edit Comment" class="pt-1 text-decoration-none popup_btn_comment_edit">
-                        <h4><i class="fa-solid fa-pencil text-primary"></i></h4>
+                        <h4><i class="fa-solid fa-pencil text-primary"></i> </h4>
                     </a>
                 @else
                     <a href="#!" class="pt-2 btn popup_btn_report_comment_create" data-id="{{ $comment->id }}"
                         data-placement="top" title="Report Comment">
-                        <h4><i class=" fa-solid fa-flag text-primary"></i></h4>
+                        <h4><i class=" fa-solid fa-flag text-primary"> </i></h4>
                     </a>
                 @endif
             @endauth
@@ -37,7 +37,7 @@
     </div>
 
     <div class="card-header d-flex justify-content-center align-items-center">
-        <img href="/profile/{{ $comment->poster->username }}" src="/{{ $comment->poster->photo }}"
+        <img src="/{{ $comment->poster->photo }}"
             alt="Commenter Profile Image" width="50" class="rounded-circle me-5">
         <a class="text-decoration-none"
             href="/profile/{{ $comment->poster->username }}">{{ $comment->poster->username }}</a>
