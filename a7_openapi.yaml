@@ -646,14 +646,14 @@ paths:
           description: 'Forbidden access to resource'
 
 /api/group/{name}/owner/{id}:
- post: 
+    post: 
       operationId: R307
       summary: 'R307: Promote a Member'
       description: 'Promote a member: OWN'
       tags:
         - "M03: Groups"
 
-    parameters:
+      parameters:
        - in: path
          name: id
          schema:
@@ -666,8 +666,7 @@ paths:
         '403':
           description: 'Forbidden access to resource'     
 
-  
-  /api/post/{id}:       
+ /api/post/{id}:       
     delete:
       operationId: R205
       summary: 'R205: Delete Post'
@@ -714,11 +713,9 @@ paths:
           description: 'The post was edit successfully'
         '403':
           description: 'Forbidden access to resource, the post is not yours'
-          
 
-
-  /api/admin/pendent_reports/{query_string}:
-    get:
+/api/admin/pendent_reports/{query_string}:
+     get:
       operationId: 'R806'
       summary: 'R806 Get the pendent reports'
       description: 'Get the pendent reports. Access: ADM'
@@ -757,8 +754,7 @@ paths:
         '403':
           description: 'Forbidden'
 
-
-  /api/admin/past_reports/{query_string}:
+/api/admin/past_reports/{query_string}:
     get:
       operationId: 'R807'
       summary: 'R807 Get the past reports'
@@ -797,8 +793,7 @@ paths:
         '403':
           description: 'Forbidden'
 
-
-  /api/like_post:
+/api/like_post:
     post:
       operationId: 'R207'
       summary: 'R207 Toggle like on post'
@@ -823,9 +818,8 @@ paths:
           description: 'The like was sucessful'
         '403':
           description: 'Forbidden access to resource'
-          
-         
-  /api/like_comment:
+
+/api/like_comment:
     post:
       operationId: 'R208'
       summary: 'R208 Toggle like on comment'
@@ -851,7 +845,7 @@ paths:
         '403':
           description: 'Forbidden access to resource'
 
-  /api/post:
+/api/post:
     post:
       operationId: R209
       summary: 'R209: Create a Post'
