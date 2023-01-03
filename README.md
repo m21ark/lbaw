@@ -10,7 +10,7 @@ The the full Docker command needed to start the image available at the group's G
 
 ## Production URL
 
-URL to our Nexus production product: lbaw2261.lbaw.fe.up.pt
+URL to our Nexus production product: [lbaw2261.lbaw.fe.up.pt](lbaw2261.lbaw.fe.up.pt)
 
 ## Access Credentials
 
