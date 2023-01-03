@@ -44,10 +44,6 @@ class CommentController extends Controller
             return view('partials.comment_item', ['comment' => $comment])->render();
         } else if (sizeof($matches[0]) === 1) {
 
-            // TODO adicionar notificação de erro
-            // TODO guardar o @ do user no texto é má ideia
-            // pq se o user mudar de nome deixa de fazer sentido
-
             $username = $matches[0][0];
 
             $aux = DB::table('comment')
@@ -57,13 +53,14 @@ class CommentController extends Controller
                 ->where('post.id', $id_post)
                 ->get('comment.id')->first();
 
-            if ($aux) { // TODO: TRANSACTION
+            if ($aux) { 
                 $comment = new Comment();
                 $comment->id_post = $id_post;
                 $comment->id_commenter = Auth::user()->id;
                 $comment->text = $text;
                 $comment->save();
 
+                // notificate the owner and the comment owner
                 event(new NewNotification(
                     intval($comment->post->owner->id),
                     'Comment',

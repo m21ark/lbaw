@@ -215,35 +215,6 @@ class SearchController extends Controller
             $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
         }
 
-        /*
-        $limiter = 20;
-        $posts_filtered = [];
-
-        foreach ($posts as $post) {
-            $post->topics = app('App\Http\Controllers\PostController')->post_topics($post->id);
-
-            foreach ($post->topics as $topic) {
-
-                if (!in_array($topic->topic, $topics_search)) {
-                    continue;
-                }
-
-                if ($offset > 0) {
-                    $offset--;
-                    break;
-                }
-
-                $posts_filtered[] = $post;
-                $limiter--;
-                break;
-            }
-
-            if ($limiter <= 0) {
-                break;
-            }
-        }
-        */
-
         return $posts;
     }
 
