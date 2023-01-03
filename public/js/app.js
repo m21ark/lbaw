@@ -2748,13 +2748,13 @@ function createCustomMessageBody(notf) {
             return notf.sender.username + " replied to your comment at <a href=/post/" + notf.id_post + ">Post</a>";
     }
     else if (notf.tipo == "FriendRequest") {
-        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you.`;
+        return `<a href=/profile/${notf.sender.username}>${notf.sender.username}</a> wants to connect with you`;
     }
     else if (notf.tipo == "Like") {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>";
+            return notf.sender.username + " liked your comment";
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
