@@ -47,10 +47,8 @@ if (user_header != null) {
         else if (data.type == "FriendRequest") {
             _notifications.push(notfiableJsonPrototype);
             updateNrNotfications();
-            addNoticomment_reply_btnfication(createCustomMessageBody(notfiableJsonPrototype), data.sender);
+            addNotification(createCustomMessageBody(notfiableJsonPrototype), data.sender);
         }
-
-
     });
 
 
