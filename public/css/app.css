@@ -78,7 +78,7 @@
         max-width: 60em;
     }
 
-    
+
 }
 
 @media(max-width: 40em) {
@@ -127,6 +127,8 @@
     #default_img {
         width: 40vh;
     }
+
+
 }
 
 
@@ -224,6 +226,11 @@
     #message_frame {
         font-size: 1.1em;
         margin-top: 5em;
+    }
+
+    #order_filter_dropdown.search_filter_dropdown .dropdown_menu label {
+        position: relative;
+        right: 5em;
     }
 
 }

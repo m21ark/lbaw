@@ -31,23 +31,23 @@
         </label>
 
 
-        <div id="order_filter_dropdown" class="orderFilter dropdown" style="width:7em;">
+        <div id="order_filter_dropdown" class="search_filter_dropdown orderFilter dropdown" style="width:7em;">
             <button class="btn dropdownPostButton" type="button">&#9776;</button>
             <div class="dropdown_menu search_order_dropdown_btn" style="z-index: 5;position: absolute; width:36em;" hidden>
                 <input class="list-group-item-check pe-none search-order" type="radio" name="search_order"
-                        id="search_radio_order_match" value="match" checked>          
-                
+                        id="search_radio_order_match" value="match" checked>
+
                 <label class="list-group-item rounded-1" for="search_radio_order_match">
                     Best Match
                 </label>
-                
+
                 <input class="list-group-item-check pe-none search-order" type="radio" name="search_order"
                     id="search_radio_order_date" value="date">
 
                 <label class="list-group-item rounded-1" for="search_radio_order_date">
                     Most Recent
                 </label>
-                
+
                 <input class="list-group-item-check pe-none search-order" type="radio" name="search_order"
                     id="search_radio_order_likes" value="likes">
 
@@ -61,14 +61,14 @@
                 <label class="list-group-item rounded-1" for="search_radio_order_comments">
                     Most Comments
                 </label>
-          
+
             </div>
         </div>
 
     </div>
 
 
-    <div id="timeline" class="search_timeline mt-3">
+    <div id="timeline" class="search_timeline d-flex flex-wrap justify-content-center align-items-center">
         <!-- Add results here -->
 
     </div>

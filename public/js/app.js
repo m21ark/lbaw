@@ -84,12 +84,12 @@ if (user_header != null) {
     channel.bind("pusher:member_removed", member => {
         var index = users.indexOf(member.id);
         users.splice(index, 1);
-        
+
         let curr_user = document.querySelector('#sms_rcv')
         if (curr_user !== null && curr_user.dataset.id == member.id) {
             curr_user.removeChild(curr_user.children[1])
         }
-        if (member.id == room ) { // IF he moves from pages ...
+        if (member.id == room) { // IF he moves from pages ...
             endCall();
         }
         render();
@@ -101,14 +101,14 @@ if (user_header != null) {
 
     function render() {
         users.forEach(element => {
-            // add a green indicator to the img 
+            // add a green indicator to the img
             let l = createElementFromHTML(`
              <span class="position-absolute top-0 start-70 translate-middle badge rounded-pill badge-notification bg-success" id="notf_nr">online</span>`
             )
 
             let onlineStatus = document.querySelector('#sms_rcv')
 
-            if (onlineStatus != null && onlineStatus.dataset.id ==element ) {
+            if (onlineStatus != null && onlineStatus.dataset.id == element) {
                 insertAfter(l, onlineStatus.firstElementChild);
             }
         });
@@ -1910,7 +1910,7 @@ function updateFeed(feed) {
         if (received.length !== 0) {
             timeline.innerHTML += createSpinner()
         }
-        
+
 
         offset += received.length;
         scroll_updating = false
@@ -2249,7 +2249,7 @@ function updateSearchOnClick() {
 
     if (filters) {
         filters.forEach(function (filter) {
-            filter.addEventListener('click', function(event) {
+            filter.addEventListener('click', function (event) {
                 let timeline = document.querySelector('#timeline')
                 if (!timeline) return;
 
@@ -2290,7 +2290,7 @@ function updateSearchOnScroll() {
 
             let timeline = document.querySelector('#timeline')
             if (!timeline) return;
-            
+
             if (scroll_updating) return;
             scroll_updating = true;
 
@@ -2319,6 +2319,7 @@ function updateSearchOnOrderChange() {
             offset = 0
             scroll_end = false
             scroll_updating = false
+            document.querySelector('.dropdown_menu.search_order_dropdown_btn').toggleAttribute('hidden')
             updateSearch()
         })
     })
@@ -2361,58 +2362,58 @@ function updateSearch() {
         scroll_end = false;
     }
 
-    sendAjaxRequest('get', '/api/search/' + query_string + 
-        '/type/' + type_search + 
+    sendAjaxRequest('get', '/api/search/' + query_string +
+        '/type/' + type_search +
         '/order/' + order_search +
         '/offset/' + offset
         , {}, function () {
-        
-        
 
-        let timeline = document.querySelector('#timeline');
-        if (!timeline) return;
 
-        if (offset === 0) {
-            timeline.innerHTML = '';
-        }
 
-        let received;
-        try {
-            received = JSON.parse(this.responseText);
-        } catch (error) {
-            console.log('Erro')
-        }
+            let timeline = document.querySelector('#timeline');
+            if (!timeline) return;
 
-        if (received == null) return;
-
-        if (received.length === 0 && scroll_end === false) {
-            // If offset is 0, it means there was never no content found
             if (offset === 0) {
-                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No results found</h3>`));
-            } else {
-                timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No more results found</h3>`));
+                timeline.innerHTML = '';
             }
 
-            scroll_end = true;
-        }
-
-        received.forEach(function (searchHit) {
-
-            if (type_search === 'posts') {
-                timeline.appendChild(createPost(searchHit));
-            } else if (type_search === 'groups') {
-                timeline.appendChild(createGroupCard(searchHit))
-            } else if (type_search === 'users') {
-                timeline.appendChild(createUserCard(searchHit))
-            } else if (type_search === 'topics') {
-                timeline.appendChild(createTopicCard(searchHit))
+            let received;
+            try {
+                received = JSON.parse(this.responseText);
+            } catch (error) {
+                console.log('Erro')
             }
 
+            if (received == null) return;
+
+            if (received.length === 0 && scroll_end === false) {
+                // If offset is 0, it means there was never no content found
+                if (offset === 0) {
+                    timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No results found</h3>`));
+                } else {
+                    timeline.appendChild(createElementFromHTML(`<h3 class="text-center" style="margin-top:4em; display:block">No more results found</h3>`));
+                }
+
+                scroll_end = true;
+            }
+
+            received.forEach(function (searchHit) {
+
+                if (type_search === 'posts') {
+                    timeline.appendChild(createPost(searchHit));
+                } else if (type_search === 'groups') {
+                    timeline.appendChild(createGroupCard(searchHit))
+                } else if (type_search === 'users') {
+                    timeline.appendChild(createUserCard(searchHit))
+                } else if (type_search === 'topics') {
+                    timeline.appendChild(createTopicCard(searchHit))
+                }
+
+            })
+
+            offset += received.length;
+            scroll_updating = false;
         })
-
-        offset += received.length;
-        scroll_updating = false;
-    })
 
 }
 
@@ -2496,9 +2497,9 @@ function createTopicCard(topic) {
     let new_card = document.createElement('article');
 
     new_card.innerHTML = `
-    <div class="card mt-4 me-3" style="height:4em">
+    <div class="card mt-4 me-3" style="height:4em;">
         <div class="d-flex align-items-center card-body">
-            <h4 class="card-title">${topic.topic}|${topic.id}</h5>
+            <a href="/search/%23${topic.topic}" class="text-dark text-decoration-none"><h4 class="card-title">${topic.topic}</h4></a>
         </div>
     </div>
     `
@@ -2753,7 +2754,7 @@ function createCustomMessageBody(notf) {
         if (notf.id_post != null)
             return notf.sender.username + " liked your <a href=/post/" + notf.id_post + "> Post</a>";
         else
-            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>"; 
+            return notf.sender.username + " liked your comment in <a href=/post/" + notf.comment.id_post + "> Post</a>";
     }
     else if (notf.tipo == "UserMention") {
         return notf.sender.username + " mentioned you in <a href=/post/" + notf.id_post + "> Post</a>";
