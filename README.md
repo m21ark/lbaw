@@ -1,8 +1,8 @@
-# LBAW 2261
+# Nexus - Social network
 
 ![Logo](docs/logo.jpg)
 
-**Nexus** is a revolutionary new social network that connects people from all walks of life. With a sleek and intuitive interface, users can easily create profiles, share their interests and passions by making posts, comments and likes and by creating or joining pre-existing thematic groups to connect with friends and family. This communication is further facilitated by Nexus built-in chat with possibility to make video calls so you can be closer to the ones you love.
+**Nexus** is a new social network that connects people from all walks of life. With a sleek and intuitive interface, users can easily create profiles, share their interests and passions by making posts, comments and likes and by creating or joining pre-existing thematic groups to connect with friends and family. This communication is further facilitated by Nexus built-in chat with possibility to make video calls so you can be closer to the ones you love.
 
 See our product demo on YouTube: 
 
